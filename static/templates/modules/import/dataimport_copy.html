@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>模块导入</title>
+    <link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/fileImport.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/common-tabs.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/fonts/larry-icon.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/fontdemo.css" media="all">
+    <style>
+        .module-page{
+            padding:0;
+        }
+
+        .module-tab{
+            margin-top: 0;
+            border-radius: 8px;
+        }
+
+        .module-main{
+            border-radius: 8px;
+        }
+
+        .tab-item{
+            border-radius: 8px;
+        }
+        .el-tabs__item {
+            color: #000 !important;
+        }
+        .el-tabs__item.is-active {
+            color: #3FACB3 !important;
+        }
+
+        .importResult{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border: 1px solid #CDCDCD;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .importItem{
+            display: flex;
+            flex: 1;
+
+        }
+
+        .el-button+.el-button {
+            margin-left: 0px;
+        }
+
+        .layui-tab-item .el-button{
+            padding: 0 0 10px 0;
+        }
+
+        .import—download-box .layui-tab-content{
+            padding: 0;
+        }
+
+        .i-rotate{
+            animation: rotate 2s linear infinite;
+            -webkit-animation: rotate 2s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0);
+            }
+
+            25% {
+                transform: rotate(90deg);
+            }
+
+            50% {
+                transform: rotate(180deg);
+            }
+
+            75% {
+                transform: rotate(270deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+    </style>
+
+</head>
+<body>
+<div id="app">
+
+    <div class="module-page mvvm-table">
+        <el-tabs v-model="activeName" type="card" style="background-color: #fff;padding: 15px 30px">
+            <el-tab-pane label="快速导入入口" name="1">
+                <div>
+                    <div class="module-tab">
+                        <ul class="tab-ul">
+                            <li class="tab-item" :class="currentTab==index?'tabActive':''" @click="tabChange(index)"
+                                v-for="(item,index) in tab">{{item}}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="module-main" v-if="status!=5">
+                        <div class="import—tab border-top">
+                            <span class="import—tab-item uploading-item">上传文件</span>
+                            <span class="import—tab-item import-item">导入数据</span>
+                        </div>
+
+                        <keep-alive>
+                            <component :is="currentTabComponent" :status="status" :import-url="importUrl" :current-tab="currentTab" @change-status="changeStatus"
+                                       @import-complete="importComplete"
+                                       :progress="progress"></component>
+                        </keep-alive>
+                    </div>
+                    <div title="上传" v-if="status==5">
+                        <import-upload :import-url="importUrl"></import-upload>
+                    </div>
+                </div>
+
+<!--                <div class="layui-form ren-form" v-show="importTypeSelect" id="importTypeSelect" style="display: none;">-->
+<!--                    <div class="layui-form-item" style="margin-top: 10px">-->
+<!--                        <label class="layui-form-label">导入文件：</label>-->
+<!--                        <div class="layui-input-block" id="importFileBlock"></div>-->
+<!--                    </div>-->
+<!--                    <div class="layui-input-block" style="left: 6%;width: 30%;margin-top: 70px;" id="selectedImportBtnBlock"></div>-->
+<!--                </div>-->
+            </el-tab-pane>
+            <el-tab-pane label="导入结果" name="2">
+                <div class="layui-form ren-form">
+<!--                    @click="goImportDetail(item)"-->
+                    <div class="importResult" v-for="item in importRecords" :key="item.id">
+                        <div style="flex: 1;display: flex;align-items: center" class="importItem">
+                            <i style="font-size: 20px;color: #52c41a" v-if="item.importStatus==1" class="icon larry-icon larry-gouSolid"></i>
+                            <i style="font-size: 20px;color: #f5222d" v-else-if="item.importStatus==2" class="icon larry-icon larry-cuowu3"></i>
+                            <i style="font-size: 20px;" v-else-if="item.importStatus==0" class="i-rotate icon larry-icon larry-huancun1"></i>
+                            <span style="margin-left: 5px">{{item.importStatus==0?'导入中':item.importStatus==1?'导入成功':'导入失败'}}</span>
+                        </div>
+                        <div style="flex: 1.5" class="importItem">
+                            <el-button v-if="item.importStatus==2" @click="downError(item)">下载错误文件</el-button>
+                        </div>
+                        <div style="flex: 5" class="importItem">
+                            <span>{{item.importBizTypeStr}}
+                                <span v-if="item.remark">({{item.remark}})</span>
+                            </span>
+                        </div>
+                        <div style="flex: 1.5" class="importItem">
+                            <span>
+                                <span v-if="item.createUserName">{{item.createUserName}}</span>
+                            </span>
+                        </div>
+                        <div style="justify-content: flex-end;flex: 1.5" class="importItem">
+                            <span>{{item.createTime}}</span>
+                        </div>
+                    </div>
+
+                    <div style="margin: 10px 0;display: flex;justify-content: flex-end">
+                        <el-pagination
+                                :current-page="page"
+                                :page-size="limit"
+                                :page-sizes="[10, 50, 100, 200]"
+                                :small="false"
+                                :disabled="false"
+                                :background="false"
+                                layout="total, sizes, prev, pager, next, jumper"
+                                :total="totalCount"
+                                @size-change="handleSizeChange"
+                                @current-change="handleCurrentChange"
+                        />
+                    </div>
+                </div>
+
+            </el-tab-pane>
+        </el-tabs>
+    </div>
+
+    <el-dialog title="失败数据" :visible.sync="dialogTableVisible" width="80%">
+        <el-table :data="importList" border>
+             <!--车辆-->
+            <template v-if="currentRecordObj&&currentRecordObj.type=='cldr'">
+                <el-table-column property="carNo" key="carNo" align="center" label="车牌号" min-width="150"></el-table-column>
+                <el-table-column property="vinNo" key="vinNo" align="center" label="车架号" min-width="150"></el-table-column>
+                <el-table-column property="engineNo" key="engineNo" align="center" label="发动机号码" min-width="150"></el-table-column>
+                <el-table-column property="brandName" key="brandName" align="center" label="车辆品牌" min-width="150"></el-table-column>
+                <el-table-column property="seriesName" key="seriesName" align="center" label="车系" min-width="150"></el-table-column>
+                <el-table-column property="modelName" key="modelName" align="center" label="车型" min-width="150"></el-table-column>
+                <el-table-column property="deptName" key="deptName" align="center" label="车辆归属" min-width="150"></el-table-column>
+                <el-table-column property="depotName" key="depotName" align="depotName" label="车辆所在仓库" min-width="150"></el-table-column>
+                <el-table-column property="supplierName" key="supplierName" align="center" label="供应商" min-width="150"></el-table-column>
+                <el-table-column property="storageTime" key="storageTime" align="center" label="车辆入库时间" min-width="150"></el-table-column>
+                <el-table-column property="remark" key="remark" align="center" label="车辆备注" min-width="150"></el-table-column>
+                <el-table-column property="initMeligile" key="initMeligile" align="center" label="车辆采购初始里程数" min-width="150"></el-table-column>
+                <el-table-column property="carColor" key="carColor" align="center" label="车辆颜色" min-width="150"></el-table-column>
+                <el-table-column property="registrationAddr" key="registrationAddr" align="center" label="上牌地址" min-width="150"></el-table-column>
+                <el-table-column property="sideDoor" key="sideDoor" align="center" label="有无侧门" min-width="150"></el-table-column>
+                <el-table-column property="nextMaintenanceDate" key="nextMaintenanceDate" align="center" label="下次保养时间" min-width="150"></el-table-column>
+                <el-table-column property="nextMaintenance" key="nextMaintenance" align="center" label="下次保养里程/km" min-width="150"></el-table-column>
+                <el-table-column property="statusStr" key="statusStr" align="center" label="车辆状态" min-width="150"></el-table-column>
+                <el-table-column property="carOwner" key="carOwner" align="center" label="行驶证所有人" min-width="150"></el-table-column>
+                <el-table-column property="documentNo" key="documentNo" align="center" label="档案编号" min-width="150"></el-table-column>
+                <el-table-column property="licenseDate" key="licenseDate" align="center" label="发证日期" min-width="150"></el-table-column>
+            </template>
+             <!--车辆保险-->
+            <template v-else-if="currentRecordObj&&currentRecordObj.type=='bxdr'">
+                <el-table-column property="carNo" key="carNo" align="center" label="车牌号" min-width="150"></el-table-column>
+                <el-table-column property="vinNo" key="vinNo" align="center" label="车架号" min-width="150"></el-table-column>
+                <el-table-column property="compulsoryCompany" key="compulsoryCompany" align="center" label="交强险保险公司" min-width="150"></el-table-column>
+                <el-table-column property="compulsoryNo" key="compulsoryNo" align="center" label="交强险保单号" min-width="150"></el-table-column>
+                <el-table-column property="compulsoryStartTime" key="compulsoryStartTime" align="center" label="交强险开始时间" min-width="150"></el-table-column>
+                <el-table-column property="compulsoryEndTime" key="compulsoryEndTime" align="center" label="交强险结束时间" min-width="150"></el-table-column>
+                <el-table-column property="compulsoryAmount" key="compulsoryAmount" align="center" label="交强险费用" min-width="150"></el-table-column>
+                <el-table-column property="compulsoryRemark" key="compulsoryRemark" align="center" label="交强险备注" min-width="150"></el-table-column>
+                <el-table-column property="carrierCompany" key="carrierCompany" align="center" label="承运险保险公司" min-width="150"></el-table-column>
+                <el-table-column property="carrierNo" key="carrierNo" align="center" label="承运险保单号" min-width="150"></el-table-column>
+                <el-table-column property="carrierStartTime" key="carrierStartTime" align="center" label="承运险开始时间" min-width="150"></el-table-column>
+                <el-table-column property="carrierEndTime" key="carrierEndTime" align="center" label="承运险结束时间" min-width="150"></el-table-column>
+                <el-table-column property="carrierAmount" key="carrierAmount" align="center" label="承运险费用" min-width="150"></el-table-column>
+                <el-table-column property="carrierRemark" key="carrierRemark" align="center" label="承运险备注" min-width="150"></el-table-column>
+                <el-table-column property="commercialCompany" key="commercialCompany" align="center" label="商业险保险公司" min-width="150"></el-table-column>
+                <el-table-column property="commercialNo" key="commercialNo" align="center" label="商业险保单号" min-width="150"></el-table-column>
+                <el-table-column property="commercialStartTime" key="commercialStartTime" align="center" label="商业险开始时间" min-width="150"></el-table-column>
+                <el-table-column property="commercialEndTime" key="commercialEndTime" align="center" label="商业险结束时间" min-width="150"></el-table-column>
+                <el-table-column property="insuranceTypeName" key="insuranceTypeName" align="center" label="商业险种/保额（万）/保费（元）" min-width="150"></el-table-column>
+                <el-table-column property="commercialRemark" key="commercialRemark" align="center" label="商业险备注" min-width="150"></el-table-column>
+                <el-table-column property="compulsoryPayableTime" key="compulsoryPayableTime" align="center" label="交强险应付时间" min-width="150"></el-table-column>
+                <el-table-column property="carrierPayableTime" key="carrierPayableTime" align="center" label="承运险险应付时间" min-width="150"></el-table-column>
+                <el-table-column property="commercialPayableTime" key="commercialPayableTime" align="center" label="商业险应付时间" min-width="150"></el-table-column>
+            </template>
+             <!--车辆年检-->
+            <template v-else-if="currentRecordObj&&currentRecordObj.type=='clnjdr'">
+                <el-table-column property="carNo" key="carNo" align="center" label="车牌号" min-width="150"></el-table-column>
+                <el-table-column property="vinNo" key="vinNo" align="center" label="车架号" min-width="150"></el-table-column>
+                <el-table-column property="thisTimeInspectionTime" key="thisTimeInspectionTime" align="center" label="本次年检时间" min-width="150"></el-table-column>
+                <el-table-column property="nextInspectionTime" key="nextInspectionTime" align="center" label="下次年检时间" min-width="150"></el-table-column>
+                <el-table-column property="inspectionAmount" key="inspectionAmount" align="center" label="年检费用/元" min-width="150"></el-table-column>
+                <el-table-column property="inspectionAgent" key="inspectionAgent" align="center" label="年审代理人" min-width="150"></el-table-column>
+                <el-table-column property="remark" key="remark" align="center" label="年检备注" min-width="150"></el-table-column>
+            </template>
+            <!--车辆保养-->
+            <template v-else-if="currentRecordObj&&currentRecordObj.type=='bydr'">
+                <el-table-column property="carNo" key="carNo" align="center" label="车牌号" min-width="150"></el-table-column>
+                <el-table-column property="vinNo" key="vinNo" align="center" label="车架号" min-width="150"></el-table-column>
+                <el-table-column property="serviceSite" key="serviceSite" align="center" label="服务站名称" min-width="150"></el-table-column>
+                <el-table-column property="currentMile" key="currentMile" align="center" label="当前公里数" min-width="150"></el-table-column>
+                <el-table-column property="nextMile" key="nextMile" align="center" label="下次保养公里数" min-width="150"></el-table-column>
+                <el-table-column property="maintenanceDate" key="maintenanceDate" align="center" label="本次保养时间" min-width="150"></el-table-column>
+                <el-table-column property="nextDate" key="nextDate" align="center" label="下次保养时间" min-width="150"></el-table-column>
+                <el-table-column property="maintenanceTypeName" key="maintenanceTypeName" align="center" label="保养项目/保养金额（元）" min-width="150"></el-table-column>
+            </template>
+            <!--车辆出险-->
+            <template v-else-if="currentRecordObj&&currentRecordObj.type=='cxdr'">
+                <el-table-column property="carPlateNo" key="carPlateNo" align="center" label="车牌号" min-width="150"></el-table-column>
+                <el-table-column property="vinNo" key="vinNo" align="center" label="车架号" min-width="150"></el-table-column>
+                <el-table-column property="receiveDate" key="receiveDate" align="center" label="接收时间" min-width="150"></el-table-column>
+                <el-table-column property="outDate" key="outDate" align="center" label="出险时间" min-width="150"></el-table-column>
+                <el-table-column property="outAddr" key="outAddr" align="center" label="出险地点" min-width="150"></el-table-column>
+                <el-table-column property="reporter" key="reporter" align="center" label="报案人" min-width="150"></el-table-column>
+                <el-table-column property="outReason" key="outReason" align="center" label="出险经过及原因" min-width="150"></el-table-column>
+                <el-table-column property="outLevel" key="outLevel" align="center" label="事故等级" min-width="150"></el-table-column>
+                <el-table-column property="sxInsuranceCompanyName" key="sxInsuranceCompanyName" align="center" label="商业险保险公司" min-width="150"></el-table-column>
+                <el-table-column property="sxIsPay" key="sxIsPay" align="center" label="商业险是否赔付" min-width="150"></el-table-column>
+                <el-table-column property="sxPayFee" key="sxPayFee" align="center" label="商业险赔付金额（元）" min-width="150"></el-table-column>
+                <el-table-column property="sxPayDate" key="sxPayDate" align="center" label="商业险赔付时间" min-width="150"></el-table-column>
+                <el-table-column property="sxCustomerPaymentAmount" key="sxCustomerPaymentAmount" align="center" label="商业险客户赔付金额（元）" min-width="150"></el-table-column>
+                <el-table-column property="qxInsuranceCompanyName" key="qxInsuranceCompanyName" align="center" label="交强险保险公司" min-width="150"></el-table-column>
+                <el-table-column property="qxIsPay" key="qxIsPay" align="center" label="交强险是否赔付" min-width="150"></el-table-column>
+                <el-table-column property="qxPayFee" key="qxPayFee" align="center" label="交强险赔付金额（元)" min-width="150"></el-table-column>
+                <el-table-column property="qxPayDate" key="qxPayDate" align="center" label="交强险赔付时间" min-width="150"></el-table-column>
+                <el-table-column property="qxCustomerPaymentAmount" key="qxCustomerPaymentAmount" align="center" label="交强险客户赔付金额（元）" min-width="150"></el-table-column>
+                <el-table-column property="responsibleParty" key="responsibleParty" align="center" label="责任方" min-width="150"></el-table-column>
+                <el-table-column property="remark" key="remark" align="center" label="备注" min-width="150"></el-table-column>
+            </template>
+            <!--车辆维修-->
+            <template v-else-if="currentRecordObj&&currentRecordObj.type=='wxdr'">
+                <el-table-column property="carPlateNo" key="carPlateNo" align="center" label="车牌号" min-width="150"></el-table-column>
+                <el-table-column property="vinNo" key="vinNo" align="center" label="车架号" min-width="150"></el-table-column>
+                <el-table-column property="repairStartDate" key="repairStartDate" align="center" label="维修开始时间" min-width="150"></el-table-column>
+                <el-table-column property="faultDesc" key="faultDesc" align="center" label="故障描述" min-width="150"></el-table-column>
+                <el-table-column property="serviceName" key="serviceName" align="center" label="维修厂名称" min-width="150"></el-table-column>
+                <el-table-column property="repairShopQuotation" key="repairShopQuotation" align="center" label="维修厂报价（元）" min-width="150"></el-table-column>
+                <el-table-column property="repairContent" key="repairContent" align="center" label="维修内容" min-width="150"></el-table-column>
+                <el-table-column property="userPay" key="userPay" align="center" label="维修价格用户支付金额（元）" min-width="150"></el-table-column>
+                <el-table-column property="platformPay" key="platformPay" align="center" label="维修价格平台支付金额（元）" min-width="150"></el-table-column>
+                <el-table-column property="insurancePay" key="insurancePay" align="center" label="维修价格保险支付金额（元）" min-width="150"></el-table-column>
+                <el-table-column property="totalPay" key="totalPay" align="center" label="总金额（元）" min-width="150"></el-table-column>
+                <el-table-column property="isSpareCar" key="isSpareCar" align="center" label="是否提供备用车" min-width="150"></el-table-column>
+                <el-table-column property="spareCarNo" key="spareCarNo" align="center" label="备用车车牌号" min-width="150"></el-table-column>
+                <el-table-column property="repairStatus" key="repairStatus" align="center" label="维修状态" min-width="150"></el-table-column>
+                <el-table-column property="remark" key="remark" align="center" label="备注" min-width="150"></el-table-column>
+                <el-table-column property="maintenanceItemInfoListStr" key="maintenanceItemInfoListStr" align="center" label="项目内容/项目金额" min-width="150"></el-table-column>
+            </template>
+            <!--客户-企业-->
+            <template v-else-if="currentRecordObj&&currentRecordObj.type=='qykhdr'">
+                <el-table-column property="customerName" key="customerName" align="center" label="客户姓名" min-width="150"></el-table-column>
+                <el-table-column property="contactPerson" key="contactPerson" align="center" label="联系人" min-width="150"></el-table-column>
+                <el-table-column property="contactMobile" key="contactMobile" align="center" label="联系电话" min-width="150"></el-table-column>
+                <el-table-column property="address" key="address" align="center" label="公司地址" min-width="150"></el-table-column>
+                <el-table-column property="license" key="license" align="center" label="营业执照" min-width="150"></el-table-column>
+                <el-table-column property="email" key="email" align="center" label="邮箱" min-width="150"></el-table-column>
+                <el-table-column property="channelName" key="channelName" align="center" label="所属渠道" min-width="150"></el-table-column>
+                <el-table-column property="businessPersonShow" key="businessPersonShow" align="center" label="所属业务负责人" min-width="150"></el-table-column>
+                <el-table-column property="note" key="note" align="center" label="备注" min-width="150"></el-table-column>
+            </template>
+            <!--客户-个人-->
+            <template v-else-if="currentRecordObj&&currentRecordObj.type=='grkhdr'">
+                <el-table-column property="customerName" key="customerName" align="center" label="客户姓名" min-width="150"></el-table-column>
+                <el-table-column property="contactMobile" key="contactMobile" align="center" label="联系电话" min-width="150"></el-table-column>
+                <el-table-column property="signedDriver" key="signedDriver" align="center" label="是否签约司机" min-width="150"></el-table-column>
+                <el-table-column property="joiningTime" key="joiningTime" align="center" label="入职日期" min-width="150"></el-table-column>
+                <el-table-column property="idCardNo" key="idCardNo" align="center" label="身份证号" min-width="150"></el-table-column>
+                <el-table-column property="address" key="address" align="center" label="联系地址" min-width="150"></el-table-column>
+                <el-table-column property="driverNo" key="driverNo" align="center" label="驾驶证号" min-width="150"></el-table-column>
+                <el-table-column property="driverValidity" key="driverValidity" align="center" label="驾驶证有效期" min-width="150"></el-table-column>
+                <el-table-column property="nowAddress" key="nowAddress" align="center" label="现住地址" min-width="150"></el-table-column>
+                <el-table-column property="emergencyPerson" key="emergencyPerson" align="center" label="紧急联系人" min-width="150"></el-table-column>
+                <el-table-column property="emergencyMobile" key="emergencyMobile" align="center" label="紧急联系电话" min-width="150"></el-table-column>
+                <el-table-column property="email" key="email" align="center" label="邮箱" min-width="150"></el-table-column>
+                <el-table-column property="bankAccount" key="bankAccount" align="center" label="银行账号" min-width="150"></el-table-column>
+                <el-table-column property="affiliatedBank" key="affiliatedBank" align="center" label="所属银行" min-width="150"></el-table-column>
+                <el-table-column property="channelName" key="channelName" align="center" label="所属渠道" min-width="150"></el-table-column>
+                <el-table-column property="businessPersonShow" align="center" label="业务负责人" min-width="150"></el-table-column>
+                <el-table-column property="note" key="note" align="center" label="备注" min-width="150"></el-table-column>
+            </template>
+            <!--车辆订单-经租-->
+            <template v-else-if="currentRecordObj&&currentRecordObj.type=='jzdr'">
+                <el-table-column property="lessorName" key="lessorName" align="center" label="出租方" min-width="150"></el-table-column>
+                <el-table-column property="customerType" key="customerType" align="center" label="客户类型" min-width="150"></el-table-column>
+                <el-table-column property="customerName" key="customerName" align="center" label="客户名称" min-width="150"></el-table-column>
+                <el-table-column property="contactPerson" key="contactPerson" align="center" label="联系人" min-width="150"></el-table-column>
+                <el-table-column property="customerTel" key="customerTel" align="center" label="联系电话" min-width="150"></el-table-column>
+                <el-table-column property="licenseNumber" key="licenseNumber" align="center" label="营业执照号" min-width="150"></el-table-column>
+                <el-table-column property="idcard" key="idcard" align="center" label="身份证号" min-width="150"></el-table-column>
+                <el-table-column property="customerAddr" key="customerAddr" align="center" label="联系地址" min-width="150"></el-table-column>
+                <el-table-column property="customerDesc" key="customerDesc" align="center" label="客户备注" min-width="150"></el-table-column>
+                <el-table-column property="vinNo" key="vinNo" align="center" label="车架号" min-width="150"></el-table-column>
+                <el-table-column property="carNo" key="carNo" align="center" label="车牌号" min-width="150"></el-table-column>
+
+                <el-table-column property="cashDeposit" key="cashDeposit" align="center" label="保证金/元/台" min-width="150"></el-table-column>
+<!--                <el-table-column property="monthlyRent" align="center" label="保证金分期数" min-width="150"></el-table-column>-->
+                <el-table-column property="monthlyRent" key="monthlyRent" align="center" label="租金/元/台" min-width="150"></el-table-column>
+                <el-table-column property="freeDays" key="freeDays" align="center" label="免费用车天数" min-width="150"></el-table-column>
+                <el-table-column property="paymentMethod" key="paymentMethod" align="center" label="付款方式" min-width="150"></el-table-column>
+                <el-table-column property="timeStartRent" key="timeStartRent" align="center" label="租赁开始时间" min-width="150"></el-table-column>
+                <el-table-column property="timeFinishRent" key="timeFinishRent" align="center" label="租赁结束时间" min-width="150"></el-table-column>
+                <el-table-column property="paymentDay" key="paymentDay" align="center" label="还款日" min-width="150"></el-table-column>
+                <el-table-column property="orderDesc" key="orderDesc" align="center" label="订单备注" min-width="150"></el-table-column>
+                <el-table-column property="operationName" key="operationName" align="center" label="提单人员" min-width="150"></el-table-column>
+                <el-table-column property="timeDelivery" key="timeDelivery" align="center" label="交车时间" min-width="150"></el-table-column>
+<!--                <el-table-column property="address" align="center" label="已退车时间" min-width="150"></el-table-column>-->
+                <el-table-column property="insuranceItems" key="insuranceItems" align="center" label="车辆已购保险" min-width="150"></el-table-column>
+                <el-table-column property="deliveryOperationName" key="deliveryOperationName" align="center" label="交车人员" min-width="150"></el-table-column>
+                <el-table-column property="deliveryDesc" key="deliveryDesc" align="center" label="交车备注" min-width="150"></el-table-column>
+                <el-table-column property="contractCode" key="contractCode" align="center" label="合同编号" min-width="150"></el-table-column>
+                <el-table-column property="timeStart" key="timeStart" align="center" label="合同生效时间" min-width="150"></el-table-column>
+                <el-table-column property="timeFinish" key="timeFinish" align="center" label="合同终止时间" min-width="150"></el-table-column>
+                <el-table-column property="desc" key="desc" align="center" label="合同备注" min-width="150"></el-table-column>
+            </template>
+            <!--车辆订单-以租代购-->
+            <template v-else-if="currentRecordObj&&currentRecordObj.type=='yzdgdr'">
+                <el-table-column property="lessorName" key="lessorName" align="center" label="出租方" min-width="150"></el-table-column>
+                <el-table-column property="customerType" key="customerType" align="center" label="客户类型" min-width="150"></el-table-column>
+                <el-table-column property="customerName" key="customerName" align="center" label="客户名称" min-width="150"></el-table-column>
+                <el-table-column property="contactPerson" key="contactPerson" align="center" label="联系人" min-width="150"></el-table-column>
+                <el-table-column property="customerTel" key="customerTel" align="center" label="联系电话" min-width="150"></el-table-column>
+                <el-table-column property="licenseNumber" key="licenseNumber" align="center" label="营业执照号" min-width="150"></el-table-column>
+                <el-table-column property="idcard" key="idcard" align="center" label="身份证号" min-width="150"></el-table-column>
+                <el-table-column property="customerAddr" key="customerAddr" align="center" label="联系地址" min-width="150"></el-table-column>
+                <el-table-column property="customerDesc" key="customerDesc" align="center" label="客户备注" min-width="150"></el-table-column>
+                <el-table-column property="vinNo" key="vinNo" align="center" label="车架号" min-width="150"></el-table-column>
+                <el-table-column property="carNo" key="carNo" align="center" label="车牌号" min-width="150"></el-table-column>
+
+                <el-table-column property="servicingFee" key="servicingFee" align="center" label="整备费/元/台" min-width="150"></el-table-column>
+<!--                <el-table-column property="address" align="center" label="整备费分期数" min-width="150"></el-table-column>-->
+                <el-table-column property="monthlyRent" key="monthlyRent" align="center" label="还款/元/台" min-width="150"></el-table-column>
+                <el-table-column property="balancePayment" key="balancePayment" align="center" label="尾款金额" min-width="150"></el-table-column>
+                <el-table-column property="address" align="center" label="尾款分期数" min-width="150"></el-table-column>
+
+                <el-table-column property="timeStartRent" key="timeStartRent" align="center" label="租赁开始时间" min-width="150"></el-table-column>
+                <el-table-column property="timeFinishRent" key="timeFinishRent" align="center" label="租赁结束时间" min-width="150"></el-table-column>
+                <el-table-column property="paymentMethod" key="paymentMethod" align="center" label="付款方式" min-width="150"></el-table-column>
+                <el-table-column property="paymentDay" key="paymentDay" align="center" label="付款日" min-width="150"></el-table-column>
+                <el-table-column property="insuranceItems" key="insuranceItems" align="center" label="车辆已购保险" min-width="150"></el-table-column>
+                <el-table-column property="channelName" key="channelName" align="center" label="所属渠道" min-width="150"></el-table-column>
+                <el-table-column property="chlRebate" key="chlRebate" align="center" label="渠道返利" min-width="150"></el-table-column>
+                <el-table-column property="orderDesc" key="orderDesc" align="center" label="订单备注" min-width="150"></el-table-column>
+
+                <el-table-column property="operationName" key="operationName" align="center" label="提单人员" min-width="150"></el-table-column>
+                <el-table-column property="timeDelivery" key="timeDelivery" align="center" label="交车时间" min-width="150"></el-table-column>
+<!--                <el-table-column property="address" align="center" label="已退车时间" min-width="150"></el-table-column>-->
+                <el-table-column property="timeTransferEstimated" key="timeTransferEstimated" align="center" label="预计过户时间" min-width="150"></el-table-column>
+                <el-table-column property="deliveryOperationName" key="deliveryOperationName" align="center" label="交车人员" min-width="150"></el-table-column>
+                <el-table-column property="deliveryDesc" key="deliveryDesc" align="center" label="交车备注" min-width="150"></el-table-column>
+
+                <el-table-column property="contractCode" key="contractCode" align="center" label="合同编号" min-width="150"></el-table-column>
+                <el-table-column property="timeStart" key="timeStart" align="center" label="合同生效时间" min-width="150"></el-table-column>
+                <el-table-column property="timeFinish" key="timeFinish" align="center" label="合同终止时间" min-width="150"></el-table-column>
+                <el-table-column property="desc" key="desc" align="center" label="合同备注" min-width="150"></el-table-column>
+            </template>
+            <!--车辆订单-融租-->
+            <template v-else-if="currentRecordObj&&currentRecordObj.type=='rzdr'">
+                <el-table-column property="lessorName" key="lessorName" align="center" label="出租方" min-width="150"></el-table-column>
+                <el-table-column property="customerType" key="customerType" align="center" label="客户类型" min-width="150"></el-table-column>
+                <el-table-column property="customerName" key="customerName" align="center" label="客户名称" min-width="150"></el-table-column>
+                <el-table-column property="contactPerson" key="contactPerson" align="center" label="联系人" min-width="150"></el-table-column>
+                <el-table-column property="customerTel" key="customerTel" align="center" label="联系电话" min-width="150"></el-table-column>
+                <el-table-column property="licenseNumber" key="licenseNumber" align="center" label="营业执照号" min-width="150"></el-table-column>
+                <el-table-column property="idcard" key="idcard" align="center" label="身份证号" min-width="150"></el-table-column>
+                <el-table-column property="customerAddr" key="customerAddr" align="center" label="联系地址" min-width="150"></el-table-column>
+                <el-table-column property="customerDesc" key="customerDesc" align="center" label="客户备注" min-width="150"></el-table-column>
+                <el-table-column property="vinNo" key="vinNo" align="center" label="车架号" min-width="150"></el-table-column>
+                <el-table-column property="carNo" key="carNo" align="center" label="车牌号" min-width="150"></el-table-column>
+
+                <el-table-column property="downPayment" key="downPayment" align="center" label="首付款/元/台" min-width="150"></el-table-column>
+<!--                <el-table-column property="address" align="center" label="首付款分期数" min-width="150"></el-table-column>-->
+                <el-table-column property="monthlyRent" key="monthlyRent" align="center" label="还款/元/台" min-width="150"></el-table-column>
+                <el-table-column property="financeCompanyName" key="financeCompanyName" align="center" label="金融公司名称" min-width="150"></el-table-column>
+                <el-table-column property="balancePayment" key="balancePayment" align="center" label="尾款金额" min-width="150"></el-table-column>
+<!--                <el-table-column property="address" align="center" label="尾款分期数" min-width="150"></el-table-column>-->
+
+                <el-table-column property="timeStartRent" key="timeStartRent" align="center" label="租赁开始时间" min-width="150"></el-table-column>
+                <el-table-column property="timeFinishRent" key="timeFinishRent" align="center" label="租赁结束时间" min-width="150"></el-table-column>
+                <el-table-column property="insuranceItems" key="insuranceItems" align="center" label="车辆已购保险" min-width="150"></el-table-column>
+                <el-table-column property="channelName" key="channelName" align="center" label="所属渠道" min-width="150"></el-table-column>
+                <el-table-column property="orderDesc" key="orderDesc" align="center" label="订单备注" min-width="150"></el-table-column>
+
+                <el-table-column property="operationName" key="operationName" align="center" label="提单人员" min-width="150"></el-table-column>
+                <el-table-column property="timeDelivery" key="timeDelivery" align="center" label="交车时间" min-width="150"></el-table-column>
+<!--                <el-table-column property="address" align="center" label="已退车时间" min-width="150"></el-table-column>-->
+                <el-table-column property="timeTransferEstimated" key="timeTransferEstimated" align="center" label="预计过户时间" min-width="150"></el-table-column>
+                <el-table-column property="deliveryOperationName" key="deliveryOperationName" align="center" label="交车人员" min-width="150"></el-table-column>
+                <el-table-column property="deliveryDesc" key="deliveryDesc" align="center" label="交车备注" min-width="150"></el-table-column>
+
+                <el-table-column property="contractCode" key="contractCode" align="center" label="合同编号" min-width="150"></el-table-column>
+                <el-table-column property="timeStart" key="timeStart" align="center" label="合同生效时间" min-width="150"></el-table-column>
+                <el-table-column property="timeFinish" key="timeFinish" align="center" label="合同终止时间" min-width="150"></el-table-column>
+                <el-table-column property="desc" key="desc" align="center" label="合同备注" min-width="150"></el-table-column>
+            </template>
+            <!--车辆订单-直购-->
+            <template v-else-if="currentRecordObj&&currentRecordObj.type=='zgdr'">
+                <el-table-column property="lessorName" key="lessorName" align="center" label="出租方" min-width="150"></el-table-column>
+                <el-table-column property="customerType" key="customerType" align="center" label="客户类型" min-width="150"></el-table-column>
+                <el-table-column property="customerName" key="customerName" align="center" label="客户名称" min-width="150"></el-table-column>
+                <el-table-column property="contactPerson" key="contactPerson" align="center" label="联系人" min-width="150"></el-table-column>
+                <el-table-column property="customerTel" key="customerTel" align="center" label="联系电话" min-width="150"></el-table-column>
+                <el-table-column property="licenseNumber" key="licenseNumber" align="center" label="营业执照号" min-width="150"></el-table-column>
+                <el-table-column property="idcard" key="idcard" align="center" label="身份证号" min-width="150"></el-table-column>
+                <el-table-column property="customerAddr" key="customerAddr" align="center" label="联系地址" min-width="150"></el-table-column>
+                <el-table-column property="customerDesc" key="customerDesc" align="center" label="客户备注" min-width="150"></el-table-column>
+                <el-table-column property="vinNo" key="vinNo" align="center" label="车架号" min-width="150"></el-table-column>
+                <el-table-column property="carNo" key="carNo" align="center" label="车牌号" min-width="150"></el-table-column>
+
+                <el-table-column property="totalPrice" key="totalPrice" align="center" label="车辆总单价/元/台" min-width="150"></el-table-column>
+                <el-table-column property="timeRepayment" key="timeRepayment" align="center" label="付款时间" min-width="150"></el-table-column>
+
+                <el-table-column property="channelName" key="channelName" align="center" label="所属渠道" min-width="150"></el-table-column>
+                <el-table-column property="orderDesc" key="orderDesc" align="center" label="订单备注" min-width="150"></el-table-column>
+
+                <el-table-column property="operationName" key="operationName" align="center" label="提单人员" min-width="150"></el-table-column>
+                <el-table-column property="timeDelivery" key="timeDelivery" align="center" label="交车时间" min-width="150"></el-table-column>
+                <el-table-column property="deliveryOperationName" key="deliveryOperationName" align="center" label="交车人员" min-width="150"></el-table-column>
+                <el-table-column property="deliveryDesc" key="deliveryDesc" align="center" label="交车备注" min-width="150"></el-table-column>
+
+                <el-table-column property="contractCode" key="contractCode" align="center" label="合同编号" min-width="150"></el-table-column>
+                <el-table-column property="timeStart" key="timeStart" align="center" label="合同生效时间" min-width="150"></el-table-column>
+                <el-table-column property="timeFinish" key="timeFinish" align="center" label="合同终止时间" min-width="150"></el-table-column>
+                <el-table-column property="desc" key="desc" align="center" label="合同备注" min-width="150"></el-table-column>
+            </template>
+            <!--车辆订单-挂靠-->
+            <template v-else-if="currentRecordObj&&currentRecordObj.type=='gkdr'">
+                <el-table-column property="lessorName" key="lessorName" align="center" label="出租方" min-width="150"></el-table-column>
+                <el-table-column property="customerType" key="customerType" align="center" label="客户类型" min-width="150"></el-table-column>
+                <el-table-column property="customerName" key="customerName" align="center" label="客户名称" min-width="150"></el-table-column>
+                <el-table-column property="contactPerson" key="contactPerson" align="center" label="联系人" min-width="150"></el-table-column>
+                <el-table-column property="customerTel" key="customerTel" align="center" label="联系电话" min-width="150"></el-table-column>
+                <el-table-column property="licenseNumber" key="licenseNumber" align="center" label="营业执照号" min-width="150"></el-table-column>
+                <el-table-column property="idcard" key="idcard" align="center" label="身份证号" min-width="150"></el-table-column>
+                <el-table-column property="customerAddr" key="customerAddr" align="center" label="联系地址" min-width="150"></el-table-column>
+                <el-table-column property="customerDesc" key="customerDesc" align="center" label="客户备注" min-width="150"></el-table-column>
+                <el-table-column property="vinNo" key="vinNo" align="center" label="车架号" min-width="150"></el-table-column>
+                <el-table-column property="carNo" key="carNo" align="center" label="车牌号" min-width="150"></el-table-column>
+
+                <el-table-column property="monthlyRent" key="monthlyRent" align="center" label="挂靠费/元/台" min-width="150"></el-table-column>
+                <el-table-column property="paymentMethod" key="paymentMethod" align="center" label="付款方式" min-width="150"></el-table-column>
+                <el-table-column property="timeStartRent" key="timeStartRent" align="center" label="租赁开始时间" min-width="150"></el-table-column>
+                <el-table-column property="timeFinishRent" key="timeFinishRent" align="center" label="租赁结束时间" min-width="150"></el-table-column>
+                <el-table-column property="paymentDay" key="paymentDay" align="center" label="还款日" min-width="150"></el-table-column>
+                <el-table-column property="channelName" key="channelName" align="center" label="所属渠道" min-width="150"></el-table-column>
+                <el-table-column property="orderDesc" key="orderDesc" align="center" label="订单备注" min-width="150"></el-table-column>
+
+                <el-table-column property="operationName" key="operationName" align="center" label="提单人员" min-width="150"></el-table-column>
+                <el-table-column property="timeDelivery" key="timeDelivery" align="center" label="交车时间" min-width="150"></el-table-column>
+<!--                <el-table-column property="address" align="center" label="已退车时间" min-width="150"></el-table-column>-->
+                <el-table-column property="deliveryOperationName" key="deliveryOperationName" min-width="150"></el-table-column>
+                <el-table-column property="deliveryDesc" key="deliveryDesc" align="center" label="交车备注" min-width="150"></el-table-column>
+
+                <el-table-column property="contractCode" key="contractCode" align="center" label="合同编号" min-width="150"></el-table-column>
+                <el-table-column property="timeStart" key="timeStart" align="center" label="合同生效时间" min-width="150"></el-table-column>
+                <el-table-column property="timeFinish" key="timeFinish" align="center" label="合同终止时间" min-width="150"></el-table-column>
+                <el-table-column property="desc" key="desc" align="center" label="合同备注" min-width="150"></el-table-column>
+            </template>
+            <!--车辆订单-直营-->
+            <template v-else-if="currentRecordObj&&currentRecordObj.type=='zydr'">
+                <el-table-column property="lessorName" key="lessorName" align="center" label="出租方" min-width="150"></el-table-column>
+                <el-table-column property="customerType" key="customerType" align="center" label="客户类型" min-width="150"></el-table-column>
+                <el-table-column property="customerName" key="customerName" align="center" label="客户名称" min-width="150"></el-table-column>
+                <el-table-column property="contactPerson" key="contactPerson" align="center" label="联系人" min-width="150"></el-table-column>
+                <el-table-column property="customerTel" key="customerTel" align="center" label="联系电话" min-width="150"></el-table-column>
+                <el-table-column property="licenseNumber" key="licenseNumber" align="center" label="营业执照号" min-width="150"></el-table-column>
+                <el-table-column property="idcard" key="idcard" align="center" label="身份证号" min-width="150"></el-table-column>
+                <el-table-column property="customerAddr" key="customerAddr" align="center" label="联系地址" min-width="150"></el-table-column>
+                <el-table-column property="customerDesc" key="customerDesc" align="center" label="客户备注" min-width="150"></el-table-column>
+                <el-table-column property="vinNo" key="vinNo" align="center" label="车架号" min-width="150"></el-table-column>
+                <el-table-column property="carNo" key="carNo" align="center" label="车牌号" min-width="150"></el-table-column>
+
+                <el-table-column property="cashDeposit" key="cashDeposit" align="center" label="保证金/元/台" min-width="150"></el-table-column>
+                <el-table-column property="cashDepositPeriods" key="cashDepositPeriods" align="center" label="保证金分期数" min-width="150"></el-table-column>
+                <el-table-column property="targetAmount" key="targetAmount" align="center" label="达标额/元/天" min-width="150"></el-table-column>
+                <el-table-column property="yesTargetAmount" key="yesTargetAmount" align="center" label="达标使用费/元/台" min-width="150"></el-table-column>
+                <el-table-column property="noTargetAmount" key="noTargetAmount" align="center" label="不达标使用费/元/台" min-width="150"></el-table-column>
+                <el-table-column property="freeDays" key="freeDays" align="center" label="免费用车天数" min-width="150"></el-table-column>
+                <el-table-column property="paymentMethod" key="paymentMethod" align="center" label="付款方式" min-width="150"></el-table-column>
+                <el-table-column property="timeStartRent" key="timeStartRent" align="center" label="租赁开始时间" min-width="150"></el-table-column>
+                <el-table-column property="timeFinishRent" key="timeFinishRent" align="center" label="租赁结束时间" min-width="150"></el-table-column>
+                <el-table-column property="address" align="center" label="还款日" min-width="150"></el-table-column>
+                <el-table-column property="channelName" key="channelName" align="center" label="所属渠道" min-width="150"></el-table-column>
+                <el-table-column property="orderDesc" key="orderDesc" align="center" label="订单备注" min-width="150"></el-table-column>
+
+                <el-table-column property="operationName" key="operationName" align="center" label="提单人员" min-width="150"></el-table-column>
+                <el-table-column property="timeDelivery" key="timeDelivery" align="center" label="交车时间" min-width="150"></el-table-column>
+                <el-table-column property="timeReturn" key="timeReturn" align="center" label="已退车时间" min-width="150"></el-table-column>
+                <el-table-column property="deliveryOperationName" key="deliveryOperationName" min-width="150"></el-table-column>
+                <el-table-column property="deliveryDesc" key="deliveryDesc" align="center" label="交车备注" min-width="150"></el-table-column>
+
+                <el-table-column property="contractCode" key="contractCode" align="center" label="合同编号" min-width="150"></el-table-column>
+                <el-table-column property="timeStart" key="timeStart" align="center" label="合同生效时间" min-width="150"></el-table-column>
+                <el-table-column property="timeFinish" key="timeFinish" align="center" label="合同终止时间" min-width="150"></el-table-column>
+                <el-table-column property="desc" key="desc" align="center" label="合同备注" min-width="150"></el-table-column>
+            </template>
+
+        </el-table>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="close">返回</el-button>
+            <el-button type="primary" @click="dialogFormVisible = false">下载失败数据</el-button>
+        </div>
+    </el-dialog>
+
+</div>
+
+
+
+
+
+</body>
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script src="../../statics/js/modules/import/vue.min.js?_${.now?long}"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script src="../../statics/js/modules/element-ui/index.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script src="../../statics/js/modules/import/import.js?_${.now?long}"></script>
+
+<script type="text/javascript">
+
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                tab: ['导入车辆信息', '导入车辆订单信息', '导入客户信息','导入车辆保险信息','导入车辆年检信息','导入车辆保养信息','导入车辆出险信息',
+                    '导入车辆维修信息'
+                    ,'导入车辆行驶证'
+                ],
+                currentTab: 0,
+                status: 1, // {1上传，2进度，3失败,4成功,5上传zip}
+                importUrl:`../../../`,
+                currentTabComponent:'import-download',
+                progress:0,
+                activeName:'1',
+                page: 1,
+                limit: 10,
+                totalCount:0,
+                importRecords:[],
+                dialogTableVisible:false,
+                importList:[],
+                currentRecordObj:null, //当前操作的导入结果记录项
+                interval:null
+            }
+        },
+
+        mounted(){
+            console.log(this.importUrl,this.currentTabComponent);
+            this.getList();
+        },
+        methods: {
+            downError(item){
+                let that = this
+                $.ajax({
+                    type: "GET",
+                    url: baseURL + "import/taskrecord/queryByNumber",
+                    // contentType: "application/json",
+                    data: {
+                        numberNo:item.importBizNo
+                    },
+                    success: function(r){
+                        if(r.code==0){
+                            if(r.data){
+                                window.location.href = baseURL + 'import/taskrecord/downXlsErr?numberNo='+item.importBizNo;
+                            }else{
+                                alert("已过期，无法下载")
+                            }
+                        }else {
+                            alert(r.msg);
+                        }
+                    }
+                });
+            },
+            importComplete(){
+              this.activeName = '2';
+                window.scrollTo({
+                    left: 0,
+                    top: 0,
+                    behavior: 'smooth'
+                })
+              this.page = 1;
+              this.getList();
+            },
+            handleSizeChange(val){
+                this.limit = val;
+                this.getList();
+            },
+            handleCurrentChange(val){
+                this.page = val;
+                this.getList();
+            },
+            getList(){
+                let that = this
+                $.ajax({
+                    type: "GET",
+                    url: baseURL + "import/taskrecord/list",
+                    // contentType: "application/json",
+                    data: {
+                        page:this.page,
+                        limit:this.limit
+                    },
+                    success: function(r){
+                        if(r.code==0){
+                            that.importRecords = r.data
+                            that.totalCount = Number(r.count)
+
+                            if(that.importRecords && that.importRecords.length>0){
+                                let find = that.importRecords.find(item=>item.importStatus==0);
+                                if(find){
+                                    that.startInterval();
+                                }else {
+                                    that.removeInterval();
+                                }
+                            }else {
+                                that.removeInterval();
+                            }
+                        }else {
+                            that.removeInterval();
+                        }
+                    },
+                    error:function (r){
+                        that.removeInterval();
+                    }
+                });
+            },
+            startInterval(){
+                clearInterval(this.interval);
+                this.interval = setInterval(()=>{
+                    this.getList();
+                }, 5000);
+            },
+            removeInterval(){
+                if(this.interval){
+                    clearInterval(this.interval)
+                    this.interval=null
+                }
+            },
+
+            tabChange(index) {
+                this.currentTab = index;
+                if(this.currentTab == 8){
+                    this.status = 5;
+                    this.currentTabComponent = 'import-upload';
+                } else {
+                    this.status = 1;
+                    this.currentTabComponent = 'import-download';
+                }
+
+            },
+            changeStatus(data){
+                this.status = data.status;
+                this.currentTabComponent = data.currentTabComponent;
+                if(data.progress){
+                    this.progress = data.progress;
+                }
+            },
+            //查看导入结果详情
+            goImportDetail(item){
+                this.currentRecordObj=item
+                this.dialogTableVisible=true
+            },
+            //关闭导入失败详情页面
+            close(){
+                this.dialogTableVisible=false
+            }
+
+        },
+    })
+</script>

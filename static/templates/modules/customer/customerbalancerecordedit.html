@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<#include "/header.html">
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <!-- 新增表单 -->
+    <form class="layui-form ren-form" style="margin-bottom: 60px;">
+
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                基本信息
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                                                                                                                                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>订单id</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_orderId" v-model="customerBalanceRecord.orderId" autocomplete="off" placeholder="订单id" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>客户id</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_customerId" v-model="customerBalanceRecord.customerId" autocomplete="off" placeholder="客户id" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>记录金额</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_amount" v-model="customerBalanceRecord.amount" autocomplete="off" placeholder="记录金额" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>记录前金额</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_amountBefore" v-model="customerBalanceRecord.amountBefore" autocomplete="off" placeholder="记录前金额" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>记录后金额</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_amountAfter" v-model="customerBalanceRecord.amountAfter" autocomplete="off" placeholder="记录后金额" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>金额类型：1、保证金 2、流水</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_amountType" v-model="customerBalanceRecord.amountType" autocomplete="off" placeholder="金额类型：1、保证金 2、流水" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>记录类型：1、增加 2、抵扣</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_recordType" v-model="customerBalanceRecord.recordType" autocomplete="off" placeholder="记录类型：1、增加 2、抵扣" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>备注</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_remark" v-model="customerBalanceRecord.remark" autocomplete="off" placeholder="备注" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>提交人id</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_operationId" v-model="customerBalanceRecord.operationId" autocomplete="off" placeholder="提交人id" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>提交人姓名</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_operationName" v-model="customerBalanceRecord.operationName" autocomplete="off" placeholder="提交人姓名" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>创建时间</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_timeCreate" v-model="customerBalanceRecord.timeCreate" autocomplete="off" placeholder="创建时间" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>更新时间</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_timeUpdate" v-model="customerBalanceRecord.timeUpdate" autocomplete="off" placeholder="更新时间" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>删除状态（0未删除，1已删除）</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_delect" v-model="customerBalanceRecord.delect" autocomplete="off" placeholder="删除状态（0未删除，1已删除）" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>租户id</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_tenantId" v-model="customerBalanceRecord.tenantId" autocomplete="off" placeholder="租户id" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                        </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="float-btn-group bottom-bar">
+            <a class="layui-btn reset-btn" id="closePage">取消</a>
+            <a class="layui-btn search-btn" lay-submit lay-filter="save" id="save">保存</a>
+        </div>
+    </form>
+
+
+</div>
+
+
+<script src="${request.contextPath}/statics/js/modules/customer/customerbalancerecordedit.js?_${.now?long}"></script>
+</body>
+</html>

@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>应退款信息表</title>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="Author" content="larry" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+    <script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+    <script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/common.js"></script>
+    <script type="text/javascript" src="../../statics/js/upload.js"></script>
+    <script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+    <link rel="stylesheet" href="../../statics/new_css/jxcPublicAll.css" media="all">
+    <link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../statics/common/step/steps.css">
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/viewer.min.css">
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+    <script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+    <script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+    <script src="../../statics/common/layui/autocomplete.js"></script>
+    <script src="../../statics/js/modules/viewer/viewer.min.js"></script>
+    <script src="../../statics/common/print-js/print.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+    <script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/searchview.js"></script>
+    <script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+    <!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+    <!-- 引入组件库 -->
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+
+
+
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .list-header-card {
+            justify-content: flex-start;
+        }
+
+        .list-header-card .active1A51FF {
+            background: #3FACB3;
+        }
+
+        .list-header-card .active1A51FF {
+            height: 70px !important;
+
+        }
+
+        .flexs {
+            width: 25% !important;
+            height: 70px !important;
+            border: 1px solid #BED7DE;
+            box-sizing: border-box;
+            flex: inherit;
+        }
+
+        .list-header-card-text {
+            font-size: 12px;
+            margin: 0 0 6px 0;
+            color: #333;
+        }
+
+        .list-header-card-number {
+            font-size: 18px;
+            font-weight: 400;
+            color: #333;
+            margin: 0;
+        }
+
+        .active1A51FF .list-header-card-text,
+        .active1A51FF .list-header-card-number {
+            color: #fff;
+        }
+
+        .list-header-content-box,
+        .list-search-title-box {
+            padding: 0;
+        }
+
+        .layui-form-label {
+            min-width: 110px !important;
+        }
+
+        .list-header-card>div {
+            margin-right: 200px;
+            padding: 12px 0;
+        }
+    </style>
+
+</head>
+
+<body class="ren-body">
+    <div id="rrapp" v-cloak>
+        <div class="list-header-content-box">
+            <div class="list-header-card display">
+                <div id="div1" class="flexs" @click="div1" style="cursor:pointer;margin-right: 10px;width:230px !important">
+                    <div class="list-header-card-text">应退账款总金额</div>
+                    <div class="list-header-card-number">{{refundAmount}}</div>
+                </div>
+                <div id="div2" class="flexs" @click="div2" style="cursor:pointer;margin-right: 10px;width:230px !important">
+                    <div class="list-header-card-text">已退账款总金额</div>
+                    <div class="list-header-card-number">{{shouldRefundAmount}}</div>
+                </div>
+                <div id="div3" class="flexs" @click="div3" style="cursor:pointer;margin-right: 10px;width:230px !important">
+                    <div class="list-header-card-text">退款提醒</div>
+                    <div class="list-header-card-number">{{reminderThresholdAmount}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="mvvm-table">
+            <div class="list-search-title-box">
+
+
+                <form class="layui-form" style="box-shadow: 0 0 20px #eee;padding-right: 15px;">
+                    <section class="jxc-section" style="display: flex;align-items: flex-start;white-space: nowrap;">
+                        <div class="card layui-row" style="flex: 1">
+                            <div class="layui-form-item ">
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">车牌号/车架号</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal" v-model="q.carVinNo"
+                                            placeholder="请输入" />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">品牌/车系/车型</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" id="carBrandSeriesModel" class="layui-input"
+                                            placeholder="请选择" readonly="readonly" />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">客户/渠道名称</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal" v-model="q.refundPerson"
+                                            placeholder="请输入" />
+                                    </div>
+                                </div>
+
+                                <section v-show="isFilter">
+                                    <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                        <label class="layui-form-label">订单编号</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" class="layui-input searchVal" v-model="q.carOrderNo"
+                                                placeholder="请输入" />
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                        <label class="layui-form-label">租赁类型</label>
+                                        <div class="layui-input-inline">
+                                            <select name="leaseType" lay-filter="leaseType" v-model="q.leaseType">
+                                                <option value="">请选择</option>
+                                                <option v-for="val in orderRentTypeMap" :value="getObjKey(orderRentTypeMap, val)">{{val}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                        <label class="layui-form-label">应退单号</label>
+                                        <div class="layui-input-inline">
+                                            <div class="layui-input-inline">
+                                                <input type="text" class="layui-input searchVal"
+                                                    v-model="q.shouldRefundNo" placeholder="请输入" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                        <label class="layui-form-label">退款类型</label>
+                                        <div class="layui-input-inline">
+                                            <select name="refundType" lay-filter="refundType" v-model="q.refundType">
+                                                <option value="">请选择</option>
+                                                <option value=1>换车结算单</option>
+                                                <option value=2>退车结算单</option>
+                                                <option value=3>备用车结算单</option>
+                                                <option value=4>保证金</option>
+                                                <option value=5>租金</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                        <label class="layui-form-label">退款方类型</label>
+                                        <div class="layui-input-inline">
+                                            <select name="lesseeType" lay-filter="lesseeType" v-model="q.lesseeType">
+                                                <option value="">请选择</option>
+                                                <option value=1>客户/企业</option>
+                                                <option value=2>客户/个人</option>
+                                                <option value=3>渠道/企业</option>
+                                                <option value=4>渠道/个人</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                        <label class="layui-form-label">出租方</label>
+                                        <div class="layui-input-inline">
+                                            <select id="lessor" name="lessor" lay-filter="lessor" v-model="q.lessor">
+                                                <option value="">请选择</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!--<div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">-->
+                                    <!--<label class="layui-form-label">合同编号</label>-->
+                                    <!--<div class="layui-input-inline">-->
+                                    <!--<div class="layui-input-inline">-->
+                                    <!--<input type="text" class="layui-input searchVal"-->
+                                    <!--v-model="q.contractNo"-->
+                                    <!--placeholder="请输入合同编号"/>-->
+                                    <!--</div>-->
+                                    <!--</div>-->
+                                    <!--</div>-->
+                                    <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                        <label class="layui-form-label">扣款科目</label>
+                                        <div class="layui-input-inline">
+                                            <div class="layui-input-inline">
+                                                <input type="text" class="layui-input searchVal" v-model="q.deductions"
+                                                    placeholder="请输入" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                        <label class="layui-form-label">退款方式</label>
+                                        <div class="layui-input-inline">
+                                            <select name="shouldRefundMethod" lay-filter="shouldRefundMethod"
+                                                v-model="q.shouldRefundMethod">
+                                                <option value="">请选择</option>
+                                                <option value=1>余额</option>
+                                                <option value=2>银行卡</option>
+                                                <option value=3>支付宝</option>
+                                                <option value=4>微信</option>
+                                                <option value=5>现金</option>
+                                                <option value=6>其他</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!--<div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">-->
+                                    <!--<label class="layui-form-label">统计入口</label>-->
+                                    <!--<div class="layui-input-inline">-->
+                                    <!--<select name="statistical" lay-filter="statistical" v-model="q.statistical">-->
+                                    <!--<option value=1>今日</option>-->
+                                    <!--<option value=2>本周</option>-->
+                                    <!--<option value=3>本月</option>-->
+                                    <!--<option value=4>本年</option>-->
+                                    <!--<option value=0>全部</option>-->
+                                    <!--</select>-->
+                                    <!--</div>-->
+                                    <!--</div>-->
+                                    <!--<div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">-->
+                                    <!--<label class="layui-form-label">应退日期</label>-->
+                                    <!--<div class="layui-input-inline">-->
+                                    <!--<input type="text" class="layui-input searchVal"-->
+                                    <!--v-model="q.expectTime"-->
+                                    <!--id="expect"-->
+                                    <!--readonly="readonly"-->
+                                    <!--placeholder="开始时间至结束时间"/>-->
+                                    <!--</div>-->
+                                    <!--</div>-->
+                                    <!--<div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">-->
+                                    <!--<label class="layui-form-label">实退日期</label>-->
+                                    <!--<div class="layui-input-inline">-->
+                                    <!--<input type="text" class="layui-input searchVal"-->
+                                    <!--v-model="q.actualTime"-->
+                                    <!--id="actual"-->
+                                    <!--readonly="readonly"-->
+                                    <!--placeholder="开始时间至结束时间"/>-->
+                                    <!--</div>-->
+                                    <!--</div>-->
+                                    <div class=" flex-box layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                        <label class="layui-form-label">应退日期:</label>
+                                        <div class="list-search-sup-title new-layui-title">
+                                            <div class="list-search-sup-title new-layui-title">
+                                                <div class="task-content-box-tab">
+                                                    <div class="display task-content-box-tab layui-col-md8 layui-col-sm8 layui-col-xs12"
+                                                        type="repairStartDate">
+                                                        <div value="0"
+                                                            class="layui-col-md2 layui-col-sm2 layui-col-xs2">昨天
+                                                        </div>
+                                                        <div value="1"
+                                                            class="layui-col-md2 layui-col-sm2 layui-col-xs2">今日
+                                                        </div>
+                                                        <div value="2"
+                                                            class="layui-col-md2 layui-col-sm2 layui-col-xs2">上周
+                                                        </div>
+                                                        <div value="3"
+                                                            class="layui-col-md2 layui-col-sm2 layui-col-xs2">本周
+                                                        </div>
+                                                        <div value="4"
+                                                            class="layui-col-md2 layui-col-sm2 layui-col-xs2">上月
+                                                        </div>
+                                                        <div value="5"
+                                                            class="layui-col-md2 layui-col-sm2 layui-col-xs2">本月
+                                                        </div>
+                                                        <div value="6"
+                                                            class="layui-col-md2 layui-col-sm2 layui-col-xs2">本季
+                                                        </div>
+                                                        <div value="7"
+                                                            class="layui-col-md2 layui-col-sm2 layui-col-xs2">本年
+                                                        </div>
+                                                    </div>
+                                                    <div class="layui-col-md3 layui-col-sm4 layui-col-xs12">
+                                                        <input type="text" class="layui-input" id="repairStartDate"
+                                                            v-model="q.repairStarDateStr" readonly placeholder="选择日期范围"
+                                                            style="width: 300px;" autocomplete="off">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class=" flex-box layui-inline layui-col-md9 layui-col-sm9 layui-col-xs9">
+                                        <label class="layui-form-label">实退日期:</label>
+                                        <div class="list-search-sup-title new-layui-title">
+                                            <div class="task-content-box-tab">
+                                                <div class="display task-content-box-tab layui-col-md8 layui-col-sm8 layui-col-xs12"
+                                                    type="repairEndDate">
+                                                    <div value="0" class="layui-col-md2 layui-col-sm2 layui-col-xs2">昨天
+                                                    </div>
+                                                    <div value="1" class="layui-col-md2 layui-col-sm2 layui-col-xs2">今天
+                                                    </div>
+                                                    <div value="2" class="layui-col-md2 layui-col-sm2 layui-col-xs2">上周
+                                                    </div>
+                                                    <div value="3" class="layui-col-md2 layui-col-sm2 layui-col-xs2">本周
+                                                    </div>
+                                                    <div value="4" class="layui-col-md2 layui-col-sm2 layui-col-xs2">上月
+                                                    </div>
+                                                    <div value="5" class="layui-col-md2 layui-col-sm2 layui-col-xs2">本月
+                                                    </div>
+                                                    <div value="6" class="layui-col-md2 layui-col-sm2 layui-col-xs2">本季
+                                                    </div>
+                                                    <div value="7" class="layui-col-md2 layui-col-sm2 layui-col-xs2">本年
+                                                    </div>
+                                                </div>
+                                                <div class="layui-col-md3 layui-col-sm4 layui-col-xs12">
+                                                    <input type="text" class="layui-input" id="repairEndDate"
+                                                        v-model="q.repairEndDateStr" readonly placeholder="选择日期范围"
+                                                        style="width: 300px;" autocomplete="off">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label"> </label>
+                                    <div class="df-color" style="display: flex;align-items: center;">
+                                        <!--查询重置按钮-->
+                                        <a class="layui-btn search-btn" @click="query">查询</a>
+                                        <a class="layui-btn reset-btn" @click="reset">重置</a>
+                                        <div @click="bindFilter"
+                                            style="margin-left: 10px;cursor: pointer;user-select: none;">
+                                            <span>高级筛选</span>
+                                            <img src="../../../statics/images/gjsx2x.png" style="width:14px">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </section>
+                </form>
+
+            </div>
+            <table class="layui-hide" id="grid" lay-filter="grid"></table>
+        </div>
+        <!-- 表单 -->
+        <form v-show="showForm" class="layui-form ren-form" id="editForm">
+            <div class="form-content-box">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    {{formName}}
+                </div>
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">退款类型*:</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input searchVal"
+                                        v-model="shouldRefund.refundTypeShow" placeholder="请输入退款类型" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">退款状态:</label>
+                                <div class="layui-input-inline">
+                                    <span>{{refundState}}</span>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">车牌号:</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input searchVal" @click="selectCar"
+                                        lay-verify="required" v-model="shouldRefund.carNo" placeholder="选择车牌号" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">车架号:</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input searchVal" @click="selectCar"
+                                        lay-verify="required" v-model="shouldRefund.vinNo" placeholder="选择车架号" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">车辆状态:</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input searchVal"
+                                        v-model="shouldRefund.vehicleStateShow" placeholder="自动获取" style="width: 50%"
+                                        disabled />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">退款收款方*:</label>
+                                <div class="layui-input-inline">
+                                    <input name="radioCustomer" lay-filter="radioCustomer" type="radio" value=5
+                                        title="客户" checked>
+                                    <input name="radioCustomer" lay-filter="radioCustomer" type="radio" value=6
+                                        title="渠道商">
+                                    <select id="customer" name="customer" lay-filter="customer" lay-verify="required"
+                                        v-model="shouldRefund.customerId">
+                                        <option value="">请选择收款方</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">{{dateLabel}}*:</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input" lay-verify="required" readonly="readonly"
+                                        id="expectRefund" v-model="shouldRefund.refundTime" placeholder="请选择退款日期">
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">{{amountLabel}}*:</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input searchVal" lay-verify="required"
+                                        oninput="value=moneyInput(value)" v-model="shouldRefund.refundAmount"
+                                        placeholder="请输入应退金额" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">退款方式*:</label>
+                                <div class="layui-input-inline">
+                                    <select name="refundWay" lay-filter="refundWay" v-model="shouldRefund.refundWay">
+                                        <option value="">请选择退款方式</option>
+                                        <option value=1>余额</option>
+                                        <option value=2>银行卡</option>
+                                        <option value=3>支付宝</option>
+                                        <option value=4>微信</option>
+                                        <option value=5>现金</option>
+                                        <option value=6>其他</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">备注:</label>
+                                <div class="layui-input-inline">
+                                    <textarea placeholder="如果需要备注，请记录备注信息" class="layui-textarea" name="desc"
+                                        v-model="shouldRefund.note"></textarea>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">附件:</label>
+                                <div class="layui-input-inline">
+                                    <div class="layui-input-inline-upload">
+                                        <div :id="deliveryFileLstId" class="layui-input-inline-upload-show box-rect"
+                                            v-for="(item,index) in deliveryFileLst">
+                                            <div v-show="item.typeFile == 1" class="layui-input-inline-upload-button">
+                                                <img :src="imageURL + item.url" class="view-img">
+                                            </div>
+                                            <div v-show="item.typeFile != 1" class="layui-input-inline-upload-button">
+                                                {{item.nameAccessory}}
+                                            </div>
+                                            <div class="layui-input-inline-upload-show-delete btn-event"
+                                                @click="delDeliveryFile(item.id)">
+                                                删除
+                                            </div>
+                                        </div>
+                                        <div class="layui-input-inline-upload-button box-rect box-rect-event"
+                                            id="addDeliveryFile">
+                                            <img src="../../statics/images/inline-upload@2x.png">
+                                        </div>
+                                    </div>
+                                    <div class="layui-input-inline-upload-text" style="padding-bottom: 10px">
+                                        附件说明：附件最大支持50M，
+                                        <br />
+                                        支持格式：PDF、Word、Excel、JPG、PNG 、ZIP、RAR
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="float-btn-group">
+                <a class="layui-btn reset-btn" @click="cancel">取消</a>
+                <a class="layui-btn search-btn" @click="save">保存</a>
+            </div>
+        </form>
+
+
+        <!-- 退款弹框 -->
+        <form v-show="refundForm" class="layui-form ren-form" id="refundForm">
+            <div class="form-content-box">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    退款
+                </div>
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">退款单号:</label>
+                                <div class="layui-input-inline">
+                                    <p>{{refundFormData.refundNo}}</p>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">退款类型:</label>
+                                <div class="layui-input-inline">
+                                    <p>{{refundFormData.refundType}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr class="layui-bg-gray">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    <span>退款明细</span> <span
+                        style="color: red; float: right">实退款金额:{{refundFormData.actualRefund}}</span>
+                </div>
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <!-- v-if="refundFormData.settleType != 3"-->
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6"
+                                v-for="(item,i) in refundFormData.feeItemEntities">
+                                <label class="layui-form-label">{{refundFormData.leaseType == 7 && item.feeItemCode ==
+                                    'ZJQKF'?'车辆挂靠费欠款金额/元':item.feeItemName}}:</label>
+                                <div v-if="item.valueType == 1" class="layui-input-inline">
+                                    <p>{{item.feeItemAmount}}</p>
+                                </div>
+                                <div v-if="item.valueType == 2" class="layui-input-inline">
+                                    <p>{{item.feeItemValue}}</p>
+                                </div>
+                            </div>
+
+                            <!--                        <div v-if="refundFormData.settleType == 3 && refundFormData.spareCarFeeItem != null"-->
+                            <!--                             class="layui-row layui-form-row-content">-->
+                            <!--                            <div v-if="refundFormData.leaseType != 2 && refundFormData.spareCarFeeItem.margin != null && refundFormData.spareCarFeeItem.margin != ''"-->
+                            <!--                                 class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+                            <!--                                <label class="layui-form-label">可退保证金:</label>-->
+                            <!--                                <div class="layui-input-inline">-->
+                            <!--                                    <input-->
+                            <!--                                            type="text"-->
+                            <!--                                            class="layui-input searchVal"-->
+                            <!--                                            v-model="refundFormData.spareCarFeeItem.margin"-->
+                            <!--                                            disabled/>-->
+                            <!--                                </div>-->
+                            <!--                            </div>-->
+                            <!--                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+                            <!--                                <label class="layui-form-label">车辆租金欠款金额:</label>-->
+                            <!--                                <div class="layui-input-inline">-->
+                            <!--                                    <input-->
+                            <!--                                            type="text"-->
+                            <!--                                            class="layui-input searchVal"-->
+                            <!--                                            v-model="refundFormData.spareCarFeeItem.rentPay"-->
+                            <!--                                            disabled/>-->
+                            <!--                                </div>-->
+                            <!--                            </div>-->
+                            <!--                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+                            <!--                                <label class="layui-form-label">车辆违章分数:</label>-->
+                            <!--                                <div class="layui-input-inline">-->
+                            <!--                                    <input-->
+                            <!--                                            type="text"-->
+                            <!--                                            class="layui-input searchVal"-->
+                            <!--                                            v-model="refundFormData.spareCarFeeItem.illegalScore"-->
+                            <!--                                            disabled/>-->
+                            <!--                                </div>-->
+                            <!--                            </div>-->
+                            <!--                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+                            <!--                                <label class="layui-form-label">车辆违章费用:</label>-->
+                            <!--                                <div class="layui-input-inline">-->
+                            <!--                                    <input-->
+                            <!--                                            type="text"-->
+                            <!--                                            class="layui-input searchVal"-->
+                            <!--                                            v-model="refundFormData.spareCarFeeItem.illegalFee"-->
+                            <!--                                            disabled/>-->
+                            <!--                                </div>-->
+                            <!--                            </div>-->
+                            <!--                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+                            <!--                                <label class="layui-form-label">车辆出险次数:</label>-->
+                            <!--                                <div class="layui-input-inline">-->
+                            <!--                                    <input-->
+                            <!--                                            type="text"-->
+                            <!--                                            class="layui-input searchVal"-->
+                            <!--                                            v-model="refundFormData.spareCarFeeItem.outInsurance"-->
+                            <!--                                            disabled/>-->
+                            <!--                                </div>-->
+                            <!--                            </div>-->
+                            <!--                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+                            <!--                                <label class="layui-form-label">车辆出险费用:</label>-->
+                            <!--                                <div class="layui-input-inline">-->
+                            <!--                                    <input-->
+                            <!--                                            type="text"-->
+                            <!--                                            class="layui-input searchVal"-->
+                            <!--                                            v-model="refundFormData.spareCarFeeItem.outFee"-->
+                            <!--                                            disabled/>-->
+                            <!--                                </div>-->
+                            <!--                            </div>-->
+                            <!--                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+                            <!--                                <label class="layui-form-label">车辆定损实际金额:</label>-->
+                            <!--                                <div class="layui-input-inline">-->
+                            <!--                                    <input-->
+                            <!--                                            type="text"-->
+                            <!--                                            class="layui-input searchVal"-->
+                            <!--                                            v-model="refundFormData.spareCarFeeItem.actualFee"-->
+                            <!--                                            disabled/>-->
+                            <!--                                </div>-->
+                            <!--                            </div>-->
+                            <!--                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+                            <!--                                <label class="layui-form-label">车辆可抵扣金额:</label>-->
+                            <!--                                <div class="layui-input-inline">-->
+                            <!--                                    <input-->
+                            <!--                                            type="text"-->
+                            <!--                                            class="layui-input searchVal"-->
+                            <!--                                            v-model="refundFormData.spareCarFeeItem.discountFee"-->
+                            <!--                                            disabled/>-->
+                            <!--                                </div>-->
+                            <!--                            </div>-->
+                            <!--                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+                            <!--                                <label class="layui-form-label">车辆其它欠款金额:</label>-->
+                            <!--                                <div class="layui-input-inline">-->
+                            <!--                                    <input-->
+                            <!--                                            type="text"-->
+                            <!--                                            class="layui-input searchVal"-->
+                            <!--                                            v-model="refundFormData.spareCarFeeItem.otherFee"-->
+                            <!--                                            disabled/>-->
+                            <!--                                </div>-->
+                            <!--                            </div>-->
+                            <!--                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+                            <!--                                <label class="layui-form-label">车辆违约金额:</label>-->
+                            <!--                                <div class="layui-input-inline">-->
+                            <!--                                    <input-->
+                            <!--                                            type="text"-->
+                            <!--                                            class="layui-input searchVal"-->
+                            <!--                                            v-model="refundFormData.spareCarFeeItem.defaultFee"-->
+                            <!--                                            disabled/>-->
+                            <!--                                </div>-->
+                            <!--                            </div>-->
+                            <!--                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+                            <!--                                <label class="layui-form-label">费用说明:</label>-->
+                            <!--                                <div class="layui-input-inline">-->
+                            <!--                                    <input-->
+                            <!--                                            type="text"-->
+                            <!--                                            class="layui-input searchVal"-->
+                            <!--                                            v-model="refundFormData.spareCarFeeItem.feeDesc"-->
+                            <!--                                            disabled/>-->
+                            <!--                                </div>-->
+                            <!--                            </div>-->
+                            <!--                        </div>-->
+                        </div>
+                    </div>
+                </div>
+                <hr class="layui-bg-gray">
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md12 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">退款方式:</label>
+                                <div class="layui-input-inline">
+                                    <select name="refundWay" lay-filter="refundWayRadio">
+                                        <option value="">请选择退款方式</option>
+                                        <option value=1>余额</option>
+                                        <option value=2>银行卡</option>
+                                        <option value=3>支付宝</option>
+                                        <option value=4>微信</option>
+                                        <option value=5>现金</option>
+                                        <option value=6>其他</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">备注:</label>
+                                <div class="layui-input-inline">
+                                    <textarea placeholder="如果需要备注，请记录备注信息" class="layui-textarea" name="desc"
+                                        v-model="refundSave.desc"></textarea>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">退款凭证:</label>
+                                <div class="layui-input-inline">
+                                    <div class="layui-input-inline-upload">
+                                        <div :id="deliveryFileLstId" class="layui-input-inline-upload-show box-rect"
+                                            v-for="(item,index) in deliveryFileLst">
+                                            <div v-show="item.typeFile == 1" class="layui-input-inline-upload-button">
+                                                <img :src="imageURL + item.url" class="view-img">
+                                            </div>
+                                            <div v-show="item.typeFile != 1" class="layui-input-inline-upload-button">
+                                                {{item.nameAccessory}}
+                                            </div>
+                                            <div class="layui-input-inline-upload-show-delete btn-event"
+                                                @click="delDeliveryFile(item.id)">
+                                                删除
+                                            </div>
+                                        </div>
+                                        <div class="layui-input-inline-upload-button box-rect box-rect-event"
+                                            id="addDeliveryFile1">
+                                            <img src="../../statics/images/inline-upload@2x.png">
+                                        </div>
+                                    </div>
+                                    <div class="layui-input-inline-upload-text" style="padding-bottom: 10px">
+                                        附件说明：附件最大支持50M，
+                                        <br />
+                                        支持格式：PDF、Word、Excel、JPG、PNG 、ZIP、RAR
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="float-btn-group">
+                <a class="layui-btn reset-btn" @click="cancel">取消</a>
+                <a class="layui-btn search-btn" @click="saveRefund(refundFormData.refundId)">保存</a>
+            </div>
+        </form>
+
+
+    </div>
+
+    <!--操作-->
+    <script type="text/html" id="barTpl">
+        <div style="min-width: 80px;">
+    {{#  if(!d.refundStatus){ }}
+    <a class="layui-grid-btn-xs" lay-event="refund">退款</a>
+    {{#  } }}
+    <a class="layui-grid-btn-xs" lay-event="detail">详情</a>
+        </div>
+</script>
+
+    <script src="../../statics/js/modules/financial/shouldrefund.js?_${.now?long}"></script>
+</body>
+
+</html>

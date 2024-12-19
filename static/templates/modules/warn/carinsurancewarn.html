@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .list-header-card-text1 {
+            font-size: 12px;
+            height: 50px;
+            line-height: 70px;
+        }
+        .list-header-card .flex{
+            width: 200px !important;
+        }
+        .list-header-card > div{
+            margin-right: 24px  !important;
+        }
+        
+       .layui-form-label {
+            width: 120px !important;
+        }
+        .laytable-cell-1-0-0{
+            width:40px !important;
+        }
+    </style>
+    <title>车辆保险预警</title>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="Author" content="larry" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+    <script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/common.js"></script>
+    <script type="text/javascript" src="../../statics/js/upload.js"></script>
+    <script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+    <link rel="stylesheet" href="../../statics/new_css/jxcPublicAll.css"  media="all">
+    <link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../statics/common/step/steps.css">
+    <link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/viewer.min.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+    <script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+    <script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+    <script src="../../statics/common/layui/autocomplete.js"></script>
+    <script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+    <script src="../../statics/common/print-js/print.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+    <script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/searchview.js"></script>
+    <script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+    <!-- 引入组件库 -->
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <div class="list-header-content-box">
+        <div class="list-header-card display">
+            <div id="field1" class="flex no_active"  @click="changeStatus(1)">
+                <div class="list-header-card-text">
+                    <span class="title">全部</span>
+                </div>
+                <div class="list-header-card-number">{{total.field1}}</div>
+            </div>
+            <div id="field2" class="flex no_active" @click="changeStatus(2)">
+                <div class="list-header-card-text">
+                    <span class="title">商业险逾期未续保</span>
+                </div>
+                <div class="list-header-card-number">{{total.field2}}</div>
+            </div>
+            <div id="field3" class="flex no_active" @click="changeStatus(3)">
+                <div class="list-header-card-text">
+                    <span class="title">商业险{{dateConfig1}}天以内待续保</span>
+                </div>
+                <div class="list-header-card-number">{{total.field3}}</div>
+            </div>
+            <div id="field4" class="flex no_active" @click="changeStatus(4)">
+                <div class="list-header-card-text">
+                    <span class="title">未购买商业险</span>
+                </div>
+                <div class="list-header-card-number">{{total.field4}}</div>
+            </div>
+            <div id="field5" class="flex no_active" @click="changeStatus(5)">
+                <div class="list-header-card-text">
+                    <span class="title">交强险逾期未续保</span>
+                </div>
+                <div class="list-header-card-number">{{total.field5}}</div>
+            </div>
+            <div id="field6" class="flex no_active" @click="changeStatus(6)">
+                <div class="list-header-card-text">
+                    <span class="title">交强险{{dateConfig2}}天以内待续保</span>
+                </div>
+                <div class="list-header-card-number">{{total.field6}}</div>
+            </div>
+            <div id="field7" class="flex no_active" @click="changeStatus(7)">
+                <div class="list-header-card-text">
+                    <span class="title">未购买交强险</span>
+                </div>
+                <div class="list-header-card-number">{{total.field7}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="mvvm-table">
+        <div class="list-search-title-box">
+            <form class="layui-form" style="box-shadow: 0 0 20px #eee;padding-right: 15px;">
+                <section class="jxc-section" style="display: flex;align-items: flex-start;white-space: nowrap;">
+                    <div class="card layui-row" style="flex: 1">
+                        <div class="layui-form-item ">
+                            <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                <label class="layui-form-label">车牌号/车架号</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input searchVal"
+                                        v-model="q.carNo"
+                                        placeholder="请输入车牌号/车架号"/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                <label class="layui-form-label">车辆归属</label>
+                                <div class="layui-input-inline">
+                                    <input v-model="q.carBelongCompanyName" type="text"   style="cursor:pointer;"   @click="deptTree" readonly="readonly"
+                                        class="layui-input searchVal"
+                                        placeholder="请选择车辆归属" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                <label class="layui-form-label">品牌/车系/车型</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" id="a"  class="layui-input" placeholder="请选择品牌/车系/车型" readonly="readonly"/>
+                                </div>
+                            </div>
+                            <section v-show="isFilter">
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">车辆状态</label>
+                                    <div class="layui-input-inline">
+                                        <select name="carStatus" lay-filter="carStatusSelect" v-model="q.carStatusStr">
+                                            <!-- 车辆状态(当前状态 1整备中，2备发车，3 预定中  4.用车中 5.已过户)-->
+                                            <option value="">请选择车辆状态</option>
+                                            <option value="1">整备中</option>
+                                            <option value="2">备发车</option>
+                                            <option value="3">预定中</option>
+                                            <option value="4">用车中</option>
+                                            <option value="5">已过户</option>
+                                            <option value="6">已处置</option>
+                                            <option value="7">已出售</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">保单号</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal" v-model="q.policyApplyNo"  placeholder="请输入保单号"/>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">保险公司</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal" v-model="q.compulsoryCaompanyName"  placeholder="请输入保险公司名称"/>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">付款对象</label>
+                                    <div class="layui-input-inline">
+                                        <select  v-model="q.payObjectName"   lay-filter="payObjectNameSelect" class="layui-select" >
+                                            <option value="">请选择付款对象</option>
+                                            <option v-for="item in payObject" :value="item.code">{{item.value}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">所在仓库</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal" v-model="q.carDepotName"  @click="chooseWarehouse"   placeholder="请选择所在仓库" readonly/>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">车辆所有人</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal" v-model="q.carOwner" placeholder="请输入车辆所有人"/>
+                                    </div>
+                                </div>
+                                <div class=" flex-box layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <label class="layui-form-label">商业险结束时间</label>
+                                    <div class="list-search-sup-title new-layui-title">
+                                        <div class="task-content-box-tab">
+                                            <div class="display task-content-box-tab layui-col-md8 layui-col-sm8 layui-col-xs12" type="commercialEndTimeType">
+                                                <div value="0" class="layui-col-md2 layui-col-sm2 layui-col-xs2">昨天</div>
+                                                <div value="1" class="layui-col-md2 layui-col-sm2 layui-col-xs2">今日</div>
+                                                <div value="2" class="layui-col-md2 layui-col-sm2 layui-col-xs2">上周</div>
+                                                <div value="3" class="layui-col-md2 layui-col-sm2 layui-col-xs2">本周</div>
+                                                <div value="4" class="layui-col-md2 layui-col-sm2 layui-col-xs2">上月</div>
+                                                <div value="5" class="layui-col-md2 layui-col-sm2 layui-col-xs2">本月</div>
+                                                <div value="6" class="layui-col-md2 layui-col-sm2 layui-col-xs2">本季</div>
+                                                <div value="7" class="layui-col-md2 layui-col-sm2 layui-col-xs2">本年</div>
+                                            </div>
+                                            <div class="layui-col-md4 layui-col-sm4 layui-col-xs12">
+                                                <input type="text" class="layui-input" id="commercialEndTimeSearch" v-model="q.commercialEndTimeSearch"
+                                                    readonly placeholder="选择日期范围" style="width: 300px;" autocomplete="off">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class=" flex-box layui-inline layui-col-md9 layui-col-sm12 layui-col-xs12">
+                                    <label class="layui-form-label">交强险结束时间</label>
+                                    <div class="list-search-sup-title new-layui-title">
+                                        <div class="task-content-box-tab">
+                                            <div class="display task-content-box-tab layui-col-md8 layui-col-sm8 layui-col-xs12" type="compulsoryEndTimeType">
+                                                <div value="0"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">昨天</div>
+                                                <div value="1"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">今日</div>
+                                                <div value="2"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">上周</div>
+                                                <div value="3"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">本周</div>
+                                                <div value="4"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">上月</div>
+                                                <div value="5"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">本月</div>
+                                                <div value="6"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">本季</div>
+                                                <div value="7"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">本年</div>
+                                            </div>
+                                            <div class="layui-col-md4 layui-col-sm4 layui-col-xs12">
+                                                <input type="text" class="layui-input" id="compulsoryEndTimeSearch" v-model="q.compulsoryEndTimeSearch"
+                                                    readonly placeholder="选择日期范围" style="width: 300px;" autocomplete="off">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <div class="layui-inline layui-col-md3 layui-col-sm12 layui-col-xs12">
+                                <label class="layui-form-label"> </label>
+                                <div class="df-color" style="display: flex;align-items: center;">
+                                    <a class="layui-btn search-btn" @click="query">查询</a>
+                                    <a class="layui-btn reset-btn" @click="reset">重置</a>
+                                    <div @click="bindFilter" style="margin-left: 10px;cursor: pointer;user-select: none;">
+                                        <span>高级筛选</span>
+                                        <i class="icon layui-icon-extend layui-extend-shaixuan"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </form>
+        </div>
+        <div class="list-search-title-box ground-search-btn">
+            <form class="layui-form">
+                    <div style="display:flex;width: 100%;">
+                        <div class="layui-form-item layui-row" style="width: 100%;">
+                            <div class="list-search-form-button" style="width: 100%;">
+                                <a class="layui-btn btn-info" @click="batchNotice" >批量通知</a>
+                                <a class="layui-btn btn-warning" @click="exports" v-m-perm="['maintenance:insurancemanagewarn:export']">导出</a>
+                            </div>
+                        </div>
+                    </div>
+            </form>
+        </div>
+        <table class="layui-hide" id="grid" lay-filter="grid"></table>
+    </div>
+</div>
+<script type="text/html" id="checkbd">
+    <div>
+        <input type="checkbox" name="siam_one" title="" lay-filter='siam_one' lay-skin="primary" data-contractId = "{{ d.carId }}" data-id = "{{ d.carId}}" {{ d.LAY_CHECKED == 1 ? 'checked' : '' }}>
+    </div>
+</script>
+<script type="text/html" id="barTpl">
+    <div style="min-width: 100px;">
+        <mperm class="option-btn-margin" v-m-perm="['maintenance:insurancemanagewarn:view']">
+            <a class="layui-grid-btn-xs" lay-event="view" more-btn-index="{{d.LAY_INDEX-1}}">查看</a>
+        </mperm>
+        <mperm class="option-btn-margin" v-m-perm="['maintenance:insurancemanage:renewal']">
+            <!-- 交强险是否续保==是 || 商业险是否续保==是 || 交强险剩余天数<=提醒天数 || 商业险剩余天数<=提醒天数-->
+            {{#if(d.isJqxRenewal === '0' || d.isSyxRenewal === '0' || d.configDay === '1' || d.syxConfigDay === '1'){}}
+                <a class="layui-grid-btn-xs" lay-event="renewal" more-btn-index="{{d.LAY_INDEX-1}}">续保</a>
+            {{#}}}
+        </mperm>
+        <mperm v-m-perm="['maintenance:insurancemanagewarn:notice']">
+            <a class="layui-grid-btn-xs" lay-event="notice" more-btn-index="{{d.LAY_INDEX-1}}">通知</a>
+        </mperm>
+    </div>
+</script>
+
+
+<script src="../../statics/js/modules/warn/carinsurancewarn.js"></script>
+</body>
+</html>

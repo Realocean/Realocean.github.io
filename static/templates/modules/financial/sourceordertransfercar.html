@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>车辆来源订单过户结算</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+    <style>
+        .multiple-cell {
+            display: table-cell;
+            padding-right: 8px;
+        }
+
+        .multiple-table {
+            margin-bottom: 9px;
+            display: table;
+        }
+
+    </style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <!-- 新增表单 -->
+    <form class="layui-form ren-form" style="margin-bottom: 60px;">
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                过户结算
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">预计过户时间:</label>
+                            <div class="layui-input-inline">
+                                <input style="border: 0" v-model="sourceOrderSettlement.transferDate" readonly id="transferDate" lay-verify="validate_rentStartDate" type="text" class="layui-input searchVal"   placeholder="预计过户时间" />
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>实际过户时间:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="sourceOrderSettlement.actualTransferDate" readonly id="actualTransferDate" lay-verify="validate_rentStartDate" type="text" class="layui-input searchVal"   placeholder="请选择实际过户时间" />
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs12">
+                            <label class="layui-form-label">过户备注:</label>
+                            <div class="layui-input-inline">
+                                <textarea maxlength="500"  v-model="sourceOrderSettlement.remark"  placeholder="过户备注" class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">可退金额/元:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="" v-model="sourceOrderSettlement.refundAmount" autocomplete="off" placeholder="可退金额/元" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">应付金额/元:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="" v-model="sourceOrderSettlement.payableAmount" autocomplete="off" placeholder="应付金额/元" class="layui-input searchVal">
+                            </div>
+                        </div>
+
+
+
+                        <div class="card">
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <label class="layui-form-label">附件:</label>
+                                    <div class="layui-input-inline">
+                                        <div class="layui-input-inline">
+                                            <div class="layui-input-inline-upload">
+                                                <div :id="fileLstId" class="layui-input-inline-upload-show box-rect" v-for="(item,index) in fileList">
+                                                    <div v-show="item.typeFile == 1" class="layui-input-inline-upload-button">
+                                                        <img :src="imageURL + item.url" class="view-img">
+                                                    </div>
+                                                    <div v-show="item.typeFile != 1" class="layui-input-inline-upload-button">
+                                                        {{item.nameAccessory}}
+                                                    </div>
+                                                    <div class="layui-input-inline-upload-show-delete btn-event" @click="delFile(item.id)">
+                                                        删除
+                                                    </div>
+                                                </div>
+                                                <div class="layui-input-inline-upload-button box-rect box-rect-event" id="orderSourceFile">
+                                                    <img src="../../statics/images/inline-upload@2x.png">
+                                                </div>
+                                            </div>
+                                            <div class="layui-input-inline-upload-text">
+                                                附件说明：附件最大支持30M，
+                                                支持格式：PDF、Word、Excel、JPG、PNG 、ZIP、RAR</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="float-btn-group bottom-bar">
+            <a class="layui-btn reset-btn" id="closePage">取消</a>
+            <a class="layui-btn search-btn" lay-submit lay-filter="save" id="save">保存</a>
+        </div>
+    </form>
+
+</div>
+
+<script type="text/html" id="feeItemBarTpl">
+    <a class="layui-grid-btn-xs" lay-event="delect">删除</a>
+</script>
+<script src="../../statics/js/modules/financial/sourceordertransfercar.js?_${.now?long}"></script>
+</body>
+</html>

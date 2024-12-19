@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../statics/newImages/logo/logo@2x.png">
+    <title>新增线索</title>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/global.css" media="all">-->
+
+    <!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/fonts/larry-icon.css" media="all">-->
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+    <!-- 放开后表格无法拖动   <link rel="stylesheet" type="text/css" href="../../statics/new_css/larryms.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/new_css/normalize.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <!-- Import style -->
+    <link rel="stylesheet" href="../../statics/js/element-plus/index.css"/>
+    <!-- 页面样式 -->
+    <link rel="stylesheet" href="../../statics/new_css/mf-layout.css"/>
+
+</head>
+<style>
+    .el-input {
+        width: 300px;
+    }
+
+
+</style>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <div class="list-header-content-box">
+
+        <div style="margin: 20px 70px 0 70px">
+
+            <el-form ref="form" :rules="rules" :model="form" label-width="120px">
+                <el-row :gutter="5">
+                    <el-col :span="12">
+                        <el-form-item label="姓名" prop="customerName">
+                            <el-input v-model="form.customerName" placeholder="请输入姓名"/>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="电话" prop="phone">
+
+                            <el-input type="text" oninput="value=value.replace(/[^\d]/g,'')" :maxlength="11" v-model="form.phone" placeholder="请输入电话"></el-input>
+
+<!--                            <el-input v-model="form.phone" :maxlength="11" type="number" placeholder="请输入电话"/>-->
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="12">
+                        <el-form-item label="线索来源" prop="cluesSource">
+                            <el-select v-model="form.cluesSource" placeholder="请选择线索来源" clearable>
+                                <el-option
+                                        v-for="(item, index) in cluesSource" :key="index"
+                                        :label="item.name" :value="item.code"/>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+
+
+                    <el-col :span="12">
+                        <el-form-item label="地址">
+                            <el-cascader
+                                    v-model="regiondata"
+                                    ref="region"
+                                    :options="province"
+                                    @change="handleChange"
+                                    placeholder="请选择地址"
+                                    :props="provinceProp"
+                                    :key="modalKey"
+                            />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="详细地址">
+                            <el-input v-model="form.address" placeholder="请输入详细地址"/>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="12">
+                        <el-form-item label="公司名称">
+                            <el-input v-model="form.company" placeholder="请输入公司名称"/>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="主营业务">
+                            <el-input v-model="form.companyBusiness" placeholder="请输入主营业务"/>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="12">
+                        <el-form-item label="职位">
+                            <el-input v-model="form.occupation" placeholder="请输入客户职位"/>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="客户类型">
+                            <el-select v-model="form.customerType" placeholder="请选择客户类型" clearable>
+                                <el-option
+                                        v-for="(item, index) in customerType" :key="index"
+                                        :label="item.name" :value="item.code"/>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="12">
+                        <el-form-item label="意向车型">
+
+                            <el-cascader
+                                    v-model="modeldata"
+                                    :key="modelKey"
+                                ref="model"
+                                :options="brandList"
+                                @change="handleBrandChange"
+                                placeholder="请选择"/>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="意向等级">
+                            <el-select v-model="form.intentionLevel" placeholder="请选择意向等级" clearable>
+                                <el-option
+                                        v-for="(item, index) in intentionLevel" :key="index"
+                                        :label="item.name" :value="item.code"/>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+
+                </el-row>
+            </el-form>
+
+            <div class="dialog-footer">
+                <el-button @click="cancel">取 消</el-button>
+                <el-button type="primary" @click="submitForm">保 存</el-button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Import Vue 3 -->
+<script src="../../statics/js/vue3/vue.global.js"></script>
+<!-- Import component library -->
+<script src="../../statics/js/element-plus/index.full.js"></script>
+<script src="../../statics/js/element-plus/icons-vue.js"></script>
+<script src="../../statics/plugins/jquery.min.js"></script>
+<script src="../../statics/common/layui/layui.js"></script>
+<script src="../../statics/js/common.js"></script>
+<script src="../../statics/js/element-plus/locale-cn.js"></script>
+<script>
+
+</script>
+<script src="../../statics/js/modules/cluesSale/dict.js"></script>
+<script src="../../statics/js/modules/cluesSale/add.js?_${.now?long}"></script>
+</body>
+
+</html>

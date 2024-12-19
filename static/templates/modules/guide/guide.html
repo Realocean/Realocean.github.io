@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>消息列表</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/new_css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/element-ui/index.css" />
+<!--  引入elementui  -->
+<script src="../../statics/common/element-ui/index.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common-tabs.css">
+
+    <style>
+        .layui-row{
+            padding-top: 20px;
+        }
+
+        .item-wrap{
+            height: 180px;
+            border-radius: 4px;
+            border: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cover-bg{
+            height: 130px;
+            background: #3facb3;
+            border-radius: 4px 4px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cover-text{
+            font-size: 26px;
+            /*line-height: 130px;*/
+            color: #fff9ec;
+            margin: 0 10px;
+            overflow: visible;
+            word-break: break-all;
+        }
+
+    </style>
+
+
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <div class="list-header-content-box layui-row layui-form-row-content layui-col-space15">
+
+        <div v-for="(item, index) in datalist" class=" layui-col-md3 layui-col-sm3 layui-col-xs3">
+            <div class="item-wrap" @click="itemClick(item)">
+
+<!--                <el-image v-if="item.fileType === 3"-->
+<!--                          :src="getUrl(item.coverUrl)"-->
+<!--                          :preview-src-list="getFileUrl(item.fileName)" fit="fill"-->
+<!--                          style="width: 100%; height: 130px"></el-image>-->
+<!--                <el-image v-else-->
+<!--                          :src="getUrl(item.coverUrl)"-->
+<!--                          fit="fill" style="width: 100%; height: 130px"></el-image>-->
+
+<!--                <img v-if="item.fileType === 3" height="130px" border="4" :src="getUrl(item.coverUrl)" alt="">-->
+<!--                <img v-else height="130px" border="4" :src="getUrl(item.coverUrl)" alt="">-->
+
+                <div class="cover-bg">
+                    <span class="cover-text">{{item.coverUrl}}</span>
+                </div>
+
+                <div style="margin: 10px 0 0 10px">{{item.fileType === 2?item.name+'操作视频':item.name}}</div>
+
+            </div>
+        </div>
+
+        <!-- 视频-->
+        <el-dialog
+                :title="videoTitle"
+                :visible.sync="dialogVisible"
+                width="50%">
+            <div>
+                <video-player class="video-player vjs-custom-skin" ref="videoPlayer1" :playsinline="true"
+                              :options="playerOptions">
+                </video-player>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">关闭</el-button>
+            </span>
+        </el-dialog>
+
+    </div>
+
+</div>
+
+<script src="../../statics/js/modules/guide/guide.js?_${.now?long}"></script>
+</body>
+</html>

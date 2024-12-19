@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>订单支付信息明细表</title>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <!-- 新增表单 -->
+    <form class="layui-form ren-form" style="margin-bottom: 60px;">
+
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                订单支付信息明细表基本信息
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                                                                                                                                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span></label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_feeitemCode" v-model="orderPaymenfeeitem.feeitemCode" autocomplete="off" placeholder="" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>订单支付信息id</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_orderPaymentId" v-model="orderPaymenfeeitem.orderPaymentId" autocomplete="off" placeholder="订单支付信息id" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>订单id</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_orderId" v-model="orderPaymenfeeitem.orderId" autocomplete="off" placeholder="订单id" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>车辆订单id</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_orderCarId" v-model="orderPaymenfeeitem.orderCarId" autocomplete="off" placeholder="车辆订单id" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>客户id</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_customerId" v-model="orderPaymenfeeitem.customerId" autocomplete="off" placeholder="客户id" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>应支付金额</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_amountPayable" v-model="orderPaymenfeeitem.amountPayable" autocomplete="off" placeholder="应支付金额" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>实际支付金额</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_amountActualPayment" v-model="orderPaymenfeeitem.amountActualPayment" autocomplete="off" placeholder="实际支付金额" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>优惠金额</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_amountDiscount" v-model="orderPaymenfeeitem.amountDiscount" autocomplete="off" placeholder="优惠金额" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>优惠券编号</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_couponNo" v-model="orderPaymenfeeitem.couponNo" autocomplete="off" placeholder="优惠券编号" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>优惠券面额</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_couponFaceValue" v-model="orderPaymenfeeitem.couponFaceValue" autocomplete="off" placeholder="优惠券面额" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>优惠券使用金额</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_couponUseValue" v-model="orderPaymenfeeitem.couponUseValue" autocomplete="off" placeholder="优惠券使用金额" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>优惠券类型</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_couponType" v-model="orderPaymenfeeitem.couponType" autocomplete="off" placeholder="优惠券类型" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>优惠券信息</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_couponData" v-model="orderPaymenfeeitem.couponData" autocomplete="off" placeholder="优惠券信息" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>优惠券状态：1.已使用,2、已退回，3、已作废</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_couponStatus" v-model="orderPaymenfeeitem.couponStatus" autocomplete="off" placeholder="优惠券状态：1.已使用,2、已退回，3、已作废" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>剩余可抵扣金额</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_deductionAmountSurplus" v-model="orderPaymenfeeitem.deductionAmountSurplus" autocomplete="off" placeholder="剩余可抵扣金额" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>已抵扣金额</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_deductedAmount" v-model="orderPaymenfeeitem.deductedAmount" autocomplete="off" placeholder="已抵扣金额" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>创建时间</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_timeCreate" v-model="orderPaymenfeeitem.timeCreate" autocomplete="off" placeholder="创建时间" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>更新时间</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_timeUpdate" v-model="orderPaymenfeeitem.timeUpdate" autocomplete="off" placeholder="更新时间" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>删除状态（0未删除，1已删除）</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_delect" v-model="orderPaymenfeeitem.delect" autocomplete="off" placeholder="删除状态（0未删除，1已删除）" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>租户id</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_tenantId" v-model="orderPaymenfeeitem.tenantId" autocomplete="off" placeholder="租户id" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                        </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="float-btn-group bottom-bar">
+            <a class="layui-btn reset-btn" id="closePage">取消</a>
+            <a class="layui-btn search-btn" lay-submit lay-filter="save" id="save">保存</a>
+        </div>
+    </form>
+
+
+</div>
+
+
+<script src="../../statics/js/modules/order/orderpaymenfeeitemedit.js?_${.now?long}"></script>
+</body>
+</html>

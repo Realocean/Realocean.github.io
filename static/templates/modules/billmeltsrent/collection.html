@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>收款</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+    <style>
+        .input-readonly{
+            border: none;
+        }
+    </style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <form class="layui-form ren-form">
+        <div class="layui-row layui-form-row-content">
+            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                <label class="layui-form-label">账单编号：</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input input-readonly" :value="isEmpty(billMeltsRentmonth.billNo)"/>
+                </div>
+            </div>
+            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                <label class="layui-form-label">待收金额：</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input input-readonly" :value="isEmpty(billMeltsRentmonth.uncollectedAmount)"/>
+                </div>
+            </div>
+            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                <label class="layui-form-label"><span style="color:red">*</span>收款金额：</label>
+                <div class="layui-input-inline">
+                    <input type="text" lay-verify="validate_skAmount" v-model="skAmount" id="skAmount"
+                           autocomplete="off" placeholder="请输入收款金额" class="layui-input searchVal">
+                </div>
+            </div>
+        </div>
+        <div class="float-btn-group" style="width: 30%;left: 35%;">
+            <a class="layui-btn reset-btn" id="closePage">取消</a>
+            <a class="layui-btn search-btn" lay-submit lay-filter="save" id="save">提交</a>
+        </div>
+    </form>
+</div>
+
+<script src="../../statics/js/modules/billmeltsrent/collection.js"></script>
+</body>
+</html>

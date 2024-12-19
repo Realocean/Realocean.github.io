@@ -1,0 +1,84 @@
+
+.fl {
+    float: left;
+}
+
+.submit-approval-header {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.submit-approval-session {
+    overflow: hidden;
+    /* padding-left:; */
+    text-align: center;
+}
+
+.submit-approval-session >div {
+    padding-left: 20px;
+    position: relative;
+    width: 230px;
+    height: 130px;
+    margin-bottom: 20px;
+    color: rgb(122, 162, 255);
+}
+
+.submit-approval-session >div:first-child, .submit-approval-session-first-child {
+    padding-left: 0;
+}
+
+.submit-approval-session-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 65px;
+    width: 65px;
+    margin: auto;
+    /* padding-top: 10px; */
+    border-radius: 50%;
+    background: rgb(202, 202, 202);
+}
+
+.submit-approval-session-box >div {
+    background-color: #fff;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}
+.submit-approval-session-text {
+    margin: 10px;
+    
+}
+
+.submit-approval-session-line-left {
+    position: absolute;
+    width: 80px;
+    height: 5px;
+    background: rgb(202, 202, 202);
+    left: 0px;
+    top: 30px;
+}
+
+.submit-approval-session-line-right {
+    position: absolute;
+    width: 60px;
+    height: 5px;
+    background: rgb(202, 202, 202);
+    right: 0px;
+    top: 30px;
+}
+
+.submit-approval-session-line-center {
+    position: absolute;
+    top: 10px;
+    left: -60px;
+    width: 140px;
+    /* background: #111; */
+}
+
+.submit-approval-session-line-left-show,
+.submit-approval-session-line-right-show,
+.submit-approval-session-box-show {
+    background: rgb(122, 162, 255);
+}

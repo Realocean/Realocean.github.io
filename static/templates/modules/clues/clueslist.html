@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>线索表</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/new_css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/viewer.min.css">
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common-tabs.css">
+    <style>
+        .layui-table-cell {
+            padding:0 5px;
+            height:inherit;
+            overflow:visible;
+            text-overflow:inherit;
+            white-space:normal;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <div class="list-header-content-box">
+        <div class="list-header-card display">
+            <div
+                    v-for="(item, index) in statusLst"
+                    :key="index"
+                    :sname="item.key"
+                    class="flex" :class="item.key == statusIndex ? 'active' : ''" @click="changeStatus(item,index)" style="cursor:pointer; margin-right: 10px;width:230px !important">
+                <div class="list-header-card-title">{{item.name}}</div>
+                <div class="list-header-card-count">{{item.count}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="mvvm-table">
+        <div class="list-search-title-box ground-search-btn">
+            <div id="searchId">
+                <div class="list-search-title-box">
+                    <form class="layui-form">
+                        <div style="display:flex;width: 100%;">
+                            <div class="layui-form-item layui-row" style="width: 100%;">
+                                <div class="list-search-form-button" style="width: 100%;">
+                                    <a v-show="statusIndex == 5" class="layui-btn btn-info" @click="add" v-m-perm="['clues:clues:save']">新增</a>
+                                    <a v-show="statusIndex == 5" class="layui-btn btn-success" id="imports" v-m-perm="['clues:clues:inport']">导入</a>
+                                    <a v-show="statusIndex == 5" style="margin-left: 10px;" class="layui-btn btn-danger" @click="importTemplate" v-m-perm="['clues:clues:inport']">导入模板</a>
+                                    <a class="layui-btn btn-warning" id="exports" v-m-perm="['clues:clues:export']">导出</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="list-table-content-box">
+            <table class="layui-hide" id="grid" lay-filter="grid"></table>
+        </div>
+    </div>
+</div>
+<form id="downLoadXls" style="display: none" method="post" target="">
+    <input type="text" name="datas"/>
+</form>
+</div>
+
+<!--操作-->
+<script type="text/html" id="rentCarTpl">
+    <div style="min-width:180px;">
+<!--    <#if shiro.hasPermission("clues:clues:update")>-->
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="dealRentBz" v-m-perm="['clues:clues:update']" more-btn-index="{{d.LAY_INDEX-1}}">处理备注</a>
+<!--    </#if>-->
+<!--    <#if shiro.hasPermission("clues:clues:info")>-->
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="rentview" v-m-perm="['clues:clues:info']" more-btn-index="{{d.LAY_INDEX-1}}">详情</a>
+<!--    </#if>-->
+    {{#if(d.isCall === 0){}}
+<!--        <#if shiro.hasPermission("clues:clues:update")>-->
+        <a class="layui-grid-btn-xs option-btn-margin" lay-event="rentCall" v-m-perm="['clues:clues:update']" more-btn-index="{{d.LAY_INDEX-1}}">确认已打电话</a>
+<!--        </#if>-->
+    {{#}}}
+</div>
+</script>
+
+<script type="text/html" id="hybmTpl">
+    <div style="min-width:180px;">
+<!--    <#if shiro.hasPermission("clues:clues:update")>-->
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="dealHybmBz" v-m-perm="['clues:clues:update']" more-btn-index="{{d.LAY_INDEX-1}}">处理备注</a>
+<!--    </#if>-->
+<!--    <#if shiro.hasPermission("clues:clues:info")>-->
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="viewHybm" v-m-perm="['clues:clues:info']" more-btn-index="{{d.LAY_INDEX-1}}">详情</a>
+<!--    </#if>-->
+    {{#if(d.isCall === 0){}}
+<!--    <#if shiro.hasPermission("clues:clues:update")>-->
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="hybmCall" v-m-perm="['clues:clues:update']" more-btn-index="{{d.LAY_INDEX-1}}">确认已打电话</a>
+<!--    </#if>-->
+    {{#}}}
+    </div>
+</script>
+
+<script type="text/html" id="yysjTpl">
+    <div style="min-width:180px;">
+<!--    <#if shiro.hasPermission("clues:clues:update")>-->
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="dealYysjBz" v-m-perm="['clues:clues:update']" more-btn-index="{{d.LAY_INDEX-1}}">处理备注</a>
+<!--    </#if>-->
+<!--    <#if shiro.hasPermission("clues:clues:info")>-->
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="viewYysj" v-m-perm="['clues:clues:info']" more-btn-index="{{d.LAY_INDEX-1}}">详情</a>
+<!--    </#if>-->
+    {{#if(d.isCall === 0){}}
+<!--    <#if shiro.hasPermission("clues:clues:update")>-->
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="yysjCall" v-m-perm="['clues:clues:update']" more-btn-index="{{d.LAY_INDEX-1}}">确认已打电话</a>
+<!--    </#if>-->
+    {{#}}}
+    {{#if(d.arrivalStatus === 1){}}
+<!--    <#if shiro.hasPermission("clues:clues:update")>-->
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="yysjArrival" v-m-perm="['clues:clues:update']" more-btn-index="{{d.LAY_INDEX-1}}">确认已到店</a>
+<!--    </#if>-->
+    {{#}}}
+</div>
+</script>
+
+<script type="text/html" id="hdzxTpl">
+    <div style="min-width:180px;">
+<!--    <#if shiro.hasPermission("clues:clues:update")>-->
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="dealHdzxBz" v-m-perm="['clues:clues:update']" more-btn-index="{{d.LAY_INDEX-1}}">处理备注</a>
+<!--    </#if>-->
+<!--    <#if shiro.hasPermission("clues:clues:info")>-->
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="viewHdzx" v-m-perm="['clues:clues:info']" more-btn-index="{{d.LAY_INDEX-1}}">详情</a>
+<!--    </#if>-->
+    {{#if(d.isCall === 0){}}
+<!--    <#if shiro.hasPermission("clues:clues:update")>-->
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="hdzxCall" v-m-perm="['clues:clues:update']" more-btn-index="{{d.LAY_INDEX-1}}">确认已打电话</a>
+<!--    </#if>-->
+    {{#}}}
+    </div>
+</script>
+
+<script type="text/html" id="hzjmTpl">
+    <div style="min-width:180px;">
+<!--    <#if shiro.hasPermission("clues:clues:update")>-->
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="dealHzjmBz" v-m-perm="['clues:clues:update']" more-btn-index="{{d.LAY_INDEX-1}}">处理备注</a>
+<!--    </#if>-->
+<!--    <#if shiro.hasPermission("clues:clues:info")>-->
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="viewHzjm" v-m-perm="['clues:clues:info']" more-btn-index="{{d.LAY_INDEX-1}}">详情</a>
+<!--    </#if>-->
+    {{#if(d.isCall === 0){}}
+<!--    <#if shiro.hasPermission("clues:clues:update")>-->
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="hzjmCall" v-m-perm="['clues:clues:update']" more-btn-index="{{d.LAY_INDEX-1}}">确认已打电话</a>
+<!--    </#if>-->
+    {{#}}}
+    </div>
+</script>
+
+<script type="text/html" id="cluesTpl">
+    <div style="min-width:180px;">
+    <!--<#if shiro.hasPermission("clues:clues:update")>
+    <a class="layui-grid-btn-xs" lay-event="transfer">跟进</a>
+    </#if>
+    <#if shiro.hasPermission("clues:clues:update")>
+    <a class="layui-grid-btn-xs" lay-event="transfer">转移</a>
+    </#if>
+    <#if shiro.hasPermission("clues:clues:info")>
+    <a class="layui-grid-btn-xs" lay-event="view">详情</a>
+    </#if>
+    <#if shiro.hasPermission("clues:clues:update")>
+    <a class="layui-grid-btn-xs" lay-event="transfer">编辑</a>
+    </#if>-->
+<!--    <#if shiro.hasPermission("clues:clues:update")>-->
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="follow_clues" v-m-perm="['clues:clues:update']" more-btn-index="{{d.LAY_INDEX-1}}">跟进</a>
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="transfer_clues" v-m-perm="['clues:clues:update']" more-btn-index="{{d.LAY_INDEX-1}}">转移</a>
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="edit_clues" v-m-perm="['clues:clues:update']" more-btn-index="{{d.LAY_INDEX-1}}">编辑</a>
+<!--    </#if>-->
+<!--    <#if shiro.hasPermission("clues:clues:info")>-->
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="view_clues" v-m-perm="['clues:clues:info']" more-btn-index="{{d.LAY_INDEX-1}}">查看</a>
+
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="delete" v-m-perm="['clues:clues:delete']" more-btn-index="{{d.LAY_INDEX-1}}">删除</a>
+
+    <!--    </#if>-->
+    </div>
+</script>
+
+<script src="../../statics/js/modules/clues/clueslist.js?_${.now?long}"></script>
+</body>
+</html>

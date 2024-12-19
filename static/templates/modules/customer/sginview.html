@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>签约绑卡</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+    <style>
+        .box {
+            max-height: 400px
+        }
+
+        #cardImage, .img {
+            display: block;
+            max-width: 100%;
+        }
+        .multiple-cell {
+            display: table-cell;
+            padding-right: 8px;
+        }
+
+        .multiple-table {
+            margin-bottom: 9px;
+            display: table;
+            margin-left: 78px;
+        }
+    </style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <!-- 新增表单 -->
+    <form class="layui-form ren-form" style="margin-bottom: 60px;">
+
+        <div class="form-content-box" :id="daikouCardId">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                银行卡信息
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs4" style="position: relative">
+                            <img class="layui-upload-drag"
+                                 style=" border: 1px dashed #c0ccda; border-radius: 6px; cursor: pointer;height: 120px;width: 220px;margin-top: 10px;padding: 0px;"
+                                 alt="银行卡正面"
+                                 onerror="this.src='../../statics/images/upload@2x.png'"
+                                 v-model="bankCardFront"
+                                 id="bankCardFront">
+                            <p style="position: absolute;z-index: 2;left: 80px;top: 20px;">银行卡正面</p>
+                        </div>
+                        <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs4" style="position: relative">
+                            <img class="layui-upload-drag"
+                                 style=" border: 1px dashed #c0ccda; border-radius: 6px; cursor: pointer;height: 120px;width: 220px;margin-top: 10px;padding: 0px;"
+                                 alt="银行卡背面"
+                                 onerror="this.src='../../statics/images/upload@2x.png'"
+                                 v-model="bankCardBack"
+                                 id="bankCardBack">
+                            <p style="position: absolute;z-index: 2;left: 80px;top: 20px;">银行卡背面</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label">开户行:</label>
+                            <div class="layui-input-inline">
+                                <select id="bankDeposit" name="bankDeposit" lay-filter="bankDeposit"
+                                        v-model="form.bankDeposit">
+                                    <option value="">请选择开户行</option>
+                                    <option v-for="(item,index) in bankSupportListFilter" :value="item.bankName">{{item.bankName}}</option>
+                                </select>
+                                <p>{{form.bankDepositDesc}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label">银行卡号:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" oninput="numInteger(this)"
+                                       v-model="form.bankCardNo" placeholder="请输入银行卡号"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label">银行卡类型:</label>
+                            <div class="layui-input-inline">
+                                <input type="radio" lay-filter="bankCardType" v-model="form.bankCardType"
+                                       name="bankCardType" value="0" lay-skin="primary" title="储蓄卡">
+                                <input type="radio" lay-filter="bankCardType" v-model="form.bankCardType"
+                                       name="bankCardType" value="1" lay-skin="primary" title="信用卡">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" v-show="form.bankCardType == 1">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label">信用卡有效期:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" maxlength="5"
+                                       v-model="form.expireDate" placeholder="请输入信用卡有效期,格式XX/XX（年份/月份）"/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label">信用卡安全码:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" oninput="numInteger(this)"
+                                       maxlength="6" v-model="form.cvv" placeholder="请输入信用卡安全码"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label">银行预留手机号:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" oninput="numInteger(this)"
+                                       v-model="form.mobileNo" placeholder="请输入银行预留手机号"/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label">手机验证码:</label>
+                            <div class="layui-input-block">
+                                <div class="multiple-table">
+                                    <div class="multiple-cell">
+                                        <input type="text" class="layui-input searchVal"
+                                               v-model="form.verificationCode" placeholder="请输入验证码"/>
+                                    </div>
+                                    <div class="multiple-cell">
+                                        <a class="layui-btn layui-btn-xs" id="sendMsg">{{sendMsgBtnTxt}}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="float-btn-group bottom-bar">
+            <a class="layui-btn reset-btn" id="closePage">取消</a>
+            <a class="layui-btn search-btn" lay-submit lay-filter="save" id="save">保存</a>
+        </div>
+    </form>
+
+
+</div>
+
+<script src="../../statics/js/modules/customer/sginview.js?_${.now?long}"></script>
+</body>
+</html>

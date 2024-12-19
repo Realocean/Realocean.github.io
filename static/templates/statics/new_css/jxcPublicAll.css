@@ -1,0 +1,112 @@
+.form-group {
+    /*margin-bottom: 15px;*/
+}
+legend {
+    display: block;
+    /*width: 100%;*/
+    padding: 0;
+    font-size: 21px;
+    line-height: inherit;
+    color: #333;
+    border: 0;
+}
+.thumbnail {
+    display: block;
+    padding: 4px;
+    margin-bottom: 20px;
+    line-height: 1.42857143;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    -webkit-transition: border .2s ease-in-out;
+    -o-transition: border .2s ease-in-out;
+    transition: border .2s ease-in-out;
+}
+.jxc-detail{
+    background: #ebeef5;
+}
+.jxc-section {
+    /*padding: 15px 20px;*/
+    /* background: #ffffff; */
+    /* margin-bottom: 20px; */
+    /*min-width: 992px !important;*/
+    /* border-radius: 8px; */
+}
+.jxc-section .aTitle{
+    font-weight: bold;
+}
+.jxc-section .card{
+    /* padding-left: 25px; */
+}
+.jxc-section .column{
+    margin-bottom: 15px;
+}
+.jxc-section .column span:nth-child(2){
+    color: #5e6d82;
+    padding-left: 10px;
+}
+.jxc-section .aTitle:before {
+    content: "";
+    height: 20px;
+    width: 8px;
+    background: #009688;
+    margin-right: 15px;
+    display: inline-block;
+}
+.jxc-section .imgList div{
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+.jxc-section img{
+    width: 100%;
+    vertical-align: middle;
+}
+.jxc-section .imgListBox li {
+    float: left;
+    background-color: #fbfdff;
+    border: 1px solid #c0ccda;
+    border-radius: 6px;
+    box-sizing: border-box;
+    width: 250px;
+    height: 165px;
+    margin-right: 1%;
+    margin-bottom: 15px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    padding: 5px;
+}
+.jxc-section .imgListBox .addImg {
+    text-align: center;
+    line-height: 168px;
+    border: 1px dashed #c0ccda;
+}
+.jxc-section .imgListBox li img {
+    width: 100%;
+    height: 100%;
+}
+.jxc-section .addImg label {
+    width: 100%;
+    height: 100%;
+    display: block;
+    cursor: pointer;
+}
+.jxc-section .addImg i{
+    font-size: 15px;
+    color: rgb(160, 157, 157);
+}
+.jxc-section .addImg input {
+    display: none;
+}
+.jxc-section .imgListBox .close {
+    position: absolute;
+    bottom: 0;
+    width: 96%;
+    text-align: center;
+    left: 5px;
+    color: #fff;
+    background-color: rgba(208, 50, 50, 0.67);
+    bottom: 5px;
+}

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>供应商审批详情</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+</head>
+<body>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <div  class="jxc-detail layui-form ren-form" >
+        <section class="jxc-section">
+            <legend class="aTitle">供应商信息:</legend>
+            <hr class="layui-bg-gray">
+            <div class="card">
+                <div class="layui-row form-group">
+                    <div class="column layui-col-xs4">
+                        <span>供应商名称:</span><span>{{supplier.supplierName}}</span>
+                    </div>
+                    <div class="column layui-col-xs4">
+                        <span>地址:</span><span>{{supplier.address}}</span>
+                    </div>
+                </div>
+                <div class="layui-row form-group">
+                    <div class="column layui-col-xs4">
+                        <span>法人代表:</span><span>{{supplier.corporateRepresentative}}</span>
+                    </div>
+                    <div class="column layui-col-xs4">
+                        <span>统一社会信用代码:</span><span>{{supplier.creditCode}}</span>
+                    </div>
+                </div>
+                <div class="layui-row form-group">
+                    <div class="column layui-col-xs4">
+                        <span>企业性质:</span><span>{{natureStr}}</span>
+                    </div>
+                    <div class="column layui-col-xs4">
+                        <span>成立时间:</span><span>{{supplier.establishmentTime}}</span>
+                    </div>
+                </div>
+                <div class="layui-row form-group">
+                    <div class="column layui-col-xs4">
+                        <span>注册资本:</span><span>{{supplier.registeredCapital}}</span>
+                    </div>
+                    <div class="column layui-col-xs4">
+                        <span>登记机关:</span><span>{{supplier.registration}}</span>
+                    </div>
+                </div>
+                <div class="layui-row form-group">
+                    <div class="column layui-col-xs4">
+                        <span>负责人:</span><span>{{supplier.person}}</span>
+                    </div>
+                    <div class="column layui-col-xs4">
+                        <span>联系手机:</span><span>{{supplier.phone}}</span>
+                    </div>
+                </div>
+                <div class="layui-row form-group">
+                    <div class="column layui-col-xs4">
+                        <span>办公电话:</span><span>{{supplier.officePhone}}</span>
+                    </div>
+                    <div class="column layui-col-xs4">
+                        <span>传真号码:</span><span>{{supplier.faxNumber}}</span>
+                    </div>
+                </div>
+                <div class="layui-row form-group">
+                    <div class="column layui-col-xs4">
+                        <span>供应商类型:</span><span>{{typeStr}}</span>
+                    </div>
+                    <div class="column layui-col-xs4">
+                        <span>结算模式:</span><span>{{settlementStr}}</span>
+                    </div>
+                </div>
+
+                <div class="layui-row form-group">
+                    <div class="column layui-col-xs4">
+                        <span>审核状态:</span><span>{{auditStatusStr}}</span>
+                    </div>
+<!--                    <div class="column layui-col-xs4">-->
+<!--                        <span>启用状态:</span><span>{{isUseStr}}</span>-->
+<!--                        &nbsp; &nbsp;&nbsp; &nbsp;<span  id="checkRecord" @click="checkRecord" style="color: blue">查看启用记录</span>-->
+<!--                    </div>-->
+                </div>
+                <div class="layui-row form-group" id="reason">
+                    <div class="column layui-col-xs4">
+                        <span>停用原因:</span><span>{{supplier.reason}}</span>
+                    </div>
+                </div>
+            </div>
+            <legend class="aTitle">附件资料</legend>
+            <hr class="layui-bg-gray">
+            <div class="card" >
+                <table class="layui-table">
+                    <colgroup>
+                        <col width="300">
+                        <col width="300">
+                        <col width="300">
+                        <col width="300">
+                        <col width="300">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>资料类型</th>
+                        <th>上传时间</th>
+                        <th>上传人</th>
+                        <th>文件名</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(item,index) in supplier.docLst" :key="index">
+                        <td>{{item.nameDesc == null||item.nameDesc == '' ?'---':item.nameDesc}}</td>
+                        <td>{{item.timeCreate}}</td>
+                        <td>{{item.operationName}}</td>
+                        <td>{{item.nameFile}}</td>
+                        <td>
+                            <a v-show="item.typeFile == 1" class="layui-btn layui-btn-xs" @click="showDoc(item.url, item.nameFile)">查看</a>
+                            <a class="layui-btn layui-btn-xs" @click="downDoc(item.url, item.nameFile)">下载</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <legend class="aTitle">客户方紧急联系人</legend>
+            <hr class="layui-bg-gray">
+            <div class="card" >
+                <table class="layui-table">
+                    <colgroup>
+                        <col width="300">
+                        <col width="300">
+                        <col width="300">
+                        <col width="300">
+                        <col width="300">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>联系人姓名</th>
+                        <th>联系手机</th>
+                        <th>办公电话</th>
+                        <th>地址</th>
+                        <th>与客户企业关系</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(item,index) in supplier.contactLst" :key="index">
+                        <td>{{item.name}}</td>
+                        <td>{{item.tel}}</td>
+                        <td>{{item.officeTel}}</td>
+                        <td>{{item.address}}</td>
+                        <td>{{item.relation}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</div>
+<script src="../../statics/js/modules/supplier/supplierDetail.js"></script>
+</body>
+</body>
+</html>

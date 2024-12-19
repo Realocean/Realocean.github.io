@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="Author" content="larry" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+    <script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/common.js"></script>
+    <script type="text/javascript" src="../../statics/js/upload.js"></script>
+    <script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+    <link rel="stylesheet" href="../../statics/new_css/jxcPublicAll.css" media="all">
+    <link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../statics/common/step/steps.css">
+    <link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/viewer.min.css">
+    <script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+    <script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+    <script src="../../statics/common/layui/autocomplete.js"></script>
+    <script src="../../statics/js/modules/viewer/viewer.min.js"></script>
+    <script src="../../statics/common/print-js/print.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+    <script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/searchview.js"></script>
+    <script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+    <!-- 引入组件库 -->
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+</head>
+<style>
+    .layui-form-label {
+        width: 120px !important;
+    }
+
+    .layui-inline .layui-input-inline #input-sty {
+        border-radius: 4px !important;
+    }
+
+    .layui-form-label-txt {
+        font-size: 16px;
+        height: 40px;
+        line-height: 40px;
+        padding: 0 15px !important;
+        font-weight: 500;
+    }
+
+    .layui-input-value {
+        height: 40px !important;
+        line-height: 40px !important;
+    }
+
+    /*.layui-input,*/
+    /*.layui-select,*/
+    /*.layui-textarea {*/
+    /*    height: 40px !important;*/
+    /*    width: 100% !important;*/
+    /*}*/
+
+    .layui-table-page .layui-laypage input {
+        width: 40px !important;
+        height: 26px !important;
+        line-height: 26px !important;
+    }
+
+    .layui-form-row-content .layui-inline .layui-input-inline-change {
+        width: 50%;
+
+    }
+
+    .box {
+        margin-bottom: 20px;
+    }
+</style>
+
+<body class="ren-body">
+    <div id="rrapp" v-cloak>
+        <div class="mvvm-table">
+            <div class="list-search-title-box">
+                <form class="layui-form" style="box-shadow: 0 0 20px #eee;padding-right: 15px;">
+                    <section class="jxc-section" style="display: flex;align-items: flex-start;white-space: nowrap;">
+                        <div class="card layui-row" style="flex: 1">
+                            <div class="layui-form-item ">
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">车牌号/车架号</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal" v-model="q.carPlateNo"
+                                            placeholder="请输入车牌号/车架号" />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">车辆归属</label>
+                                    <div class="layui-input-inline">
+                                        <input v-model="q.belongFactory" type="text" style="cursor:pointer;"
+                                            @click="deptTree" readonly="readonly" class="layui-input searchVal"
+                                            placeholder="请选择车辆归属" />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">品牌/车系/车型</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" id="a" class="layui-input" placeholder="请选择品牌/车系/车型"
+                                            readonly="readonly" />
+                                    </div>
+                                </div>
+
+                                <section v-show="isFilter">
+                                    <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                        <label class="layui-form-label">车辆状态</label>
+                                        <div class="layui-input-inline">
+                                            <select name="carStatus" v-model="q.carStatus" class="layui-select"
+                                                lay-filter="carStatusSelect">
+                                                <!-- 车辆状态(当前状态 1整备中，2备发车，3 预定中  4.用车中 5.已过户)-->
+                                                <option value="">请选择车辆状态</option>
+                                                <option value="1">整备中</option>
+                                                <option value="2">备发车</option>
+                                                <option value="3">预定中</option>
+                                                <option value="4">用车中</option>
+                                                <option value="5">已过户</option>
+                                                <option value="6">已处置</option>
+                                                <option value="7">已出售</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                        <label class="layui-form-label">客户名称</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" class="layui-input searchVal" v-model="q.customer"
+                                                placeholder="请输入客户名称" />
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                        <label class="layui-form-label">车辆订单号</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" class="layui-input searchVal" v-model="q.orderNo"
+                                                placeholder="请输入车辆订单号" />
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                        <label class="layui-form-label">车辆所在仓库</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" class="layui-input searchVal" v-model="q.carDepotName"
+                                                @click="chooseWarehouse" placeholder="请选择车辆所在仓库" readonly />
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                        <label class="layui-form-label">车辆所有人</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" class="layui-input searchVal" v-model="q.carOwner"
+                                                placeholder="请输入车辆所有人" />
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                        <label class="layui-form-label">保养时效</label>
+                                        <div class="layui-input-inline">
+                                            <select name="brandId" v-model="q.maintenanceStatus" class="layui-select"
+                                                lay-filter="maintenanceStatusSelect">
+                                                <option value="">全部</option>
+                                                <option value="1">有效</option>
+                                                <option value="0">失效</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                        <label class="layui-form-label">服务站</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" class="layui-input searchVal" v-model="q.serviceSite"
+                                                placeholder="请输入服务站" />
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                        <label class="layui-form-label">数据范围</label>
+                                        <div class="layui-input-inline">
+                                            <select name="allDataScopeFlag" v-model="q.allDataScopeFlag"
+                                                class="layui-select" lay-filter="allDataScopeFlagSelect">
+                                                <option value="1">全部</option>
+                                                <option value="2">最新</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class=" flex-box layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                        <label class="layui-form-label">本次保养时间</label>
+                                        <div class="list-search-sup-title new-layui-title">
+                                            <div class="task-content-box-tab">
+                                                <div class="display task-content-box-tab layui-col-md8 layui-col-sm8 layui-col-xs12"
+                                                    type="currentMaintenanceDate">
+                                                    <div value="0" class="layui-col-md2 layui-col-sm2 layui-col-xs2">昨天</div>
+                                                    <div value="1" class="layui-col-md2 layui-col-sm2 layui-col-xs2">今日</div>
+                                                    <div value="2" class="layui-col-md2 layui-col-sm2 layui-col-xs2">上周</div>
+                                                    <div value="3" class="layui-col-md2 layui-col-sm2 layui-col-xs2">本周</div>
+                                                    <div value="4" class="layui-col-md2 layui-col-sm2 layui-col-xs2">上月</div>
+                                                    <div value="5" class="layui-col-md2 layui-col-sm2 layui-col-xs2">本月</div>
+                                                    <div value="6" class="layui-col-md2 layui-col-sm2 layui-col-xs2">本季</div>
+                                                    <div value="7" class="layui-col-md2 layui-col-sm2 layui-col-xs2">本年</div>
+                                                </div>
+                                                <div class="layui-col-md4 layui-col-sm4 layui-col-xs12">
+                                                    <input type="text" class="layui-input" id="searchMaintenanceDate"
+                                                        v-model="q.searchMaintenanceDate" readonly placeholder="选择日期范围"
+                                                        style="width: 300px;" autocomplete="off">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class=" flex-box layui-inline layui-col-md9 layui-col-sm12 layui-col-xs12">
+                                        <label class="layui-form-label">下次保养时间</label>
+                                        <div class="list-search-sup-title new-layui-title">
+                                            <div class="task-content-box-tab">
+                                                <div class="display task-content-box-tab layui-col-md8 layui-col-sm8 layui-col-xs12"
+                                                    type="nextMaintenanceDate">
+                                                    <div value="0" class="layui-col-md2 layui-col-sm2 layui-col-xs2">昨天</div>
+                                                    <div value="1" class="layui-col-md2 layui-col-sm2 layui-col-xs2">今日</div>
+                                                    <div value="2" class="layui-col-md2 layui-col-sm2 layui-col-xs2">上周</div>
+                                                    <div value="3" class="layui-col-md2 layui-col-sm2 layui-col-xs2">本周</div>
+                                                    <div value="4" class="layui-col-md2 layui-col-sm2 layui-col-xs2">上月</div>
+                                                    <div value="5" class="layui-col-md2 layui-col-sm2 layui-col-xs2">本月</div>
+                                                    <div value="6" class="layui-col-md2 layui-col-sm2 layui-col-xs2">本季</div>
+                                                    <div value="7" class="layui-col-md2 layui-col-sm2 layui-col-xs2">本年</div>
+                                                </div>
+                                                <div class="layui-col-md4 layui-col-sm4 layui-col-xs12">
+                                                    <input type="text" class="layui-input"
+                                                        id="searchNextMaintenanceDate"
+                                                        v-model="q.searchNextMaintenanceDate" readonly
+                                                        placeholder="选择日期范围" style="width: 300px;" autocomplete="off">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label"> </label>
+                                    <div class="df-color" style="display: flex;align-items: center;">
+                                        <a class="layui-btn search-btn" @click="query">查询</a>
+                                        <a class="layui-btn reset-btn" @click="reset">重置</a>
+                                        <div @click="bindFilter"
+                                            style="margin-left: 10px;cursor: pointer;user-select: none;">
+                                            <span>高级筛选</span>
+                                            <i class="icon layui-icon-extend layui-extend-shaixuan"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </form>
+            </div>
+            <div class="list-search-title-box ground-search-btn">
+                <form class="layui-form">
+                    <div style="display:flex;width: 100%;">
+                        <div class="layui-form-item layui-row" style="width: 100%;">
+                            <div class="list-search-form-button" style="width: 100%;">
+                                <a class="layui-btn btn-warning" @click="exports"
+                                    v-m-perm="['maintenance:maintenancemanage:export']">导出</a>
+                                <a class="layui-btn btn-primary" @click="add"
+                                    v-m-perm="['maintenance:maintenancemanage:save']">新增</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="layui-tab-item layui-show">
+                <table class="layui-hide" id="grid" lay-filter="grid" lay-data="{height: 'full'}"></table>
+            </div>
+        </div>
+
+        <!-- 表单 -->
+        <form v-show="showForm" class="layui-form ren-form" id="editForm">
+            <div class="layui-form-item">
+                <label class="layui-form-label">保养编号</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.maintenanceNumber"
+                        autocomplete="off" placeholder="保养编号" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">车辆编号</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.carId" autocomplete="off"
+                        placeholder="车辆编号" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">车牌号</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.carPlateNo" autocomplete="off"
+                        placeholder="车牌号" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">品牌ID</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.brandId" autocomplete="off"
+                        placeholder="品牌ID" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">品牌名称</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.brandName" autocomplete="off"
+                        placeholder="品牌名称" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">车型id</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.modelId" autocomplete="off"
+                        placeholder="车型id" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">车型名称</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.modelName" autocomplete="off"
+                        placeholder="车型名称" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">车架号</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.vinNo" autocomplete="off"
+                        placeholder="车架号" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">客户名称</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.customer" autocomplete="off"
+                        placeholder="客户名称" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">车辆状态</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.carStatus" autocomplete="off"
+                        placeholder="车辆状态" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">车辆订单号</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.orderNo" autocomplete="off"
+                        placeholder="车辆订单号" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">车辆所属公司id</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.belongFactoryId"
+                        autocomplete="off" placeholder="车辆所属公司id" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">车辆所属公司</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.belongFactory"
+                        autocomplete="off" placeholder="车辆所属公司" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">租赁开始时间</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.rentStartDate"
+                        autocomplete="off" placeholder="租赁开始时间" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">租赁结束时间</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.rentEndDate" autocomplete="off"
+                        placeholder="租赁结束时间" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">车辆所在城市id</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.belongCityId" autocomplete="off"
+                        placeholder="车辆所在城市id" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">车辆所在城市</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.belongCity" autocomplete="off"
+                        placeholder="车辆所在城市" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">车辆用途</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.carApplication"
+                        autocomplete="off" placeholder="车辆用途" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">服务站名称</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.serviceSite" autocomplete="off"
+                        placeholder="服务站名称" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">当前公里数</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.currentMile" autocomplete="off"
+                        placeholder="当前公里数" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">下次保养公里数</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.nextMile" autocomplete="off"
+                        placeholder="下次保养公里数" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">下次保养时间</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.nextDate" autocomplete="off"
+                        placeholder="下次保养时间" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">保养类型</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.maintenanceType"
+                        autocomplete="off" placeholder="保养类型" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">保养备注</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.maintenanceRemark"
+                        autocomplete="off" placeholder="保养备注" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">保养时间</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.maintenanceDate"
+                        autocomplete="off" placeholder="保养时间" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">保养合计费用</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.maintenanceFee"
+                        autocomplete="off" placeholder="保养合计费用" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">记录人</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.operator" autocomplete="off"
+                        placeholder="记录人" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">创建时间</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.timeCreate" autocomplete="off"
+                        placeholder="创建时间" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">更新时间</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.timeUpdate" autocomplete="off"
+                        placeholder="更新时间" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">是否删除；0、未删除 1、已删除</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="maintenanceManage.deleted" autocomplete="off"
+                        placeholder="是否删除；0、未删除 1、已删除" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="saveOrUpdate">确定</button>
+                </div>
+            </div>
+        </form>
+        <!-- 超险罚款 -->
+        <form v-show="showInsurance1" class="layui-form ren-form" id="showInsurance1">
+            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12 box">
+                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label layui-form-label-txt">客户信息</label>
+                        <div class="layui-input-block layui-input-inline-chang">
+                            <input type="text" v-model="fineForm.userInfo" autocomplete="off" placeholder="客户信息"
+                                class="layui-input" disabled class="layui-input searchVal">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="fineForm.supplierInfo">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label layui-form-label-txt">供应商信息</label>
+                        <div class="layui-input-block layui-input-inline-chang">
+                            <input type="text" v-model="fineForm.supplierInfo" autocomplete="off" placeholder="供应商信息"
+                                class="layui-input" disabled class="layui-input searchVal">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12 box">
+                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label layui-form-label-txt">应收金额/元</label>
+                        <div class="layui-input-block layui-input-inline-chang">
+                            <input type="number" v-model="fineForm.receivableMoney" autocomplete="off" placeholder="请输入"
+                                class="layui-input" class="layui-input searchVal">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="fineForm.supplierInfo">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label layui-form-label-txt">应付金额/元</label>
+                        <div class="layui-input-block layui-input-inline-chang">
+                            <input type="number" v-model="fineForm.copeWithMoney" autocomplete="off" placeholder="请输入"
+                                class="layui-input" class="layui-input searchVal">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12 box">
+                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label layui-form-label-txt">应收日期</label>
+                        <div class="layui-input-block layui-input-inline-chang">
+                            <input v-model="fineForm.receivableTime" readonly id="receivableTime" type="text"
+                                class="layui-input searchVal" placeholder="请选择应收时间" />
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="fineForm.supplierInfo">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label layui-form-label-txt">应付日期</label>
+                        <div class="layui-input-block layui-input-inline-chang">
+                            <input v-model="fineForm.copeWithTime" readonly id="copeWithTime" type="text"
+                                class="layui-input searchVal" placeholder="请选择应付时间" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12 ">
+                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label layui-form-label-txt">生成应收单</label>
+                        <div class="layui-input-block layui-input-inline-chang">
+                            <input type="checkbox" id="contractSwitch1" value="1" v-model="fineForm.isGenerateReceivableBill"
+                                checked="checked" name="switchTest1" lay-skin="switch" lay-filter="switchTest1"
+                                title="ON|OFF">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="fineForm.supplierInfo">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label layui-form-label-txt">生成应付单</label>
+                        <div class="layui-input-block layui-input-inline-chang">
+                            <input type="checkbox" id="contractSwitch2" value="1" v-model="fineForm.isGeneratePayableBill"
+                                checked="checked" name="switchTest2" lay-skin="switch" lay-filter="switchTest2"
+                                title="ON|OFF">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="float-btn-group">
+                <a class="layui-btn reset-btn" @click="cancellationCommit">取消</a>
+                <a class="layui-btn search-btn" lay-submit lay-filter="saveOrUpdate" @click="fineCommit">确定</a>
+            </div>
+        </form>
+    </div>
+
+    <!--操作-->
+    <script type="text/html" id="barTpl">
+    <div style="min-width:140px;">
+        {{#if( d.isDataRenewal === 1){}}
+        <a class="layui-grid-btn-xs" lay-event="fine" v-m-perm="['maintenance:maintenancemanage:fine']" more-btn-index="{{d.LAY_INDEX-1}}">超保罚款</a>
+        {{#}}}
+        <a class="layui-grid-btn-xs option-btn-margin" lay-event="edit" v-m-perm="['maintenance:maintenancemanage:update']" more-btn-index="{{d.LAY_INDEX-1}}">编辑</a>
+        {{#if( d.isDataRenewal === 1){}}
+        <a class="layui-grid-btn-xs option-btn-margin" lay-event="renewal" v-m-perm="['maintenance:maintenancemanage:renewal']" more-btn-index="{{d.LAY_INDEX-1}}">续保</a>
+        {{#}}}
+        <a class="layui-grid-btn-xs option-btn-margin" lay-event="view" v-m-perm="['maintenance:maintenancemanage:info']" more-btn-index="{{d.LAY_INDEX-1}}">查看</a>
+    </div>
+</script>
+
+    <script src="../../statics/js/modules/maintenance/maintenancemanage.js?_${.now?long}"></script>
+</body>
+
+</html>

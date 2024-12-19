@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>线索表</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <!-- 新增表单 -->
+    <form class="layui-form ren-form" style="margin-bottom: 60px;">
+
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                线索表基本信息
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>客户类型</label>
+                            <div class="layui-input-inline">
+                                <input type="radio" lay-filter="customerType" v-model="clues.customerType"    name="cluesType" value="1" lay-skin="primary" title="个人">
+                                <input type="radio" lay-filter="customerType" v-model="clues.customerType"    name="cluesType" value="2" lay-skin="primary" title="企业">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label"><span style="color:red;">*</span>所属部门:</label>
+                                <div class="layui-input-inline">
+                                    <input v-model="clues.deptName"
+                                           type="text"
+                                           style="cursor:pointer;"
+                                           lay-verify="deptNameVerify"
+                                           @click="deptTree"
+                                           readonly="readonly"
+                                           class="layui-input searchVal"
+                                           placeholder="请选择公司/部门" />
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>客户名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_cluesName" v-model="clues.customerName"
+                                       autocomplete="off" placeholder="客户名称" class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" id="contact">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">联系人<span style="color: red;">*</span></label>
+                            <div class="layui-input-inline">
+                                <input type="text"  v-model="clues.contact" id="contactVerify" lay-verify="contactVerify"  autocomplete="off" placeholder="联系人" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>电话</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_phone" v-model="clues.phone" autocomplete="off"
+                                       placeholder="电话" class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>指派跟进人</label>
+                            <div class="layui-input-inline">
+                                <select name="followUser" lay-verify="validate_followUserId" lay-filter="operatorId" v-model="clues.sysUserId" lay-search="">
+                                    <option value="">请选择跟进人</option>
+                                    <option v-for="(item,index) in usrLst" :value="item.userId">{{item.username}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label">线索描述</label>
+                            <div class="layui-input-inline">
+                                <textarea  class="layui-textarea"  name="membersDescribe" v-model="clues.cluesDescribe"  style="width: 550px;" autocomplete="off" placeholder="线索描述"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="float-btn-group bottom-bar">
+            <a class="layui-btn reset-btn" id="closePage">取消</a>
+            <a class="layui-btn search-btn" lay-submit lay-filter="save" id="save">保存</a>
+        </div>
+    </form>
+
+
+</div>
+
+
+<script src="../../statics/js/modules/clues/cluesedit.js?_${.now?long}"></script>
+</body>
+</html>

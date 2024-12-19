@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>任务主表</title>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+    <style>
+        .multiple-cell {
+            display: table-cell;
+            padding-right: 8px;
+        }
+
+        .multiple-table {
+            margin-bottom: 9px;
+            display: table;
+            margin-left: 78px;
+        }
+
+        .layui-form-select .layui-input {
+            padding-right: 0 !important;
+        }
+    </style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <!-- 新增表单 -->
+    <form class="layui-form ren-form" style="margin-bottom: 60px;">
+
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                任务信息
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>任务名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_taskName" v-model="promotetaskTask.taskName" autocomplete="off" placeholder="任务名称" class="layui-input searchVal" maxlength="100">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>推广任务</label>
+                            <div class="layui-input-inline">
+                                <a class="layui-btn search-btn" id="addTaskobj">+添加推广任务</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="table">
+                            <table class="layui-hide" id="taskActivityLst" lay-filter="taskActivityLst"></table>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="table">
+                            <table class="layui-hide" id="taskCarPlanLst" lay-filter="taskCarPlanLst"></table>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>任务时间</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="taskTime" lay-verify="validate_taskTime" v-model="promotetaskTask.taskTime" readonly placeholder="开始时间 至 结束时间" class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-content-box">
+            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                <div class="form-content-box">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        <span>员工推广指标</span>
+                    </div>
+                    <div class="form-content-session-box">
+                        <div class="card">
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">线索留资</label>
+                                    <div class="layui-input-inline" style="width: auto">
+                                        <input type="text" v-model="promotetaskTask.promotetaskObligatoryTargets.staffEnroll" autocomplete="off" placeholder="请输入数字/条" class="layui-input searchVal" oninput="editSimple(this, 'numInteger', '9999')">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">分享次数</label>
+                                    <div class="layui-input-inline" style="width: auto">
+                                        <input type="text" v-model="promotetaskTask.promotetaskObligatoryTargets.staffShare" autocomplete="off" placeholder="请输入数字/次" class="layui-input searchVal" oninput="editSimple(this, 'numInteger', '9999')">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">访客数</label>
+                                    <div class="layui-input-inline" style="width: auto">
+                                        <input type="text" v-model="promotetaskTask.promotetaskObligatoryTargets.staffBrowse" autocomplete="off" placeholder="请输入数字/人" class="layui-input searchVal" oninput="editSimple(this, 'numInteger', '9999')">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">访问次数</label>
+                                    <div class="layui-input-inline" style="width: auto">
+                                        <input type="text" v-model="promotetaskTask.promotetaskObligatoryTargets.staffVisit" autocomplete="off" placeholder="请输入数字/次" class="layui-input searchVal" oninput="editSimple(this, 'numInteger', '9999')">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">成交单数</label>
+                                    <div class="layui-input-inline" style="width: auto">
+                                        <input type="text" v-model="promotetaskTask.promotetaskObligatoryTargets.staffTurnover" autocomplete="off" placeholder="请输入数字/单" class="layui-input searchVal" oninput="editSimple(this, 'numInteger', '9999')">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                <div class="form-content-box">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        <span>渠道推广指标</span>
+                    </div>
+                    <div class="form-content-session-box">
+                        <div class="card">
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">线索留资</label>
+                                    <div class="layui-input-inline" style="width: auto">
+                                        <input type="text" v-model="promotetaskTask.promotetaskObligatoryTargets.channelEnroll" autocomplete="off" placeholder="请输入数字/条" class="layui-input searchVal" oninput="editSimple(this, 'numInteger', '9999')">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">分享次数</label>
+                                    <div class="layui-input-inline" style="width: auto">
+                                        <input type="text" v-model="promotetaskTask.promotetaskObligatoryTargets.channelShare" autocomplete="off" placeholder="请输入数字/次" class="layui-input searchVal" oninput="editSimple(this, 'numInteger', '9999')">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">访客数</label>
+                                    <div class="layui-input-inline" style="width: auto">
+                                        <input type="text" v-model="promotetaskTask.promotetaskObligatoryTargets.channelBrowse" autocomplete="off" placeholder="请输入数字/人" class="layui-input searchVal" oninput="editSimple(this, 'numInteger', '9999')">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">访问次数</label>
+                                    <div class="layui-input-inline" style="width: auto">
+                                        <input type="text" v-model="promotetaskTask.promotetaskObligatoryTargets.channelVisit" autocomplete="off" placeholder="请输入数字/次" class="layui-input searchVal" oninput="editSimple(this, 'numInteger', '9999')">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">成交单数</label>
+                                    <div class="layui-input-inline" style="width: auto">
+                                        <input type="text" v-model="promotetaskTask.promotetaskObligatoryTargets.channelTurnover" autocomplete="off" placeholder="请输入数字/单" class="layui-input searchVal" oninput="editSimple(this, 'numInteger', '9999')">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-content-box">
+            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                <div class="form-content-box">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        <span>员工提成</span>
+                    </div>
+                    <div class="form-content-session-box">
+                        <div class="card">
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">是否设置</label>
+                                    <div class="layui-input-inline" style="width: auto">
+                                        <input type="radio" lay-filter="staffHasbonus" v-model="promotetaskTask.promotetaskObligatoryTargets.staffHasbonus"
+                                               name="staffHasbonus" value="0" lay-skin="primary" title="否">
+                                        <input type="radio" lay-filter="staffHasbonus" v-model="promotetaskTask.promotetaskObligatoryTargets.staffHasbonus"
+                                               name="staffHasbonus" value="1" lay-skin="primary" title="是"></div>
+                                </div>
+                            </div>
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">设置提成类型</label>
+                                    <div class="layui-input-inline" style="width: auto">
+                                        <select v-model="promotetaskTask.promotetaskObligatoryTargets.staffBonusType" class="layui-select" lay-filter="staffBonusType">
+                                            <option value=1>按照固定金额</option>
+                                            <option value=2>按照固定比例</option>
+                                        </select></div>
+                                </div>
+                            </div>
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">{{staffBonusValueTitle}}:</label>
+                                    <div class="layui-input-inline" style="width: auto">
+                                        <input type="text" id="staffBonusValue" v-model="promotetaskTask.promotetaskObligatoryTargets.staffBonusValue" autocomplete="off"
+                                               :placeholder="staffBonusValuePlaceholder" class="layui-input searchVal" oninput="inputChange('staffBonusValue', this)">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                <div class="form-content-box">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        <span>渠道提成</span>
+                    </div>
+                    <div class="form-content-session-box">
+                        <div class="card">
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">是否设置</label>
+                                    <div class="layui-input-inline" style="width: auto">
+                                        <input type="radio" lay-filter="channelHasbonus" v-model="promotetaskTask.promotetaskObligatoryTargets.channelHasbonus"
+                                               name="channelHasbonus" value="0" lay-skin="primary" title="否">
+                                        <input type="radio" lay-filter="channelHasbonus" v-model="promotetaskTask.promotetaskObligatoryTargets.channelHasbonus"
+                                               name="channelHasbonus" value="1" lay-skin="primary" title="是"></div>
+                                </div>
+                            </div>
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">设置提成类型</label>
+                                    <div class="layui-input-inline" style="width: auto">
+                                        <select v-model="promotetaskTask.promotetaskObligatoryTargets.channelBonusType" class="layui-select" lay-filter="channelBonusType">
+                                            <option value=1>按照固定金额</option>
+                                            <option value=2>按照固定比例</option>
+                                        </select></div>
+                                </div>
+                            </div>
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">{{channelBonusValueTitle}}</label>
+                                    <div class="layui-input-inline" style="width: auto">
+                                        <input type="text" id="channelBonusValue" v-model="promotetaskTask.promotetaskObligatoryTargets.channelBonusValue" autocomplete="off"
+                                               :placeholder="channelBonusValuePlaceholder" class="layui-input searchVal" oninput="inputChange('channelBonusValue', this)">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-content-box">
+            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                <div class="form-content-box">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        <div class="multiple-table" style="margin-bottom: 0;margin-left: 0;">
+                            <div class="multiple-cell">
+                                <span>推广员工</span>
+                            </div>
+                            <div class="multiple-cell" style="padding-left: 3px">
+                                <input type="radio" lay-filter="staffType" v-model="promotetaskTask.promotetaskObligatoryTargets.staffType"
+                                       name="staffType" value="1" lay-skin="primary" title="全部在职员工">
+                                <input type="radio" lay-filter="staffType" v-model="promotetaskTask.promotetaskObligatoryTargets.staffType"
+                                       name="staffType" value="2" lay-skin="primary" title="部分在职员工">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-content-session-box" v-show="promotetaskTask.promotetaskObligatoryTargets.staffType == 2">
+                        <div class="card">
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">选择在职员工</label>
+                                    <div class="layui-input-inline" style="width: 200px">
+                                        <div id="selectStaff"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                <div class="form-content-box">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        <div class="multiple-table" style="margin-bottom: 0;margin-left: 0;">
+                            <div class="multiple-cell">
+                                <span>推广渠道</span>
+                            </div>
+                            <div class="multiple-cell" style="padding-left: 3px">
+                                <input type="radio" lay-filter="channelType" v-model="promotetaskTask.promotetaskObligatoryTargets.channelType"
+                                       name="channelType" value="1" lay-skin="primary" title="全部合作中渠道">
+                                <input type="radio" lay-filter="channelType" v-model="promotetaskTask.promotetaskObligatoryTargets.channelType"
+                                       name="channelType" value="2" lay-skin="primary" title="部分合作中渠道">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-content-session-box" v-show="promotetaskTask.promotetaskObligatoryTargets.channelType == 2">
+                        <div class="card">
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">选择合作中渠道</label>
+                                    <div class="layui-input-inline" style="width: 200px">
+                                        <div id="selectChannel"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="float-btn-group bottom-bar">
+            <a class="layui-btn reset-btn" id="closePage">取消</a>
+            <a class="layui-btn search-btn" lay-submit lay-filter="save" id="save">保存</a>
+        </div>
+    </form>
+
+
+</div>
+
+<script type="text/html" id="barTpl">
+     <a class="layui-grid-btn-xs" lay-event="del">删除</a>
+</script>
+<script type="text/html" id="skipActivity">
+    <a class="layui-grid-btn-xs" lay-event="skipActivityView">{{d.scaName}}</a>
+</script>
+<script src="../../statics/js/modules/promotetask/promotetasktaskedit.js?_${.now?long}"></script>
+</body>
+</html>

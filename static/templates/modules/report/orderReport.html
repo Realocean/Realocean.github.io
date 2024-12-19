@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../statics/newImages/logo/logo@2x.png">
+    <title>订单报表</title>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/global.css" media="all">-->
+
+    <!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/fonts/larry-icon.css" media="all">-->
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+    <!-- 放开后表格无法拖动   <link rel="stylesheet" type="text/css" href="../../statics/new_css/larryms.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/new_css/normalize.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <!-- Import style -->
+    <link rel="stylesheet" href="../../statics/js/element-plus/index.css"/>
+    <!-- 页面样式 -->
+    <link rel="stylesheet" href="../../statics/new_css/mf-layout.css"/>
+
+</head>
+<style>
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    .title .el-input {
+        width: 220px;
+        margin: 0 10px 0 20px;
+    }
+
+    .state-wrap {
+        margin-top: 15px;
+        justify-content: space-between;
+    }
+
+    .state-item {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        width: 140px;
+        /*height: 80px;*/
+        aspect-ratio: 1/0.59;
+        padding-left: 20px;
+        background-size: 100% 100%;
+        margin-right: 10px;
+        border-radius: 6px;
+        box-sizing: border-box;
+    }
+
+    .state-name {
+        font-size: 14px;
+        color: #333;
+    }
+
+    .state-count {
+        font-size: 18px;
+        margin-top: 2px;
+    }
+
+    .child .el-input {
+        width: 150px !important;
+    }
+
+    .child .el-date-editor--date {
+        width: 150px !important;
+        margin-left: 15px;
+    }
+
+    .bg-light-blue {
+        background: #F5FBFB;
+        border-radius: 8px;
+    }
+
+    .count-item{
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        margin-right: 20px;
+        /*height: 120px;*/
+        /*aspect-ratio: 1/0.40;*/
+        justify-content: center;
+        padding: 13px 20px;
+        box-sizing: border-box;
+        background: #fff;
+        border-radius: 8px;
+    }
+
+    .count-count{
+        margin-top: 7px;
+        font-size: 18px;
+    }
+
+
+
+
+    .table-title{
+        display:flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 50px;
+    }
+
+    .wait-warp{
+        flex: 1;
+        margin-right: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 15px;
+    }
+
+    .select-wrap{
+        flex: 1;
+        margin-left: 6px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 15px;
+    }
+
+    .config-add{
+        color: #3facb3;
+        cursor: pointer;
+        font-size: 13px;
+    }
+    /*.el-table__header tr .el-table__header th {*/
+    /*    padding: 0 !important;*/
+    /*    height: 30px !important;*/
+    /*    line-height: 30px !important;*/
+    /*}*/
+
+    .task-content-box-tab{
+        display: flex;
+        align-items: center;
+        margin-left: 0;
+    }
+
+    .date-oneday{
+        font-size: 14px;
+        color: #868686;
+        width: 49px;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .actived{
+        color: #3facb3;
+        font-weight: bold;
+    }
+</style>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <div class="table-content">
+
+        <div class="flex" style="margin-bottom: 13px;margin-right: -20px">
+            <div class="count-item" v-for="(item, index) in countList" :key="index">
+                <div class="space-between" style="display: flex">
+                    <span style="color: #333;font-size: 16px;margin-top: 2px">{{item.name}}</span>
+                    <img style="width: 36px;height: 36px" :src="item.img">
+                </div>
+                <span class="count-count" :style="{color:item.color}">￥{{item.count}}</span>
+            </div>
+        </div>
+
+        <div class="list-search-title-box">
+            <el-form class="layui-form" :model="q" ref="form" style="padding: 15px 25px 0;">
+
+                <el-row :gutter="20">
+
+                    <el-col :span="6">
+                        <el-form-item label="车牌号/车架号" prop="carNo">
+                            <el-input v-model="q.carNo" placeholder="请输入车牌号/车架号" />
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="6">
+                        <el-form-item label="发车单号" prop="orderCode">
+                            <el-input v-model="q.orderCode" placeholder="请输入发车单号" />
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="6">
+                        <el-form-item label="订单车辆状态" prop="orderState">
+                            <el-select style="width: 100%"
+                                       v-model="q.orderState" placeholder="请选择车辆状态" clearable>
+<!--100、提单审核中 110、待签章 120、待签章（直营） 121、签章中（直营）
+ 122、待交车（直营） 123、待验车（直营） 124、待审核（直营） 200、用车中 300、换车审核中
+  400、已换车 500、退车审核中 600、已退车 700、已过户 800、已出售 900、已续租 901、续租时间未开始 999、已删除
+-->
+                                <el-option label="提单审核中" :value="100"></el-option>
+                                <el-option label="待签章" :value="110"></el-option>
+                                <el-option label="待签章(直营)" :value="120"></el-option>
+                                <el-option label="签章中(直营)" :value="121"></el-option>
+                                <el-option label="待交车(直营)" :value="122"></el-option>
+                                <el-option label="待验车(直营)" :value="123"></el-option>
+                                <el-option label="待审核(直营)" :value="124"></el-option>
+                                <el-option label="用车中" :value="200"></el-option>
+                                <el-option label="换车审核中" :value="300"></el-option>
+                                <el-option label="已换车" :value="400"></el-option>
+                                <el-option label="退车审核中" :value="500"></el-option>
+                                <el-option label="已退车" :value="600"></el-option>
+                                <el-option label="已过户" :value="700"></el-option>
+                                <el-option label="已出售" :value="800"></el-option>
+                                <el-option label="已续租" :value="900"></el-option>
+                                <el-option label="续租时间未开始" :value="901"></el-option>
+                                <el-option label="已删除" :value="999"></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="6" v-show="!isFilter">
+                        <div class="df-color" style="display: flex;align-items: center;justify-content: flex-end">
+                            <el-button @click="reset">重置</el-button>
+                            <el-button type="primary" @click="query">查询</el-button>
+                            <div @click="bindFilter" style="margin-left: 10px;cursor: pointer;user-select: none;">
+                                <span>高级筛选</span>
+                                <i class="icon layui-icon-extend layui-extend-shaixuan"></i>
+                            </div>
+                        </div>
+                    </el-col>
+
+                    <el-col :span="6" v-show="isFilter">
+                        <el-form-item label="合同编号" prop="contractNo">
+                            <el-input v-model="q.contractNo" placeholder="请输入合同编号" />
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="6" v-show="isFilter">
+                        <el-form-item label="所属公司/部门" prop="deptName">
+                            <el-input @click="deptTree" readonly v-model="q.deptName" placeholder="请选择所属公司/部门" >
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="6" v-show="isFilter">
+                        <el-form-item label="品牌/车系/车型">
+                            <el-cascader style="width: 100%"
+                                         v-model="carBrandName"
+                                         ref="model"
+                                         :options="brandList"
+                                         @change="handleBrandChange"
+                                         placeholder="请选择"/>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="6" v-show="isFilter">
+                        <el-form-item label="用户名称" prop="userName">
+                            <el-input v-model="q.userName" placeholder="请输入用户名称" />
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="6" v-show="isFilter">
+<!--                        1、经租 2、以租代购 3、展示车 4、试驾车 5、融租 6、直购  7挂靠 8直营  -->
+                        <el-form-item label="租赁类型" prop="rentType">
+                            <el-select style="width: 100%"
+                                       v-model="q.rentType" placeholder="请选择租赁类型" clearable>
+                                <el-option label="经租" :value="1"></el-option>
+                                <el-option label="以租代购" :value="2"></el-option>
+                                <el-option label="展示车" :value="3"></el-option>
+                                <el-option label="试驾车" :value="4"></el-option>
+                                <el-option label="融租" :value="5"></el-option>
+                                <el-option label="直购" :value="6"></el-option>
+                                <el-option label="挂靠" :value="7"></el-option>
+                                <el-option label="直营" :value="8"></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="6" v-show="isFilter">
+                        <el-form-item label="所属业务员" prop="salesman">
+                            <el-select style="width: 100%"
+                                       v-model="q.salesman" placeholder="请选择所属业务员" clearable>
+                                <el-option v-for="(item, index) in bussList" :label="item.username" :value="item.username"></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="24" v-show="isFilter">
+                        <el-form-item label="租赁开始时间" prop="value1">
+                            <div class="task-content-box-tab">
+                                <div :class="selDateIndex==0?'actived':''" @click="getSearchDateByType(0)" value="0" class="date-oneday">昨天</div>
+                                <div :class="selDateIndex==1?'actived':''" @click="getSearchDateByType(1)" value="1" class="date-oneday">今日</div>
+                                <div :class="selDateIndex==2?'actived':''" @click="getSearchDateByType(2)" value="2" class="date-oneday">上周</div>
+                                <div :class="selDateIndex==3?'actived':''" @click="getSearchDateByType(3)" value="3" class="date-oneday">本周</div>
+                                <div :class="selDateIndex==4?'actived':''" @click="getSearchDateByType(4)" value="4" class="date-oneday">上月</div>
+                                <div :class="selDateIndex==5?'actived':''" @click="getSearchDateByType(5)" value="5" class="date-oneday">本月</div>
+                                <div :class="selDateIndex==6?'actived':''" @click="getSearchDateByType(6)" value="6" class="date-oneday">本季</div>
+                                <div :class="selDateIndex==7?'actived':''" @click="getSearchDateByType(7)" value="7" class="date-oneday">本年</div>
+
+                                <el-date-picker
+                                        value-format="YYYY-MM-DD"
+                                        v-model="value1"
+                                        type="daterange"
+                                        range-separator="至"
+                                        start-placeholder="开始日期" clearable
+                                        end-placeholder="结束日期" @change="timeChange"></el-date-picker>
+                            </div>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="24" v-show="isFilter">
+                        <el-form-item label="租赁结束时间" prop="value2">
+                            <div class="task-content-box-tab">
+                                <div :class="selDateIndex2==0?'actived':''" @click="getSearchDateByType2(0)" value="0" class="date-oneday">昨天</div>
+                                <div :class="selDateIndex2==1?'actived':''" @click="getSearchDateByType2(1)" value="1" class="date-oneday">今日</div>
+                                <div :class="selDateIndex2==2?'actived':''" @click="getSearchDateByType2(2)" value="2" class="date-oneday">上周</div>
+                                <div :class="selDateIndex2==3?'actived':''" @click="getSearchDateByType2(3)" value="3" class="date-oneday">本周</div>
+                                <div :class="selDateIndex2==4?'actived':''" @click="getSearchDateByType2(4)" value="4" class="date-oneday">上月</div>
+                                <div :class="selDateIndex2==5?'actived':''" @click="getSearchDateByType2(5)" value="5" class="date-oneday">本月</div>
+                                <div :class="selDateIndex2==6?'actived':''" @click="getSearchDateByType2(6)" value="6" class="date-oneday">本季</div>
+                                <div :class="selDateIndex2==7?'actived':''" @click="getSearchDateByType2(7)" value="7" class="date-oneday">本年</div>
+
+                                <el-date-picker
+                                        value-format="YYYY-MM-DD"
+                                        v-model="value2"
+                                        type="daterange"
+                                        range-separator="至"
+                                        start-placeholder="开始日期" clearable
+                                        end-placeholder="结束日期" @change="timeChange2"></el-date-picker>
+                            </div>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="18" v-show="isFilter">
+                        <el-form-item label="实际结束时间" prop="value3">
+                            <div class="task-content-box-tab">
+                                <div :class="selDateIndex3==0?'actived':''" @click="getSearchDateByType3(0)" value="0" class="date-oneday">昨天</div>
+                                <div :class="selDateIndex3==1?'actived':''" @click="getSearchDateByType3(1)" value="1" class="date-oneday">今日</div>
+                                <div :class="selDateIndex3==2?'actived':''" @click="getSearchDateByType3(2)" value="2" class="date-oneday">上周</div>
+                                <div :class="selDateIndex3==3?'actived':''" @click="getSearchDateByType3(3)" value="3" class="date-oneday">本周</div>
+                                <div :class="selDateIndex3==4?'actived':''" @click="getSearchDateByType3(4)" value="4" class="date-oneday">上月</div>
+                                <div :class="selDateIndex3==5?'actived':''" @click="getSearchDateByType3(5)" value="5" class="date-oneday">本月</div>
+                                <div :class="selDateIndex3==6?'actived':''" @click="getSearchDateByType3(6)" value="6" class="date-oneday">本季</div>
+                                <div :class="selDateIndex3==7?'actived':''" @click="getSearchDateByType3(7)" value="7" class="date-oneday">本年</div>
+
+                                <el-date-picker
+                                        value-format="YYYY-MM-DD"
+                                        v-model="value3"
+                                        type="daterange"
+                                        range-separator="至"
+                                        start-placeholder="开始日期" clearable
+                                        end-placeholder="结束日期" @change="timeChange3"></el-date-picker>
+                            </div>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="6" v-show="isFilter">
+                        <div class="df-color" style="display: flex;align-items: center;justify-content: flex-end">
+                            <el-button @click="reset">重置</el-button>
+                            <el-button type="primary" @click="query">查询</el-button>
+                            <div @click="bindFilter" style="margin-left: 10px;cursor: pointer;user-select: none;">
+                                <span>高级筛选</span>
+                                <i class="icon layui-icon-extend layui-extend-shaixuan"></i>
+                            </div>
+                        </div>
+                    </el-col>
+                </el-row>
+
+            </el-form>
+        </div>
+
+        <div class="list-search-title-box ground-search-btn">
+            <div class="table-title" style="margin:0 20px; justify-content: flex-end">
+                <el-button type="warning" plain @click="exportdata" v-m-perm="['report:financeReport:export']">导出</el-button>
+                <el-button type="success" plain @click="openConfig" v-m-perm="['report:financeReport:export']">列表设置</el-button>
+            </div>
+
+            <div style="margin: 10px 20px">
+<!--                <el-table :header-cell-style="{'background-color':'#f6f8f8','color':'#000'}"-->
+                <el-table :header-cell-style="headerStyle"
+                          :data="tableData"
+                          style="width: 100%" border>
+<!--                    0/车辆基础信息 1/营业收入 2/费用支出 3/车辆折旧费 4/税费 5/坏账金额 6/车辆总收益-->
+                    <template v-for="(item, index) in groupedArray" :key="`${index}`">
+                        <el-table-column align="center" >
+<!--                            <template #header v-if="item.items.length>1">-->
+                            <template #header >
+                                <div style="display: flex;justify-content: center;align-items: center;cursor:pointer;" @click="item.toggle=!item.toggle">
+                                    <span style="flex: 1;text-align: center">{{0==item.type?'车辆基础信息':
+                                            1==item.type?'营业待入':
+                                            2==item.type?'营业已入':
+                                            3==item.type?'待支出':
+                                            4==item.type?'已支出':
+                                            5==item.type?'账单收支总费用':''}}</span>
+    <!--                                <i class="el-icon-delete"></i>-->
+                                    <div v-if="item.items.length>1">
+                                        <svg v-if="item.toggle" style="width: 13px; height: 13px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" data-v-ea893728=""><path fill="currentColor" d="M529.408 149.376a29.12 29.12 0 0 1 41.728 0 30.592 30.592 0 0 1 0 42.688L259.264 511.936l311.872 319.936a30.592 30.592 0 0 1-.512 43.264 29.12 29.12 0 0 1-41.216-.512L197.76 534.272a32 32 0 0 1 0-44.672l331.648-340.224zm256 0a29.12 29.12 0 0 1 41.728 0 30.592 30.592 0 0 1 0 42.688L515.264 511.936l311.872 319.936a30.592 30.592 0 0 1-.512 43.264 29.12 29.12 0 0 1-41.216-.512L453.76 534.272a32 32 0 0 1 0-44.672l331.648-340.224z"></path></svg>
+                                        <svg v-else style="width: 13px; height: 13px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" data-v-ea893728=""><path fill="currentColor" d="M452.864 149.312a29.12 29.12 0 0 1 41.728.064L826.24 489.664a32 32 0 0 1 0 44.672L494.592 874.624a29.12 29.12 0 0 1-41.728 0 30.592 30.592 0 0 1 0-42.752L764.736 512 452.864 192a30.592 30.592 0 0 1 0-42.688m-256 0a29.12 29.12 0 0 1 41.728.064L570.24 489.664a32 32 0 0 1 0 44.672L238.592 874.624a29.12 29.12 0 0 1-41.728 0 30.592 30.592 0 0 1 0-42.752L508.736 512 196.864 192a30.592 30.592 0 0 1 0-42.688z"></path></svg>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <template v-for="(citem, cindex) in item.items">
+
+                                <el-table-column
+                                        show-overflow-tooltip
+                                        v-if="0==cindex||item.toggle"
+                                        align="center" min-width="160px"
+                                        :label="citem.filedName">
+    <!--                                <template slot="header">1-->
+    <!--                                    <div>测试数据类1</div>-->
+    <!--                                </template>-->
+                                    <template v-slot="{row}">
+                                        <span v-if="'orderState'==citem.filedKey">
+                                            {{100==row[citem.filedKey]?'提单审核中':
+                                                110==row[citem.filedKey]?'待签章':
+                                                120==row[citem.filedKey]?'待签章（直营）':
+                                                121==row[citem.filedKey]?'签章中（直营）':
+                                                122==row[citem.filedKey]?'待交车（直营）':
+                                                123==row[citem.filedKey]?'待验车（直营）':
+                                                124==row[citem.filedKey]?'待审核（直营）':
+                                                300==row[citem.filedKey]?'换车中':
+                                                400==row[citem.filedKey]?'已换车':
+                                                500==row[citem.filedKey]?'退车中':
+                                                600==row[citem.filedKey]?'已退车':
+                                                700==row[citem.filedKey]?'已过户':
+                                                800==row[citem.filedKey]?'已出售':
+                                                900==row[citem.filedKey]?'已续租':
+                                                901==row[citem.filedKey]?'续租时间未开始':
+                                                200==row[citem.filedKey]?'用车中':'--'
+                                            }}
+                                        </span>
+                                        <span v-else-if="'sourceType'==citem.filedKey">
+                                            {{1==row[citem.filedKey]?'直购':
+                                                2==row[citem.filedKey]?'租赁':
+                                                3==row[citem.filedKey]?'租售':'--'
+                                            }}
+                                        </span>
+
+                                        <span v-else>
+                                            {{'number' == typeof row[citem.filedKey] ? row[citem.filedKey].toFixed(2): row[citem.filedKey] ||'--'}}
+                                        </span>
+                                    </template>
+                                </el-table-column>
+                            </template>
+                        </el-table-column>
+                    </template>
+
+                </el-table>
+            </div>
+
+            <el-row justify="end" style="margin: 10px">
+                <el-pagination
+                        :current-page="q.page"
+                        :page-size="q.limit"
+                        :page-sizes="[10, 50, 100, 200]"
+                        :small="false"
+                        :disabled="false"
+                        :background="false"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="totalCount"
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                />
+            </el-row>
+        </div>
+    </div>
+
+    <el-dialog
+            title="列表设置"
+            v-model="showConfig"
+            width="60%">
+        <div style="display: flex;justify-content: center">
+<!--            <div class="wait-warp">-->
+<!--                <div class="flex space-between align-center">-->
+<!--                    备选维度-->
+
+<!--                    <span class="config-add">全部添加</span>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="select-wrap">-->
+
+<!--            </div>-->
+
+<!--            <el-transfer-->
+<!--                    v-model="configValue"-->
+<!--                    filterable-->
+<!--                    :filter-method="filterMethod"-->
+<!--                    filter-placeholder="输入关键字"-->
+<!--                    :data="configData"-->
+<!--            />-->
+
+            <el-transfer filterable
+                    :titles="['备选列表', '已选列表']"
+                    v-model="configValue" :data="configData" @change="configChange"></el-transfer>
+
+        </div>
+        <template #footer>
+          <span class="dialog-footer">
+            <el-button @click="openConfig">清除本次设置</el-button>
+            <el-button @click="showConfig = false">取 消</el-button>
+            <el-button type="primary" @click="confirmConfig">
+              确 定
+            </el-button>
+          </span>
+        </template>
+    </el-dialog>
+
+</div>
+
+<!-- Import Vue 3 -->
+<script src="../../statics/js/vue3/vue.global.js"></script>
+<!-- Import component library -->
+<script src="../../statics/js/element-plus/index.full.js"></script>
+<script src="../../statics/js/element-plus/icons-vue.js"></script>
+<script src="../../statics/plugins/jquery.min.js"></script>
+<script src="../../statics/common/layui/layui.js"></script>
+<script src="../../statics/js/common.js"></script>
+<script src="../../statics/js/element-plus/locale-cn.js"></script>
+<!--<script type="text/javascript" src="../../statics/common/plus/echarts.min.js"></script>-->
+<!--<script type="text/javascript" src="../../statics/common/plus/echarts5.4.3.js"></script>-->
+<script>
+    // 基于准备好的dom，初始化echarts实例
+    // console.log('echarts', echarts)
+    // var myChart = echarts.init(document.getElementById('main'));
+    //
+    // // 指定图表的配置项和数据
+    // var option = {
+    //     title: {
+    //         text: 'ECharts 入门示例'
+    //     },
+    //     tooltip: {},
+    //     legend: {
+    //         data: ['销量']
+    //     },
+    //     xAxis: {
+    //         data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
+    //     },
+    //     yAxis: {},
+    //     series: [
+    //         {
+    //             name: '销量',
+    //             type: 'bar',
+    //             data: [5, 20, 36, 10, 10, 20]
+    //         }
+    //     ]
+    // };
+    //
+    // // 使用刚指定的配置项和数据显示图表。
+    // myChart.setOption(option);
+</script>
+<script src="../../statics/js/modules/cluesSale/dict.js"></script>
+<script src="../../statics/js/modules/carprofitreport/orderReport.js?_${.now?long}"></script>
+</body>
+
+</html>

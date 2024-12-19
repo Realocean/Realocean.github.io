@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>模块导入</title>
+    <link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/fileImport_common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/common-tabs.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/common-new.css">
+    <style>
+        .module-page {
+            padding: 0;
+        }
+
+        .module-tab {
+            margin-top: 0;
+            border-radius: 8px;
+        }
+
+        .module-main {
+            border-radius: 8px;
+        }
+
+        .tab-item {
+            border-radius: 8px;
+        }
+
+        #app {
+            padding: 20px;
+        }
+
+        .timeline-row {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .timeline-count {
+            width: 30px;
+            line-height: 27px;
+            text-align: center;
+            border-radius: 30px;
+            border: 1px solid #ddd;
+            color: #ddd;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .count-active {
+            color: #fff;
+            background-color: #3facb3;
+            border: none;
+        }
+
+        .timeline-text {
+            width: 145px;
+            text-align: center;
+            font-size: 13px;
+            margin-top: 6px;
+            color: #999;
+        }
+
+        .text-active {
+            color: #333;
+        }
+
+        .timeline-line {
+            flex: 1;
+            width: 0;
+            margin-top: 15px;
+            height: 1px;
+            background-color: #ddd;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+
+</head>
+<body class="ren-body">
+<div id="app">
+
+    <template>
+
+        <div class="details-tab-content">
+
+        <div class="details-tab-content-box display" v-if="currentTab==1||currentTab==2">
+            <div class="layui-tab">
+                <ul class="layui-tab-title">
+                    <li :class="0==index?'layui-this':''" @click="tabSwitch(index)"
+                        v-for="(item, index) in tab" :key="index">{{ item.label }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!--        <div class="module-tab">-->
+        <!--            <div class="tab-title">快速导入入口</div>-->
+        <!--            <ul class="tab-ul">-->
+        <!--                <li class="tab-item" :class="currentTab==index?'tabActive':''" @click="tabChange(index)"-->
+        <!--                    v-for="(item,index) in tab">{{item}}-->
+        <!--                </li>-->
+        <!--            </ul>-->
+        <!--        </div>-->
+
+        <div class="details-conteiner">
+            <div class="details-content-box">
+
+                <div style="display: flex;flex-direction:column;width: 70%; margin: -15px auto 20px">
+                    <div style="display: flex;width: 50%; margin: 10px auto">
+                        <span class="timeline-count" :class="status>=1?'count-active':''">1</span>
+
+                        <div class="timeline-line"></div>
+
+<!--                        status: 1, // {1上传，2进度，3失败,4成功,5上传zip}-->
+
+                        <span v-if="currentTab==10" class="timeline-count" :class="status>=2?'count-active':''">2</span>
+
+                        <div v-if="currentTab==10" class="timeline-line"></div>
+
+
+
+                        <span class="timeline-count" :class="status>2?'count-active':''">{{currentTab==10?3:2}}</span>
+
+                        <!--                        <div class="timeline-line"></div>-->
+                        <!--                        <span class="timeline-count" :class="step===2?'count-active':''">3</span>-->
+
+                    </div>
+
+                    <div style="display: flex;width: 60%; margin: -10px auto;justify-content: space-between">
+                        <span class="timeline-text"
+                              :class="status>=1?'text-active':''">{{currentTab==10?'下载模板/上传流水':'下载模板、上传文件'}}</span>
+                        <span class="timeline-text" v-if="currentTab==10"
+                              :class="status>=2?'text-active':''">数据导入/账单冲销</span>
+                        <span class="timeline-text" :class="status>2?'text-active':''">{{currentTab==10?'生成工资表/结果反馈':'导入数据、结果反馈'}}</span>
+                        <!--                        <span class="timeline-text" :class="step===2?'text-active':''">确认结果/完成导入</span>-->
+                    </div>
+
+                </div>
+
+                <div class="" v-if="status!=5">
+                    <!--                    <div class="import—tab border-top">-->
+                    <!--                        <span class="import—tab-item uploading-item">下载模板、上传文件</span>-->
+                    <!--                        <span class="import—tab-item import-item">导入数据、结果反馈</span>-->
+                    <!--                    </div>-->
+
+<!--                    <keep-alive>-->
+                        <component :is="currentTabComponent" :status="status" :import-url="importUrl"
+                                   :current-tab="currentTab"
+                                   :son-tab="sonTab"
+                                   @change-status="changeStatus"
+                                   :progress="progress"></component>
+<!--                    </keep-alive>-->
+                </div>
+                <div title="上传" v-if="status==5">
+                    <import-upload :import-url="importUrl"></import-upload>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </template>
+</div>
+
+
+<div class="layui-form ren-form" v-show="importTypeSelect" id="importTypeSelect" style="display: none;">
+    <div class="layui-form-item" style="margin-top: 10px">
+        <label class="layui-form-label">导入文件：</label>
+        <div class="layui-input-block" id="importFileBlock"></div>
+    </div>
+    <div class="layui-input-block" style="left: 6%;width: 30%;margin-top: 70px;" id="selectedImportBtnBlock"></div>
+</div>
+
+
+</body>
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script src="../../statics/js/modules/import/vue.min.js?_${.now?long}"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script src="../../statics/js/modules/element-ui/index.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script src="../../statics/js/modules/import/import_common.js?_${.now?long}"></script>
+
+<script type="text/javascript">
+
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                tab: [],
+                //0'导入车辆信息', 1'导入车辆订单信息', 2'导入客户信息', 3'导入车辆保险信息', 4'导入车辆年检信息',
+                // 5'导入车辆保养信息', 6'导入车辆出险信息', 7'导入车辆维修信息', 8'导入车辆行驶证'，9‘导入司机流水’, 10'司机薪资核算'，11应付账款 12线索 13采购 14:库存
+                currentTab: 999,
+                status: 1, // {1上传，2进度，3失败,4成功,5上传zip}
+                importUrl: `../../../`,
+                currentTabComponent: 'import-download',
+                progress: 0,
+                step: 0,
+                sonTab:null,//二级选项
+            }
+        },
+
+        mounted() {
+            console.log(this.importUrl, this.currentTabComponent);
+
+            let {type} = parent.layer.boxParams.boxParams
+
+            if (type != undefined && type != null) {
+                this.tabChange(type)
+
+                if (type == 1) {
+                    this.tab = [{
+                        value: 'jz',
+                        label: '经租',
+                    }, {
+                        value: 'yzdg',
+                        label: '以租代购',
+                    }, {
+                        value: 'rz',
+                        label: '融租',
+                    }, {
+                        value: 'zg',
+                        label: '直购',
+                    }]
+
+                    this.sonTab = this.tab[0].value
+                } else if (type == 2) {
+                    this.tab = [{
+                        value: 'gr',
+                        label: '个人'
+                    }, {
+                        value: 'qy',
+                        label: '企业'
+                    }]
+
+                    this.sonTab = this.tab[0].value
+                }
+
+            }
+
+
+        },
+        methods: {
+
+            tabSwitch(index){
+                this.sonTab = this.tab[index].value
+            },
+
+            tabChange(index) {
+                this.currentTab = index;
+                if (this.currentTab == 8) {
+                    this.status = 5;
+                    this.currentTabComponent = 'import-upload';
+                } else {
+                    this.status = 1;
+                    this.currentTabComponent = 'import-download';
+                }
+
+            },
+            changeStatus(data) {
+                this.status = data.status;
+                this.currentTabComponent = data.currentTabComponent;
+                if (data.progress) {
+                    this.progress = data.progress;
+                }
+            }
+        },
+    })
+</script>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../statics/newImages/logo/logo@2x.png">
+    <title>新增线索</title>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/global.css" media="all">-->
+
+    <!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/fonts/larry-icon.css" media="all">-->
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+    <!-- 放开后表格无法拖动   <link rel="stylesheet" type="text/css" href="../../statics/new_css/larryms.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/new_css/normalize.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <!-- Import style -->
+    <link rel="stylesheet" href="../../statics/js/element-plus/index.css" />
+    <!-- 页面样式 -->
+    <link rel="stylesheet" href="../../statics/new_css/mf-layout.css" />
+
+</head>
+<style>
+    .el-input {
+        width: 300px;
+    }
+
+    .detail-content{
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .el-textarea__inner{
+        width: 600px;
+    }
+
+</style>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <div class="list-header-content-box">
+
+        <div style="margin: 20px 70px 0 70px">
+
+            <div class="add-title-wrap">采购单详情</div>
+
+            <el-descriptions
+                    border
+                    :column="3"
+            >
+                <el-descriptions-item label="采购订单编号">{{orderDetail.orderNo||''}}</el-descriptions-item>
+                <el-descriptions-item label="车辆品牌"> {{orderDetail.brandName||'--'}}</el-descriptions-item>
+                <el-descriptions-item label="车辆级别"> {{getDicValueCarType(orderDetail.productType)}}</el-descriptions-item>
+                <el-descriptions-item label="电池品牌"> {{getDicValueBatteryBrand(orderDetail.batteryBrand)}}</el-descriptions-item>
+                <el-descriptions-item label="电池数量"> {{getDicValueBatteryNum(orderDetail.batteryNum)}}</el-descriptions-item>
+                <el-descriptions-item label="生产日期"> {{orderDetail.productionTime||'--'}}</el-descriptions-item>
+                <el-descriptions-item label="采购数量"> {{orderDetail.purchaseNum||'--'}}</el-descriptions-item>
+                <el-descriptions-item label="采购单价"> {{orderDetail.purchasePrice||'--'}}</el-descriptions-item>
+                <el-descriptions-item label="采购总价"> {{orderDetail.purchaseTotalPrice||'--'}}</el-descriptions-item>
+                <el-descriptions-item label="采购日期"> {{orderDetail.purchaseTime||'--'}}</el-descriptions-item>
+                <el-descriptions-item label="支付方式"> {{orderDetail.payType||'--'}}</el-descriptions-item>
+                <el-descriptions-item label="支付金额"> {{orderDetail.amountPaid||'--'}}</el-descriptions-item>
+                <el-descriptions-item label="厂家"> {{orderDetail.manufacturer||'--'}}</el-descriptions-item>
+                <el-descriptions-item label="经销商"> {{orderDetail.dealer||'--'}}</el-descriptions-item>
+
+
+            </el-descriptions>
+
+            <div class="add-title-wrap">已到店 {{tableData.length||0}}</div>
+
+            <el-table :header-cell-style="{'background-color':'#f6f8f8','color':'#000'}" :data="tableData" style="width: 100%" border>
+
+<!--                <el-table-column  label="品牌/车系/车型" align="center">-->
+<!--                    <template v-slot="{row}">-->
+<!--                        {{row.brandName}}/{{row.seriesName}}/{{row.modelName}}-->
+<!--                    </template>-->
+<!--                </el-table-column>-->
+                <el-table-column prop="productionTime" label="车架号" align="center">
+                    <template v-slot="{row}">
+                        {{row.vinNo||'--'}}
+                    </template>
+                </el-table-column>
+<!--                <el-table-column prop="productType" label="车辆级别" align="center">-->
+<!--                    <template v-slot="{row}">-->
+<!--                        {{row.productType||'&#45;&#45;'}}-->
+<!--                    </template>-->
+<!--                </el-table-column>-->
+<!--                <el-table-column prop="productionTime" label="生产日期" align="center">-->
+<!--                    <template v-slot="{row}">-->
+<!--                        {{row.productionTime||'&#45;&#45;'}}-->
+<!--                    </template>-->
+<!--                </el-table-column>-->
+                <el-table-column prop="inventoryStatus" label="入库状态" align="center">
+                    <template v-slot="{row}">
+                        {{row.inventoryStatus == 1 ? '在库' : row.inventoryStatus == 2 ? '出库' : '在途'}}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="productionTime" label="到店日期" align="center">
+                    <template v-slot="{row}">
+                        {{row.toStoreTime||'--'}}
+                    </template>
+                </el-table-column>
+            </el-table>
+
+        </div>
+    </div>
+</div>
+
+<!-- Import Vue 3 -->
+<script src="../../statics/js/vue3/vue.global.js"></script>
+<!-- Import component library -->
+<script src="../../statics/js/element-plus/index.full.js"></script>
+<script src="../../statics/js/element-plus/icons-vue.js"></script>
+<script src="../../statics/plugins/jquery.min.js"></script>
+<script src="../../statics/common/layui/layui.js"></script>
+<script src="../../statics/js/common.js"></script>
+<script src="../../statics/js/element-plus/locale-cn.js"></script>
+<script>
+
+</script>
+<script src="../../statics/js/modules/purchaseManager/detail.js?_${.now?long}"></script>
+</body>
+
+</html>

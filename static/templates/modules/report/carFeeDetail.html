@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>demo</title>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="Author" content="larry"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+    <script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+    <script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/common.js"></script>
+    <script type="text/javascript" src="../../statics/js/upload.js"></script>
+    <script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+    <link rel="stylesheet" href="../../statics/new_css/jxcPublicAll.css" media="all">
+    <link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../statics/common/step/steps.css">
+    <link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/viewer.min.css">
+    <script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+    <script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+    <script src="../../statics/common/layui/autocomplete.js"></script>
+    <script src="../../statics/js/modules/viewer/viewer.min.js"></script>
+    <script src="../../statics/common/print-js/print.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+    <script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/searchview.js"></script>
+    <script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+    <!-- 引入组件库 -->
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+
+    <link rel="stylesheet" type="text/css" href="../../statics/css/common-new.css">
+
+    <style>
+        .multiple-cell {
+            display: table-cell;
+            padding-right: 8px;
+            height: 36px;
+            vertical-align: middle;
+        }
+        .multiple-row {
+            display: table-row;
+        }
+
+        .multiple-table {
+            width: 90% !important;
+            margin-bottom: 9px;
+            display: table;
+        }
+
+        .cellItem {
+            color:black;
+            font-size: 15px;
+            margin-left: 15px;
+        }
+
+        .cellItemFee {
+            color:black;
+            font-size: 15px;
+            margin-left: 30px;
+        }
+
+        .divBoxLeft {
+            width: 45%;
+            float: left;
+        }
+
+        .divBoxRight {
+            width: 45%;
+            float: right;
+        }
+
+        .divLine {
+            width: 1%;
+            float: left;
+            border-left: 1px solid #3facb3;
+            flex: 1;
+        }
+
+        .textBtn {
+            color:#3FACB3;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <!-- 查看表单 -->
+    <form class="layui-form ren-form" style="margin-bottom: 60px;">
+        <div class="details-conteiner">
+            <div class="details-content-box">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        车辆基础信息
+                    </div>
+                </div>
+                <div class="details-layui-row">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs4">
+                            <label class="layui-form-label">车辆品牌/车型:</label>
+                            <div class="layui-input-inline label_value">
+                                {{CarIncomeDetail.carBrandName}}
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs4">
+                            <label class="layui-form-label">车架号:</label>
+                            <div class="layui-input-inline label_value">
+                                {{CarIncomeDetail.vinNo}}
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs4">
+                            <label class="layui-form-label">车牌号:</label>
+                            <div class="layui-input-inline label_value">
+                                {{CarIncomeDetail.carNo}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="details-layui-row">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs4">
+                            <label class="layui-form-label">车辆状态:</label>
+                            <div class="layui-input-inline label_value">
+                                {{CarIncomeDetail.businessType}}
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs4">
+                            <label class="layui-form-label">车辆所属公司:</label>
+                            <div class="layui-input-inline label_value">
+                                {{CarIncomeDetail.deptName}}
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs4">
+                            <label class="layui-form-label">车辆折旧率:</label>
+                            <div class="layui-input-inline label_value">
+                                {{CarIncomeDetail.tax==null?0:CarIncomeDetail.tax}}%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="details-content-box">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        收支明细
+                    </div>
+                </div>
+                <div class="details-layui-row" style="display: flex">
+                    <div class="layui-row layui-form-row-content divBoxLeft">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <div class="multiple-table">
+                                    <div class="multiple-row">
+                                        <div class="multiple-cell">
+                                            <span style="color:black;font-size: 20px;">营收收入：</span>
+                                        </div>
+                                        <div class="multiple-cell">
+                                            <a class="textBtn" @click="jumpIncomePage">查看账单详情>></a>
+                                        </div>
+                                    </div>
+                                    <div class="multiple-row">
+                                        <div class="multiple-cell">
+                                            <span class="cellItem">租赁收入：</span>
+                                        </div>
+                                        <div class="multiple-cell">
+                                            <a class="textBtn" @click="jumpCarOwnerPage">查看历任车主订单>></a>
+                                        </div>
+                                    </div>
+                            <!--        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                        <table id="compulsoryInsurance" lay-filter="test"></table>
+                                    </div>-->
+
+                                    <div class="multiple-row" v-for="temp in leaseList" :key="temp.name">
+                                        <div class="multiple-cell">
+                                            <span class="cellItemFee">{{temp.name}}:应收  {{temp.money}}  实收 {{temp.amount}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="multiple-row" >
+                                        <div class="multiple-cell">
+                                            <span class="cellItem">退车收入：</span>
+                                        </div>
+                                        <div class="multiple-cell">
+                                            <a class="textBtn" @click="jumpReturnCarPage">查看退车结算单>></a>
+                                        </div>
+                                    </div>
+                                    <div class="multiple-row" v-for="temp in returnList" :key="temp.name">
+                                        <div class="multiple-cell">
+                                            <span class="cellItemFee">{{temp.name}}:应收  {{temp.money}}  实收 {{temp.amount}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="multiple-row">
+                                        <div class="multiple-cell">
+                                            <span class="cellItem">其他收入：</span>
+                                        </div>
+                                    </div>
+                                    <div class="multiple-row" v-for="temp in otherList" :key="temp.name">
+                                        <div class="multiple-cell">
+                                            <span class="cellItemFee">{{temp.name}}:应收  {{temp.money}}  实收 {{temp.amount}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <div class="multiple-table">
+                                    <div class="multiple-row">
+                                        <div class="multiple-cell">
+                                            <span style="color:black;font-size: 20px;">费用支出：</span>
+                                        </div>
+                                        <div class="multiple-cell">
+                                            <a class="textBtn" @click="jumpPayPage">查看账单详情>></a>
+                                        </div>
+                                    </div>
+                                    <div class="multiple-row">
+                                        <div class="multiple-cell">
+                                            <span class="cellItem">采购成本：</span>
+                                        </div>
+                                    </div>
+                                    <div class="multiple-row" v-for="temp in purchaseList" :key="temp.name">
+                                        <div class="multiple-cell">
+                                            <span class="cellItemFee">{{temp.name}}:应付  {{temp.money}}  实付 {{temp.amount}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="multiple-row">
+                                        <div class="multiple-cell">
+                                            <span class="cellItem">保险费：</span>
+                                        </div>
+                                    </div>
+                                    <div class="multiple-row" v-for="temp in insureList" :key="temp.name">
+                                        <div class="multiple-cell">
+                                            <span class="cellItemFee">{{temp.name}}:应付  {{temp.money}}  实付 {{temp.amount}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="multiple-row">
+                                        <div class="multiple-cell">
+                                            <span class="cellItem">年检费：</span>
+                                        </div>
+                                    </div>
+                                    <div class="multiple-row" v-for="temp in yearCheckList" :key="temp.name">
+                                        <div class="multiple-cell">
+                                            <span class="cellItemFee">{{temp.name}}:应付  {{temp.money}}  实付 {{temp.amount}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="multiple-row">
+                                        <div class="multiple-cell">
+                                            <span class="cellItem">保养费：</span>
+                                        </div>
+                                    </div>
+                                    <div class="multiple-row" v-for="temp in maintenanceList" :key="temp.name">
+                                        <div class="multiple-cell">
+                                            <span class="cellItemFee">{{temp.name}}:应付  {{temp.money}}  实付 {{temp.amount}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="multiple-row">
+                                        <div class="multiple-cell">
+                                            <span class="cellItem">维修费：</span>
+                                        </div>
+                                    </div>
+                                    <div class="multiple-row" v-for="temp in maintainList" :key="temp.name">
+                                        <div class="multiple-cell">
+                                            <span class="cellItemFee">{{temp.name}}:应付  {{temp.money}}  实付 {{temp.amount}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="multiple-row">
+                                        <div class="multiple-cell">
+                                            <span class="cellItem">其他支出：</span>
+                                        </div>
+                                    </div>
+                                    <div class="multiple-row" v-for="temp in otherPayList" :key="temp.name">
+                                        <div class="multiple-cell">
+                                            <span class="cellItemFee">{{temp.name}}:应付  {{temp.money}}  实付 {{temp.amount}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content divLine">
+                    </div>
+                    <div class="layui-row layui-form-row-content divBoxRight">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">车辆折旧费:</label>
+                                <div class="layui-input-inline label_value">
+                                    {{CarIncomeDetail.depreciateMoney}}
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">车辆折旧率:</label>
+                                <div class="layui-input-inline label_value">
+                                    {{CarIncomeDetail.carDepreciate}}%
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">税费:</label>
+                                <div class="layui-input-inline label_value">
+                                    {{CarIncomeDetail.taxMoney}}
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">税率:</label>
+                                <div class="layui-input-inline label_value">
+                                    {{CarIncomeDetail.tax==null?0:CarIncomeDetail.tax}}%
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">坏账:</label>
+                                <div class="layui-input-inline label_value">
+                                    {{CarIncomeDetail.badMoney}}
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <a class="textBtn" @click="jumpBadPage">查看坏账账单>></a>
+                            </div>
+                        </div>
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <div class="multiple-table">
+                                    <div class="multiple-row">
+                                        <div class="multiple-cell">
+                                            <span style="color:black;font-size: 20px;">车辆收益：{{CarIncomeDetail.carIncomeMoney}}元</span>
+                                        </div>
+                                    </div>
+                                    <div class="multiple-row">
+                                        <div class="multiple-cell">
+                                            <span style="color:red;font-size: 12px;">公式：营业收入（应收）-费用支出（实际支出）-折旧费-税费-坏账</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <div class="multiple-table">
+                                    <div class="multiple-row">
+                                        <div class="multiple-cell">
+                                           <span >
+                                                实收累计(不含保证金/押金) {{CarIncomeDetail.netReceiptsMoney}}元，
+                                               <span v-show="CarIncomeDetail.currentOrderNo!=null"> 当前订单:  <a class="textBtn"  @click="jumpIncomeNoPage">{{CarIncomeDetail.currentOrderNo}}</a>
+                                                   ，订单保证金/押金:{{CarIncomeDetail.currentMoney}}元 </span>
+                                                <span v-show="CarIncomeDetail.currentOrderNo==null">车辆状态：{{CarIncomeDetail.businessType}}</span>
+                                               <span v-show="CarIncomeDetail.rentNum!=null||CarIncomeDetail.rentNum!=0">司机欠租{{CarIncomeDetail.rentNum}}月欠{{CarIncomeDetail.rentMoney}}元， </span>
+                                              <span v-show="CarIncomeDetail.paymentMoney!=null||CarIncomeDetail.paymentMoney!=0">结算司机倒挂待付{{CarIncomeDetail.paymentMoney}}元;</span>
+                                                <span v-show="historyList!=null" v-for="temp in historyList" :key="temp.carOrderNo"> [历史订单 <a class="textBtn"    @click= "jumpIncomeHistoryNoPage(temp.carOrderNo)">{{temp.carOrderNo}}</a>]司机欠费{{temp.money}}元</span>
+                                                实出累计 (不含保证金/押金){{CarIncomeDetail.outputMoney}}元，
+                                              <span v-show="CarIncomeDetail.purchaseNum!=null||CarIncomeDetail.purchaseNum!=0"> 购车款剩余{{CarIncomeDetail.purchaseNum}}期{{CarIncomeDetail.purchaseCarMoney}}元，</span>
+                                               其他待支出{{CarIncomeDetail.otherOutputMoney}}元
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="float-btn-group bottom-bar">
+        <a class="layui-btn reset-btn" id="closePage">关闭</a>
+    </div>
+</div>
+
+
+<script src="../../statics/js/modules/carprofitreport/carFeeDetail.js?_${.now?long}"></script>
+</body>
+</html>

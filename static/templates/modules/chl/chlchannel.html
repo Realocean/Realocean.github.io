@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>渠道商管理</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/new_css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/viewer.min.css">
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <div class="mvvm-table">
+        <div class="list-search-title-box">
+            <form class="layui-form" style="box-shadow: 0 0 20px #eee;padding-right: 15px;">
+                <section class="jxc-section" style="display: flex;align-items: flex-start;white-space: nowrap;">
+                    <div class="card layui-row" style="flex: 1">
+                        <div class="layui-form-item ">
+                            <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                <label class="layui-form-label">渠道商名称</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input searchVal" v-model="q.channelName"  placeholder="请输入渠道商名称"/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                <label class="layui-form-label">联系人</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input searchVal" v-model="q.contacts"  placeholder="请输入联系人"/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                <label class="layui-form-label">手机号</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                           class="layui-input searchVal" v-model="q.phone" placeholder="请输入手机号" />
+                                </div>
+                            </div>
+                            <section v-show="isFilter">
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">业务员</label>
+                                    <div class="layui-input-inline">
+                                        <select name="salesmanId" id="salesmanId"  v-model="q.salesmanId"  lay-filter="saId"  lay-verify="salesmanId">
+                                            <option value="">请选择</option>
+                                            <option v-for="item in salesmanLst" :value="item.userId">{{item.username}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">合作状态</label>
+                                    <div class="layui-input-inline">
+                                        <select name="consociationStatus" id="consociationStatus"  v-model="q.consociationStatus"  lay-filter="consociationStatus" >
+                                            <option value="">请选择</option>
+                                            <option value="1">合作中</option>
+                                            <option value="2">已解除合作</option>
+                                            <option value="3">合作申请中</option>
+                                            <option value="4">取消合作</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </section>
+                            <div :class="isFilter?'layui-col-md12':'layui-col-md3'" class="layui-inline layui-col-sm12 layui-col-xs12 flex-end">
+                                <div style="display:flex;justify-content: flex-end;">
+                                    <div style="display: flex;align-items: center;">
+                                        <a class="layui-btn search-btn" @click="query">查询</a>
+                                        <a class="layui-btn reset-btn" @click="reset">重置</a>
+
+                                        <div class="df-color"  @click="bindFilter" style="margin-left: 10px;cursor: pointer;user-select: none;">
+                                            <span >高级筛选</span>
+                                            <i class="icon layui-icon-extend layui-extend-shaixuan"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </form>
+        </div>
+        <div class="list-search-title-box ground-search-btn">
+                <form class="layui-form">
+                    <div style="display:flex;width: 100%;">
+                        <div class="layui-form-item layui-row" style="width: 100%;">
+                            <div class="list-search-form-button" style="width: 100%;">
+                                <a class="layui-btn btn-primary" @click="add" v-m-perm="['chl:chlchannel:save']">新增</a>
+                                <a class="layui-btn btn-warning" @click="extf" v-m-perm="['chl:chlchannel:export']">导出</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        <div class="layui-tab-item layui-show">
+            <table class="layui-hide" id="grid" lay-filter="grid"></table>
+        </div>
+    </div>
+</div>
+
+<!--操作-->
+<script type="text/html" id="barTpl">
+    <div style="width:180px">
+    <!--    <#if shiro.hasPermission("chl:chlchannel:update")>-->
+        <a class="layui-grid-btn-xs option-btn-margin" lay-event="edit" v-m-perm="['chl:chlchannel:update']" more-btn-index="{{d.LAY_INDEX-1}}">编辑</a>
+        <a class="layui-grid-btn-xs option-btn-margin" lay-event="generateWxQrcode" v-m-perm="['chl:chlchannel:update']" more-btn-index="{{d.LAY_INDEX-1}}">生成小程序二维码</a>
+    <!--    </#if>-->
+    </div>
+</script>
+
+<script src="../../statics/js/modules/chl/chlchannel.js"></script>
+</body>
+</html>
+<script>
+    import Docs from "../../statics/common/xmselect/static/docs";
+    export default {
+        components: {Docs}
+    }
+</script>

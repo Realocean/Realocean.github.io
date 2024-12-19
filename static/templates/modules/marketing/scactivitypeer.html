@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>同行活动表</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <blockquote class="layui-elem-quote quoteBox">
+        <form class="layui-form">
+            <section class="jxc-section">
+                <div class="card">
+                    <div class="layui-row form-group">
+                        <div class="column layui-col-xs4">
+                            <label class="layui-form-label">关键字</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" v-model="q.keyword"
+                                       placeholder="请输入关键字"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row form-group">
+                        <a class="layui-btn search_btn" @click="query">查询</a>
+                        <div class="layui-inline">
+                            <a class="layui-btn layui-btn-normal" @click="add" v-m-perm="['marketing:scactivitypeer:save']">新增</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </form>
+    </blockquote>
+    <table class="layui-hide" id="grid" lay-filter="grid"></table>
+
+    <!-- 表单 修改 -->
+    <div v-show="editForm" class="layui-form ren-form" id="editForm">
+        <div class="jxc-detail layui-form ren-form">
+            <section class="jxc-section">
+                <legend class="aTitle">详情</legend>
+                <hr class="layui-bg-gray">
+                <div class="card">
+                    <div class="column layui-col-xs4">
+                        <label class="layui-form-label">活动标题</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="required" v-model="scActivityPeer.peerTitle"
+                                   autocomplete="off"
+                                   placeholder="活动标题" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="column layui-col-xs4">
+                        <label class="layui-form-label">活动状态(1-未开始，2-进行中，3暂停中，4-已结束)</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="required" v-model="scActivityPeer.status" autocomplete="off"
+                                   placeholder="活动状态(1-未开始，2-进行中，3暂停中，4-已结束)" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="column layui-col-xs4">
+                        <label class="layui-form-label">活动开始时间</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="required" v-model="scActivityPeer.timeStart"
+                                   autocomplete="off"
+                                   placeholder="活动开始时间" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="column layui-col-xs4">
+                        <label class="layui-form-label">活动结束时间</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="required" v-model="scActivityPeer.timeEnd" autocomplete="off"
+                                   placeholder="活动结束时间" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="column layui-col-xs4">
+                        <label class="layui-form-label">虚拟参加人数</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="required" v-model="scActivityPeer.inventedJoinNumber"
+                                   autocomplete="off" placeholder="虚拟参加人数" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="column layui-col-xs4">
+                        <label class="layui-form-label">活动门店id，多个门店逗号隔开</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="required" v-model="scActivityPeer.joinStores"
+                                   autocomplete="off"
+                                   placeholder="活动门店id，多个门店逗号隔开" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="column layui-col-xs4">
+                        <label class="layui-form-label">邀请设置(1:无限制;2:仅能邀请新客)</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="required" v-model="scActivityPeer.invite" autocomplete="off"
+                                   placeholder="邀请设置(1:无限制;2:仅能邀请新客)" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="column layui-col-xs4">
+                        <label class="layui-form-label">封面图片url</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="required" v-model="scActivityPeer.coverImage"
+                                   autocomplete="off"
+                                   placeholder="封面图片url" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="column layui-col-xs4">
+                        <label class="layui-form-label">分享封面url</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="required" v-model="scActivityPeer.shareImage"
+                                   autocomplete="off"
+                                   placeholder="分享封面url" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="column layui-col-xs4">
+                        <label class="layui-form-label">活动内容</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="required" v-model="scActivityPeer.peerContent"
+                                   autocomplete="off"
+                                   placeholder="活动内容" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="column layui-col-xs4">
+                        <label class="layui-form-label">创建门店id</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="required" v-model="scActivityPeer.createStore"
+                                   autocomplete="off"
+                                   placeholder="创建门店id" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="column layui-col-xs4">
+                        <label class="layui-form-label">删除状态(1-未删除，2-已删除)</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="required" v-model="scActivityPeer.delFlag" autocomplete="off"
+                                   placeholder="删除状态(1-未删除，2-已删除)" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="column layui-col-xs4">
+                        <label class="layui-form-label">创建时间</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="required" v-model="scActivityPeer.createTime"
+                                   autocomplete="off"
+                                   placeholder="创建时间" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="column layui-col-xs4">
+                        <label class="layui-form-label">创建人</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="required" v-model="scActivityPeer.createBy"
+                                   autocomplete="off"
+                                   placeholder="创建人" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="column layui-col-xs4">
+                        <label class="layui-form-label">修改时间</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="required" v-model="scActivityPeer.updateTime"
+                                   autocomplete="off"
+                                   placeholder="修改时间" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="column layui-col-xs4">
+                        <label class="layui-form-label">修改人</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="required" v-model="scActivityPeer.updateBy"
+                                   autocomplete="off"
+                                   placeholder="修改人" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="column layui-col-xs4">
+                        <label class="layui-form-label">租户id</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="required" v-model="scActivityPeer.tenantId"
+                                   autocomplete="off"
+                                   placeholder="租户id" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="column layui-col-xs4">
+                        <label class="layui-form-label">是否有推荐奖励（0.是 1.否）</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="required" v-model="scActivityPeer.isReferralBonuses"
+                                   autocomplete="off" placeholder="是否有推荐奖励（0.是 1.否）" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="column layui-col-xs4">
+                        <label class="layui-form-label">分享url</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="required" v-model="scActivityPeer.shareUrl"
+                                   autocomplete="off"
+                                   placeholder="分享url" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="column layui-col-xs4">
+                        <label class="layui-form-label">详情封面url</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="required" v-model="scActivityPeer.detailImage"
+                                   autocomplete="off"
+                                   placeholder="详情封面url" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="column layui-col-xs4">
+                        <label class="layui-form-label">任务id</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="required" v-model="scActivityPeer.jobId" autocomplete="off"
+                                   placeholder="任务id" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="column layui-col-xs4">
+                        <label class="layui-form-label">部门id</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="required" v-model="scActivityPeer.deptId" autocomplete="off"
+                                   placeholder="部门id" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="column layui-col-xs4">
+                        <label class="layui-form-label">提交人id</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="required" v-model="scActivityPeer.operationId"
+                                   autocomplete="off"
+                                   placeholder="提交人id" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- 表单 查看 -->
+    <div v-show="showForm" class="layui-form ren-form" id="showForm">
+        <div class="jxc-detail layui-form ren-form">
+            <section class="jxc-section">
+                <legend class="aTitle">详情</legend>
+                <hr class="layui-bg-gray">
+                <div class="card">
+                    <div class="layui-row form-group">
+                        <div class="column layui-col-xs4"><span>活动标题: </span><span>{{scActivityPeer.peerTitle}}</span>
+                        </div>
+                        <div class="column layui-col-xs4"><span>活动状态(1-未开始，2-进行中，3暂停中，4-已结束): </span><span>{{scActivityPeer.status}}</span>
+                        </div>
+                        <div class="column layui-col-xs4"><span>活动开始时间: </span><span>{{scActivityPeer.timeStart}}</span>
+                        </div>
+                        <div class="column layui-col-xs4"><span>活动结束时间: </span><span>{{scActivityPeer.timeEnd}}</span>
+                        </div>
+                        <div class="column layui-col-xs4">
+                            <span>虚拟参加人数: </span><span>{{scActivityPeer.inventedJoinNumber}}</span></div>
+                        <div class="column layui-col-xs4">
+                            <span>活动门店id，多个门店逗号隔开: </span><span>{{scActivityPeer.joinStores}}</span></div>
+                        <div class="column layui-col-xs4">
+                            <span>邀请设置(1:无限制;2:仅能邀请新客): </span><span>{{scActivityPeer.invite}}</span></div>
+                        <div class="column layui-col-xs4">
+                            <span>封面图片url: </span><span>{{scActivityPeer.coverImage}}</span>
+                        </div>
+                        <div class="column layui-col-xs4">
+                            <span>分享封面url: </span><span>{{scActivityPeer.shareImage}}</span>
+                        </div>
+                        <div class="column layui-col-xs4"><span>活动内容: </span><span>{{scActivityPeer.peerContent}}</span>
+                        </div>
+                        <div class="column layui-col-xs4">
+                            <span>创建门店id: </span><span>{{scActivityPeer.createStore}}</span>
+                        </div>
+                        <div class="column layui-col-xs4">
+                            <span>删除状态(1-未删除，2-已删除): </span><span>{{scActivityPeer.delFlag}}</span></div>
+                        <div class="column layui-col-xs4"><span>创建时间: </span><span>{{scActivityPeer.createTime}}</span>
+                        </div>
+                        <div class="column layui-col-xs4"><span>创建人: </span><span>{{scActivityPeer.createBy}}</span>
+                        </div>
+                        <div class="column layui-col-xs4"><span>修改时间: </span><span>{{scActivityPeer.updateTime}}</span>
+                        </div>
+                        <div class="column layui-col-xs4"><span>修改人: </span><span>{{scActivityPeer.updateBy}}</span>
+                        </div>
+                        <div class="column layui-col-xs4"><span>租户id: </span><span>{{scActivityPeer.tenantId}}</span>
+                        </div>
+                        <div class="column layui-col-xs4"><span>是否有推荐奖励（0.是 1.否）: </span><span>{{scActivityPeer.isReferralBonuses}}</span>
+                        </div>
+                        <div class="column layui-col-xs4"><span>分享url: </span><span>{{scActivityPeer.shareUrl}}</span>
+                        </div>
+                        <div class="column layui-col-xs4">
+                            <span>详情封面url: </span><span>{{scActivityPeer.detailImage}}</span>
+                        </div>
+                        <div class="column layui-col-xs4"><span>任务id: </span><span>{{scActivityPeer.jobId}}</span></div>
+                        <div class="column layui-col-xs4"><span>部门id: </span><span>{{scActivityPeer.deptId}}</span>
+                        </div>
+                        <div class="column layui-col-xs4">
+                            <span>提交人id: </span><span>{{scActivityPeer.operationId}}</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+</div>
+
+<!--操作-->
+<script type="text/html" id="editTpl">
+    <a class="layui-btn layui-btn-xs" lay-event="edit" v-m-perm="['marketing:scactivitypeer:update']">编辑</a>
+</script>
+<script type="text/html" id="showTpl">
+    <a class="layui-btn layui-btn-xs" lay-event="show" v-m-perm="['marketing:scactivitypeer:info']">查看</a>
+</script>
+<script type="text/html" id="delTpl">
+    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del" v-m-perm="['marketing:scactivitypeer:delete']">删除</a>
+</script>
+<script type="text/html" id="startTpl">
+    <a class="layui-btn layui-btn-xs" lay-event="start" v-m-perm="['marketing:scactivitypeer:updateStatus']">开始</a>
+</script>
+<script type="text/html" id="endTpl">
+    <a class="layui-btn layui-btn-xs" lay-event="end" v-m-perm="['marketing:scactivitypeer:updateStatus']">结束</a>
+</script>
+<script type="text/html" id="restartTpl">
+    <a class="layui-btn layui-btn-xs" lay-event="restart" v-m-perm="['marketing:scactivitypeer:updateStatus']">启用</a>
+</script>
+<script type="text/html" id="stopTpl">
+    <a class="layui-btn layui-btn-xs" lay-event="stop" v-m-perm="['marketing:scactivitypeer:updateStatus']">暂停</a>
+</script>
+
+
+<script src="../../statics/js/modules/marketing/scactivitypeer.js?_${.now?long}"></script>
+</body>
+</html>

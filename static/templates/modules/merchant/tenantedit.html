@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>商户编辑</title>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <!-- 新增表单 -->
+    <form class="layui-form ren-form" style="margin-bottom: 60px;">
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                商户信息
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>商户号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" v-model="tenantEntity.tenantCode" lay-verify="tenantCode"   autocomplete="off" placeholder="商户号" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>商户名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" v-model="tenantEntity.tenantName" lay-verify="tenantName"   autocomplete="off" placeholder="商户名称" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>商户联系人</label>
+                            <div class="layui-input-inline">
+                                <input type="text" v-model="tenantEntity.tenantConcat" lay-verify="tenantConcat"   autocomplete="off" placeholder="商户联系人" class="layui-input searchVal">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>联系电话</label>
+                            <div class="layui-input-inline">
+                                <input type="text" v-model="tenantEntity.tenantPhone" lay-verify="tenantPhone|phone"   autocomplete="off" placeholder="联系电话" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>分账方编号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" v-model="tenantEntity.altMchNo" lay-verify="altMchNo"   autocomplete="off" placeholder="分账方编号" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>商户类型</label>
+                            <div class="layui-input-inline">
+                                <select lay-filter="tenantType" v-model="tenantEntity.tenantType"
+                                        v-if="!tenantFlag"
+                                        lay-verify="tenantType">
+                                    <option value="">请选择商户类型</option>
+                                    <option value="0">平台</option>
+                                    <option value="1">商户</option>
+                                </select>
+                                <input type="text" v-if="tenantFlag" value="商户" readonly disabled class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">大屏是否开启:</label>
+                            <div class="layui-input-inline">
+                                <input type="radio" name="bigScreenFlag" lay-filter="bigScreenFlag" v-model="tenantEntity.bigScreenFlag" value="1" title="关闭" checked="checked">
+                                <input type="radio" name="bigScreenFlag" lay-filter="bigScreenFlag" v-model="tenantEntity.bigScreenFlag" value="0" title="开启">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>违章直查key</label>
+                            <div class="layui-input-inline">
+                                <input type="text" v-model="tenantEntity.illegalQuery" lay-verify="illegalQuery"   autocomplete="off" placeholder="违章直查key" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>全国违章查询key</label>
+                            <div class="layui-input-inline">
+                                <input type="text" v-model="tenantEntity.illegalNation" lay-verify="illegalNation"   autocomplete="off" placeholder="全国违章查询key" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>图文识别clientId</label>
+                            <div class="layui-input-inline">
+                                <input type="text" v-model="tenantEntity.ocrClientId" lay-verify="ocrClientId"   autocomplete="off" placeholder="图文识别clientId" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>图文识别clientSecret</label>
+                            <div class="layui-input-inline">
+                                <input type="text" v-model="tenantEntity.ocrClientSecret" lay-verify="ocrClientSecret"   autocomplete="off" placeholder="图文识别clientSecret" class="layui-input searchVal">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>车辆监控登录账号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" v-model="tenantEntity.cljkLoginName" lay-verify="cljkLoginName"   autocomplete="off" placeholder="车辆监控登录账号" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>车辆监控登录密码</label>
+                            <div class="layui-input-inline">
+                                <input type="text" v-model="tenantEntity.cljkPassword" lay-verify="cljkPassword"   autocomplete="off" placeholder="车辆监控登录密码" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">短信是否开启:</label>
+                            <div class="layui-input-inline">
+                                <input type="radio" name="smsStatus" lay-filter="smsStatus" v-model="tenantEntity.smsStatus" value="1" title="开启" checked="checked">
+                                <input type="radio" name="smsStatus" lay-filter="smsStatus" v-model="tenantEntity.smsStatus" value="2" title="关闭">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">短信账号:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" v-model="tenantEntity.smsUid" lay-verify="smsUid"  maxlength="50" autocomplete="off" placeholder="短信账号" class="layui-input searchVal">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">短信是否开通:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" v-model="tenantEntity.smsPassword" lay-verify="smsPassword"   maxlength="50"  autocomplete="off" placeholder="短信密码" class="layui-input searchVal">
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                菜单权限
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label" style="width: 160px !important;">是否开放全部菜单功能:</label>
+                            <div class="layui-input-inline">
+                                <input type="radio" name="menuPermissionType" lay-filter="menuPermissionType" v-model="tenantEntity.menuPermissionType" value="1" title="是">
+                                <input type="radio" name="menuPermissionType" lay-filter="menuPermissionType" v-model="tenantEntity.menuPermissionType" value="2" title="否">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" v-show="tenantEntity.menuPermissionType == 2" :sid="menuPermissionTypeId">
+                    <ul id="menuTree" class="ztree" style="margin-left: 100px"></ul>
+                </div>
+            </div>
+
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                小程序信息
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">应用appId:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" v-model="tenantEntity.miniProgramAppId"   autocomplete="off" placeholder="应用appId" class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">应用appSecret:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" v-model="tenantEntity.miniProgramAppSecret"   autocomplete="off" placeholder="应用appSecret" class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">回调地址:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" v-model="tenantEntity.miniProgramNotifyUrl"  autocomplete="off" placeholder="回调地址" class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">微信商户id:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" v-model="tenantEntity.miniProgramMchId"    autocomplete="off" placeholder="微信商户id" class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">微信商户key:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" v-model="tenantEntity.miniProgramKey"   autocomplete="off" placeholder="微信商户key" class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <div class="float-btn-group bottom-bar">
+            <a class="layui-btn reset-btn" id="closePage">取消</a>
+            <a class="layui-btn search-btn" lay-submit lay-filter="save" id="save">保存</a>
+        </div>
+    </form>
+</div>
+<script src="../../statics/js/modules/merchant/tenantedit.js?_${.now?long}"></script>
+</body>
+</html>

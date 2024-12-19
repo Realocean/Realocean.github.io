@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>车辆订单详情</title>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="Author" content="larry" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+    <script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+    <script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/common.js"></script>
+    <script type="text/javascript" src="../../statics/js/upload.js"></script>
+    <script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+    <link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+    <link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../statics/common/step/steps.css">
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+    <script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+    <script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+    <script src="../../statics/common/layui/autocomplete.js"></script>
+    <script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+    <script src="../../statics/common/print-js/print.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+    <script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/searchview.js"></script>
+    <script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+    <script type="text/javascript" src="../../statics/js/bpmchart.js"></script>
+
+    <!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+    <!-- 引入组件库 -->
+    <link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+    <link rel="stylesheet" type="text/css" href="../../statics/css/public/flowChart.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/public/header.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/common-new.css">
+
+
+    <style>
+        select[name='salePerson']+div.layui-form-select>div>input {
+            border: solid !important;
+            border-width: 0.1px !important;
+            border-color: darkgray !important;
+        }
+    </style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <!-- 查看表单 -->
+    <form class="layui-form ren-form" style="margin-bottom: 60px;">
+        <div class="details-tab-content">
+            <div class="details-tab-content-box display">
+
+                <div class="layui-tab">
+                    <ul class="layui-tab-title">
+                        <li :class="0==index?'layui-this':''" @click="detailsSupTabContentBindtap(index, item)" v-for="(item, index) in detailsSupTabContentList" :key="index">{{ item }}</li>
+                    </ul>
+                    <div class="layui-tab-content">
+                        <div class="layui-tab-item" :class="0==index?'layui-show':''" v-for="(item, index) in detailsSupTabContentList" :key="index">
+
+                            <div class="details-conteiner" v-if="'基本信息'==item">
+
+                                <div class="details-content-box"
+                                     v-show="detailsSupTabContentListActiveValue === '基本信息' ||  detailsSupTabContentListActiveValue === '车辆订单详情'">
+                                    <div class="left-before">
+                                        <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                                            基本信息
+                                            <div class="fr display " v-show="order.orderCar.orderCarStatusStr ">
+                                                <div class="details-layui-fr-sup-title">
+                                                    <span>订单状态：</span>
+                                                    <span class="description">{{order.orderCar.orderCarStatusStr || '--'}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="details-layui-row">
+                                        <div class="layui-row layui-form-row-content">
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-show="isShow || longRent || leasePurchase || meltsRent">
+                                                <label class="layui-form-label">主合同编号:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="getContractNo(order)" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">车辆订单号:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.code  || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label ">客户名称:</label>
+                                                <div class="layui-input-inline" @click="toOtherPage(1,order.customerId)">
+                                                    <input type="text" class="layui-input searchVal" style="color: #3FACB3" :value="order.customerName  || '--'"  disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">联系地址:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.customerAddr  || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">联系人:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.contactPerson || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">联系电话:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.customerTel  || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">{{lessor_title}}名称:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.lessorName  || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-show="isShow || longRent || leasePurchase || meltsRent">
+                                                <label class="layui-form-label">车辆已选保险:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.insuranceItems  || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">订单类型:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="getRentTypeStr(order.orderCar.rentType)" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-show="order.orderCar.rentType == 7 ">
+                                                <label class="layui-form-label">挂靠费:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.plan.monthlyRent  || '0'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-show="order.orderCar.rentType == '6' ">
+                                                <label class="layui-form-label">还款时间:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="dateFormatYMD(order.orderCar.timeRepayment)  || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-show="isShow || longRent || leasePurchase">
+                                                <label class="layui-form-label">还款方式:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.paymentMethodStr  || '--'" disabled/>
+                                                </div>
+                                            </div>
+
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-show="isShow || longRent || leasePurchase || meltsRent">
+                                                <label class="layui-form-label">租期:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.maxStage || '--'" disabled/>
+                                                </div>
+                                            </div>
+
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-show="isShow || longRent || leasePurchase">
+                                                <label class="layui-form-label">还款日:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.paymentDay  || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-show="isShow || longRent || leasePurchase || meltsRent">
+                                                <label class="layui-form-label" v-show="!oldOrderCarShow">租赁开始时间:</label>
+                                                <label class="layui-form-label" v-show="oldOrderCarShow">续租开始时间:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="dateFormatYMD(order.orderCar.timeStartRent)  || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-show="isShow || longRent || leasePurchase || meltsRent">
+                                                <label class="layui-form-label" v-show="!oldOrderCarShow">租赁结束时间:</label>
+                                                <label class="layui-form-label" v-show="oldOrderCarShow">续租结束时间:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="getTimeFinishRent(order) || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">支付方式:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="transformTypeByMap(order.repaymentMethod,{ 1:'微信支付', 5:'支付宝支付', 3:'汇聚代扣', 4:'支付宝代扣', 2:'其他' })" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-show="order.plan.overdueFineConf > 0">
+                                                <label class="layui-form-label">滞纳金方案:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="'宽限'+(order.plan.gracePeriod^0)+'天，每逾期1天，收取档期应收金额的'+toMoney(order.plan.overdueFineRatio)+'%'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-if="order.orderCar.rentType == 2 || order.orderCar.rentType == 1">
+                                                <label class="layui-form-label">租金生成方式:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" :value="transformTypeByMap(order.plan.rentGenerationMethod,{ 1: '当月生成', 2: '次月生成', 4: '自定义首期租金' })" class="layui-input input-readonly" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-if="(order.orderCar.rentType == 2 || order.orderCar.rentType == 1) && order.plan.rentGenerationMethod == 4">
+                                                <label class="layui-form-label">首期租金:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" :value="order.plan.firstRent" class="layui-input input-readonly" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-show="!oldOrderCarShow">
+                                                <label class="layui-form-label">所属渠道:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.channelName  || '--' " disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" >
+                                                <label class="layui-form-label">所属销售员:</label>
+                                                <div class="layui-input-inline" id="editSalePersonId">
+<!--                                                    <input v-if="!isEditSalePerson" type="text" class="layui-input searchVal" :value="order.orderCar.salePersonName  || '&#45;&#45;' " disabled/>-->
+                                                    <select v-if="isEditSalePerson" lay-search="" name="salePerson" lay-filter="salePerson"
+                                                            v-model="order.orderCar.salePersonId">
+                                                        <option value="">请选择销售员</option>
+                                                        <option v-for="(item,index) in salePersonList" :value="item.userId">{{item.username}}</option>
+                                                    </select>
+
+                                                    <span v-if="!isEditSalePerson">{{order.orderCar.salePersonName  || '--'}}</span>
+                                                    <span class="text-edit" id="editSalePerson">修改&nbsp;</span>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-show="meltsRent || leasePurchase || isShow">
+                                                <label class="layui-form-label">是否有尾款:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.plan.hasBalancePaymentStr  || '--' " disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-show="meltsRent || leasePurchase || isShow">
+                                                <label class="layui-form-label">预计过户时间:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="dateFormatYMD(order.orderCar.timeTransferEstimated)  || '--' " disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-show="!oldOrderCarShow">
+                                                <label class="layui-form-label">备注:</label>
+                                                <div class="layui-input-inline">
+                                                    <span>{{order.orderCar.orderDesc  || '--'}}</span>
+<!--                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.orderDesc  || '&#45;&#45;' " disabled/>-->
+                                                    <span class="text-edit" id="editOrderDesc">修改&nbsp;</span>
+
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-show="!oldOrderCarShow">
+                                                <label class="layui-form-label">是否直营模式:</label>
+                                                <div class="layui-input-inline">
+<!--                                                    <input type="radio" lay-filter="directSellingMode" v-model="order.orderCar.directSellingMode"-->
+<!--                                                           name="directSellingMode" value="1" lay-skin="primary" title="是" disabled>-->
+<!--                                                    <input type="radio" lay-filter="directSellingMode" v-model="order.orderCar.directSellingMode"-->
+<!--                                                           name="directSellingMode" value="2" lay-skin="primary" title="否" disabled>-->
+
+                                                    <input type="text" class="layui-input searchVal"
+                                                           :value="1==order.orderCar.directSellingMode?'是':2==order.orderCar.directSellingMode?'否':'--'" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-show="oldOrderCarShow">
+                                                <label class="layui-form-label">续租备注:</label>
+                                                <div class="layui-input-inline">
+                                                    <span>{{order.orderCar.renewalRemark  || '--'}}</span>
+                                                    <span class="text-edit" id="editRenewalDesc">修改&nbsp;</span>
+
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-show="oldOrderCarShow">
+                                                <label class="layui-form-label">原方案中的保证金和月租金是否调整:</label>
+                                                <div class="layui-input-inline">
+                                                    <span>{{order.plan.planAdjustStr || '--'}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-if="!oldOrderCarShow">
+                                                <label class="layui-form-label" v-show="!oldOrderCarShow">订单附件:</label>
+                                                <div class="layui-input-inline" id="orderFileLst"></div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-if="oldOrderCarShow">
+                                                <label class="layui-form-label" v-show="oldOrderCarShow">续租附件:</label>
+                                                <div class="layui-input-inline" id="orderreleFileLst"></div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="oldOrderCarShow">
+                                                <label class="layui-form-label">续租订单号:</label>
+                                                <div class="layui-input-inline" @click="rentOrderNo(order.oldOrderCarId)">
+                                                    <input type="text" class="layui-input searchVal" style="color:#419BEA;" :value="order.oldOrderCarCode || '--' " disabled/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="margin-top: 30px"></div>
+                                    <div class="details-layui-row layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="order.orderCar.rentType == '1' || order.orderCar.rentType == '3' || order.orderCar.rentType == '4' ">
+                                        <div class="table">
+                                            <table class="layui-hide" id="orderLongRentPlanTable" lay-filter="orderLongRentPlanTable"></table>
+                                        </div>
+                                    </div>
+                                    <div class="details-layui-row" v-show="feeItemLstShow">
+                                        <div class="table">
+                                            <table class="layui-hide" id="feeItemLst"></table>
+                                        </div>
+                                    </div>
+                                    <div class="details-layui-row" v-show="order.orderCar.rentType == '2'">
+                                        <div class="table">
+                                            <table class="layui-hide" id="orderRentSalePlanTable" lay-filter="orderRentSalePlanTable"></table>
+                                        </div>
+                                    </div>
+                                    <div class="details-layui-row" v-show="order.orderCar.rentType == '5'">
+                                        <div class="table">
+                                            <table class="layui-hide" id="orderMeltsRentTable" lay-filter="orderMeltsRentTable"></table>
+                                        </div>
+                                    </div>
+                                    <div class="details-layui-row" v-show="order.orderCar.rentType == '6'">
+                                        <div class="table">
+                                            <table class="layui-hide" id="orderDirectPurchaseTable" lay-filter="orderDirectPurchaseTable"></table>
+                                        </div>
+                                    </div>
+                                    <div class="details-layui-row" v-show="order.orderCar.rentType == '8'">
+                                        <div class="table">
+                                            <table class="layui-hide" id="orderChainTable" lay-filter="orderChainTable"></table>
+                                        </div>
+                                    </div>
+
+                                    <div class="details-layui-row" v-show="order.orderCar.rentType != 7">
+                                        <div class="table">
+                                            <table class="layui-hide" id="rentSaleMoneyTable" lay-filter="rentSaleMoneyTable"></table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="details-conteiner" v-else-if="'车辆信息'==item">
+                                <div class="details-content-box"
+                                     v-show="detailsSupTabContentListActiveValue === '车辆信息' ||  detailsSupTabContentListActiveValue === '基本信息'">
+                                    <div class="left-before">
+                                        <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                                            车辆信息
+                                        </div>
+                                    </div>
+                                    <div class="details-layui-row">
+                                        <div class="layui-row layui-form-row-content">
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">车架号:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.vinNo  || '--' " disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">车牌号:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.carNo  || '--' " disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">车辆品牌:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.brandName || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">车系:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.seriesName || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">车型:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.modelName  || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">车辆所属部门:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.deptName  || '--' " disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">车辆所在仓库/城市:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.depotName  || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">车辆实时里程数:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.sumOdograph  || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">当前SOC%:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.electricQuantity  || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">随车物品:</label>
+                                                <div class="layui-input-inline">
+
+                                                    <span>
+                                                        {{order.orderCar.accessoryItemsName  || '--'}}
+                                                    </span>
+                                                    <!--                                                    <div class="layui-input-inline-checkbox" id="accessoryGroup"></div>-->
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">备注:</label>
+                                                <div class="layui-input-inline">
+                                                    <span>{{order.orderCar.carDesc  || '--'}}</span>
+<!--                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.carDesc  || '&#45;&#45;'" disabled/>-->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="details-conteiner" v-else-if="'交车信息'==item">
+                                <div class="details-content-box"
+                                     v-show="detailsSupTabContentListActiveValue === '交车信息' ||  detailsSupTabContentListActiveValue === '基本信息'">
+                                    <div class="left-before">
+                                        <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                                            交车信息
+                                        </div>
+                                    </div>
+                                    <div class="details-layui-row">
+                                        <div class="layui-row layui-form-row-content">
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">交车时间:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="dateFormat(order.orderCar.timeDelivery) || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">交车工作人员:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.deliveryOperationName || '--' " disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">备注:</label>
+                                                <div class="layui-input-inline">
+                                                    <span>{{order.orderCar.deliveryDesc || '--'}}</span>
+<!--                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.deliveryDesc || '&#45;&#45;'  " disabled/>-->
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                                <label class="layui-form-label">交车附件:</label>
+                                                <div class="layui-input-inline"  id="deliveryFileLst"></div>
+                                                <!--<div class="layui-input-inline" v-if="order.orderCar.deliveryFileLst.length">
+                                                    <div class="layui-input-inline-upload" >
+                                                        <div v-for="(item, index) in order.orderCar.deliveryFileLst" class="layui-input-inline-upload-show box-rect">
+                                                            <div v-show="item.typeFile == 1" class="layui-input-inline-upload-button">
+                                                                <img :src="imageURL + item.url" class="view-img">
+                                                            </div>
+                                                            <div v-show="item.typeFile != 1" class="layui-input-inline-upload-button">
+                                                                {{item.nameFile}}
+                                                            </div>
+                                                            <div class="layui-input-inline-upload-show-delete" @click="downDoc(item.url, item.nameFile)" v-if="item.typeFile != 1">
+                                                                下载
+                                                            </div>
+                                                            <div class="layui-input-inline-upload-show-delete" @click="showDoc(item.url, item.nameFile)" v-if="item.typeFile == '1'">
+                                                                预览
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>-->
+                                                <!-- <div class="layui-input-inline" v-if="!order.orderCar.deliveryFileLst.length">
+                                                     <input type="text" class="layui-input searchVal" value="&#45;&#45;" disabled/>
+                                                 </div>-->
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-show="isShow || longRent || meltsRent || leasePurchase">
+                                                <label class="layui-form-label">交车当前里程数:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.deliveryMileage || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4"  v-show="isShow || longRent || meltsRent || leasePurchase">
+                                                <label class="layui-form-label">下次保养公里数:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.mileageNextMaintenance || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4"  v-show="isShow || longRent || meltsRent || leasePurchase">
+                                                <label class="layui-form-label">下次保养时间:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="dateFormatYMD(order.orderCar.mileageNextDate) || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="details-conteiner" v-else-if="'合同信息'==item">
+                                <div :id="contentViewId"
+                                     class="details-content-box"
+                                     v-if="order.orderType == 1"
+                                     v-show="(detailsSupTabContentListActiveValue === '合同信息' ||  detailsSupTabContentListActiveValue === '基本信息')">
+                                    <div class="left-before">
+                                        <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                                            <span>合同信息</span>
+
+                                            <div style="float: right;display: inline-flex;align-items: center">
+                                                <a @click="regenerateDoc" v-show="(order.contract == null || order.contract.id == null) || (order.contract != null && order.contract.contractType == 2)" class="layui-btn layui-btn-primary generate-contract">根据订单信息重新生成合同</a>
+                                                <a @click="printDoc" v-show="(order.contract != null && order.contract.contractType == 2 && order.contract.urlHtm != null && order.contract.urlHtm != '')" class="layui-btn layui-btn-primary print-contract">打印</a>
+<!--                                                <a @click="downloadDoc" v-show="(order.contract != null && order.contract.contractType == 2 && order.contract.urlHtm != null && order.contract.urlHtm != '')" class="layui-btn layui-btn-primary download-contract">下载</a>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="details-layui-row" v-show="(order.contract == null || order.contract.id == null || (order.contract != null && order.contract.contractType == 2 && (order.contract.urlHtm == null || order.contract.urlHtm == '')))">
+                                        <div style="width: 100%; height: 50px;display: flex;align-items: center;justify-content: center">
+                                            <span>暂无合同信息/已解绑合同</span>
+                                        </div>
+                                    </div>
+                                    <div class="details-layui-row" v-show="(order.contract != null && order.contract.id != null && order.contract.contractType == 2 && order.contractContentUrl != null && order.contractContentUrl != '')">
+                                        <!--<iframe v-if="order.contract.body" id="docIframe" scrolling="yes"
+                                                frameborder="0" :srcdoc="order.contract.body"
+                                                style="width:100%;height:500px;overflow:visible;background:#fff;"></iframe>-->
+                                        <iframe id="docIframe1" :src="provinceUrl+ 'image-server/' + order.contractContentUrl" scrolling="yes" frameborder="0" style="width:100%;height:500px;overflow:visible;background:#fff;"></iframe>
+<!--                                        <image-common :disabled="true" :up-type="2" info="选择附件" :limit="1" v-model="order.contract.urlPdf"></image-common>-->
+
+                                    </div>
+                                    <div class="details-layui-row" v-show="order.contract != null && order.contract.id != null && order.contract.contractType == 1">
+                                        <div class="layui-row layui-form-row-content">
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">合同编号:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.contract.code || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">合同生效日期:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="dateFormatYMD(order.contract.timeStart) || '--' " disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">合同终止日期:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="dateFormatYMD(order.contract.timeFinish) || '--'  " disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">合同备注:</label>
+                                                <div class="layui-input-inline">
+                                                    <span>{{order.contract.desc || '--'}}</span>
+<!--                                                    <input type="text" class="layui-input searchVal" :value="order.contract.desc || '&#45;&#45;'  " disabled/>-->
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                                <label class="layui-form-label">合同附件:</label>
+                                                <div class="layui-input-inline" id="contractFileLst"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="details-conteiner" v-else-if="'其他关联单据'==item">
+                                <div class="details-content-box"
+                                     v-show="detailsSupTabContentListActiveValue === '其他关联单据' ||  detailsSupTabContentListActiveValue === '基本信息'">
+                                    <div class="left-before">
+                                        <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                                            其他关联单据记录
+                                        </div>
+                                    </div>
+                                    <div class="details-layui-row">
+                                        <div class="layui-row layui-form-row-content">
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">违章记录数:</label>
+                                                <div class="layui-input-inline" @click="toOtherPage(3,order.orderCar.id)">
+                                                    <input type="text" class="layui-input searchVal"  style="color: #3FACB3" :value="'共'+order.orderCar.orderCarRelation.totalViolation+'条(未处理'+order.orderCar.orderCarRelation.totalViolation+'条)' || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">出险记录数:</label>
+                                                <div class="layui-input-inline" @click="toOtherPage(4,order.orderCar.id)">
+                                                    <input type="text" class="layui-input searchVal"  style="color: #3FACB3" :value="'共'+order.orderCar.orderCarRelation.totalInsurance+'条' || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">保养记录数:</label>
+                                                <div class="layui-input-inline" @click="toOtherPage(5,order.orderCar.id)">
+                                                    <input type="text" class="layui-input searchVal"  style="color: #3FACB3" :value="'共'+order.orderCar.orderCarRelation.totalMaintain+'条' || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">维修记录数:</label>
+                                                <div class="layui-input-inline" @click="toOtherPage(6,order.orderCar.id)">
+                                                    <input type="text" class="layui-input searchVal"  style="color: #3FACB3" :value="'共'+order.orderCar.orderCarRelation.totalRepair+'条' || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="details-conteiner" v-else-if="'退车信息'==item">
+                                <div class="details-content-box"
+                                     v-show="(detailsSupTabContentListActiveValue === '退车信息' || detailsSupTabContentListActiveValue === '基本信息') && order.orderCar.orderCarReturnAlteration != null && order.orderCar.orderCarReturnAlteration.id != null">
+                                    <div class="left-before">
+                                        <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                                            退车信息
+                                            <a class="layui-btn search-btn" style="float:right;" @click="printBack">打印退车信息</a>
+                                        </div>
+                                    </div>
+                                    <div class="details-layui-row">
+                                        <div class="layui-row layui-form-row-content">
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">退车时间:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="dateFormatYMD(order.orderCar.orderCarReturnAlteration.timeApply)  || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">退款/收款日期:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="dateFormatYMD(order.orderCar.orderCarReturnAlteration.refundTime)  || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">退车类别:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.orderCarReturnAlteration.returnTypeStr || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">退车原因:</label>
+                                                <div class="layui-input-inline">
+                                                    <span>{{order.orderCar.orderCarReturnAlteration.alterationDesc || '--'}}</span>
+<!--                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.orderCarReturnAlteration.alterationDesc || '&#45;&#45;'" disabled/>-->
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">退车里程数/km:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.orderCarReturnAlteration.alterationMileage || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-for="item in order.orderCar.orderCarReturnAlteration.feeItemList"
+                                                 v-if="!(order.orderCar.rentType==1 && item.feeItemName == '车辆已收款')">
+                                                <label class="layui-form-label">{{order.orderCar.rentType == 7 && item.feeItemCode == 'ZJQKF'?'车辆挂靠费欠款金额/元':item.feeItemName}}:</label>
+                                                <div class="layui-input-inline">
+                                                    <input v-show="item.valueType == 1" type="text" class="layui-input searchVal" :value="item.feeItemAmount || '0'" disabled/>
+                                                    <input v-show="item.valueType == 2" type="text" class="layui-input searchVal" :value="item.feeItemValue || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <!-- <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                 <label class="layui-form-label">退车结算费用说明:</label>
+                                                 <div class="layui-input-inline">
+                                                     <input type="text" class="layui-input searchVal" :value="order.orderCar.orderCarReturnAlteration.feeDesc || '&#45;&#45;'" disabled/>
+                                                 </div>
+                                             </div>-->
+                                        </div>
+                                    </div>
+                                    <div class="details-layui-row" style="margin-top: 20px;">
+                                        <div style="font-size: 18px;font-weight: bold;">
+                                            <span>附件:<a class="layui-btn search-btn" style="margin-left: 10px;" id="replenishReturnCarAccessories">补充附件</a></span>
+                                            <div style="color: red; float: right;margin-right: 5%;" v-show="order.orderCar.orderCarReturnAlteration.repayType == '0'">
+                                                需要客户补缴金额/元:{{ order.orderCar.orderCarReturnAlteration.repayAmount|| '0'}}
+                                            </div>
+                                            <div style="color: red;float: right;margin-right: 5%;" v-show="order.orderCar.orderCarReturnAlteration.repayType == '1'">
+                                                需要退还客户金额/元:{{ order.orderCar.orderCarReturnAlteration.repayAmount|| '0'}}
+                                            </div>
+                                        </div>
+                                        <div class="table">
+                                            <table class="layui-hide" id="returnCarAccessoriesTable" lay-filter="returnCarAccessoriesTable"></table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="details-conteiner" v-else-if="'换车信息'==item">
+                                <div class="details-content-box"
+                                     v-show="(detailsSupTabContentListActiveValue === '换车信息'  || detailsSupTabContentListActiveValue === '基本信息') && order.orderCar.orderCarTransferAlteration != null && order.orderCar.orderCarTransferAlteration.id != null">
+                                    <div class="left-before">
+                                        <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                                            换车信息
+                                            <a class="layui-btn search-btn" style="float:right;" @click="printTransfer">打印换车信息</a>
+                                        </div>
+                                    </div>
+                                    <div class="details-layui-row">
+                                        <div class="layui-row layui-form-row-content">
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">换车退车时间:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="dateFormatYMD(order.orderCar.orderCarTransferAlteration.timeApply)  || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">换车里程数/km:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.orderCarTransferAlteration.alterationMileage || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">换车原因:</label>
+                                                <div class="layui-input-inline">
+                                                    <span>{{order.orderCar.orderCarTransferAlteration.alterationDesc || '--'}}</span>
+<!--                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.orderCarTransferAlteration.alterationDesc || '&#45;&#45;'" disabled/>-->
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-for="item in order.orderCar.orderCarTransferAlteration.feeItemList">
+                                                <label class="layui-form-label">{{item.feeItemName}}:</label>
+                                                <div class="layui-input-inline">
+                                                    <input v-show="item.valueType == 1" type="text" class="layui-input searchVal" :value="item.feeItemAmount || '0'" disabled/>
+                                                    <input v-show="item.valueType == 2" type="text" class="layui-input searchVal" :value="item.feeItemValue || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">换车结算费用说明:</label>
+                                                <div class="layui-input-inline">
+                                                    <span>{{order.orderCar.orderCarTransferAlteration.feeDesc || '--'}}</span>
+<!--                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.orderCarTransferAlteration.feeDesc || '&#45;&#45;'" disabled/>-->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="details-layui-row" style="margin-top: 30px;">
+                                        <div style="font-size: 18px;font-weight: bold;">
+                                            <!--                                            <span>附件:</span>-->
+                                            <div style="color: red; float: right;" v-show="order.orderCar.orderCarTransferAlteration.repayType == '0'">
+                                                需要客户补缴金额/元:{{ order.orderCar.orderCarTransferAlteration.repayAmount|| '0'}}
+                                            </div>
+                                            <div style="color: red;float: right;" v-show="order.orderCar.orderCarTransferAlteration.repayType == '1'">
+                                                需要退还客户金额/元:{{ order.orderCar.orderCarTransferAlteration.repayAmount|| '0'}}
+                                            </div>
+                                        </div>
+                                        <div class="table">
+                                            <table class="layui-hide" id="exchangeCarAccessoriesTable" lay-filter="exchangeCarAccessoriesTable"></table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="details-conteiner" v-else-if="'换车记录'==item">
+                                <div class="details-content-box"
+                                     v-show="(detailsSupTabContentListActiveValue === '换车记录' || detailsSupTabContentListActiveValue === '基本信息') && ((order.orderCar.replacedVehicleList != null && order.orderCar.replacedVehicleList.length > 0)   || (order.orderCar.replacementVehicleList != null && order.orderCar.replacementVehicleList.length > 0 ))">
+                                    <div class="left-before">
+                                        <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                                            换车记录
+                                        </div>
+                                    </div>
+                                    <div class="details-layui-row" v-show="order.orderCar.replacedVehicleList != null && order.orderCar.replacedVehicleList.length > 0">
+                                        <div class="table">
+                                            <table class="layui-hide" id="replacedVehicleTable" lay-filter="replacedVehicleTable"></table>
+                                        </div>
+                                    </div>
+                                    <div class="details-layui-row" v-show="order.orderCar.replacementVehicleList != null && order.orderCar.replacementVehicleList.length > 0">
+                                        <div class="layui-row layui-form-row-content">
+<!--                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">-->
+<!--                                                <label class="layui-form-label">月租金是否调整:</label>-->
+<!--                                                <div class="layui-input-inline">-->
+<!--                                                    <input type="text" class="layui-input searchVal" :value=" order.plan.planAdjustStr || '&#45;&#45;'" disabled/>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">原有月租金:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value=" order.oldPlan.monthlyRent|| '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">调整月租金为:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value=" order.plan.monthlyRent || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="table">
+                                            <table class="layui-hide" id="replacementVehicleTable" lay-filter="replacementVehicleTable"></table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="details-conteiner" v-else-if="'续租信息'==item">
+                                <div class="details-content-box" v-show="(detailsSupTabContentListActiveValue === '续租信息' || detailsSupTabContentListActiveValue === '基本信息') && order.renewalList.length != 0">
+                                    <div class="left-before">
+                                        <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                                            续租信息
+                                        </div>
+                                        <div class="details-layui-row">
+                                            <div class="table">
+                                                <table class="layui-hide" id="renewalTable" lay-filter="renewalTable"></table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="details-conteiner" v-else-if="'过户信息'==item">
+                                <div class="details-content-box" v-show="(detailsSupTabContentListActiveValue === '过户信息' || detailsSupTabContentListActiveValue === '基本信息') && (order.orderCar.rentType == 2 || order.orderCar.rentType == 5 || order.orderCar.rentType == 6) ">
+                                    <div class="left-before">
+                                        <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                                            过户信息
+                                        </div>
+                                        <div class="details-layui-row">
+                                            <div class="layui-row layui-form-row-content">
+                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                    <label class="layui-form-label">预计过户时间:</label>
+                                                    <div class="layui-input-inline">
+                                                        <input type="text" class="layui-input searchVal" :value="dateFormatYMD(order.orderCar.transferCar.estimatedTransferTime)  || '--'" disabled/>
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                    <label class="layui-form-label">实际过户时间:</label>
+                                                    <div class="layui-input-inline">
+                                                        <input type="text" class="layui-input searchVal" :value="dateFormatYMD(order.orderCar.transferCar.transferTime)  || '--'" disabled/>
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                    <label class="layui-form-label">过户备注信息:</label>
+                                                    <div class="layui-input-inline">
+                                                        <span>{{order.orderCar.transferCar.remarks  || '--'}}</span>
+<!--                                                        <input type="text" class="layui-input searchVal" :value="order.orderCar.transferCar.remarks  || '&#45;&#45;'" disabled/>-->
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                    <label class="layui-form-label">操作人:</label>
+                                                    <div class="layui-input-inline">
+                                                        <input type="text" class="layui-input searchVal" :value="order.orderCar.transferCar.operator  || '--'" disabled/>
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                    <label class="layui-form-label">操作时间:</label>
+                                                    <div class="layui-input-inline">
+                                                        <input type="text" class="layui-input searchVal" :value="dateFormatYMD(order.orderCar.transferCar.updateTime)  || '--'" disabled/>
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                                    <label class="layui-form-label">过户资料:</label>
+                                                    <div class="layui-input-inline">
+                                                        <a class="layui-btn layui-btn-radius " @click="viewAccessoryTransfer()">附件查看</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="details-conteiner" v-else-if="'费用减免'==item">
+                                <div class="details-content-box"
+                                     v-show="detailsSupTabContentListActiveValue === '费用减免' ">
+                                    <div class="left-before">
+                                        <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                                            费用减免操作记录
+                                        </div>
+                                    </div>
+
+                                    <div class="details-layui-row">
+                                        <div class="table">
+                                            <table class="layui-hide" id="cosreliefLog" lay-filter="cosreliefLog"></table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="details-conteiner" v-else-if="'审核信息'==item">
+                                <div class="details-content-box"
+                                     v-show="(detailsSupTabContentListActiveValue === '审核信息' || detailsSupTabContentListActiveValue === '基本信息') && bpmChartList.length > 0">
+                                    <div class="left-before">
+                                        <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                                            {{order.orderCar.flowStatus == 100 ? '提单流程': order.orderCar.flowStatus == 300 ? '换车流程': order.orderCar.flowStatus == 500 ? '退车流程': ''}}
+                                        </div>
+                                        <div class="car-details-info car-padding" id="bpmChart"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="details-conteiner" v-else-if="'还款明细'==item">
+                                <div class="details-content-box">
+                                    <div class="left-before">
+                                        <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                                            还款明细
+                                        </div>
+                                    </div>
+                                    <div class="details-layui-row">
+                                        <div class="layui-row layui-form-row-content">
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4"  v-show="order.orderCar.rentType != '6'">
+                                                <label class="layui-form-label">车辆订单号:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.code  || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                                <label class="layui-form-label">客户名称:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.customerName  || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4"  v-show="order.orderCar.rentType != '6'">
+                                                <label class="layui-form-label">付款方式:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.paymentMethodStr  || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4"  v-show="order.orderCar.rentType != '6'">
+                                                <label class="layui-form-label">租赁开始时间:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="dateFormatYMD(order.orderCar.timeStartRent)  || '--'" disabled/>
+                                                </div>
+                                            </div>
+
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4"  v-show="order.orderCar.rentType != '6'">
+                                                <label class="layui-form-label">付租赁结束时间:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="dateFormatYMD(order.orderCar.timeFinishRent)  || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-show="order.orderCar.rentType == '1'  || order.orderCar.rentType == '2'  || order.orderCar.rentType == '3' || order.orderCar.rentType == '4' || order.orderCar.rentType == '7'">
+                                                <label class="layui-form-label">还款日:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.paymentDay  || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-show="order.orderCar.rentType == '1'  || order.orderCar.rentType == '3' || order.orderCar.rentType == '4'">
+                                                <label class="layui-form-label">保证金:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.plan.cashDeposit || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-show="order.orderCar.rentType == '5'">
+                                                <label class="layui-form-label">首付款:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.plan.downPayment || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-show="order.orderCar.rentType == '2'">
+                                                <label class="layui-form-label">整备费:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.plan.servicingFee || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-show="order.orderCar.rentType == '6'">
+                                                <label class="layui-form-label">车辆总单价/元/台:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.plan.totalPrice || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-show="order.orderCar.rentType != 6 && order.orderCar.rentType != 8">
+                                                <label class="layui-form-label">{{order.orderCar.rentType == 7?'挂靠费':'租金'}}:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.plan.monthlyRent || '0'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-show="order.orderCar.rentType == '1'">
+                                                <label class="layui-form-label">总期数:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.maxStage || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-show="order.orderCar.rentType == '1'">
+                                                <label class="layui-form-label">剩余期数:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="order.orderCar.surplusStage || '--'" disabled/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="details-layui-row">
+                                        <div class="table">
+                                            <table class="layui-hide" id="repaymentDetailsTable" lay-filter="repaymentDetailsTable"></table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="details-conteiner" v-else-if="'操作记录'==item">
+                                <div class="details-content-box">
+                                    <div class="left-before">
+                                        <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                                            操作记录
+                                        </div>
+                                    </div>
+
+                                    <div class="details-layui-row">
+                                        <div class="table">
+                                            <table class="layui-hide" id="operationlog" lay-filter="operationlog"></table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+<!--                <div class="flex" v-for="(item, index) in detailsTabContentList" :key="index"-->
+<!--                     :class="index === detailsTabContentListActiveIndex ? 'active1A51FF' : ''"-->
+<!--                     @click="detailsTabContentBindtap(index)">-->
+<!--                    {{ item }}-->
+<!--                    <div>-->
+<!--                        <div :class="index === detailsTabContentListActiveIndex ? 'details-tab-content-box-absolute-bottom' : ''"></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+            </div>
+        </div>
+<!--        <div class="details-conteiner">-->
+<!--            <div class="details-sub-tab-content" v-show="detailsTabContentListActiveIndex === 0">-->
+<!--                <div class="details-sub-tab-content-box display" style="justify-content:flex-start;margin: 0 8px;">-->
+<!--                    <div class="flex" style="width:150px" v-for="(item, index) in detailsSupTabContentList" :key="index"-->
+<!--                         :class="index === detailsSupTabContentListActiveIndex ? 'active-linear-gradient' : ''"-->
+<!--                         @click="detailsSupTabContentBindtap(index, item)">-->
+<!--                        {{ item }}-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--                        -->
+<!--            -->
+<!--        </div>-->
+    </form>
+    <div class="float-btn-group">
+        <a class="layui-btn reset-btn" id="closePage">关闭</a>
+        <a  v-show="((order.orderCar.rentType == 2 || order.orderCar.rentType == 5 ) && order.orderCar.flowStatus == 200) || (order.orderCar.rentType == 6 && order.orderCar.flowStatus == 800)"  class="layui-btn search-btn" @click="transferCar">申请过户</a>
+        <a  v-if="order.orderCar.rentType != 7 && order.orderCar.rentType != 8 && (order.orderCar.showReturnCarButton == '1' || order.orderCar.flowStatus == 800)" class="layui-btn search-btn" @click="feeRemission" v-m-perm="['costrelief:cosrelief:save']">申请费用减免</a>
+        <!--           <a  v-show="(order.orderCar.showReturnCarButton == '1' && order.orderCar.rentType != 6)" class="layui-btn search-btn" @click="feeRemission">申请费用减免</a>-->
+        <a  v-show="order.orderCar.showReturnCarButton == '1' || order.orderCar.flowStatus == 800" class="layui-btn search-btn" @click="applyRenturnOrTransferCar(2)">申请退车</a>
+        <a  v-show="order.orderCar.rentType != 7 && order.orderCar.showTransferCarButton == '1' && order.orderCar.rentType != 8" class="layui-btn search-btn" @click="applyRenturnOrTransferCar(1)">申请换车</a>
+    </div>
+</div>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script src="../../statics/js/element-ui/index.min.js"></script>
+<script src="../../statics/common/components/ImageCommon.js"></script>
+<script src="../../statics/js/modules/order/orderview.js?_${.now?long}"></script>
+<!--操作-->
+<script type="text/html" id="barTpl">
+    {{#  if(d.typeFile ==  1){ }}
+    <a class="layui-btn layui-btn-xs" lay-event="showDoc">查看</a>
+    {{#  } }}
+    <a class="layui-btn layui-btn-xs" lay-event="downDoc">下载</a>
+</script>
+</body>
+</html>

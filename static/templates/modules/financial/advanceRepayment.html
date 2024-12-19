@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>确认收款</title>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="Author" content="larry" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+    <script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/common.js"></script>
+    <script type="text/javascript" src="../../statics/js/upload.js"></script>
+    <script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+    <link rel="stylesheet" href="../../statics/new_css/jxcPublicAll.css"  media="all">
+    <link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../statics/common/step/steps.css">
+    <link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/viewer.min.css">
+    <script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+    <script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+    <script src="../../statics/common/layui/autocomplete.js"></script>
+    <script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+    <script src="../../statics/common/print-js/print.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+    <script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/searchview.js"></script>
+    <script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+    <!-- 引入组件库 -->
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+    <style>
+        div.table {
+            overflow-x: auto;
+        }
+
+        .layui-form-radioed {
+            width: 90px !important;
+        }
+    </style>
+</head>
+
+<body class="ren-body" id="fm-tacrbasicadd">
+<div id="rrapp" v-cloak>
+    <form class="layui-form ren-form" style="margin-bottom: 80px;">
+
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                基础信息
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>选择订单:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" placeholder="请选择订单" autocomplete="off" v-model="q.orderCarNo" readonly @click="selectOrder"
+                                       style="cursor: pointer" lay-verify="validate_orderCarNo"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="order.flowBalance && order.flowBalance > 0">
+                            <span style="color: red;">该账户已存流水金额：{{order.flowBalance}}，优先使用流水余额抵扣账单</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>还款方式: </label>
+                            <div class="layui-input-inline">
+                                <input type="radio" lay-filter="disputeCheck"
+                                       name="paymentMethod" v-model="q.paymentMethod"
+                                       value="0" lay-skin="primary" title="全额还款">
+                                <input type="radio" lay-filter="disputeCheck"
+                                       name="paymentMethod" v-model="q.paymentMethod"
+                                       value="1" lay-skin="primary" title="部分还款">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-if="q.paymentMethod == 1">
+                            <label class="layui-form-label"><span style="color:red">*</span>收款金额: </label>
+                            <div class="layui-input-inline">
+                                <input type="text" required
+                                       placeholder="请输入收款金额" autocomplete="off"
+                                       v-model="q.amount" id="skAmount" lay-verify="validate_skAmount"
+                                       oninput="editSimple(this, 'num', '99999999.99')"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label"><span style="color:red">*</span>还款时间:</label>
+                            <div class="layui-input-inline">
+                                <input id="paymentTime" v-model="q.paymentTime" readonly lay-verify="validate_paymentTime"
+                                       type="text" class="layui-input searchVal layui-input-value"
+                                       placeholder="请选择还款时间"/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label">收款备注:</label>
+                            <div class="layui-input-inline" style="background-color: #fff;">
+                                <textarea  maxlength="200"
+                                           v-model="q.remark"
+                                           placeholder="请输入收款备注"
+                                           class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-content-box" style="margin-top: 20px">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                账单计划
+                <span STYLE="margin-right: 15px;font-size: 12px;color: red" v-show="advanceRepaymentAmount && advanceRepaymentAmount > 0">待还总额{{advanceRepaymentAmount}}元</span>
+                <span STYLE="margin-right: 15px;font-size: 12px;color: red" v-show="advanceRepaymentAmount && advanceRepaymentAmount > 0">已出账待还总额{{paidAmount}}元</span>
+                <span STYLE="margin-right: 15px;font-size: 12px;color: red" v-show="advanceRepaymentAmount && advanceRepaymentAmount > 0">未出账待还总额{{noPaidAmount}}元</span>
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="table">
+                        <table class="layui-hide" id="grid" lay-filter="grid"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="float-btn-group bottom-bar">
+            <a class="layui-btn reset-btn" @click="cancel">取消</a>
+            <a class="layui-btn search-btn" lay-submit lay-filter="save">确定</a>
+        </div>
+    </form>
+</div>
+
+<script src="../../statics/js/modules/financial/advanceRepayment.js"></script>
+
+</body>
+
+</html>

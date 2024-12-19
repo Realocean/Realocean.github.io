@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>车辆换牌</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+    <style>
+        .box {
+            max-height: 400px
+        }
+
+        #cardImage, .img {
+            display: block;
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body class="ren-body">
+    <div id="rrapp" v-cloak>
+        <form class="layui-form ren-form" style="margin-bottom: 60px;">
+            <div class="form-content-box">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    车辆信息
+                </div>
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">当前车牌:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            :value="tCarBasic.carNo || '--' "
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">当前车架号:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            :value="tCarBasic.vinNo || '--' "
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">当前车辆状态:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            :value="tCarBasic.carStatus || '--' "
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">当前车辆所有人:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            :value="tCarBasic.carOwner || '--' "
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">当前品牌型号:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            :value="tCarBasic.brandModel || '--' "
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">当前发动机号:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            :value="tCarBasic.engineNo || '--' "
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">当前行驶证:</label>
+                                <div class="layui-input-inline">
+                                    <div class="form-update-content-box-img">
+                                        <img src="../../statics/images/upload@2x.png"
+                                             alt="" :src="tCarBasic.imgDrivinglicenseFront">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-content-box">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    车辆换牌
+                </div>
+                <div class="layui-input-inline-upload-text" style="color: red;height: 50px;">
+                    提醒事项：您正在进行车辆换牌操作，通过此功能更换车牌后，当前订单中的车牌会更新。
+                    但历史订单、历史车务记录维持原车牌，如果您需要同时修改历史订单、历史车务记录的车牌，请直接在“车辆编辑”页面中修改车牌号
+                </div>
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">行驶证是否更换:</label>
+                                    <input type="radio" lay-filter="businessCheck" name="businessType" v-model="vehicleCar.isVehicleCarPhoto" value="1" lay-skin="primary" title="否">
+                                    <input type="radio" lay-filter="businessCheck" name="businessType" v-model="vehicleCar.isVehicleCarPhoto" value="2" lay-skin="primary" title="是">
+                                </div>
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="showLicense">
+                                    <div class="form-content-box">
+                                        <div class="form-update-content-box display">
+                                            <div class="">
+                                                <div class="form-update-content-box-title">上传行驶证</div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs4">
+                                                <img class="layui-upload-drag"
+                                                     style=" border: 1px dashed #c0ccda; border-radius: 6px; cursor: pointer;height: 120px;width: 220px;margin-top: 10px;padding: 0px;"
+                                                     alt="+添加行驶证图片"
+                                                     onclick="imageClick()"
+                                                     :src="tCarBasic.imgDrivinglicenseFront"
+                                                     id="imgDrivinglicenseFront">
+                                                <input accept="*/*" type="file" id="image2" style="display: none" onchange="imageChange1(this)">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="showLicense">
+                                    <label class="layui-form-label">所有人:</label>
+                                    <div class="layui-input-inline">
+                                        <input v-model="vehicleCar.carOwner"
+                                               type="text"
+                                               maxlength="30"
+                                               class="layui-input searchVal"
+                                               placeholder="请输入所有人" />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="showLicense">
+                                    <label class="layui-form-label">车辆类型:</label>
+                                    <div class="layui-input-inline">
+                                        <input v-model="vehicleCar.carType"
+                                               type="text"
+                                               maxlength="20"
+                                               class="layui-input searchVal"
+                                               placeholder="请输入车辆类型" />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="showLicense">
+                                    <label class="layui-form-label">住址:</label>
+                                    <div class="layui-input-inline">
+                                        <input v-model="vehicleCar.carOwnerAddr"
+                                               type="text"
+                                               maxlength="200"
+                                               class="layui-input searchVal"
+                                               placeholder="请输入住址" />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="showLicense">
+                                    <label class="layui-form-label">使用性质:</label>
+                                    <div class="layui-input-inline">
+                                        <input v-model="vehicleCar.useType"
+                                               type="text"
+                                               maxlength="20"
+                                               class="layui-input searchVal"
+                                               placeholder="请输入使用性质" />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="showLicense">
+                                    <label class="layui-form-label">品牌型号:</label>
+                                    <div class="layui-input-inline">
+                                        <input v-model="vehicleCar.carModelNo"
+                                               type="text"
+                                               maxlength="30"
+                                               class="layui-input searchVal"
+                                               placeholder="请输入品牌型号" />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="showLicense">
+                                    <label class="layui-form-label">注册日期:</label>
+                                    <div class="layui-input-inline">
+                                        <input id="registerDate" v-model="vehicleCar.registerDate" readonly
+                                               type="text"
+                                               class="layui-input searchVal"
+                                               placeholder="请输入注册日期" />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="showLicense">
+                                    <label class="layui-form-label">发证日期:</label>
+                                    <div class="layui-input-inline">
+                                        <input id="licenseDate" v-model="vehicleCar.licenseDate" readonly
+                                               type="text"
+                                               class="layui-input searchVal"
+                                               placeholder="请输入发证日期" />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="showLicense">
+                                    <label class="layui-form-label">档案编号:</label>
+                                    <div class="layui-input-inline">
+                                        <input  v-model="vehicleCar.documentNo"
+                                                type="text"
+                                                maxlength="20"
+                                                class="layui-input searchVal"
+                                                placeholder="请输入档案编号" />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="showLicense">
+                                    <label class="layui-form-label">载客人数:</label>
+                                    <div class="layui-input-inline">
+                                        <input v-model="vehicleCar.userNum"
+                                               type="text"
+                                               maxlength="20"
+                                               lay-verify="userNumVerify"
+                                               class="layui-input searchVal"
+                                               placeholder="请输入载客人数" />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="showLicense">
+                                    <label class="layui-form-label">车辆总质量:</label>
+                                    <div class="layui-input-inline">
+                                        <input v-model="vehicleCar.carWeight"
+                                               type="text"
+                                               lay-verify="carWeightVerify"
+                                               class="layui-input searchVal"
+                                               @keyup="inputCarWeight"
+                                               placeholder="请输入车辆总质量/KG" />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">新换车牌<span style="color:red;">*</span>:</label>
+                                    <div class="layui-input-inline">
+                                        <input v-model="vehicleCar.carNo"
+                                               type="text"
+                                               maxlength="30"
+                                               lay-verify="carNoVerify"
+                                               class="layui-input searchVal"
+                                               placeholder="请输入新车牌号码" />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">换牌原因:</label>
+                                    <div class="layui-input-inline">
+                                        <input v-model="vehicleCar.remark"
+                                               type="text"
+                                               maxlength="30"
+                                               class="layui-input searchVal"
+                                               placeholder="请输入换牌原因" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="float-btn-group bottom-bar">
+                <a class="layui-btn reset-btn" @click="cancel">取消</a>
+                <a class="layui-btn search-btn" lay-submit lay-filter="save">保存</a>
+            </div>
+        </form>
+        <div  v-show="choiceorderType" class="layui-form ren-form" id="choiceorderType">
+            <div class="box">
+                <img id="cardImage" class="img" src="">
+            </div>
+            <br/><br/><br/><br/><br/>
+            <!--<div onclick="clipImage()">确认裁剪</div>-->
+            <a class="layui-btn search-btn" onclick="clipImage()">确认裁剪</a>
+        </div>
+    </div>
+    <script src="../../statics/js/modules/car/vehicleCarNo.js"></script>
+</body>
+</html>

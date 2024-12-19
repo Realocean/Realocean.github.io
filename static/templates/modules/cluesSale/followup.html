@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../statics/newImages/logo/logo@2x.png">
+    <title>跟进</title>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/global.css" media="all">-->
+
+<!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/fonts/larry-icon.css" media="all">-->
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+<!-- 放开后表格无法拖动   <link rel="stylesheet" type="text/css" href="../../statics/new_css/larryms.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/new_css/normalize.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <!-- Import style -->
+    <link rel="stylesheet" href="../../statics/js/element-plus/index.css" />
+    <!-- 页面样式 -->
+    <link rel="stylesheet" href="../../statics/new_css/mf-layout.css" />
+
+</head>
+<style>
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    /*.el-input {*/
+    /*    width: 200px;*/
+    /*}*/
+
+    .el-cascader{
+        width: 100%;
+    }
+    .el-select{
+        width: 100%;
+    }
+
+    .step{
+        margin-bottom: 10px;
+        font-size: 16px;
+        color: #333;
+    }
+
+
+
+</style>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <div class="list-header-content-box" style="background: linear-gradient(180deg, #E1F3F4 0%, #FFFFFF 100%)">
+
+        <div style="margin: 10px 20px 0 35px" class="add-title-wrap flex align-center space-between">
+            <span>跟进记录</span>
+<!--            <span style="color: #333333;font-size: 14px;">截至到期时间：<span style="color: #F5242F;font-size: 14px;">2023年10月27日</span></span>-->
+        </div>
+
+        <div class="card-wrap shadow margin15"
+            v-for="(item, index) in oldDataList" :key="index">
+            <div class="step">第{{index+1}}次跟进</div>
+
+            <el-descriptions title="">
+                <el-descriptions-item label="姓名:">{{item.customerName||'--'}}</el-descriptions-item>
+                <el-descriptions-item label="电话:">{{item.phone||'--'}}</el-descriptions-item>
+                <el-descriptions-item label="地址:">
+                    {{item.provinceName && item.cityName && item.areaName?
+                        (item.provinceName+'/'+item.cityName+'/'+item.areaName):'--'
+                    }}</el-descriptions-item>
+                <el-descriptions-item label="详细地址:">{{item.address||'--'}}</el-descriptions-item>
+                <el-descriptions-item label="公司名称:">{{item.company||'--'}}</el-descriptions-item>
+
+                <el-descriptions-item label="主营业务:">{{item.companyBusiness||'--'}}</el-descriptions-item>
+
+                <el-descriptions-item label="职位:">{{item.occupation||'--'}}</el-descriptions-item>
+
+                <el-descriptions-item label="客户类型:">{{getCustomerType(item.customerType)||'--'}}</el-descriptions-item>
+                <el-descriptions-item label="跟进方式:">{{getFollowType(item.followType)||'--'}}</el-descriptions-item>
+                <el-descriptions-item label="联系账号:">{{item.contactAccount||'--'}}</el-descriptions-item>
+                <el-descriptions-item label="意向车型:">
+                    {{item.brandName && item.seriesName && item.modelName?
+                       (item.brandName+'/'+item.seriesName+'/'+item.modelName):'--'
+                    }}</el-descriptions-item>
+                <el-descriptions-item label="意向等级:">{{getIntentionLevel(item.intentionLevel)||'--'}}</el-descriptions-item>
+                <el-descriptions-item label="是否到店:">{{1==item.toStoreStatus?'是':2==item.toStoreStatus?'否':'--'}}</el-descriptions-item>
+                <el-descriptions-item v-if="1==item.toStoreStatus" label="到店日期:">{{item.toStoreDate||'--'}}</el-descriptions-item>
+                <el-descriptions-item label="审批状态:">{{1==item.approvalStatus?'已通过':2==item.approvalStatus?'未通过':'--'}}</el-descriptions-item>
+                <el-descriptions-item label="是否需要上牌:">{{1==item.registrationStatus?'是':2==item.registrationStatus?'否':'--'}}</el-descriptions-item>
+                <el-descriptions-item label="下一步措施:">{{getFollowResult(item.nextMeasure)||'--'}}</el-descriptions-item>
+                <el-descriptions-item v-if="1==item.nextMeasure" label="下一次跟进日期:">{{item.nextDealDate||'--'}}</el-descriptions-item>
+                <el-descriptions-item label="跟进记录:" :span="3">{{item.dealRecord||'--'}}</el-descriptions-item>
+            </el-descriptions>
+
+        </div>
+
+        <div class="card-wrap shadow margin15" style="padding-right: 70px">
+            <div class="step">第{{oldDataList&&oldDataList.length>0?oldDataList.length+1:1}}次跟进</div>
+            <el-form ref="form" :rules="rules" :model="form" label-width="120px">
+                <el-row :gutter="50">
+                    <el-col :span="8">
+                        <el-form-item label="姓名" prop="customerName">
+                            <el-input v-model="form.customerName" placeholder="请输入姓名"/>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="8">
+                        <el-form-item label="电话" prop="phone">
+                            <el-input type="text" oninput="value=value.replace(/[^\d]/g,'')" :maxlength="11" v-model="form.phone" placeholder="请输入电话"></el-input>
+                            <!--                            <el-input v-model="form.phone" maxlength="11" type="number" placeholder="请输入电话" />-->
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="8">
+                        <el-form-item label="地址" >
+                            <el-cascader
+                                    v-model="regiondata"
+                                    ref="region"
+                                    :options="province"
+                                    @change="handleChange"
+                                    placeholder="请选择地址"
+                                    :props="provinceProp"
+                                    :key="modalKey"
+                            />
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="8">
+                        <el-form-item label="详细地址" >
+                            <el-input v-model="form.address" placeholder="请输入详细地址" />
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="8">
+                        <el-form-item label="公司名称" >
+                            <el-input v-model="form.company" placeholder="请输入公司名称" />
+                        </el-form-item>
+                    </el-col>
+
+
+                    <el-col :span="8">
+                        <el-form-item label="主营业务" >
+                            <el-input v-model="form.companyBusiness" placeholder="请输入主营业务" />
+                        </el-form-item>
+                    </el-col>
+
+
+                    <el-col :span="8">
+                        <el-form-item label="职位" >
+                            <el-input v-model="form.occupation" placeholder="请输入客户职位" />
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="8">
+                        <el-form-item label="客户类型" prop="customerType">
+
+                            <el-select v-model="form.customerType" placeholder="请选择客户类型" clearable>
+                                <el-option
+                                        v-for="(item, index) in customerType" :key="index"
+                                        :label="item.name" :value="item.code"/>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="8">
+                        <el-form-item label="跟进方式" prop="followType">
+                            <el-select v-model="form.followType" placeholder="请选择跟进方式" clearable>
+                                <el-option
+                                        v-for="(item, index) in followType" :key="index"
+                                        :label="item.name" :value="item.code"/>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="联系账号" prop="contactAccount">
+                            <el-input v-model="form.contactAccount" placeholder="请输入联系账号" />
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="8">
+                        <el-form-item label="意向车型" prop="seriesId">
+
+                            <el-cascader
+                                    v-model="modeldata"
+                                    :key="modelKey"
+                                    ref="model"
+                                    :options="brandList"
+                                    @change="handleBrandChange"
+                                    placeholder="请选择"/>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="意向等级" prop="intentionLevel">
+
+                            <el-select v-model="form.intentionLevel" placeholder="请选择意向等级" clearable>
+                                <el-option
+                                        v-for="(item, index) in intentionLevel" :key="index"
+                                        :label="item.name" :value="item.code"/>
+                            </el-select>
+
+                        </el-form-item>
+                    </el-col>
+
+<!--                    <el-col :span="12">-->
+<!--                        <el-form-item label="金融需求" >-->
+<!--                            <el-input v-model="form.require" placeholder="请输入金融需求" />-->
+<!--                        </el-form-item>-->
+<!--                    </el-col>-->
+
+                    <el-col :span="8">
+                        <el-form-item label="是否到店" >
+                            <el-radio-group v-model="form.toStoreStatus">
+                                <el-radio :label="1">是</el-radio>
+                                <el-radio :label="2">否</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="8" v-if="1==form.toStoreStatus">
+                        <el-form-item label="到店时间" prop="toStoreDate">
+                            <el-date-picker
+                                    v-model="form.toStoreDate"
+                                    type="date"
+                                    format="YYYY-MM-DD"
+                                    value-format="YYYY-MM-DD"
+                                    placeholder="选择到店时间"/>
+                        </el-form-item>
+                    </el-col>
+
+
+                    <el-col :span="8">
+                        <el-form-item label="审批状态" >
+                            <el-radio-group v-model="form.approvalStatus">
+                                <el-radio :label="1">已通过</el-radio>
+                                <el-radio :label="2">未通过</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="8">
+                        <el-form-item label="是否需要上牌" >
+                            <el-radio-group v-model="form.registrationStatus">
+                                <el-radio :label="1">是</el-radio>
+                                <el-radio :label="2">否</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="8">
+                        <el-form-item label="下一步措施" prop="nextMeasure">
+                            <el-select v-model="form.nextMeasure" placeholder="请选择下一步措施" clearable>
+
+                                <el-option
+                                        v-for="(item, index) in followResult" :key="index"
+                                        :label="item.name" :value="item.code"/>
+
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="8" v-if="1==form.nextMeasure">
+                        <el-form-item label="下一次跟进日期" prop="nextDealDate">
+                            <el-date-picker
+                                    v-model="form.nextDealDate"
+                                    type="date"
+                                    format="YYYY-MM-DD"
+                                    value-format="YYYY-MM-DD"
+                                    placeholder="选择到店时间"/>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="12">
+                        <el-form-item label="跟进记录" prop="dealRecord">
+                            <el-input
+                                    type="textarea"
+                                    :rows="2"
+                                    placeholder="请输入跟进详细情况"
+                                    v-model="form.dealRecord">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+
+
+                </el-row>
+
+            </el-form>
+        </div>
+
+
+        <div class="dialog-footer">
+            <el-button type="primary" @click="submitForm">确 定</el-button>
+            <el-button @click="cancel">取 消</el-button>
+        </div>
+
+    </div>
+</div>
+
+<!-- Import Vue 3 -->
+<script src="../../statics/js/vue3/vue.global.js"></script>
+<!-- Import component library -->
+<script src="../../statics/js/element-plus/index.full.js"></script>
+<script src="../../statics/js/element-plus/icons-vue.js"></script>
+<script src="../../statics/plugins/jquery.min.js"></script>
+<script src="../../statics/common/layui/layui.js"></script>
+<script src="../../statics/js/common.js"></script>
+<script src="../../statics/js/element-plus/locale-cn.js"></script>
+<script>
+
+</script>
+<script src="../../statics/js/modules/cluesSale/dict.js"></script>
+<script src="../../statics/js/modules/cluesSale/followup.js?_${.now?long}"></script>
+</body>
+
+</html>

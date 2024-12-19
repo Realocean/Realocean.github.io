@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>备用车申请页面</title>
+    <link rel="stylesheet" type="text/css" href="../../statics/css/public/flowChart.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/public/header.css">
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+    <script type="text/javascript" src="../../statics/js/bpmchart.js"></script>
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+    <style>
+        .layui-input-block{
+            margin-left:200px;
+        }
+        .input-readonly{
+            border: none;
+        }
+
+        .multiple-cell {
+            display: table-cell;
+            padding-right: 8px;
+        }
+
+        .multiple-table {
+            margin-bottom: 9px;
+            display: table;
+            margin-left: 78px;
+        }
+
+        .layui-form-radio {
+            line-height: 28px;
+            margin: 0;
+            padding-right: 10px;
+            cursor: pointer;
+            font-size: 0;
+        }
+
+        td[data-field="paymentMethod"] div.layui-table-cell {
+            overflow: visible !important;
+        }
+
+        td[data-field="paymentMethod"] .layui-form-select {
+            margin-left: -15px;
+            margin-right: -15px;
+        }
+
+        td[data-field="paymentMethod"] div.layui-form-select dl {
+            z-index: 9999;
+        }
+
+        .layui-table-box {
+            overflow: visible;
+        }
+
+        .layui-table-body {
+            overflow: visible;
+        }
+    </style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <form class="layui-form ren-form" style="padding-bottom: 60px;">
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed" style="height: 52px">
+                备用车申请信息
+                <span style="float: right;">
+                        <span v-show="isShowContent()" style="float: right;"><span style="color: #FFC000;font-size: 18px;margin-right: 10px">{{getAuditStatusStr()}}</span><span>备用车申请审核状态：</span><span style="color: #1951FF">{{getOrderStatusStr()}}</span></span>
+                        <br v-show="isShowContent()" />
+                        <span v-show="isShowContent()" style="float: left;"><span style="color: #FFC000;font-size: 18px;">{{getAuditMarkType()}}：{{getAuditMarkStr()}}</span></span>
+                </span>
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="nodeFields.selectOrder_spareCar_carSelect.show">
+                            <label class="layui-form-label" v-show="nodeFields.selectOrder_spareCar_carSelect.edit">
+                                <span style="color:red">{{nodeFields.selectOrder_spareCar_carSelect.required?'*':''}}</span>选择车牌号
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.selectOrder_spareCar_carSelect.edit">选择车牌号</label>
+                            <div class="layui-input-inline">
+                                <input v-model="spareCar.carNo" v-show="nodeFields.selectOrder_spareCar_carSelect.edit"
+                                       :lay-verify="nodeFields.selectOrder_spareCar_carSelect.required"
+                                       type="text"
+                                       class="layui-input searchVal" readonly
+                                       @click="selectCar"
+                                       placeholder="请选择车牌号" />
+                                <input type="text" style="border:0px;" :value="spareCar.carNo || '--' " disabled style="broder:0px;"
+                                       v-show="!nodeFields.selectOrder_spareCar_carSelect.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="nodeFields.selectOrder_spareCar_vinSelect.show">
+                            <label class="layui-form-label" v-show="nodeFields.selectOrder_spareCar_vinSelect.edit">
+                                <span style="color:red">{{nodeFields.selectOrder_spareCar_vinSelect.required?'*':''}}</span>选择车架号
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.selectOrder_spareCar_vinSelect.edit">选择车架号</label>
+                            <div class="layui-input-inline">
+                                <input v-model="spareCar.vinNo" v-show="nodeFields.selectOrder_spareCar_vinSelect.edit"
+                                       :lay-verify="nodeFields.selectOrder_spareCar_vinSelect.required"
+                                       type="text"
+                                       class="layui-input searchVal" readonly
+                                       @click="selectCar"
+                                       placeholder="请选择车架号" />
+                                <input type="text" style="border:0px;" :value="spareCar.vinNo || '--' " disabled style="broder:0px;"
+                                       v-show="!nodeFields.selectOrder_spareCar_vinSelect.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed" v-show="!nodeFields.basicInfo.hide">
+                基本信息
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6"  v-show="nodeFields.basicInfo_spareCar_carNo.show">
+                            <label class="layui-form-label" v-show="nodeFields.basicInfo_spareCar_carNo.edit">
+                                <span style="color:red">{{nodeFields.basicInfo_spareCar_carNo.required?'*':''}}</span>车牌号
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.basicInfo_spareCar_carNo.edit">车牌号</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text" v-show="nodeFields.basicInfo_spareCar_carNo.edit"
+                                        class="layui-input searchVal"
+                                        v-model="spareCar.carNo"
+                                        readonly
+                                        :lay-verify="nodeFields.basicInfo_spareCar_carNo.required"
+                                        placeholder="系统自动带出"/>
+                                <input type="text" style="border:0px;" :value="spareCar.carNo || '--' " disabled
+                                       v-show="!nodeFields.basicInfo_spareCar_carNo.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6"  v-show="nodeFields.basicInfo_spareCar_rentType.show">
+                            <label class="layui-form-label" v-show="nodeFields.basicInfo_spareCar_rentType.edit">
+                                <span style="color:red">{{nodeFields.basicInfo_spareCar_rentType.required?'*':''}}</span>租赁类型
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.basicInfo_spareCar_rentType.edit">租赁类型</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text" v-show="nodeFields.basicInfo_spareCar_rentType.edit"
+                                        class="layui-input searchVal"
+                                        v-model="spareCar.rentType"
+                                        readonly
+                                        :lay-verify="nodeFields.basicInfo_spareCar_rentType.required"
+                                        placeholder="系统自动带出"/>
+                                <input type="text" style="border:0px;" :value="spareCar.rentType || '--' " disabled
+                                       v-show="!nodeFields.basicInfo_spareCar_rentType.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6"  v-show="nodeFields.basicInfo_spareCar_brandSeriesModel.show">
+                            <label class="layui-form-label" v-show="nodeFields.basicInfo_spareCar_brandSeriesModel.edit">
+                                <span style="color:red">{{nodeFields.basicInfo_spareCar_brandSeriesModel.required?'*':''}}</span>车辆品牌/车系/车型
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.basicInfo_spareCar_brandSeriesModel.edit">车辆品牌/车系/车型</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text" v-show="nodeFields.basicInfo_spareCar_brandSeriesModel.edit"
+                                        class="layui-input searchVal"
+                                        v-model="spareCar.brandModelName"
+                                        readonly
+                                        :lay-verify="nodeFields.basicInfo_spareCar_brandSeriesModel.required"
+                                        placeholder="系统自动带出"/>
+                                <input type="text" style="border:0px;" :value="spareCar.brandModelName || '--' " disabled
+                                       v-show="!nodeFields.basicInfo_spareCar_brandSeriesModel.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6"  v-show="nodeFields.basicInfo_spareCar_vinNo.show">
+                            <label class="layui-form-label" v-show="nodeFields.basicInfo_spareCar_vinNo.edit">
+                                <span style="color:red">{{nodeFields.basicInfo_spareCar_vinNo.required?'*':''}}</span>车架号
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.basicInfo_spareCar_vinNo.edit">车架号</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text" v-show="nodeFields.basicInfo_spareCar_vinNo.edit"
+                                        class="layui-input searchVal"
+                                        v-model="spareCar.vinNo"
+                                        readonly
+                                        :lay-verify="nodeFields.basicInfo_spareCar_vinNo.required"
+                                        placeholder="系统自动带出"/>
+                                <input type="text" style="border:0px;" :value="spareCar.vinNo || '--' " disabled
+                                       v-show="!nodeFields.basicInfo_spareCar_vinNo.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6"  v-show="nodeFields.basicInfo_spareCar_customer.show">
+                            <label class="layui-form-label" v-show="nodeFields.basicInfo_spareCar_customer.edit">
+                                <span style="color:red">{{nodeFields.basicInfo_spareCar_customer.required?'*':''}}</span>客户名称
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.basicInfo_spareCar_customer.edit">客户名称</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text" v-show="nodeFields.basicInfo_spareCar_customer.edit"
+                                        class="layui-input searchVal"
+                                        v-model="spareCar.customer"
+                                        readonly
+                                        :lay-verify="nodeFields.basicInfo_spareCar_customer.required"
+                                        placeholder="系统自动带出"/>
+                                <input type="text" style="border:0px;" :value="spareCar.customer || '--' " disabled
+                                       v-show="!nodeFields.basicInfo_spareCar_customer.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6"  v-show="nodeFields.basicInfo_spareCar_status.show">
+                            <label class="layui-form-label" v-show="nodeFields.basicInfo_spareCar_status.edit">
+                                <span style="color:red">{{nodeFields.basicInfo_spareCar_status.required?'*':''}}</span>状态
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.basicInfo_spareCar_status.edit">状态</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text" v-show="nodeFields.basicInfo_spareCar_status.edit"
+                                        class="layui-input searchVal"
+                                        v-model="spareCar.businessType"
+                                        readonly
+                                        :lay-verify="nodeFields.basicInfo_spareCar_status.required"
+                                        placeholder="系统自动带出"/>
+                                <input type="text" style="border:0px;" :value="spareCar.businessType || '--' " disabled
+                                       v-show="!nodeFields.basicInfo_spareCar_status.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6"  v-show="nodeFields.basicInfo_spareCar_orderNo.show">
+                            <label class="layui-form-label" v-show="nodeFields.basicInfo_spareCar_orderNo.edit">
+                                <span style="color:red">{{nodeFields.basicInfo_spareCar_orderNo.required?'*':''}}</span>合同单号
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.basicInfo_spareCar_orderNo.edit">合同单号</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text" v-show="nodeFields.basicInfo_spareCar_orderNo.edit"
+                                        class="layui-input searchVal"
+                                        v-model="spareCar.contractNo"
+                                        readonly
+                                        :lay-verify="nodeFields.basicInfo_spareCar_orderNo.required"
+                                        placeholder="系统自动带出"/>
+                                <input type="text" style="border:0px;" :value="spareCar.contractNo || '--' " disabled
+                                       v-show="!nodeFields.basicInfo_spareCar_orderNo.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6"  v-show="nodeFields.basicInfo_spareCar_carCode.show">
+                            <label class="layui-form-label" v-show="nodeFields.basicInfo_spareCar_carCode.edit">
+                                <span style="color:red">{{nodeFields.basicInfo_spareCar_carCode.required?'*':''}}</span>车辆订单号
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.basicInfo_spareCar_carCode.edit">车辆订单号</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text" v-show="nodeFields.basicInfo_spareCar_carCode.edit"
+                                        class="layui-input searchVal"
+                                        v-model="spareCar.orderCarNo"
+                                        readonly
+                                        :lay-verify="nodeFields.basicInfo_spareCar_carCode.required"
+                                        placeholder="系统自动带出"/>
+                                <input type="text" style="border:0px;" :value="spareCar.orderCarNo || '--' " disabled
+                                       v-show="!nodeFields.basicInfo_spareCar_carCode.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6"  v-show="nodeFields.basicInfo_spareCar_payType.show">
+                            <label class="layui-form-label" v-show="nodeFields.basicInfo_spareCar_payType.edit">
+                                <span style="color:red">{{nodeFields.basicInfo_spareCar_payType.required?'*':''}}</span>付款方式
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.basicInfo_spareCar_payType.edit">付款方式</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text" v-show="nodeFields.basicInfo_spareCar_payType.edit"
+                                        class="layui-input searchVal"
+                                        v-model="spareCar.payType"
+                                        readonly
+                                        :lay-verify="nodeFields.basicInfo_spareCar_payType.required"
+                                        placeholder="系统自动带出"/>
+                                <input type="text" style="border:0px;" :value="spareCar.payType || '--' " disabled
+                                       v-show="!nodeFields.basicInfo_spareCar_payType.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6"  v-show="nodeFields.basicInfo_spareCar_payDay.show">
+                            <label class="layui-form-label" v-show="nodeFields.basicInfo_spareCar_payDay.edit">
+                                <span style="color:red">{{nodeFields.basicInfo_spareCar_payDay.required?'*':''}}</span>付款日
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.basicInfo_spareCar_payDay.edit">付款日</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text" v-show="nodeFields.basicInfo_spareCar_payDay.edit"
+                                        class="layui-input searchVal"
+                                        v-model="spareCar.payDay"
+                                        readonly
+                                        :lay-verify="nodeFields.basicInfo_spareCar_payDay.required"
+                                        placeholder="系统自动带出"/>
+                                <input type="text" style="border:0px;" :value="spareCar.payDay || '--' " disabled
+                                       v-show="!nodeFields.basicInfo_spareCar_payDay.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6"  v-show="nodeFields.basicInfo_spareCar_rentStart.show">
+                            <label class="layui-form-label" v-show="nodeFields.basicInfo_spareCar_rentStart.edit">
+                                <span style="color:red">{{nodeFields.basicInfo_spareCar_rentStart.required?'*':''}}</span>租赁开始时间
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.basicInfo_spareCar_rentStart.edit">租赁开始时间</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text" v-show="nodeFields.basicInfo_spareCar_rentStart.edit"
+                                        class="layui-input searchVal"
+                                        v-model="spareCar.rentStart"
+                                        readonly
+                                        :lay-verify="nodeFields.basicInfo_spareCar_rentStart.required"
+                                        placeholder="系统自动带出"/>
+                                <input type="text" style="border:0px;" :value="spareCar.rentStart || '--' " disabled
+                                       v-show="!nodeFields.basicInfo_spareCar_rentStart.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6"  v-show="nodeFields.basicInfo_spareCar_rentEnd.show">
+                            <label class="layui-form-label" v-show="nodeFields.basicInfo_spareCar_rentEnd.edit">
+                                <span style="color:red">{{nodeFields.basicInfo_spareCar_rentEnd.required?'*':''}}</span>租赁结束时间
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.basicInfo_spareCar_rentEnd.edit">租赁结束时间</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text" v-show="nodeFields.basicInfo_spareCar_rentEnd.edit"
+                                        class="layui-input searchVal"
+                                        v-model="spareCar.rentEnd"
+                                        readonly
+                                        :lay-verify="nodeFields.basicInfo_spareCar_rentEnd.required"
+                                        placeholder="系统自动带出"/>
+                                <input type="text" style="border:0px;" :value="spareCar.rentEnd || '--' " disabled
+                                       v-show="!nodeFields.basicInfo_spareCar_rentEnd.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed" v-show="!nodeFields.spareCar.hide">
+                备用车申请信息
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6"  v-show="nodeFields.spareCar_spareCar_applyReason.show">
+                            <label class="layui-form-label" v-show="nodeFields.spareCar_spareCar_applyReason.edit">
+                                <span style="color:red">{{nodeFields.spareCar_spareCar_applyReason.required?'*':''}}</span>申请原因
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.spareCar_spareCar_applyReason.edit">申请原因</label>
+                            <div class="layui-input-inline">
+                                <textarea v-model="spareCarApply.applyReason"
+                                          type="text"
+                                          v-show="nodeFields.spareCar_spareCar_applyReason.edit"
+                                          :lay-verify="nodeFields.spareCar_spareCar_applyReason.required"
+                                          class="layui-input searchVal"
+                                          placeholder="请输入申请原因"></textarea>
+                                <textarea type="text" style="border:0px;" :value="spareCarApply.applyReason || '--' " disabled
+                                          v-show="!nodeFields.spareCar_spareCar_applyReason.edit" class="layui-input input-readonly"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="nodeFields.spareCar_spareCar_brandSelect.show">
+                            <label class="layui-form-label" v-show="nodeFields.spareCar_spareCar_brandSelect.edit">
+                                <span style="color:red">{{nodeFields.spareCar_spareCar_brandSelect.required?'*':''}}</span>选择品牌/车系/车型
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.spareCar_spareCar_brandSelect.edit">选择品牌/车系/车型</label>
+                            <div class="layui-input-inline">
+                                <input v-model="spareCarApply.brandSelect" v-if="nodeFields.spareCar_spareCar_brandSelect.edit"
+                                       :lay-verify="nodeFields.spareCar_spareCar_brandSelect.required"
+                                       type="text"
+                                       class="layui-input searchVal" readonly
+                                       id="a"
+                                       placeholder="选择品牌/车系/车型" />
+                                <input type="text" style="border:0px;" :value="spareCarApply.brandSelect || '--' " disabled style="broder:0px;"
+                                       v-if="!nodeFields.spareCar_spareCar_brandSelect.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="nodeFields.spareCar_spareCar_spareCarNo.show">
+                            <label class="layui-form-label" v-show="nodeFields.spareCar_spareCar_spareCarNo.edit">
+                                <span style="color:red">{{nodeFields.spareCar_spareCar_spareCarNo.required?'*':''}}</span>备用车车牌号
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.spareCar_spareCar_spareCarNo.edit">备用车车牌号</label>
+                            <div class="layui-input-inline">
+                                <input v-model="spareCarApply.carNo" v-show="nodeFields.spareCar_spareCar_spareCarNo.edit"
+                                       :lay-verify="nodeFields.spareCar_spareCar_spareCarNo.required"
+                                       type="text"
+                                       @click="transferCar"
+                                       class="layui-input searchVal" readonly
+                                       placeholder="请选择备用车车牌号" />
+                                <input type="text" style="border:0px;" :value="spareCarApply.carNo || '--' " disabled style="broder:0px;"
+                                       v-show="!nodeFields.spareCar_spareCar_spareCarNo.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="nodeFields.spareCar_spareCar_spareVinNo.show">
+                            <label class="layui-form-label" v-show="nodeFields.spareCar_spareCar_spareVinNo.edit">
+                                <span style="color:red">{{nodeFields.spareCar_spareCar_spareVinNo.required?'*':''}}</span>备用车车架号
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.spareCar_spareCar_spareVinNo.edit">备用车车架号</label>
+                            <div class="layui-input-inline">
+                                <input v-model="spareCarApply.vinNo" v-show="nodeFields.spareCar_spareCar_spareVinNo.edit"
+                                       :lay-verify="nodeFields.spareCar_spareCar_spareVinNo.required"
+                                       type="text"
+                                       @click="transferCar"
+                                       class="layui-input searchVal" readonly
+                                       placeholder="选择车牌号自动带出" />
+                                <input type="text" style="border:0px;" :value="spareCarApply.vinNo || '--' " disabled style="broder:0px;"
+                                       v-show="!nodeFields.spareCar_spareCar_spareVinNo.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="nodeFields.spareCar_spareCar_handleTime.show">
+                            <label class="layui-form-label" v-show="nodeFields.spareCar_spareCar_handleTime.edit">
+                                <span style="color:red">{{nodeFields.spareCar_spareCar_handleTime.required?'*':''}}</span>备用车交车时间
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.spareCar_spareCar_handleTime.edit">备用车交车时间</label>
+                            <div class="layui-input-inline">
+                                <input v-model="spareCarApply.handleTime" v-show="nodeFields.spareCar_spareCar_handleTime.edit"
+                                       :lay-verify="nodeFields.spareCar_spareCar_handleTime.required"
+                                       type="text"
+                                       class="layui-input searchVal" readonly
+                                       id="handleTime"
+                                       placeholder="请选择备用车交车时间" />
+                                <input type="text" style="border:0px;" :value="spareCarApply.handleTime || '--' " disabled style="broder:0px;"
+                                       v-show="!nodeFields.spareCar_spareCar_handleTime.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="nodeFields.spareCar_spareCar_paymentDay.show">
+                            <label class="layui-form-label" v-show="nodeFields.spareCar_spareCar_returnTime.edit">
+                                <span style="color:red">{{nodeFields.spareCar_spareCar_returnTime.required?'*':''}}</span>预计归还时间
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.spareCar_spareCar_returnTime.edit">预计归还时间</label>
+                            <div class="layui-input-inline">
+                                <input v-model="spareCarApply.returnTime" v-show="nodeFields.spareCar_spareCar_returnTime.edit"
+                                       :lay-verify="nodeFields.spareCar_spareCar_returnTime.required"
+                                       type="text"
+                                       id="returnTime"
+                                       class="layui-input searchVal" readonly
+                                       placeholder="请选择备用车归还时间" />
+                                <input type="text" style="border:0px;" :value="spareCarApply.returnTime || '--' " disabled style="broder:0px;"
+                                       v-show="!nodeFields.spareCar_spareCar_returnTime.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="nodeFields.spareCar_spareCar_paymentDay.show">
+                            <label class="layui-form-label" v-show="nodeFields.spareCar_spareCar_paymentDay.edit">
+                                <span style="color:red">{{nodeFields.spareCar_spareCar_paymentDay.required?'*':''}}</span>月租付款日
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.spareCar_spareCar_paymentDay.edit">月租付款日</label>
+                            <div class="layui-input-inline">
+                                <input type="text" readonly
+                                       style="position: absolute;line-height: 0;border-width: 0;border-style: hidden;background-color: rgba(0, 0, 0, 0);border-radius: 0;text-indent: -99999px;"
+                                       id="paymentDay" class="layui-input">
+                                <input type="text" id="paymentDayVal"
+                                       v-show="nodeFields.spareCar_spareCar_paymentDay.edit"
+                                       :lay-verify="nodeFields.spareCar_spareCar_paymentDay.required"
+                                       v-model="spareCarApply.paymentDay" readonly
+                                       autocomplete="off" placeholder="请选择月租付款日" class="layui-input">
+                                <input type="text" style="border:0px;" :value="spareCarApply.paymentDay || '--' " disabled style="broder:0px;"
+                                       v-show="!nodeFields.spareCar_spareCar_paymentDay.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="nodeFields.spareCar_spareCar_handleUser.show">
+                            <label class="layui-form-label" v-show="nodeFields.spareCar_spareCar_handleUser.edit">
+                                <span style="color:red">{{nodeFields.spareCar_spareCar_handleUser.required?'*':''}}</span>交车工作人员
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.spareCar_spareCar_handleUser.edit">交车工作人员</label>
+                            <div class="layui-input-inline">
+                                <select lay-search="" v-if="nodeFields.spareCar_spareCar_handleUser.edit"
+                                        :lay-verify="nodeFields.spareCar_spareCar_handleUser.required"
+                                        lay-filter="handleUserNameFilter" v-model="spareCarApply.handleUserId">
+                                    <option value="">请选择交车工作人员</option>
+                                    <option v-for="(item,index) in usrLst" :value="item.userId">{{item.username}}</option>
+                                </select>
+                                <input type="text" style="border:0px;" :value="spareCarApply.handleUserName || '--' " disabled style="broder:0px;"
+                                       v-if="!nodeFields.spareCar_spareCar_handleUser.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="nodeFields.spareCar_spareCar_curMile.show">
+                            <label class="layui-form-label" v-show="nodeFields.spareCar_spareCar_curMile.edit">
+                                <span style="color:red">{{nodeFields.spareCar_spareCar_curMile.required?'*':''}}</span>交车当前里程数
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.spareCar_spareCar_curMile.edit">交车当前里程数</label>
+                            <div class="layui-input-inline">
+                                <input v-model="spareCarApply.handleMile" v-show="nodeFields.spareCar_spareCar_curMile.edit"
+                                       :lay-verify="nodeFields.spareCar_spareCar_curMile.required"
+                                       @keyup="inputBindtapHandleMile"
+                                       type="text"
+                                       class="layui-input searchVal"
+                                       placeholder="请确认当前里程数" />
+                                <input type="text" style="border:0px;" :value="spareCarApply.handleMile || '--' " disabled style="broder:0px;"
+                                       v-show="!nodeFields.spareCar_spareCar_curMile.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="nodeFields.spareCar_spareCar_nextMile.show">
+                            <label class="layui-form-label" v-show="nodeFields.spareCar_spareCar_nextMile.edit">
+                                <span style="color:red">{{nodeFields.spareCar_spareCar_nextMile.required?'*':''}}</span>下次保养公里数
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.spareCar_spareCar_nextMile.edit">下次保养公里数</label>
+                            <div class="layui-input-inline">
+                                <input v-model="spareCarApply.nextMile" v-show="nodeFields.spareCar_spareCar_nextMile.edit"
+                                       :lay-verify="nodeFields.spareCar_spareCar_nextMile.required"
+                                       type="text"
+                                       class="layui-input searchVal"
+                                       @keyup="inputBindtapNextMile"
+                                       placeholder="请输入下次保养公里数" />
+                                <input type="text" style="border:0px;" :value="spareCarApply.nextMile || '--' " disabled style="broder:0px;"
+                                       v-show="!nodeFields.spareCar_spareCar_nextMile.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="nodeFields.spareCar_spareCar_nextDate.show">
+                            <label class="layui-form-label" v-show="nodeFields.spareCar_spareCar_nextDate.edit">
+                                <span style="color:red">{{nodeFields.spareCar_spareCar_nextDate.required?'*':''}}</span>下次保养时间
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.spareCar_spareCar_nextDate.edit">下次保养时间</label>
+                            <div class="layui-input-inline">
+                                <input v-model="spareCarApply.nextDate" v-show="nodeFields.spareCar_spareCar_nextDate.edit"
+                                       :lay-verify="nodeFields.spareCar_spareCar_nextDate.required"
+                                       type="text"
+                                       id="nextDate"
+                                       class="layui-input searchVal" readonly
+                                       placeholder="请选择下次保养时间" />
+                                <input type="text" style="border:0px;" :value="spareCarApply.nextDate || '--' " disabled style="broder:0px;"
+                                       v-show="!nodeFields.spareCar_spareCar_nextDate.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="nodeFields.spareCar_spareCar_remark.show">
+                            <label class="layui-form-label" v-show="nodeFields.spareCar_spareCar_remark.edit">
+                                <span style="color:red">{{nodeFields.spareCar_spareCar_remark.required?'*':''}}</span>备用车备注
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.spareCar_spareCar_remark.edit">备用车备注</label>
+                            <div class="layui-input-inline">
+                                <input v-model="spareCarApply.remark" v-show="nodeFields.spareCar_spareCar_remark.edit"
+                                       :lay-verify="nodeFields.spareCar_spareCar_remark.required"
+                                       type="text"
+                                       class="layui-input searchVal"
+                                       placeholder="备注说明" />
+                                <input type="text" style="border:0px;" :value="spareCarApply.remark || '--' " disabled style="broder:0px;"
+                                       v-show="!nodeFields.spareCar_spareCar_remark.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="nodeFields.spareCar_spareCar_fileLst.show">
+                            <label class="layui-form-label" v-show="nodeFields.spareCar_spareCar_fileLst.edit">
+                                <span style="color:red">{{nodeFields.spareCar_spareCar_fileLst.required?'*':''}}</span>备用车附件
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.spareCar_spareCar_fileLst.edit">备用车附件</label>
+                            <div class="layui-input-inline">
+                                <div class="layui-input-inline" id="fileLst" v-show="nodeFields.spareCar_spareCar_fileLst.edit"></div>
+                                <div class="layui-input-inline-upload" v-show="!nodeFields.spareCar_spareCar_fileLst.edit">
+                                    <div class="layui-input-inline-upload-show box-rect"
+                                         v-for="(item,index) in fileLst">
+                                        <div v-show="item.typeFile == 1" class="layui-input-inline-upload-button">
+                                            <img :src="imageURL + item.url" class="view-img">
+                                        </div>
+                                        <div v-show="item.typeFile != 1" class="layui-input-inline-upload-button">
+                                            {{item.nameAccessory}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-content-box" v-show="nodeFields.spareCar_spareCar_feeItem.show">
+                        <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                            备用车费用项
+                        </div>
+                        <div class="form-content-session-box">
+                            <div class="card">
+                                <div class="layui-row layui-form-row-content">
+                                    <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                        <label class="layui-form-label">费用项</label>
+                                        <div class="layui-input-inline">
+                                            <select name="feeItem" lay-filter="feeItem" lay-search="" v-model="feeItemId">
+                                                <option value="">请选择费用项</option>
+                                                <option v-for="(item,index) in feeItemLst" :value="item.fieldName">{{item.name}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                        <a class="layui-btn search-btn" @click="addFeeItem">添加</a>
+                                    </div>
+                                </div>
+
+                                <div class="layui-row form-group">
+                                    <div class="table">
+                                        <table class="layui-hide" id="feeLst" lay-filter="feeLst"></table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed"  v-show="!nodeFields.contract.hide">
+                合同信息
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6"  v-show="nodeFields.contract_spareCar_contractNo.show">
+                            <label class="layui-form-label" v-show="nodeFields.contract_spareCar_contractNo.edit">
+                                <span style="color:red">{{nodeFields.contract_spareCar_contractNo.required?'*':''}}</span>合同编号
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.contract_spareCar_contractNo.edit">合同编号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="productCategory" required placeholder="请输入合同编号/请选择合同编号"
+                                       list="contractList" id="contractValue" onchange="inputSelect()"
+                                       autocomplete="off" class="layui-input" lay-filter="contract"
+                                       v-show="nodeFields.contract_spareCar_contractNo.edit"
+                                       :lay-verify="nodeFields.contract_spareCar_contractNo.required"
+                                       v-model="spareCarApply.spareContractNo">
+                                <datalist id="contractList" style="display:none;">
+                                    <option v-for="(item,index) in contractLst" :value="item.code" :text="item.id"
+                                            :data-id="item.id"></option>
+                                </datalist>
+                                <input type="text" style="border:0px;" :value="spareCarApply.spareContractNo || '--' " disabled style="broder:0px;"
+                                       v-show="!nodeFields.contract_spareCar_contractNo.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6"  v-show="nodeFields.contract_spareCar_startTime.show">
+                            <label class="layui-form-label" v-show="nodeFields.contract_spareCar_startTime.edit">
+                                <span style="color:red">{{nodeFields.contract_spareCar_startTime.required?'*':''}}</span>合同生效日期
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.contract_spareCar_startTime.edit">合同生效日期</label>
+                            <div class="layui-input-inline">
+                                <input v-model="spareCarApply.startTime" v-show="nodeFields.contract_spareCar_startTime.edit"
+                                       :lay-verify="nodeFields.contract_spareCar_startTime.required"
+                                       type="text"
+                                       class="layui-input searchVal" readonly
+                                       id="startTime"
+                                       placeholder="自动获取" />
+                                <input type="text" style="border:0px;" :value="spareCarApply.startTime || '--' " disabled style="broder:0px;"
+                                       v-show="!nodeFields.contract_spareCar_startTime.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6"  v-show="nodeFields.contract_spareCar_endTime.show">
+                            <label class="layui-form-label" v-show="nodeFields.contract_spareCar_endTime.edit">
+                                <span style="color:red">{{nodeFields.contract_spareCar_endTime.required?'*':''}}</span>合同终止日期
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.contract_spareCar_endTime.edit">合同终止日期</label>
+                            <div class="layui-input-inline">
+                                <input v-model="spareCarApply.endTime" v-show="nodeFields.contract_spareCar_endTime.edit"
+                                       :lay-verify="nodeFields.contract_spareCar_endTime.required"
+                                       type="text"
+                                       class="layui-input searchVal" readonly
+                                       id="endTime"
+                                       placeholder="自动获取" />
+                                <input type="text" style="border:0px;" :value="spareCarApply.endTime || '--' " disabled style="broder:0px;"
+                                       v-show="!nodeFields.contract_spareCar_endTime.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6"  v-show="nodeFields.contract_spareCar_contractRemark.show">
+                            <label class="layui-form-label" v-show="nodeFields.contract_spareCar_contractRemark.edit">
+                                <span style="color:red">{{nodeFields.contract_spareCar_contractRemark.required?'*':''}}</span>合同备注
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.contract_spareCar_contractRemark.edit">合同备注</label>
+                            <div class="layui-input-inline">
+                                <input v-model="spareCarApply.contractRemark"
+                                       v-show="nodeFields.contract_spareCar_contractRemark.edit"
+                                       :lay-verify="nodeFields.contract_spareCar_contractRemark.required"
+                                       type="text"
+                                       class="layui-input searchVal"
+                                       placeholder="自动获取"/>
+                                <input type="text" :value="spareCarApply.contractRemark || '--' " disabled style="broder:0px;"
+                                       v-show="!nodeFields.contract_spareCar_contractRemark.edit" class="layui-input input-readonly"/>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12"  v-show="nodeFields.contract_spareCar_contractFileLst.show">
+                            <label class="layui-form-label" v-show="nodeFields.contract_spareCar_contractFileLst.edit">
+                                <span style="color:red">{{nodeFields.contract_spareCar_contractFileLst.required?'*':''}}</span>合同附件
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.contract_spareCar_contractFileLst.edit">合同附件</label>
+                            <div class="layui-input-inline">
+                                <div class="layui-input-inline" id="fileLst1" v-show="nodeFields.contract_spareCar_contractFileLst.edit"></div>
+                                <div class="layui-input-inline-upload" v-show="!nodeFields.contract_spareCar_contractFileLst.edit">
+                                    <div class="layui-input-inline-upload-show box-rect"
+                                         v-for="(item,index) in fileLst1">
+                                        <div v-show="item.typeFile == 1" class="layui-input-inline-upload-button">
+                                            <img :src="imageURL + item.url" class="view-img">
+                                        </div>
+                                        <div v-show="item.typeFile != 1" class="layui-input-inline-upload-button">
+                                            {{item.nameAccessory}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-content-box" v-if="viewTag!='apply'">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                备用车申请流程
+            </div>
+            <div class="car-details-info car-padding">
+                <div class="car-flowChart" id="bpmChart"></div>
+            </div>
+        </div>
+        <div class="float-btn-group bottom-bar" v-if="viewTag=='apply' || viewTag=='edit'">
+            <a class="layui-btn reset-btn" @click="cancel">取消</a>
+            <a class="layui-btn search-btn" lay-submit lay-filter="submitEditData">保存</a>
+        </div>
+        <div class="float-btn-group bottom-bar" v-if="viewTag=='applyDetail'">
+            <a class="layui-btn reset-btn" @click="cancel">返回</a>
+            <a class="layui-btn search-btn" v-if="instanceStatus == 1" @click="recall">撤回</a>
+            <a class="layui-btn search-btn" v-if="instanceStatus == 2 || instanceStatus == 5" @click="applydel">删除</a>
+            <a class="layui-btn search-btn" v-if="instanceStatus == 6 && nodeType == 1" @click="reedit">重新编辑</a>
+        </div>
+        <div class="float-btn-group bottom-bar" v-if="viewTag=='approve'">
+            <a class="layui-btn reset-btn" @click="cancel">返回</a>
+            <a class="layui-btn search-btn" v-if="approveType != 3" @click="approve">审核通过</a>
+            <a class="layui-btn search-btn" v-if="approveType != 3" @click="reject">审核驳回</a>
+            <a class="layui-btn search-btn" v-if="approveType != 3" @click="refuse">审核拒绝</a>
+        </div>
+    </form>
+
+    <form class="layui-form ren-form" v-show="boxShow" id="boxShow">
+        <div class="details-conteiner">
+            <div class="details-content-box">
+                <div class="form-content-session-box" :style="boxInputShow?'':'text-align: center;'">
+                    <PRE>{{boxMark}}</PRE>
+                    <br/>
+                    <div class="card" v-show="boxInputShow">
+                        <textarea style="min-width: 400px;min-height: 90px;max-width: 400px;max-height: 120px" type="text" v-model="boxTxt" autocomplete="off" :placeholder="boxHolder" class="layui-input"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="details-content-box">
+                <div class="form-content-session-box">
+                    <label class="layui-form-label">审批附件:</label>
+                    <div class="layui-input-inline">
+                        <div class="layui-input-inline-upload">
+                            <div :id="fileLstId2" class="layui-input-inline-upload-show box-rect" v-for="(item,index) in fileLst2">
+                                <div v-show="item.typeFile == 1" class="layui-input-inline-upload-button">
+                                    <img :src="imageURL + item.url" class="view-img">
+                                </div>
+                                <div v-show="item.typeFile != 1" class="layui-input-inline-upload-button">
+                                    {{item.nameAccessory}}
+                                </div>
+                                <div class="layui-input-inline-upload-show-delete btn-event" @click="delFile2(item.id)">
+                                    删除
+                                </div>
+                            </div>
+                            <div class="layui-input-inline-upload-button box-rect box-rect-event" id="addFile2">
+                                <img src="../../statics/images/inline-upload@2x.png">
+                            </div>
+                        </div>
+                        <div class="layui-input-inline-upload-text" style="padding-bottom: 10px">附件说明：附件最大支持50M，
+                            <br/>
+                            支持格式：PDF、Word、Excel、JPG、PNG、ZIP、RAR
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/html" id="feeItemBarTpl">
+    <a class="layui-grid-btn-xs" lay-event="delect">删除</a>
+</script>
+<script type="text/html" id="selectPaymentMethod">
+    <select name="feeItemPaymentMethod" sid="{{d.serializeId}}" lay-filter="feeItemPaymentMethod">
+        <option value="">请选择尾款付款方式</option>
+        <option {{ d.multiple == 1 ? 'disabled' : '' }} value="7">日付</option>
+        <option {{ d.multiple == 1 ? 'disabled' : '' }} value="8">周付</option>
+        <option {{ d.multiple == 1 ? 'disabled' : '' }} value="1">月付</option>
+        <option {{ d.multiple == 1 ? 'disabled' : '' }} value="2">两月付</option>
+        <option {{ d.multiple == 1 ? 'disabled' : '' }} value="3">季付</option>
+        <option {{ d.multiple == 1 ? 'disabled' : '' }} value="6">半年付</option>
+        <option {{ d.multiple == 1 ? 'disabled' : '' }} value="4">年付</option>
+        <option value="5">一次性结清</option>
+        <!--<option {{ d.multiple == 0 ? 'disabled' : '' }} value="5">一次性结清</option>-->
+    </select>
+</script>
+<script src="../../statics/js/modules/order/sparecarflow.js"></script>
+<link rel="stylesheet" href="../../statics/css/submit-approval.css">
+</body>
+</html>

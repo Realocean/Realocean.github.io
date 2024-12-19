@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>查看维修单</title>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="Author" content="larry" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+    <script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+    <script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/common.js"></script>
+    <script type="text/javascript" src="../../statics/js/upload.js"></script>
+    <script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+    <link rel="stylesheet" href="../../statics/css/jxcPublicAll.css" media="all">
+    <link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../statics/common/step/steps.css">
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+    <script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+    <script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+    <script src="../../statics/common/layui/autocomplete.js"></script>
+    <script src="../../statics/js/modules/viewer/viewer.min.js"></script>
+    <script src="../../statics/common/print-js/print.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+    <script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/searchview.js"></script>
+    <script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+    <!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+    <!-- 引入组件库 -->
+    <link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+</head>
+
+<body class="ren-body">
+    <div id="rrapp" v-cloak>
+
+        <div class="details-tab-content">
+            <div class="details-tab-content-box display">
+                <div class="flex" v-for="(item, index) in detailsTabContentList" :key="index"
+                    :class="index === detailsTabContentListActiveIndex ? 'active1A51FF' : ''"
+                    @click="detailsTabContentBindtap(index)">
+                    {{ item }}
+                    <div>
+                        <div
+                            :class="index === detailsTabContentListActiveIndex ? 'details-tab-content-box-absolute-bottom' : ''">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="details-conteiner">
+            <!-- 维修详情 -->
+            <div class="details-content-box" v-show="detailsSupTabContentListActiveValue === '维修详情'">
+                <div lass="details-content-box">
+                    <div class="">
+                        <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                            车辆基础信息
+                        </div>
+                    </div>
+                    <form class="layui-form">
+                        <div class="details-layui-row">
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">车辆品牌/车型：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal"
+                                            :value="carRepairOrder.carBrandModelName || '--'" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">车牌号：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal"
+                                            :value="carRepairOrder.carPlateNo || '--'" disabled />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">车架号：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal"
+                                            :value="carRepairOrder.vinNo || '--'" disabled />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">客户名称：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal"
+                                            :value="carRepairOrder.customer || '--'" disabled />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">车辆状态：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal"
+                                            :value="carRepairOrder.carStatusStr || '--'" disabled />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">订单编号：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal"
+                                            :value="carRepairOrder.orderNo || '--'" disabled />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">车辆所属公司：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal"
+                                            :value="carRepairOrder.factoryName || '--'" disabled />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">租赁开始时间：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal"
+                                            :value="carRepairOrder.timeStartRent || '--'" disabled />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">租赁结束时间：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal"
+                                            :value="carRepairOrder.timeFinishRent || '--'" disabled />
+                                    </div>
+                                </div>
+                                <!--<div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">车辆当前里程数：</label>
+                                <div class="layui-input-inline">
+                                    <input  type="text" class="layui-input searchVal"   :value="carRepairOrder.mileage || '&#45;&#45;'" disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">车辆所属仓库：</label>
+                                <div class="layui-input-inline">
+                                    <input  type="text" class="layui-input searchVal"   :value="carRepairOrder.depotName || '&#45;&#45;'" disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">车辆用途：</label>
+                                <div class="layui-input-inline">
+                                    <input  type="text" class="layui-input searchVal"   :value="carRepairOrder.carPurpose || '&#45;&#45;'" disabled/>
+                                </div>
+                            </div>-->
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div lass="details-content-box" style="margin-top: 40px;">
+                    <div>
+                        <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                            <span>维修信息</span>
+                            <span style="margin-left: 1200px;">维修状态:{{carRepairOrder.repairStatusStr || '&#45;&#45;'}}
+                            </span>
+                        </div>
+                    </div>
+                    <form class="layui-form">
+                        <div class="details-layui-row">
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">维修申请单：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal"
+                                            :value="carRepairOrder.applyNo || '--'" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">维修开始时间：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal"
+                                            :value="carRepairOrder.repairStartDate || '--'" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">故障描述：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal"
+                                            :value="carRepairOrder.faultDesc || '--'" disabled />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">维修厂名称：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal"
+                                            :value="carRepairOrder.serviceName || '--'" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">维修厂报价/元：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal"
+                                            :value="carRepairOrder.repairShopQuotation || '--'" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">维修内容：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal"
+                                            :value="carRepairOrder.repairContent || '--'" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">维修价格用户支付金额/元：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal"
+                                            :value="carRepairOrder.userPay || '--'" disabled />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">维修价格平台支付金额/元：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal"
+                                            :value="carRepairOrder.platformPay || '--'" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">维修价格保险支付金额/元：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal"
+                                            :value="carRepairOrder.insurancePay || '--'" disabled />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">总金额/元：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal"
+                                            :value="carRepairOrder.totalPay || '--'" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">是否提供备用车：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal"
+                                            :value="carRepairOrder.isSpareCarStr || '--'" disabled />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">备用车车牌号：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal"
+                                            :value="carRepairOrder.spareCarNo || '--'" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">备注：</label>
+                                    <div class="layui-input-inline">
+                                        <textarea type="text" class="layui-textarea"
+                                            :value="carRepairOrder.remark  || '--'" disabled
+                                            style="border: none"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">维修附件：</label>
+                                    <div class="layui-input-inline" id="RepairModel">
+                                        <!--                                    <a  class="layui-btn layui-btn-normal " @click="viewAccessory">附件查看</a>-->
+                                        <!-- <a class="layui-btn layui-btn-normal"  @click="download">文档下载</a>-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="float-btn-group">
+                    <a class="layui-btn reset-btn" @click="cancel">返回</a>
+                </div>
+            </div>
+            <!-- 操作记录 -->
+            <div class="details-content-box" v-show="detailsSupTabContentListActiveValue === '操作记录'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        操作记录
+                    </div>
+                </div>
+                <div class="details-layui-row">
+                    <div class="table">
+                        <table class="layui-hide" id="operationLog"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 附件显示窗口 -->
+    <div id="attachmentDiv">
+        <table class="layui-hide" id="attachmentList" lay-filter="attachmentList"></table>
+    </div>
+
+    <div id="jqxattachmentDiv">
+        <table class="layui-hide" id="jqxattachmentList" lay-filter="jqxattachmentList"></table>
+    </div>
+
+    <script type="text/html" id="attachmentBarTpl">
+    <a class="layui-grid-btn-xs" lay-event="detail">查看</a>
+</script>
+    <script type="text/html" id="jqxattachmentBarTpl">
+    <a class="layui-grid-btn-xs" lay-event="detail">查看</a>
+</script>
+    <script src="../../statics/js/modules/carrepairorder/carrepairorderdetail.js"></script>
+</body>
+
+</html>

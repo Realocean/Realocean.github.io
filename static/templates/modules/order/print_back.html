@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>退车打印预览</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+    <style media=print type="text/css">
+        .noprint{visibility:hidden}
+    </style>
+    <style>
+        .table_border,.table_border tr td{
+            border: solid 1px #000;
+        }
+        table td{
+            width: 150px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="ren-body">
+<div style="padding:0 100px 50px 100px;"  id="rrapp" v-cloak>
+    <h1 align="center">终止合同协议书</h1>
+    <button class="noprint" onclick="window.print()" style="position:absolute;top:20px;left:930px;font-size:20px;padding:10px;">打印</button>
+    <div>（甲方）：{{carBackData.lessorName}} </div>
+    <div>（乙方）：{{carBackData.customerName}} </div>
+    <div>    甲、乙双方本着平等互利的原则，经友好协商，达成如下协议：</div>
+    <div>    一、双方均同意终止于{{carBackData.signDate}}双方所签订编号为{{carBackData.contractNo}}之合同/协议</div>
+    <div>    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;合同起止时间：{{
+                order&&order.contract&&order.contract.timeStart?new Date(order.contract.timeStart).format("yyyy年MM月dd日"):'＿＿＿＿年＿＿月＿＿日'
+                }}至{{
+                order&&order.contract&&order.contract.timeFinish?new Date(order.contract.timeFinish).format("yyyy年MM月dd日"):'＿＿＿＿年＿＿月＿＿日'
+             }}
+    </div>
+    <div>    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;租期：{{order&&order.orderCar&&order.orderCar.maxStage?order.orderCar.maxStage:'＿＿期'}}</div>
+    <div>    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;租金：{{order&&order.plan&&order.plan.monthlyRent?order.plan.monthlyRent:'＿＿'}}元</div>
+    <div>    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;退款原因：{{
+            order&&order.orderCar&&order.orderCar.orderCarReturnAlteration&&order.orderCar.orderCarReturnAlteration.alterationDesc?order.orderCar.orderCarReturnAlteration.alterationDesc:'＿＿＿＿'
+        }}
+    </div>
+    <div>    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;退款日期：{{
+            order&&order.orderCar&&order.orderCar.orderCarReturnAlteration&&order.orderCar.orderCarReturnAlteration.refundTime?new Date(order.orderCar.orderCarReturnAlteration.refundTime).format("yyyy年MM月dd日"):'＿＿＿＿年＿＿月＿＿日'
+        }}
+    </div>
+    <div>    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;所属业务员：{{order&&order.orderCar&&order.orderCar.salePersonName?order.orderCar.salePersonName:'＿＿'}}</div>
+    <div>（简称原合同/协议）。（车牌号：{{carBackData.carPlateNo}}）</div>
+    <div>    二、根据原合同/协议约定，乙方将承担以下费用：</div>
+    <table class="table_border">
+        <thead>
+            <tr>
+                <td colspan="4">退车费用清单（元）</td>
+            </tr>
+            <tr>
+                <td>编号</td>
+                <td>费用项目</td>
+                <td>金额（元）/备注</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="(feeItem,index) in carBackData.feeLst">
+                <td>{{(index+1)}}</td>
+                <td>{{feeItem.feeItemName}}</td>
+                <td>{{feeItem.valueType==1?(feeItem.feeItemAmount||0):feeItem.valueType==2?(feeItem.feeItemValue||'--'):(feeItem.feeItemValue||feeItem.feeItemAmount)}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div>    三、双方对以上内容均无异议，在本协议生效后双方互不承担任何责任和义务。  </div>
+    <div>    四、本协议自双方签字（盖章）生效。一式两份，甲、乙双方各执一份，具有同等法律效  </div>
+    <div>力。</div>
+    <div>退款人姓名：{{carBackData.refundAccountName}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;开户银行：{{carBackData.bankName}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;账号：{{carBackData.bankAccount}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+    <div>甲方：{{carBackData.lessorName}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;乙方：{{carBackData.customerName}}</div>
+    <div>签约时间：{{carBackData.nowDate}}</div>
+</div>
+<script src="../../statics/js/modules/order/print_back.js"></script>
+</body>
+</html>

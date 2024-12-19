@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>banner活动新增</title>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+    <style>
+        .hideCard .el-upload--picture-card {
+            display: none;
+        }
+    </style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <!-- 新增表单 -->
+    <form class="layui-form ren-form" style="margin-bottom: 60px;">
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                活动类型-banner活动
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>活动名称:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_activityName" v-model="activity.activityName"  autocomplete="off" placeholder="请输入活动名称"  maxlength="200"  class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">活动位置:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_sort" v-model="activity.sort" autocomplete="off" placeholder="请输入大于0的整数，数字越大排序越靠前" class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">活动状态:</label>
+                            <div class="layui-input-inline">
+                                <input type="checkbox" v-model="activity.isEnable"  lay-filter="isEnable_filter"   lay-skin="switch" lay-text="启用|禁用">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">上架时间:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id='validate_launchTime'  lay-verify="validate_launchTime" v-model="activity.launchTime"
+                                       autocomplete="off" placeholder="请选择日期时间" class="layui-input searchVal" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">下架时间:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="validate_offShelfTime"  lay-verify="validate_offShelfTime" v-model="activity.offShelfTime"
+                                       autocomplete="off" placeholder="请选择日期时间" class="layui-input searchVal" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">备注信息:</label>
+                            <div class="layui-input-inline">
+                                <textarea placeholder="如需其他描述可用进行备注说明" lay-verify="remarks"  v-model="activity.remarks"  maxlength="200"  class="layui-textarea" name="desc"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>活动列表图片展示:</label>
+                            <div class="layui-input-inline">
+                                <el-upload
+                                        action="#"
+                                        list-type="picture-card"
+                                        :on-preview="handlePictureCardPreview"
+                                        :on-remove="handleRemove"
+                                        :on-change="handlechange"
+                                        :file-list="fileList"
+                                        :class="{hideCard:hideUploadEdit}"
+                                        :before-upload="beforeAvatarUpload"
+                                        :auto-upload="true" >
+                                    <i class="el-icon-plus"></i>
+                                </el-upload>
+                            </div>
+                            <!-- 大图查看-->
+                            <el-dialog :visible.sync="dialogVisible">
+                                <img  :src="imageURL+activity.listImage"  width="100%"/>
+                            </el-dialog>
+                            <div style="margin-left: 170px;margin-top: 20px;"><span>附件说明：附件最大支持5M，支持格式：JPG、PNG</span></div>
+                        </div>
+                    </div>
+                    <!--<div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">是否有咨询栏:</label>
+                            <div class="layui-input-inline">
+                                <input type="radio" name="isInformationColumn" value="1" title="有咨询"   v-model="activity.isInformationColumn"   lay-filter="isInformationColumn">
+                                <input type="radio" name="isInformationColumn" value="2" title="无咨询"   v-model="activity.isInformationColumn"   lay-filter="isInformationColumn">
+                            </div>
+                        </div>
+                    </div>-->
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>活动跳转类型:</label>
+                            <div class="layui-input-inline">
+                                <input type="radio" name="activityJumpType" value="1" title="外部链接"    v-model="activity.activityJumpType"  lay-filter="activityJumpType" lay-verify="validate_activityJumpType">
+                                <input type="radio" name="activityJumpType" value="2" title="内部跳转"    v-model="activity.activityJumpType"  lay-filter="activityJumpType" lay-verify="validate_activityJumpType">
+                                <input type="radio" name="activityJumpType" value="3" title="产品跳转"    v-model="activity.activityJumpType"  lay-filter="activityJumpType" lay-verify="validate_activityJumpType">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content" id="connectionAddressDiv">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <div class="layui-input-inline" style="margin-left: 60px;">
+                                <input type="text" id="validate_connectionAddress" lay-verify="validate_connectionAddress"   v-model="activity.connectionAddress" autocomplete="off"
+                                       placeholder="请输入跳转链接(例如:http://www.baidu.com)" class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content" id="internalJumpDiv">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <div class="layui-input-inline" id="Editor" style="margin-left: 60px;">
+                                <p></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content" id="productJumpDiv">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <div class="layui-input-inline" style="margin-left: 60px;">
+                                <input type="text" id="validate_productJump" lay-verify="validate_productJump" v-model="activity.brandSeriesModelSchemename"
+                                       @click="selectScheme"      autocomplete="off" placeholder="请选择绑定车辆品牌/车系/车型主方案" class="layui-input searchVal">
+                                <input type="hidden" id="validate_productJump" lay-verify="validate_productJump" v-model="activity.productJump" autocomplete="off"  class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="float-btn-group bottom-bar">
+            <a class="layui-btn reset-btn" id="closePage">取消</a>
+            <a class="layui-btn search-btn" lay-submit lay-filter="save" id="save">保存</a>
+        </div>
+    </form>
+</div>
+<script src="../../statics/js/modules/element-ui/index.js"></script>
+<script src="../../statics/js/modules/element-ui/wangEditor.min.js"></script>
+<script src="../../statics/js/modules/activity/bannereventsedit.js?_${.now?long}"></script>
+</body>
+</html>

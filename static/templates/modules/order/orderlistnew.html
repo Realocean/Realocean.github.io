@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>订单表</title>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="Author" content="larry" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+    <script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+    <script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/common.js"></script>
+    <script type="text/javascript" src="../../statics/js/upload.js"></script>
+    <script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+    <link rel="stylesheet" href="../../statics/new_css/jxcPublicAll.css" media="all">
+    <link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../statics/common/step/steps.css">
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/viewer.min.css">
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+    <script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+    <script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+    <script src="../../statics/common/layui/autocomplete.js"></script>
+    <script src="../../statics/js/modules/viewer/viewer.min.js"></script>
+    <script src="../../statics/common/print-js/print.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+    <script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/searchview.js"></script>
+    <script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+    <!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+    <!-- 引入组件库 -->
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+
+
+    <style>
+        #rrapp {
+            background-color: transparent;
+        }
+
+        .layui-table-cell {
+            padding: 0 5px;
+            height: inherit;
+            overflow: visible;
+            text-overflow: inherit;
+            white-space: normal;
+            word-break: break-all;
+        }
+
+        .list-header-cards .active {
+            box-shadow: 0 0px 5px 1px #bed7de;
+            border: none;
+        }
+
+        .list-header-cards,
+        .list-header-sub-card {
+            background: #fff;
+            padding: 16px 16px 0 16px;
+            margin-bottom: 16px;
+            border-radius: 4px;
+        }
+
+        .list-header-cards {
+            padding: 16px;
+            display: flex;
+        }
+
+        .list-header-cards-text {
+            font-size: 16px;
+        }
+
+        .list-header-cards-number {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        .list-header-cards .flex {
+            padding: 5px 0px;
+            width:100%;
+            text-align: center;
+            border: 1px solid #BED7DE;
+            margin-right: 16px;
+            border-radius: 4px
+        }
+        .list-header-cards .flex.active {
+            border: 1px solid #3FACB3;
+            background: #3FACB3;
+            color: #fff;
+        }
+        .list-header-cards .flex:hover {
+            box-shadow: 0 0 10px #c7c6c6;
+        }
+
+        .list-header-cards .flex:last-child {
+            margin-right: 0;
+        }
+
+        .list-header-cards .orderImg {
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+        }
+
+        .list-header-sub-card>div {
+            padding: 8px 10px;
+            height: auto;
+            margin: 0 12px 16px 0;
+        }
+
+        .list-header-sub-card-text {
+            margin-bottom: 0;
+            font-size: 14px;
+        }
+
+        #rrapp .car-stutas-dds {
+            padding: 10px 0;
+            margin-bottom: 16px;
+            border-radius: 4px;
+            background-color: #fff;
+        }
+
+        #rrapp .car-stutas-dd {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin:0px 14px
+        }
+
+        #rrapp .car-stutas-dd .car-stutas-dd-title {
+            width: 70px;
+            font-size: 14px;
+            font-weight: 700;
+            text-align: center;
+            margin-right: 10px;
+        }
+
+        #rrapp .car-stutas-dd .car-stutas-dd-list .car-stutas-dd-list-item {
+           display: inline-block;
+           padding: 4px 8px;
+           font-size:14px;
+           margin-right:12px;
+           border:1px solid #BED7DE;
+           border-radius: 4px;
+           margin:6px 8px 6px 0px;
+           font-weight:700;
+        }
+
+        #rrapp .car-stutas-dd .car-stutas-dd-list .car-stutas-dd-list-item:hover {
+            border: 1px solid #3FACB3;
+            background: #3FACB3;
+            color: #fff;
+        }
+
+        /* #rrapp .car-stutas-dd .car-stutas-dd-list .car-stutas-dd-list-item::first-line{
+            margin-top:16px;
+        } */
+        #rrapp .car-stutas-dd .car-stutas-dd-list .car-stutas-dd-list-item.active {
+            border: 1px solid #3FACB3;
+            background: #3FACB3;
+            color: #fff;
+        }
+
+        #rrapp .car-stutas-dd .car-stutas-dd-list .car-stutas-dd-list-item:last-child {
+            margin-right: 0px;
+        }
+
+        .list-search-title-box {
+            margin-bottom: 0;
+            padding: 0;
+        }
+
+        .layui-form .jxc-section {
+            position: relative;
+        }
+
+        .layui-form .jxc-section>div:nth-of-type(2) {
+            position: absolute;
+            right: 0;
+            bottom: 15px;
+        }
+
+        .layui-form .jxc-section>div:nth-of-type(2) span {
+            color: #3FACB3 !important;
+        }
+
+        .layui-form .jxc-section>div:nth-of-type(2) img {
+            width: 16px !important;
+            vertical-align: text-top;
+        }
+
+        .layui-form .jxc-section .layui-col-md4 {
+            width: 25%;
+        }
+
+        .layui-form-label {
+            min-width: 120px !important;
+        }
+
+        #searchId .list-search-title-box:nth-child(2) {
+            margin-top: 16px;
+        }
+
+        table tr td .layui-table-cell span {
+            color: #3FACB3 !important;
+        }
+
+        .mmv-dropdonw {
+            display: inline-block;
+        }
+
+        .mmv-dropdonw .mmv-dropdonw-wrap {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            box-shadow: 0 0 5px #ddd;
+        }
+
+        .mmv-dropdonw .mmv-dropdonw-wrap .mmv-drop-donw-item {
+            background-color: #fff;
+            padding: 0 10px;
+        }
+    </style>
+</head>
+
+<body class="ren-body">
+    <div id="rrapp" v-cloak>
+        <div class="list-header-content-boxs">
+            <div class="car-stutas-dds">
+                <div class="car-stutas-dd">
+                    <span class="car-stutas-dd-title">用车状态</span>
+                    <div class="car-stutas-dd-list">
+                        <div class="car-stutas-dd-list-item" v-for="(item, index) in statusLst" :key="index"
+                            @click="changeStatus(item,index)" :class="item.key === statusIndex ? 'active' : ''"
+                            style="cursor:pointer;">
+                            <div class="list-header-sm-card-text">{{item.name}}（{{item.count}}）</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="car-stutas-dd">
+                    <span class="car-stutas-dd-title">过户状态</span>
+                    <div class="car-stutas-dd-list">
+                        <div class="car-stutas-dd-list-item" v-for="(item, index) in statusLstSub" :key="index"
+                            @click="changeStatus(item,index)" :class="item.key === statusIndex ? 'active' : ''"
+                            style="cursor:pointer;">
+                            <div class="list-header-sm-card-text">{{item.name}}（{{item.count}}）</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="car-stutas-dd">
+                    <span class="car-stutas-dd-title">订单状态</span>
+                    <div class="car-stutas-dd-list">
+                        <div class="car-stutas-dd-list-item" v-for="(item, index) in statusLstSubs" :key="index"
+                            @click="changeStatus(item,index)" :class="item.key === statusIndex ? 'active' : ''"
+                            style="cursor:pointer;">
+                            <div class="list-header-sm-card-text">{{item.name}}（{{item.count}}）</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="mvvm-table">
+            <div id="searchId">
+                <div class="list-search-title-box">
+                    <form class="layui-form">
+                        <div style="display:flex;width: 100%;">
+                            <div class="layui-form-item layui-row" style="width: 100%;">
+                                <div class="list-search-form-button" style="width: 100%;">
+                                    <a class="layui-btn btn-primary" @click="placeOrder"
+                                        v-m-perm="['order:order:save']">下单</a>
+                                    <a class="layui-btn btn-primary" @click="placeOrderAlipay"
+                                        v-m-perm="['order:order:alipaysave']">代扣下单</a>
+                                    <a class="layui-btn btn-warning " id="exports"
+                                        v-m-perm="['order:order:export']">导出</a>
+                                    <a class="layui-btn btn-success" @click="relet"
+                                        v-m-perm="['order:order:relet']">续租</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="list-table-content-box">
+                <table class="layui-hide" id="grid" lay-filter="grid"></table>
+            </div>
+        </div>
+
+
+        <form id="downLoadXls" style="display: none" action="../../order/order/downxlserr" method="post" target="">
+            <input type="text" name="datas" />
+            <input type="text" name="rentType" />
+        </form>
+
+        <div class="layui-form ren-form" v-show="exportTypeSelect" id="exportTypeSelect">
+            <div class="layui-form-item">
+                <label class="layui-form-label">导出类型：</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="exportType" lay-filter="exportType" v-model="exportType" value="1"
+                        title="车辆汇总数据导出">
+                    <input type="radio" name="exportType" lay-filter="exportType" v-model="exportType" value="2"
+                        title="基础数据导出">
+                    <!--<input type="radio" name="exportType" lay-filter="exportType" v-model="exportType" value="3" title="根据订单状态导出">-->
+                </div>
+            </div>
+            <div class="layui-input-block" style="left: 6%;width: 30%;margin-top: 100px;">
+                <a class="layui-btn reset-btn" @click="closeTip">取消</a>
+                <a class="layui-btn search-btn" @click="selectedExportType">确定</a>
+            </div>
+        </div>
+
+        <div class="layui-form ren-form" v-show="importTypeSelect" id="importTypeSelect">
+            <div class="layui-form-item">
+                <label class="layui-form-label">订单类型：</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="importType" lay-filter="importType" v-model="importType" value="1"
+                        title="经租">
+                    <input type="radio" name="importType" lay-filter="importType" v-model="importType" value="2"
+                        title="以租代购">
+                    <input type="radio" name="importType" lay-filter="importType" v-model="importType" value="5"
+                        title="融租">
+                    <input type="radio" name="importType" lay-filter="importType" v-model="importType" value="6"
+                        title="直购">
+                    <input type="radio" name="importType" lay-filter="importType" v-model="importType" value="3"
+                        title="展示车">
+                    <input type="radio" name="importType" lay-filter="importType" v-model="importType" value="4"
+                        title="试驾车">
+                    <input type="radio" name="importType" lay-filter="importType" v-model="importType" value="7"
+                        title="挂靠">
+                    <input type="radio" name="importType" lay-filter="importType" v-model="importType" value="8"
+                        title="直营">
+                </div>
+            </div>
+            <div class="layui-form-item" style="margin-top: 10px">
+                <label class="layui-form-label">数据文件：</label>
+                <div class="layui-input-block" id="importFileBlock"></div>
+            </div>
+            <div class="layui-input-block" style="left: 6%;width: 30%;margin-top: 70px;" id="selectedImportBtnBlock">
+            </div>
+        </div>
+    </div>
+
+    <script src="../../statics/js/modules/order/orderlistutil.js?_${.now?long}"></script>
+    <script src="../../statics/js/modules/order/orderlistnew.js"></script>
+</body>
+
+</html>

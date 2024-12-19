@@ -1,0 +1,15 @@
+/* 底部按钮*/
+.footer-btn-group {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 15px 0;
+    background: #fff;
+}
+
+.margin-auto {
+    margin: 0 auto;
+    text-align: center;
+}

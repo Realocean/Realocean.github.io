@@ -1,0 +1,89 @@
+#mmv-swiper_namespace .carousel-container {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+#mmv-swiper_namespace .carousel-indicator {
+    display: flex;
+    bottom: 10%;
+    position: absolute;
+    z-index: 99;
+    width: 100%;
+    justify-content: center;
+}
+
+#mmv-swiper_namespace .is-active-item {
+    opacity: 1 !important;
+}
+
+#mmv-swiper_namespace .carousel-indicator-item {
+    margin: 0 5px;
+    background: #fff;
+    width: 30px;
+    height: 3px;
+    list-style: none;
+    border-radius: 20px;
+    opacity: 0.5;
+}
+
+#mmv-swiper_namespace .carousel-list {
+    display: flex;
+    position: relative;
+}
+
+#mmv-swiper_namespace .arrow-left,
+#mmv-swiper_namespace .arrow-right {
+    font-family: element-icons;
+    font-style: normal;
+}
+
+#mmv-swiper_namespace .arrow-right:before {
+    content: "\e6e0";
+}
+
+#mmv-swiper_namespace .carousel-list img {
+    width: 100%;
+    flex-shrink: 0;
+}
+
+#mmv-swiper_namespace .carousel-list div {
+    width: 100%;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+#mmv-swiper_namespace .arrow-left:before {
+    content: "\e6de";
+}
+
+#mmv-swiper_namespace .carousel-arrow {
+    border: none;
+    outline: 0;
+    padding: 0;
+    margin: 0;
+    height: 36px;
+    width: 36px;
+    cursor: pointer;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+    border-radius: 50%;
+    background-color: rgba(31, 45, 61, 0.11);
+    color: #fff;
+    position: absolute;
+    top: 50%;
+    z-index: 10;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    text-align: center;
+    font-size: 12px;
+}
+
+#mmv-swiper_namespace .carousel-arrow-left {
+    left: 15px;
+}
+
+#mmv-swiper_namespace .carousel-arrow-right {
+    right: 15px;
+}

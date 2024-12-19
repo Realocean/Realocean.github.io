@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>轨迹</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+    <script src="//api.map.baidu.com/api?v=2.0&ak=lOg1cACjgBWi6hmjj9L3KR4sATnuzfk3"></script>
+    <style>
+        body, html, #app, #map {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            font-family: "微软雅黑";
+        }
+
+        .info {
+            z-index: 999;
+            width: auto;
+            min-width: 22rem;
+            padding: .75rem 1.25rem;
+            margin-left: 1.25rem;
+            position: fixed;
+            top: 1rem;
+            background-color: #fff;
+            border-radius: .25rem;
+            font-size: 14px;
+            color: #666;
+            box-shadow: 0 2px 6px 0 rgba(27, 142, 236, 0.5);
+        }
+
+        #container {
+            width: 100%;
+            height: 100vh;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        /* 轨迹*/
+        .map-track {
+            position: absolute;
+            right: 0;
+            top: 40px;
+            width: 560px;
+            box-sizing: border-box;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.80);
+            box-shadow: 1px 1px 5px 2px #e4edff;
+        }
+
+        .track-title {
+            font-weight: 500;
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .track-main {
+            border: 1px solid #dbe2ec;
+            margin-bottom: 12px;
+        }
+
+        .th, .td {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 40px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .th {
+            background: #f4f7fd;
+            border-bottom: 1px solid #dbe2ec;
+        }
+
+        .th span, .td span {
+            width: 100px;
+        }
+
+        .td {
+            background: #fff;
+        }
+
+        .margin-bottom {
+            margin-bottom: 12px;
+        }
+
+        .track-step {
+            display: flex;
+            align-items: center;
+
+        }
+
+        .step-slider {
+            flex: 1;
+        }
+
+        .step-label {
+            /*text-align: center;*/
+            width: 70px;
+        }
+
+        .track-step .layui-slider {
+            height: 8px;
+            background: #dbe2ec;
+            margin-right: 15px;
+        }
+
+        .track-step .layui-slider-wrap {
+            top: -14px;
+        }
+
+        .track-step .layui-slider-wrap-btn {
+            background: #3FACB3;
+        }
+
+        .timing {
+            display: flex;
+            /*justify-content: center;*/
+        }
+
+        .timing-inner {
+            display: flex;
+            align-items: center;
+        }
+
+        .timing-input {
+            height: 30px;
+            line-height: 1.3;
+            line-height: 30px \9;
+            border-width: 1px;
+            border-style: solid;
+            background-color: #fff;
+            border-radius: 2px;
+            border-color: #e6e6e6;
+            box-sizing: border-box;
+            padding: 0 5px;
+            margin: 0 10px;
+        }
+
+        .stretch {
+            box-sizing: border-box;
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 10;
+        }
+
+        .stretch-img {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .fade-enter-active, .fade-leave-active {
+            transition: all .5s;
+        }
+
+        .fade-enter, .fade-leave-to {
+            opacity: 0;
+            transform: translateX(560px);
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="map-container">
+        <v-map ref="map" :map-track="1" :config="config" @send="run"></v-map>
+        <!--  轨迹-->
+        <div class="stretch" @click="isStretch =!isStretch">
+            <img class="stretch-img" src="../../statics/images/map/stretch.png" alt="">
+        </div>
+        <transition name="fade">
+            <div class="map-track" v-show="isStretch">
+                <p class="track-title">轨迹详情</p>
+                <div>
+                    <ul class="track-main">
+                        <li class="th">
+                            <span>司机姓名</span>
+                            <span>车牌号码</span>
+                            <span>最大时速</span>
+                            <span>平均时速</span>
+                           <!-- <span>行驶里程</span>-->
+                            <span>总里程</span>
+                            <span>行驶耗时</span>
+                        </li>
+                        <li class="td">
+                            <span>{{trackDetails.customerName}}</span>
+                            <span>{{trackDetails.carNo}}</span>
+                            <span>91km/h</span>
+                            <span>26km/h</span>
+                            <span>{{trackDetails.useMileage}}</span>
+                            <span>136分钟</span>
+                        </li>
+                    </ul>
+
+                    <div class="track-step margin-bottom">
+                        <span class="step-label">回放速度</span>
+                        <div class="step-slider" id="slideTest1"></div>
+                        <span class="step-label">3600km/h</span>
+                    </div>
+                    <div class="timing margin-bottom">
+                        <p class="timing-inner">
+                            <span>开始时间:</span>
+                            <input type="text" class="timing-input" id="trackStartTime" placeholder="请选择开始时间">
+                        </p>
+                        <p class="timing-inner">
+                            <span>结束时间:</span>
+                            <input type="text" class="timing-input" id="trackEndTime" placeholder="请选择结束时间">
+                        </p>
+                    </div>
+                    <div class="text-center margin-bottom">
+                        <button class="layui-btn search-btn" @click="serch">搜索</button>
+                        <button class="layui-btn search-btn" v-if="isLushu==2" @click="playback">暂停回放</button>
+                        <button class="layui-btn search-btn" v-if="isLushu==1" @click="pause">暂停回放</button>
+                        <button class="layui-btn layui-btn-primary" @click="temp">关闭轨迹</button>
+                    </div>
+                </div>
+            </div>
+        </transition>
+    </div>
+
+</div>
+</body>
+<script src="../../statics/common/components/Map.js"></script>
+<script src="../../statics/js/modules/car/track.js"></script>
+<script src="../../statics/js/modules/car/TrackAnimation.min.js"></script>
+<script type="text/javascript" src="../../statics/common/LuShu/LuShu_min.js"></script>
+
+</html>

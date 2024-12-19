@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="app">
+        <demo title="Bilibili干杯！~"></demo>
+        <demo2 memo="你个变态绅士~"></demo2>
+    </div>
+    <script>
+        // 全局注册的component
+        // 全局注册的component需要写在new Vue()之前，在实例化之前注册
+        Vue.component('demo', {
+            // 用于组件外界传值进来，比如title
+            props: ['title'],
+            // data必须是一个函数，而非对象，因此每个component实例都能获得一个独立可维护的data对象，
+            // component组件是可重复使用的，上面这个操作阻止了数据互串
+            data(){
+                return {
+                    id: '2233',
+                    name: '2233娘'
+                }
+            },
+            methods: {
+                getDemo() {
+                    alert('你获得一个22娘')
+                }
+            },
+            // template中只允许最外层有一个dom层
+            template: `
+                <div>
+                    <h1>{{title}}</h1>
+                    <span @click="getDemo">你获得一个{{name}},id是{{id}}</span>
+                </div>
+            `
+        });
+        var vm = new Vue({
+            el: '#app',
+            // 局部注册和全局差不多
+            components: {
+                'demo2': {
+                    props: ['memo'],
+                    data() {
+                        return {
+                            id: '123',
+                            name: 'acfun'
+                        }
+                    },
+                    template: `
+                        <div>
+                            <span :id="id">你竟然是个{{name}}! {{memo}}</span>
+                        </div>
+                    `
+                }
+            }
+        });
+    </script>
+</body>
+</html>

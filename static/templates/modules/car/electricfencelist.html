@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>电子围栏</title>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/new_css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/viewer.min.css">
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css">
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+    <style>
+        .layui-table-cell {
+            padding:0 5px;
+            height:inherit;
+            overflow:visible;
+            text-overflow:inherit;
+            white-space:normal;
+            word-break: break-all;
+        }
+        .layui-form-label{
+            min-width:120px !important;
+        }
+    </style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <!-- <div class="list-search-title-box">
+        <form class="layui-form">
+        <section class="jxc-section">
+        </section>
+        <div style="display: flex;align-items: center;justify-content: center;">
+            <div class="layui-form-item layui-row">
+                <div class="list-search-form-button">
+                </div>
+            </div>
+        </div>
+        </form>
+    </div> -->
+    <div class="mvvm-table">
+        <div class="list-search-title-box">
+            <form class="layui-form" style="box-shadow: 0 0 20px #eee;padding-right: 15px;">
+                <section class="jxc-section" style="display: flex;align-items: flex-start;white-space: nowrap;">
+                    <div class="card layui-row" style="flex: 1">
+                        <div class="layui-form-item ">
+                            <div class="layui-form-item ">
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">电子围栏名称</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal" v-model="q.electricName"  autocomplete="off" placeholder="请输入范围名称"/>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">车辆归属</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal" style="cursor:pointer;"
+                                               @click="deptTree" v-model="q.deptName" readonly
+                                               placeholder="请选择车辆归属"/>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">围栏状态</label>
+                                    <div class="layui-input-inline">
+                                        <select name="isAvailable" lay-filter="isAvailable" v-model="q.isAvailable">
+                                            <option value="">全部</option>
+                                            <option value="1">启用</option>
+                                            <option value="0">禁用</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <section v-show="isFilter">
+                                    <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                        <label class="layui-form-label">报警类型</label>
+                                        <div class="layui-input-inline">
+                                            <select name="warningType" lay-filter="warningType" v-model="q.warningType">
+                                                <option value="">全部</option>
+                                                <option value="1">驶入报警</option>
+                                                <option value="2">驶出报警</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline layui-col-md9 layui-col-sm6 layui-col-xs12">
+                                        <label class="layui-form-label">创建时间</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" id="createTimeStart" class="layui-input searchVal" v-model="q.createTime" autocomplete="off" placeholder="开始时间-结束时间" readonly/>
+                                        </div>
+                                    </div>
+                                </section>
+                                <div class="layui-inline layui-col-md3 layui-col-sm12 layui-col-xs12">
+                                    <label class="layui-form-label"> </label>
+                                    <div style="display: flex;align-items: center;">
+                                        <a class="layui-btn search-btn" @click="query">查询</a>
+                                        <a class="layui-btn reset-btn" @click="reset">重置</a>
+                                        <div class="df-color"  @click="bindFilter" style="margin-left: 10px;cursor: pointer;user-select: none;">
+                                            <span >高级筛选</span>
+                                            <i class="icon layui-icon-extend layui-extend-shaixuan"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </form>
+        </div>
+        <div class="list-search-title-box ground-search-btn">
+            <form class="layui-form">
+                <div style="display:flex;width: 100%;">
+                    <div class="layui-form-item layui-row" style="width: 100%;">
+                        <div class="list-search-form-button" style="width: 100%;">
+                            <a class="layui-btn btn-primary" @click="add" v-m-perm="['car:electricfence:save']">新增电子围栏</a>
+                            <a class="layui-btn btn-warning" @click="exports" v-m-perm="['car:electricfence:export']">导出</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="list-table-content-box">
+            <table class="layui-hide" id="grid" lay-filter="grid"></table>
+        </div>
+    </div>
+</div>
+
+<!--操作-->
+<script type="text/html" id="barTpl">
+   <!-- <#if shiro.hasPermission("car:electricfence:info")>
+    <a class="layui-grid-btn-xs" lay-event="view">查看</a>
+    </#if>
+    <#if shiro.hasPermission("car:electricfence:update")>
+    {{#if(d.isAvailable===0){}}
+    <a class="layui-grid-btn-xs" lay-event="isAvailable">启用</a>
+    {{#}else if((d.isAvailable===1)){}}
+    <a class="layui-grid-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-grid-btn-xs" lay-event="bindingCar">绑定车辆</a>
+    <a class="layui-grid-btn-xs" lay-event="available">禁用</a>
+    {{#}}}
+    </#if>-->
+
+<!--   <#if shiro.hasPermission("car:electricfence:info")>-->
+     <a class="layui-grid-btn-xs option-btn-margin" lay-event="view" v-m-perm="['car:electricfence:info']">查看</a>
+<!--   </#if>-->
+<!--   <#if shiro.hasPermission("car:electricfence:binding")>-->
+     <a class="layui-grid-btn-xs option-btn-margin" lay-event="bindingCar" v-m-perm="['car:electricfence:binding']">绑定车辆</a>
+<!--   </#if>-->
+
+   <!--可用状态(0 未启用 1 已启用)-->
+   {{#if(d.isAvailable===0){}}
+<!--       <#if shiro.hasPermission("car:electricfence:available")>-->
+            <a class="layui-grid-btn-xs option-btn-margin" lay-event="isAvailable" v-m-perm="['car:electricfence:available']">启用</a>
+<!--       </#if>-->
+<!--       <#if shiro.hasPermission("car:electricfence:update")>-->
+             <a class="layui-grid-btn-xs option-btn-margin" lay-event="edit" v-m-perm="['car:electricfence:update']">编辑</a>
+<!--       </#if>-->
+       <!--<#if shiro.hasPermission("car:electricfence:binding")>
+            <a class="layui-grid-btn-xs option-btn-margin" lay-event="bindingCar">绑定车辆</a>
+       </#if>-->
+<!--       <#if shiro.hasPermission("car:electricfence:delete")>-->
+             <a class="layui-grid-btn-xs option-btn-margin" lay-event="del" v-m-perm="['car:electricfence:delete']">删除</a>
+<!--       </#if>-->
+   {{#}else if((d.isAvailable===1)){}}
+<!--       <#if shiro.hasPermission("car:electricfence:available")>-->
+         <a class="layui-grid-btn-xs option-btn-margin" lay-event="available" v-m-perm="['car:electricfence:available']">禁用</a>
+<!--       </#if>-->
+   {{#}}}
+
+</script>
+<script src="../../statics/js/modules/car/electricfencelist.js?_${.now?long}"></script>
+</body>
+</html>

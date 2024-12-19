@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>设备信息表</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common-new.css">
+<style>
+    .btn{
+        border-radius: 8px;
+        padding:8px 16px;
+        border:1px solid #eee;
+        display:inline-block;
+        margin-right:12px;
+        cursor: pointer;
+    }
+    .btn-active{
+        background:#3facb3;
+        color:#fff;
+    }
+    </style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <div class="details-tab-content">
+        <div class="details-tab-content-box display">
+
+            <div class="layui-tab">
+                <ul class="layui-tab-title">
+                    <li :class="0==index?'layui-this':''" @click="onSelectBtn(item)"
+                        v-for="(item, index) in btnList" :key="index">{{ item.name }}
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+<!--    <div class="btn-group">-->
+<!--        <div v-for="item in btnList" :key="item.id" class="btn" :class="item.id === btnActive ? 'btn-active' : ''" @click="onSelectBtn(item)">{{item.name}}</div>-->
+<!--    </div>-->
+    <!-- 查看表单 -->
+    <form v-show="btnActive ===0" class="layui-form ren-form" style="margin-bottom: 60px;">
+        <div class="details-conteiner" >
+            <div class="details-content-box">
+                <div class="details-layui-row">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">设备编号:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal"
+                                       :value="deviceInformation.deviceNo || '--'" disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">绑定车辆:</label>
+
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal"
+                                       :value="deviceInformation.carPlateNo || '--'" disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">SIM卡号:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal"
+                                       :value="deviceInformation.simCard || '--' " disabled/>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">设备供应商:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal"
+                                       :value="deviceInformation.equipmentSupplierName || '--' " disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">SIM卡到期时间:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal"
+                                       :value="deviceInformation.simExpirationTime || '--' " disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">设备型号:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal"
+                                       :value="deviceInformation.deviceTypeNo || '--' " disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+
+                            <label class="layui-form-label">设备到期时间:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" readonly
+                                       id="deviceExpirationTime" v-model="deviceInformation.deviceExpirationTime || '--'" disabled/>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">设备类型:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal"
+                                :value="deviceInformation.deviceKindStr || '--' " disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">购买时间:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" v-model="deviceInformation.buyingTime || '--'" disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">购买批次:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" v-model="deviceInformation.deviceBatch || '--'" disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">备注信息:</label>
+                            <div class="layui-input-inline">
+                                <span>{{deviceInformation.remark || '--'}}</span>
+<!--                                <input type="text" class="layui-input searchVal" v-model="deviceInformation.remark || '&#45;&#45;'"-->
+<!--                                       disabled/>-->
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">安装位置:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" v-model="deviceInformation.installationPosition || '--'"
+                                       disabled/>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div v-show="btnActive ===1" class="list-table-content-box">
+        <table class="layui-hide" id="grid" lay-filter="grid"></table>
+    </div>
+    <div class="float-btn-group bottom-bar">
+        <a class="layui-btn reset-btn" id="closePage">关闭</a>
+    </div>
+</div>
+
+
+<script src="../../statics/js/modules/deviceinformation/deviceinformationview.js?_${.now?long}"></script>
+</body>
+</html>

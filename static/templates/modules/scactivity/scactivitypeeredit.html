@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>同行活动表</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+    <link rel="stylesheet" type="text/css" href="../../statics/css/mmv-ui/mmv-peer-component.css">
+    <!-- 用法 -->
+    <!-- <div id="rrapp" v-cloak> -->
+    <!-- <mmv-peer-component :peerdata="peerdata"></mmv-peer-component> -->
+    <!-- </div> -->
+
+    <script type="text/x-template" id="mmv-peer-component">
+        <div id="mmv-peer-component_namespace">
+            <div class="peer-component">
+                <div class="app-header">
+                    <el-image
+                            :src="coverImgFilter(peerdata.detailImage, 'detailImage')"
+                            fit="contain"
+                            class="bar"
+                    ></el-image>
+                    <div class="card">
+                        <div class="left">
+                            <p class="title">{{ peerdata.peerTitle | appData('peerTitle') }}</p>
+                            <div class="time">
+                                <el-image :src="time" fit="cover" class="time-bg"></el-image>
+                                <div class="text">
+                                    活动时间 : {{ peerdata.timeStart | appData_time('timeStart') }}
+                                    至
+                                    {{ peerdata.timeEnd | appData_time('timeEnd') }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="right">
+                            <el-image :src="card_right" fit="cover" class="card-right"></el-image>
+                            <div class="content">
+                                <p class="last-name">距报名结束仅剩</p>
+                                <div class="last-time">
+                                    <span>1天</span>
+                                    <span class="last-time-item">09</span>
+                                    <span>:</span>
+                                    <span class="last-time-item">04</span>
+                                    <span>:</span>
+                                    <span class="last-time-item">59</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="app-content">
+                    <div class="active">
+                        <div class="app-content-title">活动奖品</div>
+                        <ul class="prize_card">
+                            <li
+                                    :class="{
+                    prize_list_item: true,
+                    clear_margin: (index + 1) % 3 === 0,
+                    }"
+                                    v-for="(item, index) in peerdata.activitySeckillList"
+                                    :key="index"
+                            >
+                                <el-image :src="prize" fit="cover" class="0item-img"></el-image>
+                                <p class="item-img-text">{{ item.peerNumber }}人组队成功</p>
+                                <el-image
+                                        :src="getImgUrl(item.peerUrl)"
+                                        fit="scale-down"
+                                        class="prize_bg"
+                                ></el-image>
+                                <!--
+                                                            <el-image
+                                                                    v-if="item.peerUrl != '' && !item.peerUrl"
+                                                                    :src="getImgUrl(item.peerUrl)"
+                                                                    fit="scale-down"
+                                                                    class="prize_bg"
+                                                            ></el-image>
+                                                            <div v-else class="prize_bg">
+                                                                <el-image :src="yhqImg" fit="scale-down"></el-image>
+                                                            </div>+
+
+                                -->
+                                <div class="prize_name">
+                                    <p>{{ item.peerName }}</p>
+                                    <p>X {{ item.peerStock }}</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="grounp">
+                        <div class="app-content-title">组队成员</div>
+                        <div class="active_card">
+                            <el-image :src="active" fit="cover" class="item-img"></el-image>
+                            <p class="item-img-text">五人团 *还差 2 人获得飞利浦剃须刀</p>
+                            <ul class="active_card_content">
+                                <li
+                                        :class="{
+                        active_list_item: true,
+                        clear_margin: (index + 1) % 5 === 0,
+                    }"
+                                        v-for="(item, index) in prizList"
+                                        :key="index"
+                                >
+                                    <el-image
+                                            :src="item.url"
+                                            fit="cover"
+                                            class="active-item-img"
+                                    ></el-image>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="prize">
+                        <div class="app-content-title">获得奖品</div>
+                        <div class="prize-content">
+                            <el-image :src="kong" fit="cover" class="prize-item-img"></el-image>
+                            <span>暂无奖品</span>
+                        </div>
+                    </div>
+                    <div class="address">
+                        <div class="app-content-title">活动地点</div>
+                        <div
+                                class="address-content"
+                                v-for="(item, index) in peerdata.activityUnit"
+                                :key="index"
+                        >
+                            <p class="name">{{ item.applicableUnit }}</p>
+                            <p class="address">{{ item.unitAddress }}</p>
+                            <el-row type="flex" class="row-bg" justify="space-between">
+                                <el-col :span="6" class="commodity-list">
+                                    <p class="commodity-list-item-1">1.15km</p>
+                                    <p class="commodity-list-item-2">距离</p>
+                                </el-col>
+                                <el-col :span="6">
+                                    <p class="commodity-list-item-1">
+                                        {{ item.serviceConsultant }}人
+                                    </p>
+                                    <p class="commodity-list-item-2">服务顾问</p>
+                                </el-col>
+                                <el-col :span="6" class="vertical-center">
+                                    <el-image
+                                            :src="phone"
+                                            fit="cover"
+                                            class="vertical-center-item-1"
+                                    ></el-image>
+                                    <el-image
+                                            :src="address"
+                                            fit="cover"
+                                            class="vertical-center-item-2"
+                                    ></el-image>
+                                </el-col>
+                            </el-row>
+                        </div>
+                    </div>
+                    <div class="introduce">
+                        <div class="app-content-title">活动介绍</div>
+                        <div v-html="peerdata.peerContent" class="card_introduce"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+    <!-- 加载js文件-->
+    <!-- 引入element-ui -->
+    <script src="../../statics/js/element-ui/index.min.js"></script>
+    <script>
+        $(function () {
+            function MmvFilterUrl(url) {
+                if (url){
+                    return importURL + url;
+                }else {
+                    return baseURL + 'statics/images/mmv-ui/img/vip.png';
+                }
+            }
+            let defaultData = {
+                peerTitle: '一键加油 | 立减20元',
+                timeStart: '2021-12-31',
+                timeEnd: '2022-12-31',
+                inventedEnrollNumber: 100,
+                activeAddress: '深圳汇天源科技园店',
+                coverImage: '../../statics/images/mmv-ui/peer/header.png',
+                detailImage: '../../statics/images/mmv-ui/peer/header.png',
+                activityUnit: [],
+            }
+            Vue.component("peer-component", {
+                template: "#mmv-peer-component",
+                filters: {
+                    appData(val, key) {
+                        if (val && val != '') {
+                            return val
+                        } else {
+                            return defaultData[key]
+                        }
+                    },
+                    appData_time(val, key) {
+                        if (val && val != '') {
+                            let date = new Date(val)
+                            let year = date.getFullYear() // 获取当前年份(2位)
+                            let month = date.getMonth() + 1 // 获取当前月份(0-11,0代表1月)
+                            let day = date.getDate() // 获取当前日(1-31)
+                            //修改月份格式
+                            if (month >= 1 && month <= 9) {
+                                month = '0' + month
+                            }
+                            //修改日期格式
+                            if (day >= 0 && day <= 9) {
+                                day = '0' + day
+                            }
+                            return year + '-' + month + '-' + day
+                        } else {
+                            return defaultData[key]
+                        }
+                    },
+                },
+                props: {
+                    peerdata: {
+                        type: Object,
+                        default() {
+                            return {
+                                peerTitle: '活动名称', // 活动名称
+                                timeStart: '', // 活动开始时间
+                                timeEnd: '', // 活动结束时间
+                                inventedJoinNumber: null, // 虚拟报名人数量
+                                detailImage: '', // 活动上方的头图
+                                peerContent: '', // 活动介绍
+                                // 添加同行活动商品
+                                activitySeckillList: [
+                                    {
+                                        peerNumber: 0, // 组队人数
+                                        peerUrl: '', // 奖品封面
+                                        peerName: '奖品名称', // 奖品名称
+                                        peerStock: 0,  // 奖品数量
+                                    },
+                                ],
+                                // 活动地址
+                                activityUnit: [
+                                    {
+                                        // applicableUnit: '地点名称', // 地点名称
+                                        // unitAddress: '详细地址', // 详细地址
+                                        serviceConsultant: 0, // 服务顾问人数
+                                        "applicableUnitNo": "b163e907c9bf4d21b07106ee3293cd4d",
+                                        "applicableUnit": "西安小寨店",
+                                        "unitPhone": "13571744789",
+                                        "unitLon": 108.959338,
+                                        "unitLat": 34.260003,
+                                        "unitAddress": "陕西省西安市碑林区咸宁学巷36号"
+                                    },
+                                ],
+                            };
+                        },
+                    },
+                },
+                data() {
+                    return {
+                        header: '../../statics/images/mmv-ui/peer/header.png',
+                        bar: '../../statics/images/mmv-ui/peer/bar.png',
+                        time: '../../statics/images/mmv-ui/peer/time.png',
+                        card_right: '../../statics/images/mmv-ui/peer/card_right.png',
+                        prize: '../../statics/images/mmv-ui/peer/prize.png',
+                        prize_bg: '../../statics/images/mmv-ui/peer/prize_bg.png',
+                        active: '../../statics/images/mmv-ui/peer/active.png',
+                        av: '../../statics/images/mmv-ui/peer/av.png',
+                        add: '../../statics/images/mmv-ui/peer/add.png',
+                        kong: '../../statics/images/mmv-ui/peer/kong.png',
+                        address: '../../statics/images/mmv-ui/peer/address.png',
+                        phone: '../../statics/images/mmv-ui/peer/phone.png',
+                        detailImg: '../../statics/images/mmv-ui/peer/header.png',
+                        yhqImg: '../../statics/images/mmv-ui/img/vip.png',
+                        prizList: [
+                            { url: '../../statics/images/mmv-ui/peer/av.png' },
+                            { url: '../../statics/images/mmv-ui/peer/add.png' },
+                        ],
+                    }
+                },
+                mounted() {
+                    console.log('同行组件渲染成功！')
+                },
+                methods: {
+                    getImgUrl: MmvFilterUrl,
+                    coverImgFilter(val, key) {
+                        if (val && val != '') {
+                            return this.getImgUrl(val)
+                        } else {
+                            return defaultData[key]
+                        }
+                    },
+                },
+            })
+        })
+    </script>
+    <style>
+        .layui-table-cell {
+            padding:0 5px;
+            height:inherit;
+            overflow:visible;
+            text-overflow:inherit;
+            white-space:normal;
+            word-break: break-all;
+        }
+
+        .layui-table img {
+            max-width: 200px !important;
+            max-height: 200px !important;
+        }
+    </style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <!-- 新增表单 -->
+    <form class="layui-form ren-form" style="margin-bottom: 60px;">
+        <div class="form-content-session-box">
+            <div class="card">
+                <el-row :gutter="15">
+                    <el-col :span="12">
+                       <div>
+                           <peer-component :peerdata="scActivityPeer"></peer-component>
+                       </div>
+                    </el-col>
+                    <el-col :span="12">
+                        <div class="form-content-box">
+                            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                                新增同行活动
+                            </div>
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <label class="layui-form-label"><span style="color:red">*</span>活动名称</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_peerTitle" maxlength="50"
+                                               v-model="scActivityPeer.peerTitle" autocomplete="off" placeholder="活动名称"
+                                               class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <label class="layui-form-label"><span style="color:red">*</span>活动开始时间</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_timeStart" readonly id="scActivityPeertimeStart"
+                                               v-model="scActivityPeer.timeStart" autocomplete="off" placeholder="请选择活动开始时间"
+                                               class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <label class="layui-form-label">活动结束时间</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_timeEnd" readonly id="scActivityPeertimeEnd"
+                                               v-model="scActivityPeer.timeEnd" autocomplete="off" placeholder="请选择活动结束时间"
+                                               class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <label class="layui-form-label"><span style="color:red">*</span>虚拟报名人数量</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_inventedJoinNumber"
+                                               oninput="editSimple(this, 'numInteger', '9999999')"
+                                               v-model="scActivityPeer.inventedJoinNumber" autocomplete="off" placeholder="请输入虚拟报名人数量"
+                                               class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <label class="layui-form-label">邀请设置</label>
+                                    <div class="layui-input-inline">
+                                        <input type="radio" lay-filter="invite" v-model="scActivityPeer.invite"
+                                               name="invite" value="1" lay-skin="primary" title="无限制">
+                                        <input type="radio" lay-filter="invite" v-model="scActivityPeer.invite"
+                                               name="invite" value="2" lay-skin="primary" title="仅能邀请新客">
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <label class="layui-form-label"><span style="color:red">*</span>活动门店/部门</label>
+                                    <div class="layui-input-inline">
+                                        <div id="selectApplicableUnit"></div>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <label class="layui-form-label">分享标题</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_shareTitle"
+                                               v-model="scActivityPeer.shareTitle" autocomplete="off" placeholder="请输入分享标题"
+                                               class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <label class="layui-form-label">分享描述</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_shareDesc" v-model="scActivityPeer.shareDesc"
+                                               autocomplete="off" placeholder="请输入分享描述" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                                添加活动奖品
+                                <a class="layui-btn search-btn" @click="addActivitySeckillobj" style="margin-left: 20px">+添加奖品</a>
+                                <span style="color: #606266;marginLeft: 15px;font-size: 10px;">最多支持设置5级阶梯礼包,组队人数建议2～10人，最少2人以上</span>
+                            </div>
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <div class="table">
+                                        <table class="layui-hide" id="seckillGoodsLst" lay-filter="seckillGoodsLst"></table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                                活动信息
+                            </div>
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <label class="layui-form-label"><span style="color:red">*</span>活动封面</label>
+                                    <div class="layui-input-inline" id="coverImageLst"></div>
+                                </div>
+                            </div>
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <label class="layui-form-label"><span style="color:red">*</span>详情封面</label>
+                                    <div class="layui-input-inline" id="detailsImageLst"></div>
+                                </div>
+                            </div>
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <label class="layui-form-label"><span style="color:red">*</span>分享封面</label>
+                                    <div class="layui-input-inline" id="shareImageLst"></div>
+                                </div>
+                            </div>
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <label class="layui-form-label"><span style="color:red">*</span>活动描述</label>
+                                    <div class="layui-input-inline" id="activitycontent">
+                                        <p></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </el-col>
+                </el-row>
+            </div>
+        </div>
+
+        <div class="float-btn-group bottom-bar">
+            <a class="layui-btn reset-btn" id="closePage">取消</a>
+            <a class="layui-btn search-btn" lay-submit lay-filter="save" id="save">保存</a>
+        </div>
+    </form>
+
+
+</div>
+
+<script type="text/html" id="barTpl">
+    <a class="layui-grid-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-grid-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script type="text/html" id="imgTpl">
+    <div style="width: 200px;height: 200px">
+        {{#if(d.peerType == 1) {}}
+            <img style="width: 99%;height: 99%;" src="../../statics/images/mmv-ui/img/vip.png">
+        {{#} }}
+        {{#if(d.peerType == 2) {}}
+            <img style="width: 99%;height: 99%;" :src="imageURL+d.peerUrl">
+        {{#} }}
+    </div>
+</script>
+<script src="../../statics/js/modules/element-ui/index.js"></script>
+<script src="../../statics/js/modules/element-ui/wangEditor.min.js"></script>
+<script src="../../statics/js/modules/scactivity/scactivitypeeredit.js?_${.now?long}"></script>
+</body>
+</html>

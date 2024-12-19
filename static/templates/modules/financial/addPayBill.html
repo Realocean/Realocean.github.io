@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>新增应付</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <form v-show="showForm" class="layui-form ren-form" id="editForm">
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                {{title}}
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+
+                  <!--      <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color: red">*</span>付款类型:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" lay-verify="required"
+                                       v-model="payment.type" placeholder="请输入付款类型" />
+                            </div>
+                        </div>-->
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label layui-form-label-txt"><span style="color: red">*</span>付款类型:</label>
+  <!--                          <div class="layui-input-inline layui-input-inline-change">
+                                <select lay-filter="paymentType" v-model="payment.typeVal" lay-verify="validate_paymentType">
+                                    <option v-for="(item,index) in costTypeList" :value="item.id">{{item.costName}}</option>
+                                </select>
+                            </div>-->
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="payment.type"
+                                        placeholder="请输入付款类型"/>
+                            </div>
+                        </div>
+                        <!--<div class="layui-inline layui-col-md2 layui-col-sm2 layui-col-xs2">
+                            <div style="display: flex;justify-content: space-between;">
+                                <div style="flex: 1">
+                                    <a class="layui-btn search-btn" @click="jumpToFeeTypePage">新增</a>
+                                </div>
+                            </div>
+                        </div>-->
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">付款状态:</label>
+                            <div class="layui-input-inline" style="margin-top: 5px;">
+                                <span>{{status}}</span>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color: red">*</span>车牌号:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" :disabled="disabled" @click="selectCar"
+                                       lay-verify="required" v-model="payment.carNo" placeholder="选择车牌号" />
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color: red">*</span>车架号:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" :disabled="disabled" @click="selectCar"
+                                       lay-verify="required" v-model="payment.vinNo" placeholder="选择车架号" />
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label">车辆状态:</label>
+                            <div class="layui-input-inline" style="width: 25%">
+                                <input type="text" class="layui-input searchVal" v-model="payment.carStatusShow"
+                                       placeholder="自动获取" disabled />
+                            </div>
+
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>付款方</label>
+                            <div class="layui-input-inline">
+                                <select lay-search="" lay-verify="validate_lessorId" name="lessor"
+                                        lay-filter="lessor" v-model="payment.payerId">
+                                    <option value="">请选择付款方</option>
+                                    <option v-for="(item,index) in deptList" :value="item.deptId">{{item.name}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color: red">*</span>收款方:</label>
+                            <div class="layui-input-inline" style="margin-top: -5px;">
+                                <input name="radioCustomer" lay-filter="radioCustomer" type="radio" value=5
+                                       title="客户" v-model="payment.customerType">
+                                <input name="radioCustomer" lay-filter="radioCustomer" type="radio" value=6
+                                       title="渠道商" v-model="payment.customerType">
+                                <input name="radioCustomer" lay-filter="radioCustomer" type="radio" value=7
+                                       title="供应商" v-model="payment.customerType">
+                                <div style="margin-top: 15px;">
+                                    <div v-show="qudaoShow">
+                                        <select id="customer" lay-verify="required" name="customer"
+                                                lay-filter="customer" v-model="payment.customerId">
+                                            <option value="">请选择收款方</option>
+                                        </select>
+                                    </div>
+                                    <div v-show="supplierShow">
+                                        <select id="supplier" lay-verify="required" name="supplier"
+                                                lay-filter="supplier" v-model="payment.customerId">
+                                            <option value="">请选择供应商</option>
+                                        </select>
+                                    </div>
+                                    <div v-show="kehuShow">
+                                        <input id="carNo" @click="selectCustomer" type="text"
+                                               v-model="customer.customerName" class="layui-input searchVal"
+                                               placeholder="请选择客户信息" readonly />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color: red">*</span>{{dateLabel}}:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" lay-verify="required" id="paymentTime"
+                                       v-model="payment.paymentTime" placeholder="请选择日期" readonly>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span
+                                    style="color: red">*</span>{{amountLabel}}:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" lay-verify="required|number"
+                                       v-model="payment.paymentAmount" placeholder="请输入金额" />
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">备注:</label>
+                            <div class="layui-input-inline">
+                                    <textarea placeholder="如果需要备注，请记录备注信息" class="layui-textarea" name="desc"
+                                              v-model="payment.note"></textarea>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">附件:</label>
+                            <div class="layui-input-inline">
+                                <div class="layui-input-inline-upload">
+                                    <div :id="deliveryFileLstId" class="layui-input-inline-upload-show box-rect"
+                                         v-for="(item,index) in deliveryFileLst">
+                                        <div v-show="item.typeFile == 1" class="layui-input-inline-upload-button">
+                                            <img :src="imageURL + item.url" class="view-img">
+                                        </div>
+                                        <div v-show="item.typeFile != 1" class="layui-input-inline-upload-button">
+                                            {{item.nameAccessory}}
+                                        </div>
+                                        <div class="layui-input-inline-upload-show-delete btn-event"
+                                             @click="delDeliveryFile(item.id)">
+                                            删除
+                                        </div>
+                                    </div>
+                                    <div class="layui-input-inline-upload-button box-rect box-rect-event"
+                                         id="addDeliveryFile">
+                                        <img src="../../statics/images/inline-upload@2x.png">
+                                    </div>
+                                </div>
+                                <div class="layui-input-inline-upload-text" style="padding-bottom: 10px">
+                                    附件说明：附件最大支持50M，
+                                    <br />
+                                    支持格式：PDF、Word、Excel、JPG、PNG 、ZIP、RAR
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="float-btn-group">
+            <a class="layui-btn reset-btn" @click="cancel">取消</a>
+            <a class="layui-btn search-btn" lay-submit lay-filter="saveOrUpdate">保存</a>
+        </div>
+    </form>
+</div>
+
+<script src="../../statics/js/modules/financial/addPayBill.js"></script>
+</body>
+</html>

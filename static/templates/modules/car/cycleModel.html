@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>设置上报周期</title>
+  <meta charset="utf-8">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="Author" content="larry" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+  <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+  <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+  <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+  <link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+  <link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+  <link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+  <script src="../../statics/common/js/pca-code.js"></script>
+  <script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+  <script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+  <script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+  <script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+  <script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+  <script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+  <script type="text/javascript" src="../../statics/js/common.js"></script>
+  <script type="text/javascript" src="../../statics/js/upload.js"></script>
+  <script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+  <link rel="stylesheet" href="../../statics/css/jxcPublicAll.css" media="all">
+  <link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../statics/common/step/steps.css">
+  <link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+  <link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+  <script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+  <script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+  <script src="../../statics/common/layui/autocomplete.js"></script>
+  <script src="../../statics/js/modules/viewer/viewer.min.js"></script>
+  <script src="../../statics/common/print-js/print.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+  <script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+  <script type="text/javascript" src="../../statics/js/searchview.js"></script>
+  <script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+  <!-- 引入组件库 -->
+  <link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+  <link rel="stylesheet" type="text/css" href="../../statics/common/plug/cascader/index.css" />
+  <script type="text/javascript" src="../../statics/common/plug/cascader/index.js"></script>
+  <style>
+    .layui-form-label{
+      width: 60px !important;
+    }
+    .layui-form-item .layui-input-inline{
+      width:calc(100% - 100px);
+    }
+    .layui-form-item{
+      margin-bottom:12px !important;
+    }
+    .time-label{
+      width:120px !important;
+    }
+    .time-input{
+      width:calc(100% - 65px) !important;
+    }
+  </style>
+</head>
+<body class="ren-body">
+  <div id="rrapp" v-cloak>
+    <form class="layui-form">
+        <div class="layui-row">
+            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+              <div class="layui-form-item">
+                <label class="layui-form-label">设备编号:</label>
+                <div class="layui-input-inline" style="margin-top:8px;">
+                    {{detail.deviceNo}}
+                </div>
+              </div>
+            </div>
+            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+              <div class="layui-form-item">
+                <label class="layui-form-label">SIM卡号:</label>
+                <div class="layui-input-inline" style="margin-top:8px;">
+                  {{detail.simCard}}
+                </div>
+              </div>
+            </div>
+            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+              <div class="layui-form-item">
+                <label class="layui-form-label">车牌号:</label>
+                <div class="layui-input-inline" style="margin-top:8px;">
+                  {{detail.carPlateNo}}
+                </div>
+              </div>
+            </div>
+            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+              <div class="layui-form-item">
+                <label class="layui-form-label">车架号:</label>
+                <div class="layui-input-inline" style="margin-top:8px;">
+                  {{detail.vin}}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" style="padding-left:20px;">
+            <div class="layui-form-item">
+              <input type="radio" name="type" lay-filter="type" value="0" title="默认设置  上报次数：1天1次；上报时间：14:00" v-model="q.type">
+            </div>
+            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+              <div class="layui-form-item">
+              <input type="radio" name="type" lay-filter="type" value="1" title="自定义设置" v-model="q.type">
+              <div class="layui-btn-group">
+                <button type="button" class="layui-btn" @click="modeType(0)" :class="{'layui-btn-primary':mode!==0}">定时模式</button>
+                <button type="button" class="layui-btn" @click="modeType(1)" :class="{'layui-btn-primary':mode!==1}">星期模式</button>
+                <button type="button" class="layui-btn" @click="modeType(2)" :class="{'layui-btn-primary':mode!==2}">普通模式</button>
+              </div>
+              </div>
+             </div>
+             <div v-show="mode==0" class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" >
+              <div class="layui-form-item">
+                <label class="layui-form-label">上报次数:</label>
+                <div class="layui-input-inline" style="width:150px;">
+                  <select id="t" lay-filter="t" v-model="q.t">
+                  </select>
+                </div>
+                <div class="layui-input-inline" style="width:150px;">
+                  <select id="c" lay-filter="c" v-model="q.c">
+                  </select>
+                </div>
+                <span>（多天一次，一天多次，天数最大不超过60天，次数最大不超过60次）</span>
+              </div>
+            </div>
+            <div v-show="mode==0" class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" >
+              <div class="layui-form-item">
+                <label class="layui-form-label">上报时间:</label>
+                <div class="layui-input-inline">
+                  <div class="layui-row">
+                    <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-for="item in Number(q.c)">
+                      <label class="layui-form-label time-label">第{{item}}次上报时间:</label>
+                      <div class="layui-input-inline time-input">
+                        <input type="text" class="layui-input" :id="'test'+item" placeholder="HH:mm:ss" :disabled="q.type==='0'">
+                      </div>
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-show="mode==1" class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                <div class="layui-form-item">
+                  <label class="layui-form-label">上报时间:</label>
+                  <div class="layui-input-inline">
+                    <input type="checkbox" lay-filter="updateTime"  value="0" lay-skin="primary" title="星期日" :disabled="q.type==='0'">
+                    <input type="checkbox" lay-filter="updateTime"  value="1"  lay-skin="primary" title="星期一" :disabled="q.type==='0'">
+                    <input type="checkbox" lay-filter="updateTime"  value="2"  lay-skin="primary" title="星期二" :disabled="q.type==='0'">
+                    <input type="checkbox" lay-filter="updateTime"  value="3"  lay-skin="primary" title="星期三" :disabled="q.type==='0'">
+                    <input type="checkbox" lay-filter="updateTime"  value="4"  lay-skin="primary" title="星期四" :disabled="q.type==='0'">
+                    <input type="checkbox" lay-filter="updateTime"  value="5"  lay-skin="primary" title="星期五" :disabled="q.type==='0'">
+                    <input type="checkbox" lay-filter="updateTime"  value="6"  lay-skin="primary" title="星期六" :disabled="q.type==='0'">
+                  </div>
+                </div>
+            </div>
+            <div v-show="mode==1" class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+              <div class="layui-form-item">
+                <label class="layui-form-label">上报时间:</label>
+                <div class="layui-input-inline"  style="width:290px;">
+                  <input type="text" class="layui-input" id="sbtime" placeholder="HH:mm" :disabled="q.type==='0'">
+                </div>
+              </div>
+            </div>
+            <div v-show="mode==2" class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+              <div class="layui-form-item">
+                <label class="layui-form-label">唤醒时间:</label>
+                <div class="layui-input-inline"  style="width:290px;">
+                  <input type="text" class="layui-input" id="hxtime" placeholder="HH:mm" :disabled="q.type==='0'">
+                </div>
+              </div>
+          </div>
+          <div v-show="mode==2" class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+            <div class="layui-form-item">
+              <label class="layui-form-label">上传间隔:</label>
+              <div class="layui-input-inline" style="width:290px;">
+                <select lay-filter="intervalTime" v-model="q.intervalTime" :disabled="q.type==='0'" >
+                  <option value="">请选择上传间隔</option>
+                  <option v-for="item in intervalTime" :key="item.id" :value="item.id">{{item.label}}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" style="margin-bottom:100px;">
+              <div class="layui-form-item">
+                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                  注意：上报次数过于频繁，设备待机时间将缩短。
+                </div>
+                <div class="layui-input-inline">
+                  <input type="checkbox" name="checkbox" lay-skin="primary" title="所有设备同步此自定义设置。(如不勾选则此选项则仅对当前设备生效)" :disabled="q.type==='0'">
+                </div>
+              </div>
+            </div>
+        </div>
+    </form>
+    <div class="float-btn-group" style="width: 30%;left: 35%;">
+      <a class="layui-btn reset-btn"  @click="closePage">取消</a>
+      <a class="layui-btn search-btn" @click="save">保存</a>
+  </div>
+  </div>
+  <script src="../../statics/js/modules/car/cycleModel.js"></script>
+</body>
+</html>

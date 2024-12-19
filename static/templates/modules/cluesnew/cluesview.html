@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>线索表</title>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="Author" content="larry"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+    <script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+    <script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/common.js"></script>
+    <script type="text/javascript" src="../../statics/js/upload.js"></script>
+    <script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+    <link rel="stylesheet" href="../../statics/css/jxcPublicAll.css" media="all">
+    <link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../statics/common/step/steps.css">
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+    <script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+    <script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+    <script src="../../statics/common/layui/autocomplete.js"></script>
+    <script src="../../statics/js/modules/viewer/viewer.min.js"></script>
+    <script src="../../statics/common/print-js/print.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+    <script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/searchview.js"></script>
+    <script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+    <!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+    <!-- 引入组件库 -->
+    <link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/common-new.css">
+
+
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <!-- 查看表单 -->
+    <form class="layui-form ren-form" style="margin-bottom: 60px;">
+        <div class="details-tab-content">
+            <div class="details-tab-content-box display">
+
+                <div class="layui-tab">
+                    <ul class="layui-tab-title">
+                        <li :class="0==index?'layui-this':''" @click="detailsSupTabContentBindtap(index, item)"
+                            v-for="(item, index) in detailsSupTabContentList" :key="index">{{ item }}
+                        </li>
+                    </ul>
+                </div>
+
+<!--                <div class="flex" v-for="(item, index) in detailsTabContentList" :key="index"-->
+<!--                     :class="index === detailsTabContentListActiveIndex ? 'active1A51FF' : ''"-->
+<!--                     @click="detailsTabContentBindtap(index)">-->
+<!--                    {{ item }}-->
+<!--                    <div>-->
+<!--                        <div :class="index === detailsTabContentListActiveIndex ? 'details-tab-content-box-absolute-bottom' : ''"></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+            </div>
+        </div>
+        <div class="details-conteiner">
+            <div class="details-content-box"
+                 v-show="detailsSupTabContentListActiveValue === '基本信息'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        线索详情
+                    </div>
+                </div>
+                <div class="details-layui-row">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">线索客户类型:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal"
+                                       :value="transformTypeByMap(clues.customerType, {1:'个人', 2:'企业'})" disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">客户名称:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" :value="clues.customerName" disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">联系电话:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" :value="clues.phone" disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4"
+                             v-show="clues.customerType == 2">
+                            <label class="layui-form-label">联系人:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" :value="clues.contact" disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">职业:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" :value="clues.occupation" disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">电子邮箱:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" :value="clues.mailBox" disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">微信号:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" :value="clues.wechatNumber" disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">QQ号码:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" :value="clues.qqNumber" disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">租车用途:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" :value="clues.rentCarPurpose"
+                                       disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">常住地:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" :value="clues.usualResidence"
+                                       disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">线索来源:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal"
+                                       :value="transformTypeByMap(clues.cluesSource, {1:'电话营销', 2:'主动来电', 3:'客户介绍', 4:'自己挖掘', 5:'网络搜索', 6:'其他途径'})"
+                                       disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">意向情况:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal"
+                                       :value="transformTypeByMap(clues.intentionStatus, {1:'无意向', 2:'低意向', 3:'中意向', 4:'高意向', 5:'已成单'})"
+                                       disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">线索状态:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal"
+                                       :value="transformTypeByMap(clues.cluesState, {1:'初步接触', 2:'潜在客户', 3:'持续跟进', 4:'忠诚客户', 5:'无效客户', 6:'成交客户'})"
+                                       disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">线索描述:</label>
+                            <div class="layui-input-inline">
+                                <span>{{clues.cluesDescribe}}</span>
+<!--                                <input type="text" class="layui-input searchVal" :value="clues.cluesDescribe" disabled/>-->
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">录入人:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" :value="clues.operatorName" disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">录入时间:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" :value="dateFormat(clues.createTime)"
+                                       disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">跟进人:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" :value="clues.followName" disabled/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="details-content-box"
+                 v-show="detailsSupTabContentListActiveValue === '跟进详情'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        跟进详情
+                    </div>
+                </div>
+
+                <div class="form-content-session-box">
+                    <div class="layui-row layui-form-row-content">
+                        <ul class="layui-timeline" v-for="(value,key) in listCluesDeal" :key="key">
+                            <li class="layui-timeline-item">
+                                <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                <div class="layui-timeline-content layui-text">
+                                    <h3 class="layui-timeline-title" style="border:1px solid #F7FBFE">
+                                        {{key.substring(5)}}</h3>
+                                    <ul v-for="val in value">
+                                        <li style="border:1px solid #F7FBFE;background-color:#F7FBFE;box-sizing: border-box;padding: 15px;list-style-type: none;">
+                                            <p style="margin-bottom: 15px;">
+                                                跟进人：{{val.dealProcessor}}<span
+                                                    style="float: right">跟进时间：{{val.dealTime}}</span><br>
+                                            </p>
+                                            <p>
+                                                线索状态：{{transformTypeByMap(val.cluesStatus, {
+                                                1: '初步接触',
+                                                2: '潜在客户',
+                                                3: '持续跟进',
+                                                4: '忠诚客户',
+                                                5: '无效客户',
+                                                6: '成交客户'
+                                            })}}<br>
+                                            </p>
+                                            <p>
+                                                意向情况：{{transformTypeByMap(val.intentionStatus, {
+                                                1: '无意向',
+                                                2: '低意向',
+                                                3: '中意向',
+                                                4: '高意向',
+                                                5: '已成单'
+                                            })}}<br>
+                                            </p>
+                                            <p>
+                                                跟进方式：{{transformTypeByMap(val.followType, {
+                                                1: '面谈',
+                                                2: '电话',
+                                                3: '微信',
+                                                4: '短信',
+                                                5: '邮件',
+                                                6: 'QQ',
+                                                7: '其它'
+                                            })}}<br>
+                                            </p>
+                                            <p>
+                                                跟进内容：{{val.dealResult}}<br>
+                                            </p>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+            <div class="details-content-box"
+                 v-show="detailsSupTabContentListActiveValue === '操作记录'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        操作记录
+                    </div>
+                </div>
+
+                <div class="details-layui-row">
+                    <div class="table">
+                        <table class="layui-hide" id="operationlog" lay-filter="operationlog"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="float-btn-group bottom-bar">
+        <a class="layui-btn reset-btn" id="closePage">关闭</a>
+    </div>
+</div>
+
+
+<script src="../../statics/js/modules/cluesnew/cluesview.js?_${.now?long}"></script>
+</body>
+</html>

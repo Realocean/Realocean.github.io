@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>后台首页</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="./statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="./statics/common/css/animate.css" media="all">
+    <link rel="stylesheet" type="text/css" href="./statics/css/main.css">
+
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="Author" content="larry" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="./statics/common/cascader/cascader/cascader.css" media="all">
+    <link rel="stylesheet" type="text/css" href="./statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="./statics/common/layui/css/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="./statics/common/layui/css/soulTable.css">
+    <link rel="stylesheet" type="text/css" href="./statics/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" type="text/css" href="./statics/css/common.css">
+    <link rel="stylesheet" type="text/css" href="./statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="./statics/css/list-search-table.css">
+    <script type="text/javascript" src="./statics/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="./statics/common/lib/vue.min.js"></script>
+    <script type="text/javascript" src="./statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="./statics/common/layui/layui.all.js"></script>
+    <script type="text/javascript" src="./statics/common/js/axios.min.js"></script>
+    <script type="text/javascript" src="./statics/common/js/xm-select.js"></script>
+    <script type="text/javascript" src="./statics/js/common.js"></script>
+    <script type="text/javascript" src="./statics/js/upload.js"></script>
+    <script type="text/javascript" src="./statics/common/step/steps.js"></script>
+    <link rel="stylesheet" href="./statics/css/jxcPublicAll.css" media="all">
+    <link href="./statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+    <link rel="stylesheet" href="./statics/common/step/steps.css">
+    <link rel="stylesheet" href="./statics/js/modules/cropper/cropper.css" media="all">
+    <link rel="stylesheet" type="text/css" href="./statics/css/viewer.min.css">
+    <script src="./statics/js/modules/cropper/cropper.min.js"></script>
+    <script src="./statics/common/photoviewer/dist/photoviewer.js"></script>
+    <script src="./statics/common/layui/autocomplete.js"></script>
+    <script src="./statics/js/modules/viewer/viewer.min.js"></script>
+    <script src="./statics/common/print-js/print.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./statics/common/print-js/print.min.css">
+    <script type="text/javascript" src="./statics/common/xmselect/xm-select.js"></script>
+    <script type="text/javascript" src="./statics/js/searchview.js"></script>
+    <script type="text/javascript" src="./statics/js/tableedit.js"></script>
+    <!-- 引入组件库 -->
+    <link rel="stylesheet" type="text/css" href="./statics/css/index.css">
+    <style>
+        #rrapp,
+        .ren-body {
+            background: #f6f8f8 !important;
+      
+        }
+     
+     
+
+       
+        #rrapp {
+            padding: 0 20px 0 0 !important
+        }
+
+        .margin-right_childer_div>div {
+            margin-right: 20px;
+        }
+
+        .task-content-box.task-content-box-fast {
+            width: 450px;
+            height: auto;
+            margin-left: 15px;
+            color: #fff;
+        }
+        .noice{
+            min-width: 100px;
+        }
+        .noice-right-item{
+            max-width: max-content;
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+
+<body class="ren-body larry-bg-gray">
+    <div id="rrapp" v-cloak>
+
+        <div class="task-main-box display" style="justify-content: space-between;">
+
+            <div class="task-user-login-information">
+                <div class="task-user-login-information-header-img" v-show="sessionStorage.getItem('avatar') != null">
+                    <img class="info-img" :src="imageURL + sessionStorage.getItem('avatar')" alt=""
+                        onerror="this.src='./statics/images/user.jpg'"
+                        style="width: 60px;height: 60px;border-radius: 50%;">
+                </div>
+                <div class="task-user-login-information-header-img" v-show="sessionStorage.getItem('avatar') == null">
+                    <img src="./statics/images/user.jpg" alt="" style="width: 60px;height: 60px;border-radius: 50%;">
+                </div>
+
+                <div class="task-user-login-information-header-text">
+                    <p style="margin-bottom:10px">您好{{sysUserInfo.username}}，欢迎登录！</p>
+                    <div style="display: flex;align-items: center;margin-bottom:8px;">
+                        <span class="span-title">用户角色：</span>
+                        <span class="span-management">{{formatRoles(sysUserInfo.roles)}}</span>
+                    </div>
+                     <div style="display: flex;align-items: center">
+                        <span class="span-title span-title-left">所属公司：</span>
+                        <span>{{sysUserInfo.deptName}}</span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="display">
+                <div class="display">
+                    <div class="user-right-item" @click="processInfoData('1')">
+                        <p>待我审核</p>
+                        <div class="number user-right-item-num">{{bpmData.processApprove || '0'}}</div>
+                    </div>
+    
+                    <div class="user-divide"></div>
+    
+                    <div class="user-right-item" @click="processInfoData('2')">
+                        <p>抄送我的</p>
+                        <div class="number user-right-item-num">{{bpmData.processCopy || '0'}}</div>
+                    </div>
+    
+                    <div class="user-divide"></div>
+    
+                    <div class="user-right-item" @click="processInfoData('3')">
+                        <p>我发起的</p>
+                        <div class="number user-right-item-num">{{bpmData.processApply || '0'}}</div>
+                    </div>
+    
+                    <div class="user-divide"></div>
+    
+                    <div class="user-right-item" @click="messageBtn">
+                        <p>未读消息</p>
+                        <div class="number user-right-item-num">{{unread || '0'}}</div>
+                    </div>
+    
+                    <div class="user-divide"></div>
+    
+                  <!--  <div class="user-right-item" @click="warningBtn" >
+                        <p>违章预警</p>
+                        <div class="number user-right-item-num">{{violationWarning || '0'}}</div>
+                    </div>-->
+    
+                </div>
+                <div class="noice">
+                    <div class="noice-right-item" @click="noiceClick" @mouseleave="noiceMouseout" @mouseenter="noiceMove">
+                        <span>更新公告</span>
+                        <img src="./statics/images/new_red.png" alt=""  id="noiceId" style="width:20px;margin-left: 10px;">
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="display">
+
+            <div class="main-content-left">
+
+                <div class="main-content-item-layout" v-show="riskShow">
+                    <span>风险总览&nbsp;<i @mouseout.stop="mouseout" @mousemove="move(3)"
+                            class="layui-icon layui-icon-about" style="color: #3FACB3"
+                            id="LAY_layedit_code3"></i></span>
+
+                    <div class="main-content-item-wrap red-hover">
+
+                        <div class="display">
+                            <div class="main-content-item" @click="carOperationalData('13')">
+                                <span>车辆租赁到期</span>
+                                <p class="main-content-item-num">{{riskAlert.leaseExpirationCount || '0'}}</p>
+                            </div>
+
+                            <div class="main-content-item" @click="riskRemindData('1','车辆租金预警')">
+                                <span>租金逾期</span>
+                                <p class="main-content-item-num">{{riskAlert.rentOverdueCount || '0' }}</p>
+                            </div>
+
+                            <div class="main-content-item" @click="riskRemindData('2','车辆保险预警')">
+                                <span>交强险到期</span>
+                                <p class="main-content-item-num">{{riskAlert.waitInsuranceCount || '0' }}</p>
+                            </div>
+                        </div>
+
+                        <div class="display">
+                            <div class="main-content-item" @click="riskRemindData('8','车辆保险预警')">
+                                <span>商业险到期</span>
+                                <p class="main-content-item-num">{{riskAlert.waitCommercialCount || '0' }}</p>
+                            </div>
+
+                            <div class="main-content-item" @click="riskRemindData('3','车辆年检预警')">
+                                <span>年检到期</span>
+                                <p class="main-content-item-num">{{riskAlert.waitInspectionCount || '0' }}</p>
+                            </div>
+
+                            <div class="main-content-item" @click="riskRemindData('4','车辆保养预警')">
+                                <span>保养提醒</span>
+                                <p class="main-content-item-num">{{riskAlert.waitMaintenanceCount || '0' }}</p>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <div class="main-content-item-layout" v-show="carShow">
+                    <span>车辆总览</span>
+
+                    <div class="main-content-item-wrap green-hover">
+
+                        <div class="display">
+                            <div class="main-content-item" @click="carOperationalData('')">
+                                <span>车辆总数&nbsp;<i @mouseout.stop="mouseout" @mousemove="move(4)"
+                                        class="layui-icon layui-icon-about" style="color: #3FACB3"
+                                        id="LAY_layedit_code4"></i></span>
+                                <p class="main-content-item-num">{{vehicleOperationData.allCarCount || '0' }}</p>
+                            </div>
+
+                            <div class="main-content-item" @click="carOperationalData('4')">
+                                <span>在租车辆</span>
+                                <p class="main-content-item-num">{{vehicleOperationData.leasedVehiclesCount || '0' }}
+                                </p>
+                            </div>
+
+                            <div class="main-content-item" @click="carOperationalData('3')">
+                                <span>预订车辆</span>
+                                <p class="main-content-item-num">{{vehicleOperationData.bookingTaxiCount || '0' }}</p>
+                            </div>
+                        </div>
+
+                        <div class="display">
+                            <div class="main-content-item" @click="carOperationalData('2')">
+                                <span>备发车</span>
+                                <p class="main-content-item-num">{{vehicleOperationData.standbyTrainCount || '0' }}</p>
+                            </div>
+
+                            <div class="main-content-item" @click="carOperationalData('1')">
+                                <span>整备中</span>
+                                <p class="main-content-item-num">{{vehicleOperationData.inPreparationCount || '0' }}</p>
+                            </div>
+
+                            <div class="main-content-item" @click="carOperationalData('19')">
+                                <span>已处置</span>
+                                <p class="main-content-item-num">{{vehicleOperationData.isDisposedCount || '0' }}</p>
+                            </div>
+                        </div>
+
+                        <div class="display">
+                            <div class="main-content-item" @click="carOperationalData('20')">
+                                <span>已出售</span>
+                                <p class="main-content-item-num">{{vehicleOperationData.isSoldCount || '0' }}</p>
+                            </div>
+
+                            <div class="main-content-item" @click="carOperationalData('5')">
+                                <span>已过户</span>
+                                <p class="main-content-item-num">{{vehicleOperationData.transferCount || '0' }}</p>
+                            </div>
+
+                            <div class="main-content-item" @click="carOperationalData('18')">
+                                <span>维修中</span>
+                                <p class="main-content-item-num">{{vehicleOperationData.repairCount || '0' }}</p>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+                <div class="main-content-item-layout" v-show="orderShow">
+
+                    <div class="main-content-title-layout">
+                        <span>订单总览</span>
+
+                        <div class="task-content-box-tab display margin-right_childer_div" type="carOperation">
+                            <div class="task-content-box-tab-child-active tab-width" value="1" >今日</div>
+                            <div value="2" class="tab-width">本周</div>
+                            <div value="3" class="tab-width">本月</div>
+                            <div value="4" class="tab-width">本年</div>
+                            <div value="5" class="tab-width">全部</div>
+                            <input type="text" class="layui-input" id="carOperation_dateTime"
+                                v-model="carOperation.dateTime" readonly placeholder="选择日期范围" style="width: 300px;"
+                                autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="main-content-item-wrap">
+
+                        <div class="display">
+
+                            <div class="main-content-item main-order-item" @click="jumpToOrder(301)">
+
+                                <img src="./statics/images/main-order0.png" style="margin-left: 20px" alt="">
+
+                                <div>
+                                    <span>待交车</span>
+                                    <p class="main-content-item-num">{{carOperation.deliverycar}}</p>
+                                </div>
+
+                                <img src="./statics/images/main-order1.png" style="margin-right: 20px" alt="">
+                            </div>
+
+                            <div class="main-content-item main-order-item" @click="jumpToOrder(500)">
+
+                                <img src="./statics/images/main-order2.png" style="margin-left: 20px" alt="">
+
+                                <div>
+                                    <span>退车中</span>
+                                    <p class="main-content-item-num">{{carOperation.backing}}</p>
+                                </div>
+
+                                <img src="./statics/images/main-order3.png" style="margin-right: 20px" alt="">
+                            </div>
+                        </div>
+
+                        <div class="display">
+
+                            <div class="main-content-item main-order-item" @click="jumpToOrder(300)">
+
+                                <img src="./statics/images/main-order4.png" style="margin-left: 20px" alt="">
+
+                                <div>
+                                    <span>换车中</span>
+                                    <p class="main-content-item-num">{{carOperation.transfering}}</p>
+                                </div>
+
+                                <img src="./statics/images/main-order5.png" style="margin-right: 20px" alt="">
+                            </div>
+
+                            <div class="main-content-item main-order-item" @click="jumpToOrder(201)">
+
+                                <img src="./statics/images/main-order6.png" style="margin-left: 20px" alt="">
+
+                                <div>
+                                    <span>备用车用车中</span>
+                                    <p class="main-content-item-num">{{carOperation.spareuseing}}</p>
+                                </div>
+
+                                <img src="./statics/images/main-order7.png" style="margin-right: 20px" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="main-content-right">
+                <div class="main-content-item-layout" v-show="customerShow">
+                    <span>客户总览</span>
+
+                    <div class="main-content-item-wrap orange-hover">
+
+                        <div class="display">
+                            <div class="main-content-item" @click="customerData('0')" >
+                                <span>客户总数</span>
+                                <p class="main-content-item-num">{{customerOperationData.totalCount || '0' }}</p>
+                            </div>
+
+                            <div class="main-content-item" @click="customerData('1')">
+                                <span>在租客户订单</span>
+                                <p class="main-content-item-num">{{customerOperationData.rentCount || '0' }}</p>
+                            </div>
+
+                            <div class="main-content-item" @click="customerData('2')">
+                                <span>即将到期客户订单</span>
+                                <p class="main-content-item-num">{{customerOperationData.dueSoonCount || '0' }}</p>
+                            </div>
+                        </div>
+
+                        <div class="display">
+                            <div class="main-content-item" @click="customerData('3')">
+                                <span>需要交租客户订单</span>
+                                <p class="main-content-item-num">{{customerOperationData.needPayRentCount || '0' }}</p>
+                            </div>
+
+                            <div class="main-content-item" @click="customerData('4')">
+                                <span>逾期欠款客户订单</span>
+                                <p class="main-content-item-num">{{customerOperationData.overDueCount || '0' }}</p>
+                            </div>
+
+                            <div class="main-content-item" @click="jumpTorRefund(2)">
+                                <span>退款提醒</span>
+                                <p class="main-content-item-num">{{customerOperationData.reminderThresholdCount || '0' }}</p>
+                            </div>
+
+<!--                            <div style="flex: 1;margin: 0 30px 20px 0;"></div>-->
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="main-content-item-layout">
+                    <span>运营快捷入口</span>
+
+                    <div class="main-content-item-wrap blue-hover">
+
+                        <div class="display">
+<!--                            <div class="main-content-item main-item-mini home-main-item-mini" v-m-perm="['clues:clues:save']"-->
+<!--                                @click="addClues">-->
+<!--                                <span>新增线索</span>-->
+<!--                            </div>-->
+                            <div class="main-content-item main-item-mini home-main-item-mini" v-m-perm="['clues:clues:save']"
+                                 @click="dataImport">
+                                <span>数据导入</span>
+                            </div>
+
+                            <div class="main-content-item main-item-mini home-main-item-mini" v-m-perm="['customer:save']"
+                                @click="addCustomer">
+                                <span>新增客户</span>
+                            </div>
+
+                            <div class="main-content-item main-item-mini home-main-item-mini"
+                                v-m-perm="['contract:contracordernotemplate:save']" @click="addOrderContract">
+                                <span>新增合同</span>
+                            </div>
+
+                            <div class="main-content-item main-item-mini home-main-item-mini" v-m-perm="['order:order:save']"
+                                @click="addOrder">
+                                <span>新增订单</span>
+                            </div>
+
+                           
+
+                        </div>
+
+                        <div class="display">
+                            <div class="main-content-item main-item-mini home-main-item-mini"
+                                v-m-perm="['maintenance:insurancemanage:save']" @click="addBx">
+                                <span>新增保险</span>
+                            </div>
+                            <div class="main-content-item main-item-mini home-main-item-mini"
+                                v-m-perm="['maintenance:inspectionmanage:save']" @click="addNj">
+                                <span>新增年检</span>
+                            </div>
+                            <div class="main-content-item main-item-mini home-main-item-mini"
+                                v-m-perm="['maintenance:maintenancemanage:save']" @click="addBy">
+                                <span>新增保养</span>
+                            </div>
+                            <div class="main-content-item main-item-mini home-main-item-mini"
+                                v-m-perm="['carrepairorder:carrepairorder:save']" @click="addWxd">
+                                <span>新增维修单</span>
+                            </div>
+                            
+
+                        </div>
+
+                        <div class="display">
+                            <div class="main-content-item main-item-mini home-main-item-mini"
+                                v-m-perm="['outinsuranceorder:ouinsuranceorder:save']" @click="addCxd">
+                                <span>新增出险单</span>
+                            </div>
+                            <div class="main-content-item main-item-mini home-main-item-mini" v-m-perm="['message:systemmessage:add']"
+                                @click="addMessage">
+                                <span>新增消息</span>
+                            </div>
+                            <div class="main-content-item main-item-mini home-main-item-mini" v-m-perm="['clues:clues:save']"
+                                @click="addCar">
+                                <span>新增车辆</span>
+                            </div>
+
+                            <div class="main-content-item main-item-mini home-main-item-mini" v-m-perm="['car:carillegal:list']"
+                                @click="searchIllegal">
+                                <span>违章查询</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+               
+
+                <div class="main-content-item-layout" v-show="caiWuShow">
+                    <div class="main-content-title-layout main-content-item-title">
+                        <span >财务总览</span>
+
+                        <div class="task-content-box-tab display margin-right_childer_div" type="financeOperation">
+                            <div class="task-content-box-tab-child-active tab-width" value="1">今日</div>
+                            <div value="2" class="tab-width">本周</div>
+                            <div value="3" class="tab-width">本月</div>
+                            <div value="4" class="tab-width">本年</div>
+                            <div value="5" class="tab-width">全部</div>
+                            <input type="text" class="layui-input" id="financeOperation_dateTime"
+                                v-model="financeOperation.dateTime" readonly placeholder="选择日期范围" style="width: 300px;"
+                                autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="main-content-item-wrap">
+
+                        <div class="display">
+
+                            <div class="main-content-item main-finance-item" style="background: #3BBDB1"
+                                @click="jumpTorReceivable(-9)">
+
+                                <div class="main-finance-wrap">
+                                    <span>账单应收金额</span><!--应收账款-->
+                                    <p class="main-content-item-num">￥{{financeOperation.receivable}}</p>
+                                </div>
+                                <i class="el-icon-star-on"></i>
+                            </div>
+
+                            <div class="main-content-item main-finance-item" style="background: #F95150"
+                                @click="jumpTorReceivable(2)">
+
+                                <div class="main-finance-wrap">
+                                    <span>账单已收金额</span><!--已收账款-->
+                                    <p class="main-content-item-num">￥{{financeOperation.received}}</p>
+                                </div>
+                                <i class="el-icon-star-on"></i>
+                            </div>
+
+                            <div class="main-content-item main-finance-item" style="background: #F95150"
+                                 @click="jumpTocollectionMoneyPage(2)">
+
+                                <div class="main-finance-wrap">
+                                    <span>收款金额</span><!--已收账款-->
+                                    <p class="main-content-item-num">￥{{financeOperation.collectionMoney}}</p>
+                                </div>
+                                <i class="el-icon-star-on"></i>
+                            </div>
+
+                        </div>
+
+                        <div class="display">
+
+                            <div class="main-content-item main-finance-item" style="background: #FFB800"
+                                @click="jumpTorRefund(0)">
+
+                                <div class="main-finance-wrap">
+                                    <span>账单应退金额</span><!--应退账款-->
+                                    <p class="main-content-item-num">￥{{financeOperation.back}}</p>
+                                </div>
+                                <i class="el-icon-star-on"></i>
+                            </div>
+
+                            <div class="main-content-item main-finance-item" style="background: #419BEA"
+                                @click="jumpTorRefund(1)">
+
+                                <div class="main-finance-wrap">
+                                    <span>账单已退金额</span><!--已退账款-->
+                                    <p class="main-content-item-num">￥{{financeOperation.retired}}</p>
+                                </div>
+                                <i class="el-icon-star-on"></i>
+                            </div>
+
+                            <div class="main-content-item main-finance-item" style="background: #419BEA"
+                                 @click="jumpTorRefund(1)">
+
+                                <div class="main-finance-wrap">
+                                    <span>退款金额</span>
+                                    <p class="main-content-item-num">￥{{financeOperation.returnMoney}}</p>
+                                </div>
+                                <i class="el-icon-star-on"></i>
+                            </div>
+
+                        </div>
+
+                        <div class="display">
+
+                            <div class="main-content-item main-finance-item" style="background: #7561CE"
+                                @click="jumpToPayBill(1)">
+
+                                <div class="main-finance-wrap">
+                                    <span>账单应付金额</span><!--应付账款-->
+                                    <p class="main-content-item-num">￥{{financeOperation.copyWothAmount}}</p>
+                                </div>
+                                <i class="el-icon-star-on"></i>
+                            </div>
+
+                            <div class="main-content-item main-finance-item" style="background: #2B396D"
+                                @click="jumpToPayBill(2)">
+
+                                <div class="main-finance-wrap">
+                                    <span>账单已付金额</span><!--已付账款-->
+                                    <p class="main-content-item-num">￥{{financeOperation.isPayAmount}}</p>
+                                </div>
+                                <i class="el-icon-star-on"></i>
+                            </div>
+
+                            <div class="main-content-item main-finance-item" style="background: #2B396D"
+                                 @click="jumpTopaymentMoneyPage(0)">
+
+                                <div class="main-finance-wrap">
+                                    <span>付款金额</span>
+                                    <p class="main-content-item-num">￥{{financeOperation.paymentMoney}}</p>
+                                </div>
+                                <i class="el-icon-star-on"></i>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!--        <div class="display">-->
+        <!--            <div class="task-content-box flex">-->
+        <!--                <div class="list-search-sup-title new-layui-title">-->
+        <!--                    我的任务-->
+        <!--                </div>-->
+        <!--                <div class="display task-content-box-my">-->
+        <!--                    <div class="flex" @click="processInfoData('1')" style="cursor: pointer;">-->
+        <!--                        <div class="icon-box">-->
+        <!--                            <img class="icon-main" src="./statics/images/pending@2x.png" alt="">-->
+        <!--                            <span>-->
+        <!--                                    待我审核-->
+        <!--                                    <i @mouseout.stop="mouseout" @mousemove="move(5)" class="layui-icon layui-icon-about"-->
+        <!--                                       style="color: #3FACB3" id="LAY_layedit_code5"></i>-->
+        <!--                                </span>-->
+        <!--                        </div>-->
+        <!--                        <div class="number">{{bpmData.processApprove || '0'}}</div>-->
+        <!--                    </div>-->
+        <!--                    <div class="flex" @click="processInfoData('2')" style="cursor: pointer;">-->
+        <!--                        <div class="icon-box">-->
+        <!--                            <img class="icon-main" src="./statics/images/approved@2x.png" alt="">-->
+        <!--                            <span>抄送我的</span>-->
+        <!--                        </div>-->
+        <!--                        <div class="number">{{bpmData.processCopy || '0'}}</div>-->
+        <!--                    </div>-->
+        <!--                    <div class="flex" @click="processInfoData('3')" style="cursor: pointer;">-->
+        <!--                        <div class="icon-box">-->
+        <!--                            <img class="icon-main" src="./statics/images/initiate@2x.png" alt="">-->
+        <!--                            <span>-->
+        <!--                                    我发起的-->
+        <!--                                    <i @mouseout.stop="mouseout" @mousemove="move(6)" class="layui-icon layui-icon-about"-->
+        <!--                                       style="color: #3FACB3" id="LAY_layedit_code6"></i>-->
+        <!--                                </span>-->
+        <!--                        </div>-->
+        <!--                        <div class="number">{{bpmData.processApply || '0'}}</div>-->
+        <!--                    </div>-->
+        <!--                </div>-->
+        <!--                <div class="big-wave"></div>-->
+        <!--            </div>-->
+        <!--            <div class="task-content-box task-content-box-fast">-->
+        <!--                <div class="list-search-sup-title new-layui-title">-->
+        <!--                    运营快捷入口-->
+        <!--                </div>-->
+        <!--                <div class="display">-->
+        <!--                    &lt;!&ndash; <mperm v-m-perm="['clues:clues:save']"> &ndash;&gt;-->
+        <!--                    <div v-m-perm="['clues:clues:save']" @click="addClues">新增线索</div>-->
+        <!--                    &lt;!&ndash; </mperm> &ndash;&gt;-->
+        <!--                    &lt;!&ndash; <mperm v-m-perm="['customer:save']"> &ndash;&gt;-->
+        <!--                    <div v-m-perm="['customer:save']" @click="addCustomer">新增客户</div>-->
+        <!--                    &lt;!&ndash; </mperm> &ndash;&gt;-->
+        <!--                    &lt;!&ndash; <mperm v-m-perm="['contract:contracordernotemplate:save']"> &ndash;&gt;-->
+        <!--                    <div v-m-perm="['contract:contracordernotemplate:save']" @click="addOrderContract">新增合同-->
+        <!--                        <i @mouseout.stop="mouseout" @mousemove="move(2)" class="layui-icon layui-icon-about"-->
+        <!--                           style="color: #3FACB3" id="LAY_layedit_code2"></i>-->
+        <!--                    </div>-->
+        <!--                    &lt;!&ndash; </mperm> &ndash;&gt;-->
+        <!--                    &lt;!&ndash; <mperm v-m-perm="['order:order:save']"> &ndash;&gt;-->
+        <!--                    <div v-m-perm="['order:order:save']" @click="addOrder">新增订单-->
+        <!--                        <i @mouseout.stop="mouseout" @mousemove.stop="move(1)" class="layui-icon layui-icon-about"-->
+        <!--                           style="color: #3FACB3" id="LAY_layedit_code1"></i>-->
+        <!--                    </div>-->
+        <!--                    &lt;!&ndash; </mperm> &ndash;&gt;-->
+        <!--                    &lt;!&ndash; <mperm v-m-perm="['clues:clues:save']"> &ndash;&gt;-->
+        <!--                    <div v-m-perm="['clues:clues:save']" @click="addCar">新增车辆</div>-->
+        <!--                    &lt;!&ndash; </mperm> &ndash;&gt;-->
+        <!--                    &lt;!&ndash; <mperm v-m-perm="['car:carillegal:list']"> &ndash;&gt;-->
+        <!--                    <div v-m-perm="['car:carillegal:list']" @click="searchIllegal">违章查询</div>-->
+        <!--                    &lt;!&ndash; </mperm> &ndash;&gt;-->
+        <!--                    &lt;!&ndash; <mperm v-m-perm="['maintenance:insurancemanage:save']"> &ndash;&gt;-->
+        <!--                    <div v-m-perm="['maintenance:insurancemanage:save']" @click="addBx">-->
+        <!--                        <span>新增保险</span>-->
+        <!--                    </div>-->
+        <!--                    &lt;!&ndash; </mperm> &ndash;&gt;-->
+        <!--                    &lt;!&ndash; <mperm v-m-perm="['maintenance:inspectionmanage:save']"> &ndash;&gt;-->
+        <!--                    <div v-m-perm="['maintenance:inspectionmanage:save']" @click="addNj">新增年检</div>-->
+        <!--                    &lt;!&ndash; </mperm> &ndash;&gt;-->
+        <!--                    &lt;!&ndash; <mperm v-m-perm="['maintenance:maintenancemanage:save']"> &ndash;&gt;-->
+        <!--                    <div v-m-perm="['maintenance:maintenancemanage:save']" @click="addBy">新增保养</div>-->
+        <!--                    &lt;!&ndash; </mperm> &ndash;&gt;-->
+        <!--                    &lt;!&ndash; <mperm v-m-perm="['carrepairorder:carrepairorder:save']"> &ndash;&gt;-->
+        <!--                    <div v-m-perm="['carrepairorder:carrepairorder:save']" @click="addWxd">新增维修单</div>-->
+        <!--                    &lt;!&ndash; </mperm> &ndash;&gt;-->
+        <!--                    &lt;!&ndash; <mperm v-m-perm="['outinsuranceorder:ouinsuranceorder:save']"> &ndash;&gt;-->
+        <!--                    <div v-m-perm="['outinsuranceorder:ouinsuranceorder:save']" @click="addCxd">新增出险单</div>-->
+        <!--                    &lt;!&ndash; </mperm> &ndash;&gt;-->
+        <!--                    &lt;!&ndash; <mperm v-m-perm="['message:systemmessage:add']"> &ndash;&gt;-->
+        <!--                    <div v-m-perm="['message:systemmessage:add']" @click="addMessage">新增消息</div>-->
+        <!--                    &lt;!&ndash; </mperm> &ndash;&gt;-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--        </div>-->
+
+        <!--    <div class="task-content-box" v-show="riskShow">-->
+        <!--        &lt;!&ndash;        <div class="list-search-sup-title new-layui-title border-bottom-dashed ">&ndash;&gt;-->
+        <!--        &lt;!&ndash;            风险总览&nbsp;&nbsp;<i @mouseout.stop="mouseout" @mousemove="move(3)" class="layui-icon layui-icon-about"&ndash;&gt;-->
+        <!--        &lt;!&ndash;                               style="color: #3FACB3" id="LAY_layedit_code3"></i>&ndash;&gt;-->
+        <!--        &lt;!&ndash;        </div>&ndash;&gt;-->
+        <!--        <div class="display risk-content-box risk-content-box-FFC000">-->
+        <!--            <div class="flex" @click="carOperationalData('13')">-->
+        <!--                <div class="number">{{riskAlert.leaseExpirationCount || '0'}}</div>-->
+        <!--                <div class="text">车辆租赁到期</div>-->
+        <!--            </div>-->
+        <!--            <div class="flex" @click="riskRemindData('1','车辆租金预警')">-->
+        <!--                <div class="number">{{riskAlert.rentOverdueCount || '0' }}</div>-->
+        <!--                <div class="text">租金逾期</div>-->
+        <!--            </div>-->
+        <!--            &lt;!&ndash;<div class="flex">-->
+        <!--                <div class="number">{{riskAlert.carIllegalCount  || '0'}}</div>-->
+        <!--                <div class="text">违章车辆</div>-->
+        <!--            </div>&ndash;&gt;-->
+        <!--            <div class="flex" @click="riskRemindData('2','车辆保险预警')">-->
+        <!--                <div class="number">{{riskAlert.waitInsuranceCount || '0' }}</div>-->
+        <!--                <div class="text">交强险到期</div>-->
+        <!--            </div>-->
+        <!--            <div class="flex" @click="riskRemindData('8','车辆保险预警')">-->
+        <!--                <div class="number">{{riskAlert.waitCommercialCount || '0' }}</div>-->
+        <!--                <div class="text">商业险到期</div>-->
+        <!--            </div>-->
+        <!--            <div class="flex" @click="riskRemindData('3','车辆年检预警')">-->
+        <!--                <div class="number">{{riskAlert.waitInspectionCount || '0' }}</div>-->
+        <!--                <div class="text">年检到期</div>-->
+        <!--            </div>-->
+        <!--            <div class="flex" @click="riskRemindData('4','车辆保养预警')">-->
+        <!--                <div class="number">{{riskAlert.waitMaintenanceCount || '0' }}</div>-->
+        <!--                <div class="text">保养到期</div>-->
+        <!--            </div>-->
+        <!--            &lt;!&ndash; <div class="flex" @click="riskRemindData('5','围栏预警')">-->
+        <!--            <div class="number">{{riskAlert.carWarningCount  || '0' }}</div>-->
+        <!--            <div class="text">围栏报警</div>-->
+        <!--        </div>&ndash;&gt;-->
+        <!--        </div>-->
+        <!--    </div>-->
+
+        <!--    <div class="task-content-box" v-show="carShow">-->
+        <!--        <div class="list-search-sup-title new-layui-title border-bottom-dashed ">-->
+        <!--            车辆总览-->
+        <!--        </div>-->
+        <!--        <div class="display risk-content-box risk-content-box-1951FF">-->
+        <!--            <div class="flex" @click="carOperationalData('')">-->
+        <!--                <div class="number">{{vehicleOperationData.allCarCount || '0' }}</div>-->
+        <!--                <div class="text">车辆总数&nbsp;<i @mouseout.stop="mouseout" @mousemove="move(4)"-->
+        <!--                                               class="layui-icon layui-icon-about" style="color: #3FACB3"-->
+        <!--                                               id="LAY_layedit_code4"></i></div>-->
+        <!--            </div>-->
+        <!--            <div class="flex" @click="carOperationalData('4')">-->
+        <!--                <div class="number">{{vehicleOperationData.leasedVehiclesCount || '0' }}</div>-->
+        <!--                <div class="text">在租车辆</div>-->
+        <!--            </div>-->
+        <!--            <div class="flex" @click="carOperationalData('3')">-->
+        <!--                <div class="number">{{vehicleOperationData.bookingTaxiCount || '0' }}</div>-->
+        <!--                <div class="text">预订车辆</div>-->
+        <!--            </div>-->
+        <!--            <div class="flex" @click="carOperationalData('2')">-->
+        <!--                <div class="number">{{vehicleOperationData.standbyTrainCount || '0' }}</div>-->
+        <!--                <div class="text">备发车</div>-->
+        <!--            </div>-->
+        <!--            <div class="flex" @click="carOperationalData('1')">-->
+        <!--                <div class="number">{{vehicleOperationData.inPreparationCount || '0' }}</div>-->
+        <!--                <div class="text">整备中</div>-->
+        <!--            </div>-->
+        <!--            <div class="flex" @click="carOperationalData('19')">-->
+        <!--                <div class="number">{{vehicleOperationData.isDisposedCount || '0' }}</div>-->
+        <!--                <div class="text">已处置</div>-->
+        <!--            </div>-->
+        <!--            <div class="flex" @click="carOperationalData('20')">-->
+        <!--                <div class="number">{{vehicleOperationData.isSoldCount || '0' }}</div>-->
+        <!--                <div class="text">已出售</div>-->
+        <!--            </div>-->
+        <!--            <div class="flex" @click="carOperationalData('5')">-->
+        <!--                <div class="number">{{vehicleOperationData.transferCount || '0' }}</div>-->
+        <!--                <div class="text">已过户</div>-->
+        <!--            </div>-->
+        <!--            <div class="flex" @click="carOperationalData('18')">-->
+        <!--                <div class="number">{{vehicleOperationData.repairCount || '0' }}</div>-->
+        <!--                <div class="text">维修中</div>-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <!--    </div>-->
+
+        <!--    <div class="task-content-box" v-show="orderShow">-->
+        <!--        <div class="main-all list-search-sup-title new-layui-title border-bottom-dashed display">-->
+        <!--            <div>订单总览</div>-->
+
+        <!--            <div class="task-content-box-tab display margin-right_childer_div" type="carOperation">-->
+        <!--                <div class="task-content-box-tab-child-active" value="1">今日</div>-->
+        <!--                <div value="2">本周</div>-->
+        <!--                <div value="3">本月</div>-->
+        <!--                <div value="4">本年</div>-->
+        <!--                <div value="5">全部</div>-->
+        <!--                <input type="text" class="layui-input" id="carOperation_dateTime" v-model="carOperation.dateTime"-->
+        <!--                       readonly placeholder="选择日期范围" style="width: 300px;" autocomplete="off">-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <!--        <div class="task-content-box-order display">-->
+        <!--            &lt;!&ndash;<div class="flex display">-->
+        <!--                <div class="img">-->
+        <!--                    <img src="./statics/images/delivered@2x.png" alt="">-->
+        <!--                </div>-->
+        <!--                <div class="order-info">-->
+        <!--                    <div class="number">{{carOperation.useing}}</div>-->
+        <!--                    <div class="text">用车中</div>-->
+        <!--                </div>-->
+        <!--            </div>&ndash;&gt;-->
+        <!--            <div class="flex display">-->
+        <!--                <div class="img" style="cursor: pointer;" @click="jumpToOrder(301)">-->
+        <!--                    <img src="./statics/images/delivered@2x.png" alt="">-->
+        <!--                </div>-->
+        <!--                <div class="order-info" style="cursor: pointer;" @click="jumpToOrder(301)">-->
+        <!--                    <div class="number">{{carOperation.deliverycar}}</div>-->
+        <!--                    <div class="text">待交车</div>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div class="flex display">-->
+        <!--                <div class="img" style="cursor: pointer;" @click="jumpToOrder(500)">-->
+        <!--                    <img src="./statics/images/retreating@2x.png" alt="">-->
+        <!--                </div>-->
+        <!--                <div class="order-info" style="cursor: pointer;" @click="jumpToOrder(500)">-->
+        <!--                    <div class="number">{{carOperation.backing}}</div>-->
+        <!--                    <div class="text">退车中</div>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div class="flex display">-->
+        <!--                <div class="img" style="cursor: pointer;" @click="jumpToOrder(300)">-->
+        <!--                    <img src="./statics/images/changing@2x.png" alt="">-->
+        <!--                </div>-->
+        <!--                <div class="order-info" style="cursor: pointer;" @click="jumpToOrder(300)">-->
+        <!--                    <div class="number">{{carOperation.transfering}}</div>-->
+        <!--                    <div class="text">换车中</div>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div class="flex display">-->
+        <!--                <div class="img" style="cursor: pointer;" @click="jumpToOrder(90)">-->
+        <!--                    <img src="./statics/images/in-car@2x.png" alt="">-->
+        <!--                </div>-->
+        <!--                <div class="order-info" style="cursor: pointer;" @click="jumpToOrder(201)">-->
+        <!--                    <div class="number">{{carOperation.spareuseing}}</div>-->
+        <!--                    <div class="text">备用车用车中</div>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <!--    </div>-->
+
+        <!--    <div class="task-content-box" v-show="customerShow">-->
+        <!--        <div class="list-search-sup-title new-layui-title border-bottom-dashed ">-->
+        <!--            客户总览-->
+        <!--        </div>-->
+        <!--        <div class="display risk-content-box risk-content-box-1951FF">-->
+        <!--            <div class="flex" @click="customerData('0')">-->
+        <!--                <div class="number">{{customerOperationData.totalCount || '0' }}</div>-->
+        <!--                <div class="text">客户总数</div>-->
+        <!--            </div>-->
+        <!--            <div class="flex" @click="customerData('1')">-->
+        <!--                <div class="number">{{customerOperationData.rentCount || '0' }}</div>-->
+        <!--                <div class="text">在租客户订单</div>-->
+        <!--            </div>-->
+        <!--            <div class="flex" @click="customerData('2')">-->
+        <!--                <div class="number">{{customerOperationData.dueSoonCount || '0' }}</div>-->
+        <!--                <div class="text">即将到期客户订单</div>-->
+        <!--            </div>-->
+        <!--            <div class="flex" @click="customerData('3')">-->
+        <!--                <div class="number">{{customerOperationData.needPayRentCount || '0' }}</div>-->
+        <!--                <div class="text">需要交租客户订单</div>-->
+        <!--            </div>-->
+        <!--            <div class="flex" @click="customerData('4')">-->
+        <!--                <div class="number">{{customerOperationData.overDueCount || '0' }}</div>-->
+        <!--                <div class="text">逾期欠款客户订单</div>-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <!--    </div>-->
+
+        <!--    <div class="task-content-box" v-show="caiWuShow">-->
+        <!--        <div class="main-all list-search-sup-title new-layui-title border-bottom-dashed display">-->
+        <!--            <div>财务总览</div>-->
+
+        <!--            <div class="task-content-box-tab display margin-right_childer_div" type="financeOperation">-->
+        <!--                <div class="task-content-box-tab-child-active" value="1">今日</div>-->
+        <!--                <div value="2">本周</div>-->
+        <!--                <div value="3">本月</div>-->
+        <!--                <div value="4">本年</div>-->
+        <!--                <div value="5">全部</div>-->
+        <!--                <input type="text" class="layui-input" id="financeOperation_dateTime"-->
+        <!--                       v-model="financeOperation.dateTime" readonly placeholder="选择日期范围" style="width: 300px;"-->
+        <!--                       autocomplete="off">-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <!--        <div class="task-content-box-finance display">-->
+        <!--            <div class="flex task-content-box-finance-032585">-->
+        <!--                <div class="number"><span style="cursor: pointer;"-->
+        <!--                                          @click="jumpTorReceivable(1)">￥{{financeOperation.receivable}}</span></div>-->
+        <!--                <div class="text"><span style="cursor: pointer;" @click="jumpTorReceivable(1)">应收账款</span></div>-->
+        <!--            </div>-->
+        <!--            <div class="flex task-content-box-finance-5F0473">-->
+        <!--                <div class="number"><span style="cursor: pointer;"-->
+        <!--                                          @click="jumpTorReceivable(2)">￥{{financeOperation.received}}</span></div>-->
+        <!--                <div class="text"><span style="cursor: pointer;" @click="jumpTorReceivable(2)">已收账款</span></div>-->
+        <!--            </div>-->
+        <!--            <div class="flex task-content-box-finance-FF1A1A">-->
+        <!--                <div class="number"><span style="cursor: pointer;"-->
+        <!--                                          @click="jumpTorRefund(0)">￥{{financeOperation.back}}</span></div>-->
+        <!--                <div class="text"><span style="cursor: pointer;" @click="jumpTorRefund(0)">应退账款</span></div>-->
+        <!--            </div>-->
+        <!--            <div class="flex task-content-box-finance-1951FF">-->
+        <!--                <div class="number"><span style="cursor: pointer;"-->
+        <!--                                          @click="jumpTorRefund(1)">￥{{financeOperation.retired}}</span></div>-->
+        <!--                <div class="text"><span style="cursor: pointer;" @click="jumpTorRefund(1)">已退账款</span></div>-->
+        <!--            </div>-->
+        <!--            <div class="flex task-content-box-finance-FF8B1A">-->
+        <!--                <div class="number" style="cursor: pointer;" @click="jumpToPayBill(1)">-->
+        <!--                    ￥{{financeOperation.copyWothAmount}}-->
+        <!--                </div>-->
+        <!--                <div class="text" style="cursor: pointer;" @click="jumpToPayBill(1)">应付账款</div>-->
+        <!--            </div>-->
+        <!--            <div class="flex task-content-box-finance-D40054">-->
+        <!--                <div class="number" style="cursor: pointer;" @click="jumpToPayBill(2)">-->
+        <!--                    ￥{{financeOperation.isPayAmount}}-->
+        <!--                </div>-->
+        <!--                <div class="text" style="cursor: pointer;" @click="jumpToPayBill(2)">已付账款</div>-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <!--    </div>-->
+
+    </div>
+    <!-- 加载js文件-->
+
+    <script type="text/javascript">
+        layui.cache.page = 'main';
+        layui.config({
+            base: './statics/common/'
+        }).extend({
+            larry: 'js/base'
+        }).use('larry');
+    </script>
+    <!--<script src="./statics/common/lib/larryms/mainvue.js?_${.now?long}"></script>-->
+    <script src="./statics/js/main.js"></script>
+</body>
+</html>

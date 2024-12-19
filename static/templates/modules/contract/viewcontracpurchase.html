@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>采购合同列表</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <!-- 查看表单 -->
+    <form class="layui-form ren-form">
+        <div class="jxc-detail layui-form ren-form">
+            <section class="jxc-section">
+                <legend class="aTitle">查看</legend>
+                <hr class="layui-bg-gray">
+                <div class="card">
+                    <div class="layui-row form-group">
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <span>合同编号</span><span>{{contracpurchase.code}}</span>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <span>供应商id</span><span>{{contracpurchase.purchaseSupplierId}}</span>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <span>供应商名称</span><span>{{contracpurchase.purchaseSupplierName}}</span>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <span>租赁类型：1、长租 2、以租代购 3、直购</span><span>{{contracpurchase.rentType}}</span>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <span>提交人id</span><span>{{contracpurchase.operationId}}</span>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <span>提交人姓名</span><span>{{contracpurchase.operationName}}</span>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <span>描述</span><span>{{contracpurchase.desc}}</span>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <span>状态</span><span>{{contracpurchase.status}}</span>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <span>车辆id</span><span>{{contracpurchase.carId}}</span>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <span>车牌号</span><span>{{contracpurchase.carNo}}</span>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <span>车架号</span><span>{{contracpurchase.vinNo}}</span>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <span>直购单价</span><span>{{contracpurchase.pricePurchase}}</span>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <span>购买时间</span><span>{{contracpurchase.timePurchase}}</span>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <span>租赁开始时间</span><span>{{contracpurchase.timeRentStart}}</span>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <span>租赁结束时间</span><span>{{contracpurchase.timeRentFinish}}</span>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <span>首付</span><span>{{contracpurchase.priceDownpayment}}</span>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <span>月租</span><span>{{contracpurchase.priceMonthlyrent}}</span>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <span>还款形式：1、金融公司 2、租赁平台</span><span>{{contracpurchase.returnmethod}}</span>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <span>还款日</span><span>{{contracpurchase.dueDate}}</span>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <span>已付金额</span><span>{{contracpurchase.pricePaid}}</span>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <span>保证金</span><span>{{contracpurchase.priceDeposit}}</span>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <span>支付方式</span><span>{{contracpurchase.paymethod}}</span>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <span>生效时间</span><span>{{contracpurchase.timeStart}}</span>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <span>结束时间</span><span>{{contracpurchase.timeFinish}}</span>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <span>创建时间</span><span>{{contracpurchase.timeCreate}}</span>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <span>更新时间</span><span>{{contracpurchase.timeUpdate}}</span>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <span>删除状态（0未删除，1已删除）</span><span>{{contracpurchase.delect}}</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </form>
+
+    <div style="position: fixed; left: 0; bottom: 0; width: 100%; height: 49px; line-height: 49px; padding-bottom: 10px; background-color: white; z-index: 1024;">
+        <a style="margin-left: 400px;margin-top: 10px;margin-bottom: 10px"
+           class="layui-btn layui-btn-primary layui-btn-sm" id="closePage">关闭</a>
+    </div>
+</div>
+
+
+<script src="../../statics/js/modules/contract/viewcontracpurchase.js?_${.now?long}"></script>
+</body>
+</html>

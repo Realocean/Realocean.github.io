@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>秒杀活动</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+    <script src="../../statics/js/modules/element-ui/index.js"></script>
+    <script src="../../statics/js/modules/element-ui/wangEditor.min.js"></script>
+    <style>
+        .ztree li ul.line{ height: 80%; }
+        /*编辑表单弹出层底部按钮*/
+        .edit-form-btn .layui-layer-btn0{
+            background: #FFC000;
+            border-radius: 3px;
+            height: 30px !important;
+            line-height: 30px !important;
+            font-size: 12px !important;
+            color: white;
+            border:0;
+        }
+        .edit-form-btn .layui-layer-btn1{
+            margin-left: 10px;
+            background: #3FACB3;
+            border-radius: 3px;
+            height: 30px !important;
+            line-height: 30px !important;
+            font-size: 12px !important;
+            color: white;
+            border:0;
+        }
+    </style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <div class="list-search-title-box">
+        <div class="list-search-sup-title">
+            筛选条件
+            <div class="list-search-form-button">
+                <a class="layui-btn layui-btn-normal" @click="add">新增秒杀活动</a>
+                <a id="exports" class="layui-btn search-btn">导出</a>
+                <a class="layui-btn search-btn">设置筛选项</a>
+                <a class="layui-btn search-btn">设置列表</a>
+            </div>
+        </div>
+        <form class="layui-form">
+            <section class="jxc-section">
+                <div class="card">
+                    <div class="layui-row form-group">
+                        <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs12">
+                            <label class="layui-form-label">方案名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" v-model="q.seckillName"
+                                       autocomplete="off" placeholder="请输入方案名称"/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs12">
+                            <label class="layui-form-label">活动状态</label>
+                            <div class="layui-input-inline">
+                                <select name="status" lay-filter="status" v-model="q.status">
+                                    <option value="">全部</option>
+                                    <option value="1">未开始</option>
+                                    <option value="2">进行中</option>
+                                    <option value="3">暂停中</option>
+                                    <option value="4">已结束</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs12">
+                            <label class="layui-form-label">开始时间:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="timeStartRange" class="layui-input searchVal"
+                                       v-model="q.timeStartRange" autocomplete="off" placeholder="选择日期范围" readonly/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs12">
+                            <label class="layui-form-label">结束时间:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="timeEndRange" class="layui-input searchVal"
+                                       v-model="q.timeEndRange" autocomplete="off" placeholder="选择日期范围" readonly/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs12">
+                            <label class="layui-form-label">所属部门：</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="deptName" v-model="q.deptName" @click="deptTree"
+                                       placeholder="所属部门" class="layui-input" readonly/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row form-group">
+                        <div @click="bindFilter" style="position: absolute;right: 30px;font-size: 14px;color: #1a1f33;">
+                            <span>高级筛选</span>
+                            <i class="layui-icon" :class="isFilter?'layui-icon-up':'layui-icon-down'"
+                               data-cascader="icon"></i>
+                        </div>
+                        <a class="layui-btn search_btn" @click="query">查询</a>
+                    </div>
+                </div>
+            </section>
+        </form>
+    </div>
+    <table class="layui-hide" id="grid" lay-filter="grid"></table>
+
+    <!-- 表单 修改 -->
+    <div v-show="editForm" class="layui-form ren-form" id="editForm">
+        <div class="jxc-detail layui-form ren-form">
+            <section class="jxc-section">
+                <legend class="aTitle">新增秒杀活动</legend>
+                <hr class="layui-bg-gray">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">活动标题<span style="color:red;">*</span>:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="supplierName" maxlength="200" v-model="scActivitySeckill.seckillName" autocomplete="off"
+                                       placeholder="请输入活动标题" class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">活动开始日期<span style="color:red;">*</span>:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" id="timeStart" placeholder="请选择开始时间"
+                                       :value="scActivitySeckill.timeStart" readonly/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">活动结束日期:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" id="timeEnd"  placeholder="不限时间"
+                                       :value="scActivitySeckill.timeEnd" readonly/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">库存数<span style="color:red;">*</span>:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="supplierName" maxlength="200" v-model="scActivitySeckill.countNumber" autocomplete="off"
+                                       placeholder="请输入库存数" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">虚拟已售数量<span style="color:red;">*</span>:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="supplierName" maxlength="200" v-model="scActivitySeckill.inventedSalesNumber" autocomplete="off"
+                                       placeholder="请输入已售数量" class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">活动原价/元<span style="color:red;">*</span>:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="supplierName" maxlength="200" v-model="scActivitySeckill.costPrice" autocomplete="off"
+                                       placeholder="请输入活动原价/元" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">活动秒杀价/元<span style="color:red;">*</span>:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="supplierName" maxlength="200" v-model="scActivitySeckill.costPrice" autocomplete="off"
+                                       placeholder="请输入活动原价/元" class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">可抢购数量</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="required" v-model="scActivitySeckill.rushBuyNumber"
+                                       autocomplete="off" placeholder="输入账号可抢购的份数/默认不限制" class="layui-input" value="0">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">适用门店/部门</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="required" v-model="scActivitySeckill.createStore"
+                                       autocomplete="off" placeholder="请选择活动店面/部门" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label" style="font-weight:bolder">添加秒杀商品<span style="color:red;">*</span></label>
+                            <div class="layui-input-inline">
+                                <a class="layui-btn layui-btn-normal" @click="addRow">添加商品</a>
+                            </div>
+                        </div>
+                        <div class="layui-row form-group">
+                            <div class="table">
+                                <table class="layui-hide" id="goodsTable" lay-filter="goodsTable"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr class="layui-bg-gray">
+                <legend class="aTitle">活动信息</legend>
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">活动封面<span style="color:red;">*</span>:</label>
+                            <div class="layui-input-inline">
+                                <a class="layui-btn layui-btn-normal">+添加图片</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <div class="layui-input-inline">
+                                支持JPG/Jpeg/png，尺寸XXXpa*XXXpa，不超过XXXK，仅限1张图片
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">详情封面<span style="color:red;">*</span>:</label>
+                            <div class="layui-input-inline">
+                                <a class="layui-btn layui-btn-normal">+添加图片</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <div class="layui-input-inline">
+                                支持JPG/Jpeg/png，尺寸XXXpa*XXXpa，不超过XXXK，仅限1张图片
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">分享封面<span style="color:red;">*</span>:</label>
+                            <div class="layui-input-inline">
+                                <a class="layui-btn layui-btn-normal">+添加图片</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <div class="layui-input-inline">
+                                支持JPG/Jpeg/png，尺寸XXXpa*XXXpa，不超过XXXK，仅限1张图片
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label">活动描述<span style="color:red;">*</span>:</label>
+                            <div id="Editor" style="margin-left: 170px;">
+                                <p></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- 表单 查看 -->
+    <div v-show="showForm" class="layui-form ren-form" id="showForm">
+        <div class="jxc-detail layui-form ren-form">
+            <section class="jxc-section">
+                <legend class="aTitle">详情</legend>
+                <hr class="layui-bg-gray">
+                <div class="card">
+                    <div class="layui-row form-group">
+                        <div class="column layui-col-xs4">
+                            <span>活动标题: </span><span>{{scActivitySeckill.seckillName}}</span>
+                        </div>
+                        <div class="column layui-col-xs4"><span>活动状态(1-未开始，2-进行中，3暂停中，4-已结束): </span><span>{{scActivitySeckill.status}}</span>
+                        </div>
+                        <div class="column layui-col-xs4">
+                            <span>活动开始时间: </span><span>{{scActivitySeckill.timeStart}}</span>
+                        </div>
+                        <div class="column layui-col-xs4">
+                            <span>活动结束时间: </span><span>{{scActivitySeckill.timeEnd}}</span>
+                        </div>
+                        <div class="column layui-col-xs4"><span>虚拟已售数量: </span><span>{{scActivitySeckill.inventedSalesNumber}}</span>
+                        </div>
+                        <div class="column layui-col-xs4">
+                            <span>封面图片url: </span><span>{{scActivitySeckill.coverImage}}</span></div>
+                        <div class="column layui-col-xs4">
+                            <span>详情图片url: </span><span>{{scActivitySeckill.detailsImage}}</span></div>
+                        <div class="column layui-col-xs4">
+                            <span>分享封面url: </span><span>{{scActivitySeckill.shareImage}}</span></div>
+                        <div class="column layui-col-xs4">
+                            <span>活动图文内容: </span><span>{{scActivitySeckill.content}}</span>
+                        </div>
+                        <div class="column layui-col-xs4">
+                            <span>活动原价: </span><span>{{scActivitySeckill.costPrice}}</span>
+                        </div>
+                        <div class="column layui-col-xs4"><span>活动现价: </span><span>{{scActivitySeckill.nowPrice}}</span>
+                        </div>
+                        <div class="column layui-col-xs4"><span>可抢购数量（0为不限制）: </span><span>{{scActivitySeckill.rushBuyNumber}}</span>
+                        </div>
+                        <div class="column layui-col-xs4">
+                            <span>活动总数量: </span><span>{{scActivitySeckill.countNumber}}</span>
+                        </div>
+                        <div class="column layui-col-xs4">
+                            <span>适用门店: </span><span>{{scActivitySeckill.createStore}}</span>
+                        </div>
+                        <div class="column layui-col-xs4"><span>是否有推荐奖励（0.是 1.否）: </span><span>{{scActivitySeckill.isReferralBonuses}}</span>
+                        </div>
+                        <div class="column layui-col-xs4"><span>租户id: </span><span>{{scActivitySeckill.tenantId}}</span>
+                        </div>
+                        <div class="column layui-col-xs4"><span>删除状态(1-未删除，2-已删除): </span><span>{{scActivitySeckill.delFlag}}</span>
+                        </div>
+                        <div class="column layui-col-xs4">
+                            <span>创建时间: </span><span>{{scActivitySeckill.createTime}}</span>
+                        </div>
+                        <div class="column layui-col-xs4">
+                            <span>更新时间: </span><span>{{scActivitySeckill.updateTime}}</span>
+                        </div>
+                        <div class="column layui-col-xs4"><span>创建者: </span><span>{{scActivitySeckill.createBy}}</span>
+                        </div>
+                        <div class="column layui-col-xs4"><span>更新者: </span><span>{{scActivitySeckill.updateBy}}</span>
+                        </div>
+                        <div class="column layui-col-xs4"><span>备注: </span><span>{{scActivitySeckill.remark}}</span>
+                        </div>
+                        <div class="column layui-col-xs4">
+                            <span>分享url: </span><span>{{scActivitySeckill.shareUrl}}</span>
+                        </div>
+                        <div class="column layui-col-xs4"><span>部门id: </span><span>{{scActivitySeckill.deptId}}</span>
+                        </div>
+                        <div class="column layui-col-xs4">
+                            <span>提交人id: </span><span>{{scActivitySeckill.operationId}}</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+<!-- 选择部门 -->
+<div id="deptLayer" style="display: none;padding:10px;">
+    <ul id="deptTree" class="ztree"></ul>
+</div>
+<#--商品动态表格删除操作-->
+<script type="text/html" id="goodsTableItemScript">
+    <a class="layui-grid-btn-xs" lay-event="delete">删除</a>
+</script>
+<!--操作-->
+<script type="text/html" id="showTpl">
+        <a class="layui-btn layui-btn-xs" lay-event="show" v-m-perm="['marketing:scactivityseckill:info']">查看</a>
+</script>
+<script type="text/html" id="editTpl">
+        <a class="layui-btn layui-btn-xs" lay-event="edit" v-m-perm="['marketing:scactivityseckill:update']">编辑</a>
+</script>
+<script type="text/html" id="delTpl">
+        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del" v-m-perm="['marketing:scactivityseckill:delete']">删除</a>
+</script>
+<script type="text/html" id="startTpl">
+        <a class="layui-btn layui-btn-xs" lay-event="start" @click="updateStatus" v-m-perm="['marketing:scactivityseckill:updateStatus']">开始</a>
+</script>
+<script type="text/html" id="stopTpl">
+        <a class="layui-btn layui-btn-xs" lay-event="stop" v-m-perm="['marketing:scactivityseckill:updateStatus']">暂停</a>
+</script>
+<script type="text/html" id="shareTpl">
+        <a class="layui-btn layui-btn-xs" lay-event="share" v-m-perm="['marketing:scactivityseckill:updateStatus']">分享</a>
+</script>
+<script type="text/html" id="restartTpl">
+        <a class="layui-btn layui-btn-xs" lay-event="restart" v-m-perm="['marketing:scactivityseckill:updateStatus']">启用</a>
+</script>
+<script type="text/html" id="endTpl">
+        <a class="layui-btn layui-btn-xs" lay-event="end" v-m-perm="['marketing:scactivityseckill:updateStatus']">结束</a>
+</script>
+<script type="text/html" id="copyActivityBtn">
+        <a class="layui-btn layui-btn-xs" lay-event="copyActivityBtn" v-m-perm="['marketing:scactivityseckill:copyActivityBtn']">复制活动</a>
+</script>
+<script type="text/html" id="activityDataBtn">
+        <a class="layui-btn layui-btn-xs" lay-event="activityData" v-m-perm="['marketing:scactivityseckill:activityData']">活动数据</a>
+</script>
+<script type="text/html" id="commissionDataBtn">
+        <a class="layui-btn layui-btn-xs" lay-event="commissionData" v-m-perm="['marketing:scactivityseckill:commissionData']">提成数据</a>
+</script>
+<script type="text/html" id="subCommissionDataBtn">
+        <a class="layui-btn layui-btn-xs" lay-event="subCommissionDataBtn" v-m-perm="['marketing:scactivityseckill:subCommissionDataBtn']">分佣数据</a>
+</script>
+
+<script src="../../statics/js/modules/marketing/scactivityseckill.js?_${.now?long}"></script>
+</body>
+</html>

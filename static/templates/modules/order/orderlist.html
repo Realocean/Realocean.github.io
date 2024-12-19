@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>订单表</title>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+    <style>
+        .layui-table-cell {
+            padding:0 5px;
+            height:inherit;
+            overflow:visible;
+            text-overflow:inherit;
+            white-space:normal;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <div class="list-header-content-box">
+        <div class="list-header-card display">
+            <div
+                    v-for="(item, index) in statusLst"
+                    :key="index"
+                    :sname="item.key"
+                    class="flex" :class="item.key === statusIndex ? 'active' : ''" @click="changeStatus(item,index)" style="cursor:pointer;">
+                <div class="list-header-card-text">{{item.name}}</div>
+                <div class="list-header-card-number">{{item.count}}</div>
+            </div>
+        </div>
+        <div class="list-header-sub-card">
+            <div v-for="(item, index) in statusLstSub" :key="index" @click="changeStatus(item,index)" :sname="item.key" :class="item.key === statusIndex ? 'active' : ''" style="cursor:pointer;">
+                <div class="list-header-sub-card-text">{{item.name}}</div>
+                <div class="list-header-sub-card-number">{{item.count}}</div>
+            </div>
+        </div>
+    </div>
+    <div id="searchId">
+        <div class="list-search-title-box">
+            <form class="layui-form">
+                <div style="display:flex;width: 100%;">
+                    <div class="layui-form-item layui-row" style="width: 100%;">
+                        <div class="list-search-form-button" style="width: 100%;">
+                            <a class="layui-btn search-btn" id="exports" v-m-perm="['order:order:export']">导出</a>
+                            <a class="layui-btn reset-btn" @click="importexl" v-m-perm="['order:order:inport']">订单导入</a>
+                            <a class="layui-btn reset-btn" @click="placeOrder" v-m-perm="['order:order:save']">下单</a>
+                            <a class="layui-btn reset-btn" @click="relet" v-m-perm="['order:order:relet']">续租</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="list-table-content-box">
+        <table class="layui-hide" id="grid" lay-filter="grid"></table>
+    </div>
+
+    <form id="downLoadXls" style="display: none" :action="baseURL + 'order/order/downxlserr'" method="post" target="">
+        <input type="text" name="datas"/>
+        <input type="text" name="rentType"/>
+    </form>
+
+    <div class="layui-form ren-form" v-show="exportTypeSelect" id="exportTypeSelect">
+        <div class="layui-form-item">
+            <label class="layui-form-label">导出类型：</label>
+            <div class="layui-input-block">
+                <input type="radio" name="exportType" lay-filter="exportType" v-model="exportType" value="1" title="车辆汇总数据导出">
+                <input type="radio" name="exportType" lay-filter="exportType" v-model="exportType" value="2" title="基础数据导出">
+            </div>
+        </div>
+        <div class="layui-input-block" style="left: 6%;width: 30%;margin-top: 100px;">
+            <a class="layui-btn reset-btn" @click="closeTip">取消</a>
+            <a class="layui-btn search-btn" @click="selectedExportType">确定</a>
+        </div>
+    </div>
+
+    <div class="layui-form ren-form" v-show="importTypeSelect" id="importTypeSelect">
+        <div class="layui-form-item">
+            <label class="layui-form-label">订单类型：</label>
+            <div class="layui-input-block">
+                <input type="radio" name="importType" lay-filter="importType" v-model="importType" value="1" title="经租">
+                <input type="radio" name="importType" lay-filter="importType" v-model="importType" value="2" title="以租代购">
+                <input type="radio" name="importType" lay-filter="importType" v-model="importType" value="5" title="融租">
+                <input type="radio" name="importType" lay-filter="importType" v-model="importType" value="6" title="直购">
+                <input type="radio" name="importType" lay-filter="importType" v-model="importType" value="3" title="展示车">
+                <input type="radio" name="importType" lay-filter="importType" v-model="importType" value="4" title="试驾车">
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-top: 10px">
+            <label class="layui-form-label">数据文件：</label>
+            <div class="layui-input-block" id="importFileBlock"></div>
+        </div>
+        <div class="layui-input-block" style="left: 6%;width: 30%;margin-top: 70px;" id="selectedImportBtnBlock"></div>
+    </div>
+</div>
+
+<!--操作-->
+<script type="text/html" id="barTpl">
+    {{#if (d.orderStatus == 2 && d.orderCarStatus != 100){ }}
+    <a class="layui-grid-btn-xs" lay-event="view" v-m-perm="['order:order:info']">查看</a>
+    {{#} }}
+    {{#if (d.orderStatus == 1){ }}
+    <a class="layui-grid-btn-xs" lay-event="edit" v-m-perm="['order:order:update']">编辑</a>
+    {{#} }}
+    {{#if (d.orderCarStatus == 300 && d.replaceDeliveryCar == 1){ }}
+    <a class="layui-grid-btn-xs" lay-event="deliveryCar" v-m-perm="['order:order:delivery']">分配交车</a>
+    {{#} }}
+    {{#if ($.inArray('1', d.btnKeys) >= 0 || $.inArray('306', d.btnKeys) >= 0){ }}
+    <a class="layui-grid-btn-xs" lay-event="delect" v-m-perm="['order:order:delect']">删除</a>
+    {{#} }}
+</script>
+
+<script src="../../statics/js/modules/order/orderlist.js?_${.now?long}"></script>
+</body>
+</html>

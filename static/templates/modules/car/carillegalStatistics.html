@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>车辆违章统计</title>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="/statics/common/include/head.js"></script>
+</head>
+<style>
+    .layui-form-label{
+        width: 100px;
+    }
+</style>
+<body class="ren-body">
+    <div id="rrapp" v-cloak>
+        <div class="mvvm-table">
+            <!--搜索条件-->
+            <div class="list-search-title-box">
+                <form class="layui-form" style="box-shadow: 0 0 20px #eee;padding-right: 15px;">
+                    <section class="jxc-section" style="display: flex;align-items: flex-start;white-space: nowrap;">
+                        <div class="card layui-row" style="flex: 1">
+                            <div class="layui-form-item ">
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12"
+                                    style="margin-bottom: 5px !important">
+                                    <label class="layui-form-label">车辆号</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal" v-model="q.carNo"
+                                            @keyup.enter="query" placeholder="请输入车牌号"/>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12"
+                                    style="margin-bottom: 5px !important">
+                                    <label class="layui-form-label">是否达到预警值</label>
+                                    <div class="layui-input-inline">
+                                        <select name="warningFlag" lay-filter="warningFlag" v-model="q.warningFlag">
+                                            <option value="">全部</option>
+                                            <option v-for="(item,index) in warningFlagDict" :value="item.value">{{item.label}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm4 layui-col-xs12">
+                                    <div style="display: flex;align-items: center;">
+                                        <a class="layui-btn btn-warning" @click="exports">导出</a>
+                                        <a class="layui-btn search-btn" @click="query">查询</a>
+                                        <a class="layui-btn reset-btn" @click="reset">重置</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </form>
+            </div>
+            <div class="list-table-content-box">
+                <table class="layui-hide" id="grid" lay-filter="grid"></table>
+            </div>
+        </div>
+        <form id="downLoadXls" style="display: none" method="post" target="">
+            <input type="text" name="datas" />
+        </form>
+    </div>
+    <script src="/statics/js/modules/car/carillegalStatistics.js"></script>
+</body>
+</html>

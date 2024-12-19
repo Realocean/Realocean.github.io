@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>货源管理</title>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/new_css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+
+
+
+
+
+    <style>
+        .layui-table-cell {
+            padding:0 5px;
+            height:inherit;
+            overflow:visible;
+            text-overflow:inherit;
+            white-space:normal;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <div class="mvvm-table">
+        <div class="list-search-title-box">
+            <form class="layui-form" style="box-shadow: 0 0 20px #eee;padding-right: 15px;">
+                <section class="jxc-section" style="display: flex;align-items: flex-start;white-space: nowrap;">
+                    <div class="card layui-row" style="flex: 1">
+                        <div class="layui-form-item">
+                            <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                <label class="layui-form-label">项目名称</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input searchVal" v-model="q.projectName"  placeholder="请输入项目名称"/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                <label class="layui-form-label">活动跳转类型</label>
+                                <div class="layui-input-inline">
+                                    <!--项目跳转类型(1外部链接，2内部展示)-->
+                                    <select v-model="q.jumpType" class="layui-select" lay-filter="jumpType">
+                                        <option value="">全部</option>
+                                        <option value="1">外部链接</option>
+                                        <option value="2">内部展示</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                <label class="layui-form-label">活动状态</label>
+                                <div class="layui-input-inline">
+                                    <!-- 项目状态(1启用，0停用)-->
+                                    <select v-model="q.projectStatus" class="layui-select" lay-filter="projectStatus">
+                                        <option value="">全部</option>
+                                        <option value="1">启用</option>
+                                        <option value="0">禁用</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <section v-show="isFilter">
+                                <div class=" flex-box layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <label class="layui-form-label">报名开始时间</label>
+                                    <div class="list-search-sup-title new-layui-title">
+                                        <div class="task-content-box-tab">
+                                            <div class="display task-content-box-tab layui-col-md8 layui-col-sm8 layui-col-xs12" type="registrationStartTimeType">
+                                                <div value="0"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">昨天</div>
+                                                <div value="1"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">今日</div>
+                                                <div value="2"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">上周</div>
+                                                <div value="3"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">本周</div>
+                                                <div value="4"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">上月</div>
+                                                <div value="5"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">本月</div>
+                                                <div value="6"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">本季</div>
+                                                <div value="7"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">本年</div>
+                                            </div>
+                                            <div class="layui-col-md3 layui-col-sm4 layui-col-xs12">
+                                                <input type="text" class="layui-input"  id="registrationStartTimeStr" v-model="q.registrationStartTimeStr" readonly placeholder="选择日期范围" style="width: 300px;" autocomplete="off">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-box layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <label class="layui-form-label">报名结束时间</label>
+                                    <div class="list-search-sup-title new-layui-title">
+                                        <div class="task-content-box-tab">
+                                            <div class="display task-content-box-tab layui-col-md8 layui-col-sm8 layui-col-xs12" type="registrationClosingTimeType">
+                                                <div value="0"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">昨天</div>
+                                                <div value="1"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">今天</div>
+                                                <div value="2"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">上周</div>
+                                                <div value="3"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">本周</div>
+                                                <div value="4"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">上月</div>
+                                                <div value="5"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">本月</div>
+                                                <div value="6"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">本季</div>
+                                                <div value="7"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">本年</div>
+                                            </div>
+                                            <div class="layui-col-md3 layui-col-sm4 layui-col-xs12">
+                                                <input type="text" class="layui-input" id="registrationClosingTimeStr"  v-model="q.registrationClosingTimeStr" readonly placeholder="选择日期范围"
+                                                       style="width: 300px;" autocomplete="off">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-box layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <label class="layui-form-label">创建时间</label>
+                                    <div class="list-search-sup-title new-layui-title">
+                                        <div class="task-content-box-tab">
+                                            <div class="display task-content-box-tab layui-col-md8 layui-col-sm8 layui-col-xs12"
+                                                 type="createTimeType">
+                                                <div value="0"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">昨天</div>
+                                                <div value="1"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">今天</div>
+                                                <div value="2"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">上周</div>
+                                                <div value="3"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">本周</div>
+                                                <div value="4"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">上月</div>
+                                                <div value="5"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">本月</div>
+                                                <div value="6"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">本季</div>
+                                                <div value="7"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">本年</div>
+                                            </div>
+                                            <div class="layui-col-md3 layui-col-sm4 layui-col-xs12">
+                                                <input type="text" class="layui-input" id="createTimeStr"
+                                                       v-model="q.createTimeStr" readonly placeholder="选择日期范围"  style="width: 300px;" autocomplete="off">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <div :class="isFilter?'layui-col-md12':'layui-col-md3'" class="layui-inline layui-col-sm12 layui-col-xs12 flex-end">
+                                <div style="display:flex;justify-content: flex-end;">
+                                    <div style="display: flex;align-items: center;">
+                                        <a class="layui-btn search-btn" @click="query">查询</a>
+                                        <a class="layui-btn reset-btn" @click="reset">重置</a>
+
+                                        <div class="df-color"  @click="bindFilter" style="margin-left: 10px;cursor: pointer;user-select: none;">
+                                            <span >高级筛选</span>
+                                            <i class="icon layui-icon-extend layui-extend-shaixuan"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+<!--                    <div style="display: flex;align-items: center;">-->
+<!--                        <a class="layui-btn search-btn" @click="query">查询</a>-->
+<!--                        <a class="layui-btn reset-btn" @click="reset">重置</a>-->
+<!--                        <div @click="bindFilter" style="margin-left: 10px;cursor: pointer;user-select: none;">-->
+<!--                            <span style="color: #3FACB3;">高级筛选</span>-->
+<!--                            <img src="../../../statics/images/gjsx2x.png" style="width:14px">-->
+<!--                        </div>-->
+<!--                    </div>-->
+                </section>
+            </form>
+        </div>
+        <div class="list-search-title-box">
+
+            <form class="layui-form">
+                <div style="display:flex;width: 100%;">
+                    <div class="layui-form-item layui-row" style="width: 100%;">
+                        <div class="list-search-form-button" style="width: 100%;">
+                            <a class="layui-btn btn-primary" @click="add" v-m-perm="['supplymanagement:supplymanagement:save']">新增</a>
+                            <a class="layui-btn btn-warning" @click="exports" v-m-perm="['supplymanagement:supplymanagement:export']">导出</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+<!--            <form class="layui-form">-->
+<!--                <div style="display:flex;width: 100%;">-->
+<!--                    <div class="layui-form-item layui-row" style="width: 100%;">-->
+<!--                        <div class="list-search-form-button" style="width: 100%;">-->
+<!--                            <mperm v-m-perm="['supplymanagement:supplymanagement:export']">-->
+<!--                                <a class="layui-btn search-btn" @click="exports">导出</a>-->
+<!--                            </mperm>-->
+<!--                            <mperm v-m-perm="['supplymanagement:supplymanagement:save']">-->
+<!--                                <a class="layui-btn reset-btn" @click="add">新增</a>-->
+<!--                            </mperm>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </form>-->
+        </div>
+
+        <div class="list-table-content-box">
+            <table class="layui-hide" id="grid" lay-filter="grid"></table>
+        </div>
+    </div>
+</div>
+
+<!--操作-->
+<script type="text/html" id="barTpl">
+    <div style="min-width: 100px;">
+    <mperm v-m-perm="['supplymanagement:supplymanagement:info']" class="option-btn-margin">
+    <a class="layui-grid-btn-xs" lay-event="view" more-btn-index="{{d.LAY_INDEX-1}}">查看</a>
+    </mperm>
+
+    {{#if(d.projectStatus==0){}}
+        <mperm v-m-perm="['supplymanagement:supplymanagement:update']" class="option-btn-margin">
+          <a class="layui-grid-btn-xs" lay-event="edit" more-btn-index="{{d.LAY_INDEX-1}}">编辑</a>
+        </mperm>
+        <mperm v-m-perm="['supplymanagement:supplymanagement:start']" class="option-btn-margin">
+            <a class="layui-grid-btn-xs" lay-event="start" more-btn-index="{{d.LAY_INDEX-1}}">启用</a>
+        </mperm>
+        <mperm v-m-perm="['supplymanagement:supplymanagement:delete']" class="option-btn-margin">
+            <a class="layui-grid-btn-xs" lay-event="del" more-btn-index="{{d.LAY_INDEX-1}}">删除</a>
+        </mperm>
+    {{#}}}
+    {{#if(d.projectStatus==1){}}
+        <mperm v-m-perm="['supplymanagement:supplymanagement:stop']" class="option-btn-margin">
+          <a class="layui-grid-btn-xs" lay-event="stop" more-btn-index="{{d.LAY_INDEX-1}}">停用</a>
+        </mperm>
+    {{#}}}
+    </div>
+</script>
+
+<script src="../../statics/js/modules/supplymanagement/supplymanagementlist.js?_${.now?long}"></script>
+</body>
+</html>

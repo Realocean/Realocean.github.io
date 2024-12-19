@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>map</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_2498251_ys55il3udco.css">
+    <style>
+        body, html, #app, #map {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            font-family: "微软雅黑";
+        }
+
+        #container {
+            width: 100%;
+            height: 100vh;
+        }
+
+        .map-container {
+            position: relative;
+        }
+
+        .map-query {
+            position: absolute;
+            right: 20px;
+            top: 0;
+            box-sizing: border-box;
+            padding: 15px 0;
+            background: #fff;
+            box-shadow: 1px 1px 5px 2px #e4edff;
+        }
+
+        .map-search {
+            margin-bottom: 20px;
+        }
+
+        .car-status {
+            display: flex;
+            justify-content: center;
+            box-sizing: border-box;
+            padding: 10px;
+        }
+
+        .car-status__item {
+            width: 140px;
+            height: 40px;
+            background: #f4f7fd;
+            margin: 0 8px;
+            text-align: center;
+            line-height: 40px;
+            cursor: pointer;
+        }
+
+        .car-icon {
+            /*width: 15px;*/
+            /*height: 15px;*/
+            width: 26px;
+            height: 26px;
+            vertical-align: middle;
+        }
+
+        .car-label {
+            vertical-align: middle;
+            cursor: pointer;
+        }
+
+        /* */
+        .text-center {
+            display: flex;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .car-details__btn {
+            position: relative;
+            display: inline-block;
+            margin: 10px 15px 0 20px;
+            color: #3FACB3;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .car-details__btn:after {
+            content: '';
+            border-right: 1px solid #B2D6FF;
+            top: 0;
+            right: 0;
+            padding-left: 30px;
+        }
+
+        .car-details__btn:last-child:after {
+            padding-left: 0px;
+            border-right: none;
+        }
+
+        /*车辆详情 - 弹框**/
+        .car-details__container {
+            border-bottom: 1px solid #F0F7FF;
+            margin-bottom: 15px;
+        }
+
+        .car-details__container:last-child {
+            border-bottom: none;
+        }
+
+        .car-details__box {
+            box-sizing: border-box;
+            padding: 15px;
+        }
+
+        .PeriodDiv-car-info {
+            margin-bottom: 12px
+        }
+
+        .PeriodDiv-car-info p {
+            margin-bottom: 6px;
+        }
+
+        .car-details__title {
+            box-sizing: border-box;
+            padding-left: 13px;
+            border-left: 4px solid #5F9DFF;
+            font-size: 16px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .PeriodDiv-car-info {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .car-details__item {
+            width: 50%;
+        }
+
+        .car-details__item, .car-details__inner, car-details__item span, .car-details__inner span {
+            font-size: 12px;
+            color: #666666;
+        }
+
+        .car-details__inner {
+            width: 100%;
+        }
+
+        .BMap_bubble_title {
+            font-size: 18px;
+            font-weight: 700;
+            border-bottom: 1px solid #cfcfcf;
+            padding-bottom: 8px;
+            margin-bottom: 8px;
+        }
+
+        .periodDiv-label {
+            display: inline-block;
+            width: 130px;
+        }
+
+        .locationAddress {
+            display: flex;
+            align-items: self-start;
+        }
+
+        .stretch {
+            box-sizing: border-box;
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 10;
+        }
+
+        .stretch-img {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .fade-enter-active, .fade-leave-active {
+            transition: all .5s;
+        }
+
+        .fade-enter, .fade-leave-to {
+            opacity: 0;
+            transform: translateX(560px);
+        }
+
+        .statusAction {
+            background: #3FACB3;
+            color: #fff;
+        }
+
+        .info {
+            z-index: 999;
+            width: auto;
+            min-width: 22rem;
+            padding: .75rem 1.25rem;
+            margin-left: 1.25rem;
+            position: fixed;
+            top: 1rem;
+            background-color: #fff;
+            border-radius: .25rem;
+            font-size: 14px;
+            color: #666;
+            box-shadow: 0 2px 6px 0 rgba(27, 142, 236, 0.5);
+        }
+
+        /* 车辆左侧信息 2.0 */
+        .vehicle-left {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 280px;
+            box-sizing: border-box;
+            padding: 0 15px;
+        }
+
+        .vertical-align {
+            vertical-align: middle;
+        }
+
+        .white {
+            box-shadow: 1px 1px 5px 2px #e4edff;
+            background: white;
+        }
+
+        .vehicle-title {
+            position: relative;
+            width: 250px;
+            height: 45px;
+            margin-left: -15px;
+            padding: 0 15px;
+        }
+
+        .vehicle-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 15px;
+            right: 15px;
+            border-bottom: 1px dotted #dbe2ec;
+        }
+
+        .vehicle-ul {
+            max-height: 52vh;
+            overflow-y: auto;
+        }
+
+        .vehicle-ul::-webkit-scrollbar {
+            width: 5px;
+            overflow: hidden;
+        }
+
+        .vehicle-ul::-webkit-scrollbar-thumb { /*滚动条里面小方块*/
+            width: 5px;
+            border-radius: 5px;
+            -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .vehicle-ul::-webkit-scrollbar-track { /*滚动条里面轨道*/
+            -webkit-box-shadow: inset 0 0 5px #eee;
+            border-radius: 0;
+            background: #fff;
+        }
+
+        .vehicle-ul {
+            scrollbar-color: #e5e5e5 #f7f7f9; /* 滑块颜色  滚动条背景颜色 */
+            scrollbar-width: thin; /* 滚动条宽度有三种：thin、auto、none */
+        }
+
+        .vehicle-li {
+            box-sizing: border-box;
+        }
+
+        .vehicle-title, .vehicle-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .line-border-bottom {
+            border-bottom: 1px solid #F0F7FF;
+        }
+
+        .vehicle-item {
+            position: relative;
+            font-size: 12px;
+            box-sizing: border-box;
+            padding: 12px 5px;
+        }
+
+        .vehicle-equipment {
+            box-sizing: border-box;
+            padding-left: 10px;
+            border-left: 2px solid #3FACB3;
+            font-size: 12px;
+            margin-left: 3px;
+            margin-bottom: 8px;
+        }
+
+        .vehicle-equipment-item {
+            box-sizing: border-box;
+            padding: 5px 0;
+        }
+
+        .vehicle-state {
+            display: flex;
+        }
+
+        .vehicle-state-tab {
+            display: flex;
+            box-sizing: border-box;
+            padding: 10px 0;
+        }
+
+        .vehicle-state {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            flex: 1;
+        }
+        .vehicle-state p{
+            font-size:14px;
+        }
+        .vehicle-state p:first-child {
+           margin-bottom:8px;
+        }
+        .title{
+            font-size:14px;
+            font-weight: 700;
+        }
+        .margin-bottom-10 {
+            margin-bottom: 10px !important;
+        }
+
+        .stateAction {
+            /*color: #3FACB3;*/
+            position: relative;
+        }
+
+        .stateAction:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 10px;
+            border: 1px solid #3FACB3;
+            right: 10px;
+        }
+
+        .pointer {
+            cursor: pointer;
+        }
+
+        .vehicle-all {
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .vehicle-left-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 280px;
+        }
+
+        .car-alarm {
+            display: flex;
+            justify-content: space-around;
+            background: #f5f5f5;
+            box-sizing: border-box;
+            height: 30px;
+            line-height: 30px;
+            text-align: right;
+        }
+
+        .all-car {
+            font-size: 12px;
+            padding: 2px;
+            border-radius: 2px;
+            font-weight: 300;
+            background-image: linear-gradient(
+                    180deg, #aabcdd, #141c60 75%, #bad0ea);
+            margin-right: 4px;
+            color: #fff;
+        }
+
+        .car-onLine {
+            width: 17px;
+            height: 17px;
+            display: inline-block;
+            background: #4caf50;
+            transform: translateY(4px);
+        }
+
+        #vehicle-li-page {
+            text-align: center;
+            border-top: 1px solid #f1f1f1;
+        }
+
+        #vehicle-li-page .layui-laypage {
+            display: flex;
+            justify-content: center;
+        }
+
+        #vehicle-li-page .layui-laypage a, .layui-laypage span {
+            padding: 0 10px;
+            height: 21px;
+            line-height: 21px;
+            border: transparent;
+        }
+
+        .vehicle-table {
+            position: absolute;
+            bottom: -10px;
+            right: 0;
+            width: calc(100vw - 280px);
+        }
+
+        .sendInstructions {
+            /*position: absolute;*/
+            /*top: 100px;*/
+            /*left: 300px;*/
+            /*width: 600px;*/
+            /*background: #fff;*/
+        }
+
+        .sendInstructions .el-form-item {
+            margin-bottom: 0;
+        }
+
+        .sendInstructions .el-button {
+            background: #3FACB3;
+            border-radius: 3px;
+        }
+
+        .sendInstructions .el-date-editor--datetimerange.el-input__inner {
+            width: 350px;
+        }
+
+        .equipment-container {
+            position: absolute;
+            top: 100px;
+            left: 300px;
+            width: 600px;
+            background: #fff;
+        }
+
+        .equipment-body {
+            box-sizing: border-box;
+            padding: 5px 15px;
+        }
+
+        .mask .el-dialog__header {
+            padding: 0;
+        }
+
+        .icon-lingdang {
+            animation: flashing 2s ease-in-out infinite;
+        }
+
+        @keyframes flashing {
+            0% {
+                opacity: 1;
+                transform: scale(0.5);
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1.4);
+                opacity: 0.2;
+            }
+        }
+
+        .el-tabs__item.is-active, .el-tabs__item:hover {
+            color: #3FACB3;
+        }
+
+        .el-tabs__active-bar,
+        .el-pagination.is-background .el-pager li:not(.disabled).active {
+            background-color: #3FACB3;
+        }
+
+        .refreshCountdown-list {
+            background: #fff;
+            /*border-radius: 4px;*/
+            box-sizing: border-box;
+            padding: 5px 15px;
+            margin-left: -15px;
+            margin-right: -15px;
+        }
+
+        .refreshCountdown-carInfo {
+            position: fixed;
+            top: 15px;
+            left: 290px;
+            background: #fff;
+            border-radius: 4px;
+            box-sizing: border-box;
+            padding: 5px 20px;
+        }
+
+        .audio {
+            position: absolute;
+            bottom: -45px;
+            /*bottom: 55px;*/
+            left: -41px;
+            /*left: 0;*/
+        }
+
+        .driving {
+            color: #00B83F;
+        }
+
+        .alarm {
+            color: red;
+        }
+
+        .off-line {
+            color: #FFC000
+        }
+    </style>
+    <script src="https://api.map.baidu.com/api?v=2.0&ak=5xg2kqlDtrMlhuMjuhVA5tYZe4OQ68dY"></script>
+</head>
+<body>
+<div id="app">
+    <div class="map-container">
+        <v-map ref="map" :map-point="mapPoint" :point-list="point" :config="config" @send="onDirective"
+               @vehicle-position="onVehiclePosition" :center-zoom="centerAndZoom"></v-map>
+
+        <div class="refreshCountdown-carInfo" v-if="isVehicleCountdown">
+            <i class="el-icon-time"></i>
+            <span>{{vehicleCountdown}}秒后刷新</span>
+            <span style="color: #c33;cursor: pointer" v-if="isDisable" @click="getMonitorlist(obj)"> 刷新</span>
+            <span style="color: #c33;cursor: no-drop" v-else> 刷新</span>
+        </div>
+
+        <div class="vehicle-left" :class="isVehicle?'white':''">
+            <!--            <div class="refreshCountdown-list">-->
+            <!--                <i class="el-icon-time"></i>-->
+            <!--                <span style="color: #c33">{{listCountdown}}秒后刷新</span>-->
+            <!--            </div>-->
+            <div class="vehicle-title" style="background: #fff">
+                <p @click="onIsVehicle" class="pointer title">车辆列表
+                    <i class="layui-icon" :class="isVehicle?'layui-icon-down':'layui-icon-up'"></i>
+                </p>
+                <p>
+                    <i class="layui-icon layui-icon-refresh pointer" @click="refreshList"
+                       style="margin-right: 15px"></i>
+                    <i class="layui-icon layui-icon-location pointer" @click="onDevice(2,0)"></i>
+                </p>
+            </div>
+            <div class="vehicle-body" v-show="isVehicle">
+                <div class="vehicle-state-tab margin-bottom-10 pointer">
+                    <div class="vehicle-state" :class="actionState==0?'stateAction':''" @click="chooseState(0)">
+                        <p>全部</p>
+                        <p>{{allCount}}</p>
+                    </div>
+                    <div class="vehicle-state" :class="actionState==1?'stateAction':''" @click="chooseState(1)">
+                        <p>行驶</p>
+                        <p>{{travelCount}}</p>
+                    </div>
+                    <div class="vehicle-state" :class="actionState==2?'stateAction':''" @click="chooseState(2)">
+                        <p>静止</p>
+                        <p>{{staticCount}}</p>
+                    </div>
+                    <div class="vehicle-state" :class="actionState==3?'stateAction':''" @click="chooseState(3)">
+                        <p>离线</p>
+                        <p>{{offLineCount}}</p>
+                    </div>
+                    <div class="vehicle-state" :class="actionState==4?'stateAction':''" @click="chooseState(4)"
+                         style="color: #D63F5F">
+                        <p>报警</p>
+                        <p>{{warnCount}}</p>
+                    </div>
+                </div>
+                <div class="margin-bottom-10">
+                    <div class="layui-form">
+                        <div class="layui-form-item margin-bottom-10">
+                            <select id="deptSelect" name="modules" lay-filter="deptIdSelect" lay-search=""
+                                    v-model="q.deptId">
+                                <option value="">请输入所属公司或部门</option>
+                                <!--                                    <template v-for="item in sysDeptEntityList">-->
+                                <!--                                        <option :value="item.deptId">{{item.name}}</option>-->
+                                <!--                                    </template>-->
+                            </select>
+                        </div>
+                        <div class="layui-form-item margin-bottom-10">
+                            <div class="layui-input-inline" style="width: 100% !important;">
+                                <input type="text" v-model="q.carNo" class="layui-input" placeholder="请输入车牌号">
+                            </div>
+                            
+                        </div>
+                        <div class="" style="display: block;text-align: right;">
+                            <button type="button" class="layui-btn search-btn layui-btn-sm"
+                                    @click="refreshList">查询
+                            </button>
+                            <button class="layui-btn reset-btn layui-btn-sm" @click="reset">重置</button>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <ul class="vehicle-ul">
+                        <li v-for="(item,index) in carList" class="vehicle-li line-border-bottom pointer"
+                            @click="onVehicle(item,index)">
+                            <div class="vehicle-item">
+                                <div>
+                                    <!--  <img :src="item.icon" >-->
+                                    <i class="iconfont icon-car-fill vertical-align"
+                                       :class="setTextColor(item.gpsDeviceStatus)"></i>
+                                    <span class="vertical-align "
+                                    >{{item.carPlateNo}}</span>
+                                </div>
+                                <div>
+                                    <!-- gpsDeviceStatus 状态-->
+                                    <!-- <i class="iconfont icon-zuanshi"></i>-->
+                                    <!--<span>{{item.deviceStatusShow}}</span>-->
+                                    <!-- 离线则显示天数-->
+                                    <!-- <span>2天</span>-->
+                                </div>
+                            </div>
+                            <div v-if="item.isEquipment" class="vehicle-equipment">
+                                <template v-for="(device,i) in item.deviceList" :key="i">
+                                    <p class="vehicle-equipment-item" @click.stop="onDevice(1,device)"
+                                       :class="setTextColor(device.gpsDeviceStatus)">
+                                        <i class="iconfont icon-target-full" style="font-size: 14px"></i>
+                                        <i class="iconfont icon-xinhao" style="font-size: 14px"></i>
+                                        <span>{{device.deviceNo}}</span>
+                                        <span>{{device.deviceStatusShow}}</span>
+                                    </p>
+                                </template>
+                            </div>
+                        </li>
+
+                        <li v-if="carList.length<=0" class="text-center" style="margin: 15px 0">暂无数据</li>
+                    </ul>
+                    <!--                    <p class="line-border-bottom vehicle-all">共5条记录</p>-->
+                </div>
+                <div v-if="pageCount>10" id="vehicle-li-page"></div>
+                <audio loop="true" class="audio" id="myVideo" src="../../statics/offlinewarning.wav"
+                       controls="controls">
+                    Your browser does not support the audio element.
+                </audio>
+                <div class="vehicle-left-footer">
+                    <!--                    <div id="vehicle-li-page"></div>-->
+                    <div class="car-alarm" style="text-align: right">
+                        <!--                        <p>-->
+                        <!--                            <span class="all-car">总</span>-->
+                        <!--                            <span>2</span>-->
+                        <!--                        </p>-->
+                        <!--                        <p>-->
+                        <!--                            <span class="car-onLine"></span>-->
+                        <!--                            <span>2</span>-->
+                        <!--                        </p>-->
+                        <p style="width: 100%;padding-right: 15px" v-if="warnCount>0">
+                            <i class="iconfont icon-lingdang vertical-align" style="font-size: 20px;color: #c33"></i>
+                            <span @click="controlVideo" class="vertical-align">
+                                <i v-if="paused" class="iconfont icon-004laba-3"></i>
+                                <i v-else class="iconfont icon-004laba-4"></i>
+                            </span>
+                            <span class="vertical-align">{{warnCount}}</span>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 车辆table-->
+        <table class="layui-table vehicle-table" style="display: none">
+            <colgroup>
+                <col width="150">
+                <col width="150">
+                <col width="200">
+                <col>
+            </colgroup>
+            <thead>
+            <tr>
+                <th>车牌</th>
+                <th>速度（km/h)</th>
+                <th>状态</th>
+                <th>报警</th>
+                <th>状态信息</th>
+                <th>GPS（时间）</th>
+                <th>接收时间</th>
+                <th>默认显示地址</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>贤心</td>
+                <td>汉族</td>
+                <td>1989-10-14</td>
+                <td>人生似修行</td>
+                <td>人生似修行</td>
+                <td>人生似修行</td>
+                <td>人生似修行</td>
+                <td>人生似修行</td>
+                <td>人生似修行</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!--发送指令-->
+        <el-dialog width="780px" class="mask" :visible.sync="isSendInstructions">
+            <div id="sendInstructions" class="sendInstructions">
+                <el-tabs v-model="activeDirective" @tab-click="handleClick">
+                    <el-tab-pane label="发送指令" name="send">
+                        <send-instructions :car-info="carInfo" :device-info="deviceInfo"
+                                           :instructions-list="instructionsList"
+                                           @change-directive="changeDirective" @send-success="sendSuccess"/>
+                    </el-tab-pane>
+                    <el-tab-pane label="历史指令" name="history">
+                        <command-history :device-info="deviceInfo"/>
+                    </el-tab-pane>
+                </el-tabs>
+            </div>
+        </el-dialog>
+
+        <!-- 设备 -->
+        <el-dialog width="50%" class="mask">
+            <equipment/>
+        </el-dialog>
+
+
+        <!-- 车辆信息 -->
+        <div style="display:none">
+            <div class="stretch" @click="isStretch =!isStretch">
+                <img class="stretch-img" src="../../statics/images/map/stretch.png" alt="">
+            </div>
+            <transition name="fade">
+                <div class="map-query" v-show="isStretch">
+                    <!-- <form class="map-search layui-form" class="layui-form">-->
+                    <div class="map-search layui-form">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">所属部门</label>
+                            <div class="layui-input-inline">
+                                <select name="modules" lay-filter="deptIdSelect" lay-search="" v-model="q.deptId">
+                                    <option value="">直接选择或搜索选择</option>
+                                    <template v-for="item in sysDeptEntityList">
+                                        <option :value="item.deptId">{{item.name}}</option>
+                                    </template>
+
+                                </select>
+                            </div>
+                            <div class="layui-input-inline">
+                                <input type="text" v-model="q.carNo" class="layui-input" placeholder="请输入车牌号">
+                            </div>
+                            <div class="layui-input-inline">
+                                <button type="button" class="layui-btn search-btn" lay-submit lay-filter="search">搜索
+                                </button>
+                                <a class="layui-btn reset-btn" @click="reset">重置</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- </form>-->
+                    <div class="car-status ">
+                        <span class="car-status__item" :class="actionState==1?'statusAction':''"
+                              @click="chooseState(1)">全部车辆 ({{allCount}})</span>
+                        <span class="car-status__item" :class="actionState==2?'statusAction':''"
+                              @click="chooseState(2)">
+                      <img class="car-icon" src="../../statics/images/map/Online_90.png"/>
+                      <label class="car-label">行驶 ({{travelCount}})</label>
+                </span>
+                        <span class="car-status__item" :class="actionState==3?'statusAction':''"
+                              @click="chooseState(3)">
+                      <img class="car-icon" src="../../statics/images/map/bdw_90.png"/>
+                      <label class="car-label">静止 ({{staticCount}})</label>
+                </span>
+                        <span class="car-status__item" :class="actionState==4?'statusAction':''"
+                              @click="chooseState(4)">
+                       <img class="car-icon" src="../../statics/images/map/OffLine_90.png"/>
+                       <label class="car-label">离线 ({{offLineCount}})</label>
+                  </span>
+                    </div>
+                </div>
+            </transition>
+        </div>
+    </div>
+</div>
+</body>
+
+<script src="../../statics/common/components/Map.js"></script>
+<script src="../../statics/js/modules/car/page.js"></script>
+<script type="text/javascript" src="../../statics/common/LuShu/LuShu_min.js"></script>
+<!-- 引入组件库 -->
+<script src="../../statics/js/modules/element-ui/index.js"></script>
+
+<script>
+    // 发送指令
+    Vue.component('sendInstructions', {
+        template: `
+                  <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-position="right" label-width="95px">
+                      <el-form-item label="车牌号：">
+                         <span v-if="carInfo && carInfo.carNo">{{carInfo.carNo}}</span>
+                         <span v-else>--</span>
+                       </el-form-item>
+                      <el-form-item label="设备号：">
+                            <span v-if="deviceInfo && deviceInfo.deviceNo">{{deviceInfo.deviceNo}}</span>
+                            <span v-else>--</span>
+                       </el-form-item>
+                      <el-form-item label="选择指令：">
+                          <el-select v-model="sysDeptEntityVal" value-key="id" placeholder="请选择" size="small" @change="changeDirective">
+                                <el-option
+                                  v-for="item in sysDeptEntityList"
+                                  :key="item.id"
+                                  :label="item.name"
+                                  :value="item">
+                                </el-option>
+                            </el-select>
+                       </el-form-item>
+
+                       <el-form-item label="指令参数：" prop="commandParameterVal">
+                          <el-select v-model="ruleForm.commandParameterVal" value-key="id" @change="changeCommandParameter" placeholder="请选择" size="small">
+                              <template v-if="commandParameter">
+                                    <tempalte v-for="item in commandParameter">
+                                        <el-option
+                                          v-for="item in item.deviceInstructSunParamDtoList"
+                                          :key="item.id"
+                                          :label="item.sunParamName"
+                                          :value="item">
+                                        </el-option>
+                                    </tempalte>
+                                </template>
+                          </el-select>
+                       </el-form-item>
+                       <el-form-item style="margin-top: 30px">
+                            <el-button style="width: 200px" size="small" type="primary" @click="onSend('ruleForm')">发送</el-button>
+                       </el-form-item>
+                    </el-form>
+                 `,
+        data() {
+            return {
+                ruleForm: {
+                    commandParameterVal: '',
+                },
+                rules: {
+                    commandParameterVal: [{required: true, message: '请选择指令参数', trigger: 'change'}]
+                },
+                sysDeptEntityVal: '', // 指令
+                sysDeptEntityId: '',  // 指令id
+                deviceInstructParamId: '',  // 指令参数id
+                deviceInstructSunParamSunId: '',  // 子参数id
+                sysDeptEntityList: [], //选择指令
+                commandParameter: [] // 指令参数
+            }
+        },
+        props: {
+            carInfo: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
+            },
+            deviceInfo: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
+            },
+            instructionsList: {
+                type: Object,
+                default: () => {
+                    return []
+                }
+            }
+        },
+        watch: {
+            instructionsList(n, o) {
+                if (n.length > 0) {
+                    this.sysDeptEntityList = n;
+                    console.log('sysDeptEntityList', n[0])
+                    this.sysDeptEntityVal = n[0].name;
+                    this.sysDeptEntityId = n[0].id; // 指令参数id
+                    this.commandParameter = n[0].deviceInstructParamList;
+                    this.deviceInstructParamId = n[0].deviceInstructParamList[0].id // 指令参数id
+                }
+            }
+        },
+        methods: {
+            sendinstructions() {
+                if (this.carInfo && this.deviceInfo) {
+                    let {deviceId, deviceNo, deviceManufacturerNumber} = this.deviceInfo;
+                    $.ajax({
+                        type: "post",
+                        url: baseURL + 'vehiclemonitor/sendinstructions',
+                        contentType: "application/json",
+                        data: JSON.stringify({
+                            carId: this.carInfo.carId,
+                            carPlateNo: this.carInfo.carNo, //	车牌号
+                            deviceId: deviceId, //设备ID
+                            deviceNo: deviceNo, //设备编号
+                            deviceManufacturerNumber: deviceManufacturerNumber,//设备厂商编号
+                            deviceInstructId: this.sysDeptEntityId,//指令id
+                            deviceInstructParamId: this.deviceInstructParamId,//指令参数id
+                            deviceInstructSunParamSunId: this.deviceInstructSunParamSunId // 指令子参数id
+                        }),
+                        success: (r) => {
+                            console.log(r);
+                            if (r.code === 0) {
+                                // this.ruleForm.commandParameterVal = '';
+                                this.$emit('send-success', true)
+                            } else {
+                                layer.alert('发送失败')
+                            }
+                        },
+                        error: () => {
+                            layer.alert('发送失败')
+                        }
+                    });
+                } else {
+                    alert('数据不全')
+                }
+            },
+
+            onSend(formName) {
+                console.log('发送')
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.sendinstructions()
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+            },
+
+            // 指令参数
+            changeCommandParameter(item) {
+                console.log('changeCommandParameter', item);
+                this.deviceInstructSunParamSunId = item.id;  // 子参数id
+                this.ruleForm.commandParameterVal = item.sunParamName;
+            },
+
+            // 选择指令
+            changeDirective(item) {
+                console.log('选择指令', item);
+                this.sysDeptEntityVal = item.name;// 指令
+                this.sysDeptEntityId = item.id; // 指令id
+                this.commandParameter = item.deviceInstructParamList;
+                // 目前为单数据
+                this.deviceInstructParamId = item.deviceInstructParamList[0].id; // 指令参数id
+            }
+        },
+    })
+
+    // 历史指令
+    Vue.component('commandHistory', {
+        template: ` <div>
+                     <el-form class="margin-bottom-10" :inline="true" label-position="right" label-width="90px">
+                           <el-form-item label="选择指令：">
+                                <el-date-picker size="small"
+                                      value-format="yyyy-MM-dd hh:mm:ss"
+                                      v-model="directiveTime"
+                                      type="datetimerange"
+                                      range-separator="至"
+                                      start-placeholder="开始日期"
+                                      end-placeholder="结束日期" @change="changeDatetimerange">
+                                </el-date-picker>
+                           </el-form-item>
+                           <el-form-item>
+                                <el-button size="small" type="primary" @click="onSend">查询</el-button>
+                           </el-form-item>
+                    </el-form>
+                        <el-table  border  height="300"
+                          :data="tableData"
+                          style="width: 100%">
+                          <el-table-column
+                            prop="carPlateNo"
+                            label="车牌号"
+                            width="80">
+                          </el-table-column>
+                          <el-table-column
+                            prop="deviceNo"
+                            label="设备编号"
+                            width="80">
+                          </el-table-column>
+                          <el-table-column
+                            prop="deviceInstructName"
+                            label="指令名称">
+                          </el-table-column>
+                          <el-table-column
+                            prop="deviceInstructSunParamNames"
+                            label="指令参数">
+                          </el-table-column>
+                          <el-table-column
+                            prop="sendCount"
+                            label="发送次数">
+                          </el-table-column>
+                          <el-table-column
+                            prop="sendStatus"
+                            label="状态">
+                            <template slot-scope="scope">
+                                <span v-if="scope.row.sendStatus==1">成功</span>
+                                <span v-if="scope.row.sendStatus==2">失败</span>
+                            </template>
+                          </el-table-column>
+                          <el-table-column
+                            prop="sendTime"
+                            label="发送时间">
+                          </el-table-column>
+                          <el-table-column
+                            prop="operationName"
+                            label="操作人">
+                          </el-table-column>
+                            <el-table-column
+                            prop="operationName"
+                            label="操作" width="120">
+                            <template slot-scope="scope">
+                                 <el-button type="primary" size="small" v-if="scope.row.sendStatus==2" @click="resend(scope.row.deviceInstructSendRecordId)">重新发送</el-button>
+                                 <span v-else>--</span>
+                            </template>
+                          </el-table-column>
+                        </el-table>
+                        <div style="margin: 15px auto;text-align: center">
+                         <el-pagination
+                              background
+                              hide-on-single-page
+                              layout="prev, pager, next"
+                              :total="count" @current-change="currentChange">
+                            </el-pagination>
+                         </div>
+                  </div>`,
+        props: {
+            deviceInfo: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
+            },
+        },
+        data() {
+            return {
+                directiveTime: '',
+                tableData: [],
+                page: 1,
+                count: 0
+            }
+        },
+        mounted() {
+            let start = new Date(new Date().toLocaleDateString()).format("yyyy-MM-dd hh:mm:ss");
+            //var  end=new Date(new Date(new Date().toLocaleDateString()).getTime()+24*60*60*1000-1).format("yyyy-MM-dd hh:mm:ss");
+            let end = new Date().format("yyyy-MM-dd hh:mm:ss");
+            // this.directiveTime = [start, end];
+            this.sendinstructionsrecord()
+        },
+        methods: {
+            sendinstructionsrecord() {
+                let {deviceId} = this.deviceInfo;
+                // let deviceId = 14;
+                let startTime = '';
+                let endTime = '';
+                if (this.directiveTime) {
+                    startTime = this.directiveTime[0];
+                    endTime = this.directiveTime[1];
+                }
+                $.ajax({
+                    type: "get",
+                    url: baseURL + 'vehiclemonitor/sendinstructionsrecord',
+                    data: {
+                        startTime: startTime,
+                        endTime: endTime,
+                        deviceId: deviceId, //设备ID
+                        page: this.page
+                    },
+                    success: (r) => {
+                        console.log(r);
+                        if (r.code === 0) {
+                            this.count = r.count;
+                            this.tableData = r.data;
+                        }
+                    }
+                });
+            },
+
+            // 重新发送指令
+            resend(id = 12) {
+                $.ajax({
+                    type: "post",
+                    url: baseURL + 'vehiclemonitor/resendinstructions',
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        deviceInstructSendRecordId: id
+                    }),
+                    success: (r) => {
+                        console.log(r);
+                        if (r.code === 0) {
+                            this.sendinstructionsrecord()
+                        } else {
+                            alert(r.msg)
+                        }
+                    }
+                });
+            },
+
+            currentChange(val) {
+                console.log(val);
+                this.page = val;
+                this.sendinstructionsrecord()
+            },
+
+            changeDatetimerange(val) {
+                console.log(val);
+                this.directiveTime = val;
+            },
+
+            onSend() {
+                console.log('查询')
+                this.sendinstructionsrecord()
+            }
+        }
+    })
+
+    Vue.component('equipment', {
+        template: `<el-tabs class="equipment" v-model="activeName" @tab-click="handleClick">
+                    <el-tab-pane label="有线设备" name="wired">
+                        有线设备
+                    </el-tab-pane>
+                    <el-tab-pane label="无线设备" name="wireless">
+                      <div class="equipment-body">
+                          <h4 class="margin-bottom-10">常用指令</h4>
+                            <el-row >
+                              <el-col :span="8" v-for="(item,index) in 10">{{index+1}}.{{item}}</el-col>
+                             </el-row>
+                      </div>
+                    </el-tab-pane>
+                  </el-tabs>
+         `,
+        data() {
+            return {
+                activeName: 'wired',
+                Instruction: [
+                    {
+                        id: 0,
+                        text: '1'
+                    }
+                ]
+            }
+        },
+        methods: {
+            handleClick(e) {
+                console.log(e);
+            }
+        }
+    })
+</script>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>定时任务</title>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/new_css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/new-edit.css">
+
+
+
+
+	<style>
+		.layui-inline {
+			margin-bottom: 5px !important;
+		}
+		.laytable-cell-1-0-0{
+      width:40px !important;
+    }
+	</style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+	<div class="mvvm-table">
+		<div class="list-search-title-box">
+			<form class="layui-form" style="box-shadow: 0 0 20px #eee;padding-right: 15px;">
+				<section class="jxc-section" style="display: flex;align-items: flex-start;white-space: nowrap;">
+					<div class="card layui-row" style="flex: 1">
+						<div class="layui-form-item ">
+							<div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12" style="margin-bottom: 5px !important">
+								<div class="layui-input-inline">
+									<input type="text" class="layui-input searchVal" v-model="q.beanName" @keyup.enter="query" placeholder="bean名称" />
+								</div>
+								<!--				<a class="layui-btn search_btn" @click="query">查询</a>-->
+							</div>
+						</div>
+					</div>
+					<div style="display: flex;align-items: center;">
+						<a class="layui-btn search-btn" @click="query">查询</a>
+					</div>
+				</section>
+			</form>
+		</div>
+		<div class="list-search-title-box">
+			<form class="layui-form">
+				<div style="display:flex;width: 100%;">
+					<div class="layui-form-item layui-row" style="width: 100%;">
+						<div class="list-search-form-button" style="width: 100%;">
+							<a class="layui-btn btn-primary" @click="add" v-m-perm="['sys:schedule:save']">新增</a>
+							<a class="layui-btn btn-warning delBatch" v-m-perm="['sys:schedule:delete']">批量删除</a>
+							<a class="layui-btn btn-success logList" v-m-perm="['sys:schedule:log']">日志列表</a>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<table class="layui-hide" id="grid" lay-filter="grid"></table>
+	</div>
+	<!-- 表单 -->
+	<form v-show="showForm" class="layui-form ren-form" id="editForm">
+		<div class="layui-form-item">
+			<label class="layui-form-label">bean名称</label>
+			<div class="layui-input-block">
+				<input type="text" lay-verify="required" v-model="schedule.beanName" autocomplete="off" placeholder="spring bean名称，如：testTask" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">方法名称</label>
+			<div class="layui-input-block">
+				<input type="text" lay-verify="required" v-model="schedule.methodName" autocomplete="off" placeholder="方法名称" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">参数</label>
+			<div class="layui-input-block">
+				<input type="text" v-model="schedule.params" autocomplete="off" placeholder="参数" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">cron表达式</label>
+			<div class="layui-input-block">
+				<input type="text" lay-verify="required" v-model="schedule.cronExpression" autocomplete="off" placeholder="如：0 0 12 * * ?" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">备注</label>
+			<div class="layui-input-block">
+				<input type="text" v-model="schedule.remark" autocomplete="off" placeholder="备注" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<div class="layui-input-block">
+				<button class="layui-btn" lay-submit lay-filter="saveOrUpdate">确定</button>
+			</div>
+		</div>
+	</form>
+</div>
+
+<!--操作-->
+<script type="text/html" id="barTpl">
+	<a class="layui-grid-btn-xs" lay-event="edit" v-m-perm="['sys:schedule:update']">修改</a>
+	<a class="layui-grid-btn-xs" lay-event="pause" v-m-perm="['sys:schedule:pause']">暂停</a>
+	<a class="layui-grid-btn-xs" lay-event="resume" v-m-perm="['sys:schedule:resume']">恢复</a>
+	<a class="layui-grid-btn-xs" lay-event="runOnce" v-m-perm="['sys:schedule:run']">执行</a>
+	<a class="layui-grid-btn-xs" lay-event="del" v-m-perm="['sys:schedule:delete']">删除</a>
+</script>
+
+<script src="../../statics/js/modules/job/schedule.js?_${.now?long}"></script>
+</body>
+</html>

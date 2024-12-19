@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>导入司机流水</title>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="Author" content="larry"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+    <script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+    <script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/common.js"></script>
+    <script type="text/javascript" src="../../statics/js/upload.js"></script>
+    <script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+    <link rel="stylesheet" href="../../statics/css/jxcPublicAll.css" media="all">
+    <link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../statics/common/step/steps.css">
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+    <script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+    <script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+    <script src="../../statics/common/layui/autocomplete.js"></script>
+    <script src="../../statics/js/modules/viewer/viewer.min.js"></script>
+    <script src="../../statics/common/print-js/print.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+    <script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/searchview.js"></script>
+    <script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/fonts/larry-icon.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/fontdemo.css" media="all">
+    <!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+    <!-- 引入组件库 -->
+    <link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+    <style>
+        .layui-form-label {
+            width: 100px !important;
+        }
+
+        .layui-form-item .layui-input-inline {
+            width: 256px;
+        }
+
+        .timeline-row {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .timeline-count {
+            width: 30px;
+            line-height: 30px;
+            text-align: center;
+            border-radius: 30px;
+            border: 1px solid #ddd;
+            color: #ddd;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .count-active {
+            color: #fff;
+            background-color: #3facb3;
+            border: none;
+        }
+
+        .timeline-text {
+            width: 145px;
+            text-align: center;
+            font-size: 13px;
+            margin-top: 6px;
+            color: #999;
+        }
+
+        .text-active {
+            color: #333;
+        }
+
+        .timeline-line {
+            flex: 1;
+            width: 0;
+            margin-top: 15px;
+            height: 1px;
+            background-color: #ddd;
+        }
+        td {
+            overflow:auto;
+        }
+        .laytable-cell-1-0-0{
+            width:40px !important;
+        }
+    </style>
+
+
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <div class="layui-form ren-form">
+        <div class="layui-form-item">
+
+            <div style="display: flex;flex-direction:column;width: 70%; margin: -30px auto 0">
+                <div style="display: flex;width: 70%; margin: 10px auto">
+                    <span class="timeline-count" :class="step===0||step===1||step===2?'count-active':''">1</span>
+
+                    <div class="timeline-line"></div>
+                    <span class="timeline-count" :class="step===1||step===2?'count-active':''">2</span>
+
+                    <div class="timeline-line"></div>
+                    <span class="timeline-count" :class="step===2?'count-active':''">3</span>
+
+                </div>
+
+                <div style="display: flex;width: 90%; margin: -10px auto;justify-content: space-between">
+                    <span class="timeline-text" :class="step===0||step===1||step===2?'text-active':''">上传文件</span>
+                    <span class="timeline-text" :class="step===1||step===2?'text-active':''">数据检查/执行导入</span>
+                    <span class="timeline-text" :class="step===2?'text-active':''">确认结果/完成导入</span>
+                </div>
+
+            </div>
+
+            <div v-show="step===0" style="width: 85%;display: flex;border: 1px solid #ddd;margin: 30px auto">
+                <div class="layui-upload-drag" id="importData">
+                    <i style="font-size: 60px;" class="layui-icon"></i>
+                    <p>点击上传</p>
+                    <div class="layui-hide" id="uploadDemoView">
+                        <hr>
+                        <img src="" alt="上传成功后渲染" style="max-width: 196px">
+                    </div>
+                </div>
+
+                <div style="display:flex;flex-direction: column;margin: 20px">
+                    <div style="font-size: 18px;font-weight:bold;">上传司机流水的excel附件</div>
+                    <h5 style="color: #666;margin-top: 10px">1.支持文件xls、xlsx，文件大小不超过10M</h5>
+                    <h5 style="color: #666;margin-top: 10px">2.附件表头字段名称需调整与以下模板保持一致：
+
+                        “司机姓名”、“联系电话”、“车牌”、“品牌/车系/车型”、“平台名称”、“流水(元)”、 “奖励(元)”、
+
+                        “完单量(单)”、“在线时长(h)”、“服务时长(h)”、“里程(KM)”、“结算开始日期”、“结算结束日期”、“备注信息”
+                        <br/>
+
+                        其中必填项有：“司机姓名”、“联系电话”、“车牌”、“平台名称”、“流水(元)”、“结算开始日期”、“结算结束日期”</h5>
+                    <h5 style="color: #666;margin-top: 10px">3.不可跨月导入数据，即结算开始日期和结束日期必须属同一月份。</h5>
+
+                </div>
+            </div>
+
+            <div v-show="step===1" style="width: 95%;display: flex;margin: 30px auto;flex-direction: column">
+
+                <div style="display: flex">
+                    <span style="color: #3facb3;font-size: 14px;cursor: pointer" @click="sucType=0;vm.reload()">已成功{{uploadRes.successCount}}条</span>
+                    <span style="color: #F95150;font-size: 14px;cursor: pointer;margin-left: 10px" @click="sucType=1;vm.reload()">失败{{uploadRes.failCount}}条</span>
+                </div>
+
+                <table id="grid" lay-filter="grid"></table>
+            </div>
+
+            <div v-show="step===2" style="width: 65%;display: flex;margin: 30px auto;flex-direction: column;justify-content: center;align-items: center">
+                <i style="margin-top: 20px;font-size: 60px;color: #3facb3" class="icon larry-icon larry-gouSolid"></i>
+                <div style="margin-top: 20px;font-weight:bold;font-size: 20px;color: #333">导入成功</div>
+                <div style="margin-top: 10px;color: #666;font-size: 14px;">已成功导入{{uploadRes.successCount}}条数据，可在司机流水导入明细列表中查看</div>
+            </div>
+
+        </div>
+
+        <div class="float-btn-group" style="display: flex;justify-content: center;left: 0">
+            <!--            <a class="layui-btn reset-btn"  @click="closePage">取消</a>-->
+            <a v-show="step===0 && uploadRes.code" class="layui-btn search-btn" @click="step=1">下一步</a>
+            <a v-show="step===1" class="layui-btn search-btn" @click="step=0">上一步</a>
+            <a v-show="step===1 && sucType===1" class="layui-btn search-btn" @click="downfailfile">下载失败数据</a>
+            <a v-show="step===1" class="layui-btn search-btn" @click="commit">直接导入</a>
+            <a v-show="step===2" class="layui-btn search-btn" @click="closePage">完成</a>
+        </div>
+
+    </div>
+    <form id="downLoadXls" style="display: none" method="post" target="">
+        <input type="text" name="datas"/>
+    </form>
+</div>
+
+<script type="text/html" id="state">
+    {{# if(d.errMessage=='成功'){ }}
+        <span style="color: #3facb3;">{{d.errMessage}}</span>
+    {{# }else { }}
+        <span style="color: #F95150;">{{d.errMessage}}</span>
+    {{# } }}
+</script>
+
+<script src="../../statics/js/modules/driver/importflow.js"></script>
+</body>
+</html>

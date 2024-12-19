@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>司机预支工资</title>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="Author" content="larry"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+    <script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/common.js"></script>
+    <script type="text/javascript" src="../../statics/js/upload.js"></script>
+    <script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+    <link rel="stylesheet" href="../../statics/new_css/jxcPublicAll.css" media="all">
+    <link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../statics/common/step/steps.css">
+    <link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/viewer.min.css">
+    <script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+    <script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+    <script src="../../statics/common/layui/autocomplete.js"></script>
+    <script src="../../statics/js/modules/viewer/viewer.min.js"></script>
+    <script src="../../statics/common/print-js/print.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+    <script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/searchview.js"></script>
+    <script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+    <!-- 引入组件库 -->
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/common-new.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .list-header-card .active {
+            background: #3FACB3;
+        }
+
+        .list-header-card .active {
+            height: 70px !important;
+
+        }
+
+        .flex {
+            height: 70px !important;
+            border: 1px solid #BED7DE;
+        }
+
+        .list-header-card-text {
+            font-size: 12px;
+            margin: 0 0 6px 0;
+            color: #333;
+        }
+
+        .list-header-card-number {
+            font-size: 18px;
+            font-weight: 400;
+            color: #333;
+            margin: 0;
+        }
+
+        .active .list-header-card-text,
+        .active .list-header-card-number {
+            color: #fff;
+        }
+
+        .list-header-content-box,
+        .list-search-title-box {
+            padding: 0;
+        }
+
+        .layui-form-label {
+            min-width: 90px !important;
+        }
+
+        .list-header-card > div {
+            margin-right: 16px;
+        }
+
+        .layui-tab-title {
+            left: 10px;
+        }
+
+        .layui-tab-content {
+            padding-top: 0;
+        }
+
+        .event {
+            height: 100%;
+            display: inline-block;
+            width: 50%;
+        }
+
+        .layui-input, .layui-select, .layui-textarea {
+            height: 30px !important;
+            border-width: 1px !important;
+            border-style: solid !important;
+            border-color: #e6e6e6 !important;
+        }
+
+        .layui-form-select .layui-input {
+            padding-right: 0px;
+            cursor: pointer;
+        }
+
+        .detail_align{
+            text-align: left;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <div class="mvvm-table">
+        <div class="list-search-title-box">
+            <form class="layui-form" style="box-shadow: 0 0 20px #eee;padding-right: 15px;">
+                <section class="jxc-section" style="display: flex;align-items: flex-start;white-space: nowrap;">
+                    <div class="card layui-row" style="flex: 1">
+                        <div class="layui-form-item">
+                            <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                <label class="layui-form-label">预支编号</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input searchVal" v-model="q.advanceNo"
+                                           placeholder="请输入预支编号"/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                <label class="layui-form-label">司机姓名</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input searchVal" v-model="q.driverName"
+                                           placeholder="请输入"/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                <label class="layui-form-label">联系电话</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input searchVal" v-model="q.contactMobile"
+                                           placeholder="请输入"/>
+                                </div>
+                            </div>
+                            <section v-show="isFilter">
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">车牌号</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input" v-model="q.carNo" placeholder="请输入"/>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">状态</label>
+                                    <div class="layui-input-inline">
+                                        <select lay-filter="deductionStatus" v-model="q.deductionStatus">
+                                            <option value="">请选择</option>
+                                            <option v-for="(value, key) in deductionStatusList" :key="key" :value="key">{{value}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">创建时间</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal" v-model="q.createTime"
+                                               id="createTime" placeholder="开始时间至结束时间" readonly/>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">业务负责人</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal" v-model="q.businessLeader"
+                                               placeholder="请输入"/>
+                                    </div>
+                                </div>
+                            </section>
+                            <div :class="isFilter?'layui-col-md3':'layui-col-md3'"
+                                 class="layui-inline  layui-col-sm6 layui-col-xs12 flex-end">
+                                <label class="layui-form-label"> </label>
+                                <div class="df-color" style="display: flex;align-items: center;">
+                                    <a class="layui-btn search-btn" @click="query">查询</a>
+                                    <a class="layui-btn reset-btn" @click="reset">重置</a>
+                                    <div @click="bindFilter"
+                                         style="margin-left: 10px;cursor: pointer;user-select: none;">
+                                        <span>高级筛选</span>
+                                        <i class="icon layui-icon-extend layui-extend-shaixuan"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </form>
+        </div>
+        <div class="list-search-title-box">
+            <form class="layui-form">
+                <div style="display:flex;width: 100%;">
+                    <div class="layui-form-item layui-row" style="width: 100%;">
+                        <div class="list-search-form-button" style="width: 100%;">
+                            <a class="layui-btn btn-primary" @click="add"
+                               v-m-perm="['driver:advancepay:save']">新增</a>
+                            <a class="layui-btn btn-warning" @click="exports"
+                               v-m-perm="['driver:advancepay:export']">导出</a>
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <table class="layui-hide" id="grid" lay-filter="grid"></table>
+
+    </div>
+
+    <!-- 表单 -->
+    <form v-show="showForm" class="layui-form ren-form" id="editForm">
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                {{receivables.id ? '编辑' : '新增'}}司机预支工资
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">
+                                <span style="color: red">*</span>司机名称:
+                            </label>
+                            <div class="layui-input-inline">
+                                <select lay-filter="driverId" lay-verify="required" v-model="receivables.driverId"
+                                        lay-search>
+                                    <option value="">请选择司机名称</option>
+                                    <option v-for="(item, index) in pageDriverList" :key="item.id" :value="item.id">{{item.customerName}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">
+                                <span style="color: red">*</span>电话:
+                            </label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       lay-verify="required" v-model="receivables.contactNumber"
+                                       placeholder="选择司机名称后自动带出" readonly/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">
+                                <span style="color: red">*</span>预支金额:
+                            </label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       lay-verify="required" class="layui-input searchVal"
+                                       lay-verify="required" v-model="receivables.advanceAmount"
+                                       placeholder="请输入预支金额"
+                                       oninput="value=value.toString().match(/^\d+(?:\.\d{0,2})?/)"/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">
+                                <span style="color: red">*</span>车牌号:
+                            </label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="required" class="layui-input searchVal"
+                                       v-model="receivables.carNo"
+                                       placeholder="请输入车牌号"/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">
+                                <span style="color: red">*</span>应还时间:
+                            </label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="required" id="repaymentTime" class="layui-input searchVal"
+                                       v-model="receivables.repaymentTime" placeholder="请选择应还时间" readonly/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">
+                                <span style="color: red">*</span>
+                                业务负责人:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="required" class="layui-input searchVal"
+                                       v-model="receivables.businessLeader" placeholder="选择司机名称后自动带出"
+                                       readonly/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">备注:</label>
+                            <div class="layui-input-inline">
+<!--                                <span>{{receivables.remarks}}</span>-->
+                                    <textarea placeholder="请输入备注信息" class="layui-textarea" name="desc"
+                                              v-model="receivables.remarks"></textarea>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">附件信息:</label>
+
+                            <div class="layui-input-inline" id="deliveryFileLstId1"></div>
+
+<!--                            <div class="layui-input-inline">-->
+<!--                                <div class="layui-input-inline-upload">-->
+<!--                                    <div :id="deliveryFileLstId" class="layui-input-inline-upload-show box-rect"-->
+<!--                                         v-for="(item,index) in deliveryFileLst">-->
+<!--                                        <div v-show="item.typeFile == 1" class="layui-input-inline-upload-button">-->
+<!--                                            <img :src="imageURL + item.url" class="view-img">-->
+<!--                                        </div>-->
+<!--                                        <div v-show="item.typeFile != 1" class="layui-input-inline-upload-button">-->
+<!--                                            {{item.nameAccessory}}-->
+<!--                                        </div>-->
+<!--                                        <div class="layui-input-inline-upload-show-delete btn-event"-->
+<!--                                        >-->
+<!--                                            <div @click="delDeliveryFile(item.id)" class="event">删除</div>-->
+<!--                                            <div @click="download(item.url,item.nameFile)" class="event">下载</div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <div class="layui-input-inline-upload-button box-rect box-rect-event"-->
+<!--                                         id="addDeliveryFile">-->
+<!--                                        <img src="../../statics/images/inline-upload@2x.png">-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="layui-input-inline-upload-text" style="padding-bottom: 10px">-->
+<!--                                    附件说明：附件最大支持50M，-->
+<!--                                    <br/>-->
+<!--                                    支持格式：PDF、Word、Excel、JPG、PNG-->
+<!--                                </div>-->
+<!--                            </div>-->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="float-btn-group">
+            <a class="layui-btn reset-btn" @click="cancel">取消</a>
+            <a class="layui-btn search-btn" lay-submit lay-filter="saveOrUpdate">保存</a>
+        </div>
+    </form>
+    <!-- 表单详情 -->
+    <form v-show="showDetailForm" class="details-layui-row layui-form ren-form" id="viewForm">
+        <div class="details-conteiner">
+            <div class="details-content-box">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        司机预支工资详情
+                    </div>
+                </div>
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">预支编号:</label>
+                                <div class="layui-input-inline">
+                                    <label class="layui-form-label detail_align">{{receivables.advanceNo}}</label>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">司机名称:</label>
+                                <div class="layui-input-inline">
+                                    <label class="layui-form-label detail_align">{{receivables.driverName}}</label>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">电话:</label>
+                                <div class="layui-input-inline">
+                                    <label class="layui-form-label detail_align">{{receivables.contactNumber}}</label>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">状态:</label>
+                                <div class="layui-input-inline">
+                                    <label class="layui-form-label detail_align">{{0==receivables.deductionStatus?'待抵扣':1==receivables.deductionStatus?'全部抵扣':2==receivables.deductionStatus?'部分抵扣':3==receivables.deductionStatus?'订单结算中':'--'}}</label>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">预支金额:</label>
+                                <div class="layui-input-inline">
+                                    <label class="layui-form-label detail_align">{{receivables.advanceAmount}}</label>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">薪资抵扣:</label>
+                                <div class="layui-input-inline">
+                                    <label class="layui-form-label detail_align">{{receivables.salaryDeduction}}</label>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">待抵扣:</label>
+                                <div class="layui-input-inline">
+                                    <label class="layui-form-label detail_align">{{receivables.waitDeduction}}</label>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">创建时间:</label>
+                                <div class="layui-input-inline">
+                                    <label class="layui-form-label detail_align">{{receivables.createTime}}</label>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">备注:</label>
+                                <div class="layui-input-inline">
+                                    <span>{{receivables.remarks||'--'}}</span>
+<!--                                    <textarea placeholder="请输入备注信息" class="layui-textarea" name="desc"-->
+<!--                                              v-model="receivables.remarks" disabled style="border:0px"></textarea>-->
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-lg12">
+                                <label class="layui-form-label">附件信息:</label>
+
+                                <div class="layui-input-inline" id="deliveryFileLstId2"></div>
+
+<!--                                <div class="layui-input-inline">-->
+<!--                                    <div class="layui-input-inline-upload">-->
+<!--                                        <div :id="deliveryFileLstId" class="layui-input-inline-upload-show box-rect"-->
+<!--                                             v-for="(item,index) in deliveryFileLst">-->
+<!--                                            <div v-show="item.typeFile == 1" class="layui-input-inline-upload-button">-->
+<!--                                                <img :src="imageURL + item.url" class="view-img">-->
+<!--                                            </div>-->
+<!--                                            <div v-show="item.typeFile != 1" class="layui-input-inline-upload-button">-->
+<!--                                                {{item.nameAccessory}}-->
+<!--                                            </div>-->
+<!--                                            <div class="layui-input-inline-upload-show-delete btn-event"-->
+<!--                                                 @click="download(item.url,item.nameFile)">-->
+<!--                                                下载-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <div class="layui-input-inline-upload-text" style="padding-bottom: 10px">-->
+<!--                                        附件说明：附件最大支持50M，-->
+<!--                                        <br/>-->
+<!--                                        支持格式：PDF、Word、Excel、JPG、PNG-->
+<!--                                    </div>-->
+<!--                                </div>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="float-btn-group">
+                <a class="layui-btn reset-btn" @click="cancel">取消</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!--操作-->
+<script type="text/html" id="barTpl">
+    <div style="min-width: 100px;">
+        <a class="layui-grid-btn-xs" lay-event="detail" v-m-perm="['driver:advancepay:view']"
+           more-btn-index="{{d.LAY_INDEX-1}}">详情</a>
+        {{#if(d.deductionStatus == 0 || d.deductionStatus == 2){}}
+        <a class="layui-grid-btn-xs" lay-event="edit" v-m-perm="['driver:advancepay:update']"
+           more-btn-index="{{d.LAY_INDEX-1}}">编辑</a>
+        {{# }}}
+        {{#if(d.deductionStatus == 0){}}
+        <a class="layui-grid-btn-xs" lay-event="del" v-m-perm="['driver:advancepay:delete']"
+           more-btn-index="{{d.LAY_INDEX-1}}">删除</a>
+        {{# }}}
+    </div>
+</script>
+<script src="../../statics/js/modules/driver/advancepay.js?_${.now?long}"></script>
+</body>
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../statics/newImages/logo/logo@2x.png">
+    <title>销售首页</title>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/global.css" media="all">-->
+
+<!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/fonts/larry-icon.css" media="all">-->
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+<!-- 放开后表格无法拖动   <link rel="stylesheet" type="text/css" href="../../statics/new_css/larryms.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/new_css/normalize.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <!-- Import style -->
+    <link rel="stylesheet" href="../../statics/js/element-plus/index.css" />
+    <!-- 页面样式 -->
+    <link rel="stylesheet" href="../../statics/new_css/mf-layout.css" />
+
+</head>
+<style>
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    .state-wrap{
+        margin-top: 15px;
+        justify-content: space-between;
+    }
+
+    .state-item{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        width: 140px;
+        /*height: 80px;*/
+        aspect-ratio: 1/0.59;
+        padding-left: 20px;
+        background-size: 100% 100%;
+        margin-right: 10px;
+        border-radius: 6px;
+        box-sizing: border-box;
+    }
+
+    .state-name{
+        font-size: 14px;
+        color: #333;
+    }
+
+    .left-top{
+        aspect-ratio: 1/0.5;
+        margin-top: 15px;
+    }
+
+    .right-top{
+        aspect-ratio: 1/0.85;
+        margin-top: 15px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .left-bottom{
+        aspect-ratio: 1/0.4;
+        margin-top: 15px;
+    }
+
+    .right-bottom{
+        aspect-ratio: 1/0.68;
+        margin-top: 15px;
+    }
+
+    .date-item{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        aspect-ratio: 1/1.4;
+        margin-right: 10px;
+        flex: 1;
+        border-radius: 4px;
+        background: #3FACB3;
+        color: #333;
+    }
+
+    .state-count{
+        font-size: 18px;
+        margin-top: 2px;
+    }
+
+    .bg-light-blue{
+        background: #F5FBFB;
+        border-radius: 8px;
+    }
+
+    .add-title-wrap{
+        margin: 0 0 0 20px;
+        white-space: nowrap;
+    }
+
+    #stock_0{
+        width: 50vw;
+        height: 68vh;
+    }
+
+    #stock_1{
+        width: 33vw;
+        height: 55vh;
+    }
+
+    .task-wrap{
+        background: white;
+        border-radius: 4px;
+        margin: 0 15px 15px;
+        aspect-ratio: 1/0.66;
+    }
+
+    .task-list{
+        aspect-ratio: 1/0.58;
+        overflow-y: scroll;
+    }
+
+    .task-item{
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #CFE8E8;
+        height: 51px;
+        padding: 0 16px;
+        justify-content: space-between;
+    }
+
+    .table-wrap{
+        aspect-ratio: 1/0.335;
+        margin: 15px 15px 0;
+    }
+
+    .el-pagination button:disabled{
+        background: transparent;
+    }
+
+    .el-pager li{
+        background: transparent;
+    }
+
+    .el-pagination .btn-next, .el-pagination .btn-prev{
+        background: transparent;
+    }
+
+</style>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <div class="card-wrap flex column" style="padding: 5px 10px 20px 20px">
+
+        <div class="flex state-wrap">
+            <div v-for="(item, index) in tabList"
+                 :key="index"
+                 class="state-item"
+                 @click="stateClick(index)"
+                 :style="{'backgroundImage':`url('${item.img}')`, 'border': item.select?`1px solid ${item.color}`:'none'}">
+                <span class="state-name">{{item.name}}</span>
+                <span class="state-count" :style="{color:item.color}">{{item.count}}</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="flex">
+        <div class="card-wrap flex child column" style="flex: 1.7">
+            <div class="flex align-center space-between">
+                <div class="add-title-wrap">跟进类型分布总览或跟进阶段分布</div>
+            </div>
+
+            <div class="left-top bg-light-blue" >
+                <div id="stock_0">
+                </div>
+            </div>
+
+        </div>
+        <div style="width: 15px"></div>
+        <div class="card-wrap flex child column">
+            <div class="flex align-center space-between">
+                <div class="add-title-wrap">待完成任务</div>
+            </div>
+
+            <div class="right-top bg-light-blue">
+
+                <div style="display: flex;margin: 15px 0 15px 10px">
+
+                    <div :style="{'background':item.select?'#3FACB3':'transparent'}"
+                         @click="dateClick(index)"
+                         class="date-item" v-for="(item, index) in dateList" :key="index">
+                        <div :style="{color:item.select?'#fff':'#333'}">{{item.week}}</div>
+                        <div :style="{color:item.select?'#fff':'#333'}" style="margin-top: 5px">{{item.day}}</div>
+                    </div>
+
+                </div>
+
+                <div class="task-wrap">
+
+                    <div class="task-list">
+                        <div v-if="taskList && taskList.length>0">
+                            <div v-for="(item, index) in taskList"
+                                 :key="index" class="task-item"
+                                 :style="{'border-bottom':index===taskList.length-1?'none':'1px solid #CFE8E8'}">
+                                <div>待联系客户{{item.callCustomerName||'--'}}</div>
+                                <div>截止时间：{{item.deadline||'--'}}</div>
+                            </div>
+                        </div>
+                        <div v-else style="text-align: center;margin-top: 20px;color: #666">暂无数据~</div>
+                    </div>
+
+                    <div style="display: flex;justify-content: flex-end">
+                        <el-pagination
+                                :current-page="undoParam.page"
+                                :page-size="undoParam.limit"
+                                :page-sizes="[5, 10, 20, 50]"
+                                layout="prev, pager, next"
+                                :total="undoCount"
+                                @size-change="handleSizeChange"
+                                @current-change="handleCurrentChange"/>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="flex">
+        <div class="card-wrap flex child column" style="flex: 1.7">
+            <div class="flex align-center space-between">
+                <div class="add-title-wrap">跟进明细</div>
+            </div>
+
+            <div class="left-bottom bg-light-blue">
+                <div class="table-wrap">
+
+                    <el-table :header-cell-style="{'background-color':'#f6f8f8','color':'#000'}" :data="followTableData" style="width: 100%" border @row-click="gotoFollowup">
+
+                        <el-table-column prop="customerName" label="客户名称" align="center"></el-table-column>
+
+                        <el-table-column prop="brandName" label="意向车型" align="center" show-overflow-tooltip>
+                            <template v-slot="{row}">
+                                <div v-if="row.brandName && row.seriesName && row.modelName">{{row.brandName}}/{{row.seriesName}}/{{row.modelName}}</div>
+                                <div v-else>--</div>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column prop="dealRecord" label="跟进内容" align="center" show-overflow-tooltip></el-table-column>
+
+                        <el-table-column prop="dealTime" label="跟进时间" align="center"></el-table-column>
+
+                    </el-table>
+
+                    <div style="display: flex;justify-content: flex-end">
+                        <el-pagination
+                                :current-page="recordParam.page"
+                                :page-size="recordParam.limit"
+                                :page-sizes="[5, 10, 20, 50]"
+                                layout="prev, pager, next"
+                                :total="recordCount"
+                                @size-change="handleSizeChange2"
+                                @current-change="handleCurrentChange2" />
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <div style="width: 15px"></div>
+        <div class="card-wrap flex child column">
+
+            <div class="flex align-center space-between">
+                <div class="add-title-wrap">跟进次数</div>
+
+            </div>
+
+            <div class="right-bottom bg-light-blue">
+                <div id="stock_1">
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- Import Vue 3 -->
+<script src="../../statics/js/vue3/vue.global.js"></script>
+<!-- Import component library -->
+<script src="../../statics/js/element-plus/index.full.js"></script>
+<script src="../../statics/js/element-plus/icons-vue.js"></script>
+<script src="../../statics/plugins/jquery.min.js"></script>
+<script src="../../statics/common/layui/layui.js"></script>
+<script src="../../statics/js/common.js"></script>
+<script src="../../statics/js/moment.js"></script>
+<script src="../../statics/js/element-plus/locale-cn.js"></script>
+<!--<script type="text/javascript" src="../../statics/common/plus/echarts.min.js"></script>-->
+<script type="text/javascript" src="../../statics/common/plus/echarts5.4.3.js"></script>
+<script>
+    // 基于准备好的dom，初始化echarts实例
+    // console.log('echarts', echarts)
+    // var myChart = echarts.init(document.getElementById('main'));
+    //
+    // // 指定图表的配置项和数据
+    // var option = {
+    //     title: {
+    //         text: 'ECharts 入门示例'
+    //     },
+    //     tooltip: {},
+    //     legend: {
+    //         data: ['销量']
+    //     },
+    //     xAxis: {
+    //         data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
+    //     },
+    //     yAxis: {},
+    //     series: [
+    //         {
+    //             name: '销量',
+    //             type: 'bar',
+    //             data: [5, 20, 36, 10, 10, 20]
+    //         }
+    //     ]
+    // };
+    //
+    // // 使用刚指定的配置项和数据显示图表。
+    // myChart.setOption(option);
+</script>
+<script src="../../statics/js/modules/cluesSale/dict.js"></script>
+<script src="../../statics/js/modules/cluesSale/salesmain.js?_${.now?long}"></script>
+</body>
+
+</html>

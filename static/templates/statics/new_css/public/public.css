@@ -1,0 +1,36 @@
+.bg {
+    box-sizing: border-box;
+    padding: 19px 30px;
+    background: #F6F8F8;
+}
+
+.car-padding {
+    background: #fff;
+    box-sizing: border-box;
+    padding: 20px 30px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.mainColor {
+    color: #3FACB3 !important;
+}
+
+.hr {
+    border-bottom: 1px solid #dbe2ec;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.laypage {
+    margin: 0 auto;
+    text-align: center;
+}
+
+.overflowX {
+    overflow-x: auto !important;
+}
+
+[v-cloak] {
+    display: none;
+}

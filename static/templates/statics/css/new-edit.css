@@ -1,0 +1,161 @@
+.layui-input{
+    height: 40px !important;
+}
+.retract-box{
+    height: 20px;
+    margin-top: 15px;
+}
+.retract{
+    float: right;
+    margin-right: 10px;
+    color: blue;
+    cursor: pointer;
+}
+.inco-expand{
+    width: 18px;
+    height: 15px;
+}
+.layui-table-cell {
+    overflow: visible !important;
+}
+
+/* 使得下拉框与单元格刚好合适 */
+td .layui-form-select {
+    /*margin-top: -10px;*/
+    margin-left: -15px;
+    margin-right: -15px;
+}
+
+.layui-table-box {
+    overflow: visible;
+}
+
+.layui-table-body {
+    overflow: visible;
+}
+
+.box {
+    max-height: 400px
+}
+
+#cardImage,
+.img {
+    display: block;
+    max-width: 100%;
+}
+
+/*解决下拉框被表格覆盖样式问题*/
+.layui-form-select dl {
+    z-index: 9999;
+}
+
+/*.fm-daoru-title{*/
+/*    border: none;*/
+/*}*/
+
+/*.fm-daoru-title:before {*/
+/*    border-radius: 6px;*/
+/*    height: 18px;*/
+/*    width: 5px;*/
+/*    top: 1px;*/
+/*    left: -13px;*/
+/*    transform: rotate(15deg);*/
+/*}*/
+
+.left-before{
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 2px 8px 0px rgba(17, 45, 47, 0.12);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px !important;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.border-bottom-dashed{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom:none;
+}
+
+.left-before:before{
+    display: none;
+}
+
+.fm-daoru-title{
+    position: relative;
+}
+
+.list-search-sup-title, .new-layui-title{
+    padding-right: 0;
+}
+
+.fm-daoru-title:before{
+    content: '';
+    position: absolute;
+    border-radius: 6px;
+    height: 18px;
+    width: 5px;
+    top: 3px;
+    left: -13px;
+    background: #3facb3;
+    transform: rotate(15deg);
+}
+
+.layui-form-label{
+    padding: 9px 15px !important;
+    font-weight: normal;
+}
+
+.layui-form-checkbox{
+    margin-top: 5px;
+}
+
+.details-content-box .table{
+    border-bottom: none;
+}
+
+.bottom20{
+    margin-bottom: 20px;
+}
+
+.layui-input-inline-upload-button img{
+    width: 180px;
+    height: 120px;
+}
+
+.layui-input-inline-upload > div.box-rect > div > img.view-img{
+    width: 180px;
+    height: 120px;
+}
+
+.layui-input-inline-upload-show {
+    width: 180px;
+    height: 160px;
+    border: none;
+}
+
+.layui-input-inline-upload-button{
+    width: 180px;
+    height: 120px;
+    border: 1px dashed #afafaf;
+    word-break: break-all;
+}
+.form-content-box{
+    padding: 5px 20px 20px;
+}
+
+.layui-input-inline-upload-show-delete{
+    bottom: 40px;
+}
+
+.layui-input-inline-upload-text{
+    margin-top: 6px;
+}
+
+.layui-form-item {
+    margin: 20px;
+}

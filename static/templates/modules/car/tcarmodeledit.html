@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>车型表</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/new-edit.css">
+
+
+
+
+
+    <style>
+        .form-label {
+            width: 130px !important;
+        }
+        .label-tip {
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            margin-left: 160px;
+        }
+
+        .el-tag + .el-tag {
+            margin-left: 10px;
+        }
+        .button-new-tag {
+            margin-left: 10px;
+            height: 32px;
+            line-height: 30px;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+        .input-new-tag {
+            width: 90px;
+            margin-left: 10px;
+            vertical-align: bottom;
+        }
+
+        .bqmodel .layui-unselect.layui-form-checkbox{
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+<form class="layui-form ren-form" style="margin-bottom: 60px;">
+    <div class="form-content-box">
+        <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+            <span class="fm-daoru-title">车型基本信息</span>
+        </div>
+        <div class="form-content-session-box">
+            <div class="card">
+                <div class="layui-row layui-form-row-content">
+                    <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                        <label class="layui-form-label"><span style="color:red">*</span>所属品牌:</label>
+                        <div class="layui-input-inline">
+                            <input type="hidden" id="carBrandId" readonly="readonly" name="brandId" v-model="tCarModel.carBrandId" autocomplete="off" placeholder="请选择品牌"
+                                   class="layui-input">
+                            <input type="text" lay-verify="carBrandName" readonly="readonly" id="brandName" v-model="tCarModel.carBrandName" autocomplete="off"
+                                   placeholder="请选择品牌" class="layui-input" @click="alertTab">
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                        <label class="layui-form-label"><span style="color:red">*</span>所属车系:</label>
+                        <div class="layui-input-inline">
+                            <select lay-verify="carSeriesId" name="carSeriesId" v-model="tCarModel.carSeriesId" class="layui-select" lay-filter="carSeriesId">
+                                <option v-for="r in allCarSeries" :value="r.id">{{r.seriesName}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                        <label class="layui-form-label"><span style="color:red">*</span>车型名称:</label>
+                        <div class="layui-input-inline">
+                            <input type="text" lay-verify="modelName" id="modelName" v-model="tCarModel.modelName" autocomplete="off" placeholder="车型名称" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                        <label class="layui-form-label"><span style="color:red">*</span>所属款型:</label>
+                        <div class="layui-input-inline">
+                            <select name="status"  v-model="tCarModel.styleModelId"  lay-filter="styleModelId" lay-verify="styleModelIdVerify" >
+                                <option value="">请选择</option>
+                                <option v-for="item in styleModelData" :value="item.code">{{item.value}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                        <label class="layui-form-label"><span style="color:red">*</span>所属类型:</label>
+                        <div class="layui-input-inline">
+                            <select name="status"  v-model="tCarModel.modelType" lay-verify="modelTypeVerify" lay-filter="modelTypeFilter"  >
+                                <option value="">请选择</option>
+                                <option v-for="item in modelTypeData" :value="item.code">{{item.value}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                        <label class="layui-form-label layui-form-label-txt"><span style="color:red">*</span>年折旧率(%):</label>
+                        <div class="layui-input-inline layui-input-inline-change">
+                            <input type="number" min="1" max="100" lay-verify="carDepreciate" id="depreciate" v-model="tCarModel.carDepreciate" autocomplete="off" placeholder="年折旧率" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12 bqmodel">
+                        <label class="layui-form-label">车型颜色:</label>
+                        <!--<div class="layui-input-inline"  id="commissionBox" ></div>-->
+                        <div>
+                            <el-tag closable :key="index"
+                                    v-for="(tag,index) in dynamicTags"
+                                    @close="handleClose(tag)">
+                                <el-checkbox v-model="tag.checked">{{tag.name}}</el-checkbox>
+                            </el-tag>
+                            <el-input
+                                    class="input-new-tag"
+                                    v-if="inputVisible"
+                                    v-model="inputValue"
+                                    ref="saveTagInput"
+                                    size="small"
+                                    @keyup.enter.native="handleInputConfirm"
+                                    @blur="handleInputConfirm"
+                            >
+                            </el-input>
+                            <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 添加其他颜色</el-button>
+                        </div>
+                    </div>
+
+                    <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12 bqmodel">
+                        <label class="layui-form-label">标签:</label>
+                        <!--<div class="layui-input-inline"  id="commissionBox" ></div>-->
+                        <div>
+                            <el-tag
+                                    :key="tag"
+                                    v-for="tag in tagTags"
+                                    closable
+                                    :disable-transitions="false"
+                                    @close="handleTagClose(tag)">
+                                {{tag}}
+                            </el-tag>
+                            <el-input
+                                    class="input-new-tag"
+                                    v-if="inputTagVisible"
+                                    v-model="inputTagValue"
+                                    ref="saveTagTagInput"
+                                    size="small"
+                                    @keyup.enter.native="handleInputTagConfirm"
+                                    @blur="handleInputTagConfirm"
+                            >
+                            </el-input>
+                            <el-button v-else class="button-new-tag" size="small" @click="showTagInput">+ 新增标签</el-button>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                        <label class="layui-form-label"><span style="color:red;">*</span>车型状态：</label>
+                        <div class="layui-input-inline">
+                            <input type="checkbox" v-model="tCarModel.isAvailable" lay-filter="isAvailable" lay-verify="isAvailable"  lay-skin="switch" lay-text="启用|停用">
+                        </div>
+
+                    </div>
+
+                    <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                        <label class="layui-form-label">说明:</label>
+                        <div class="layui-input-inline">
+                            <textarea name="memo" id="memo" v-model="tCarModel.remark" placeholder="请输入内容" class="layui-textarea"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="list-search-sup-title new-layui-title border-bottom-dashed" v-show="carParamconf != null && carParamconf.length > 0">
+            <span class="fm-daoru-title">车型参数信息</span>
+        </div>
+        <div class="form-content-session-box" v-show="carParamconf != null && carParamconf.length > 0" :cfViewId="cfViewId">
+            <div class="card" id="paramConfId">
+                <div class="layui-row layui-form-row-content">
+                </div>
+            </div>
+        </div>
+        <section>
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                <span class="fm-daoru-title">车型相关图片介绍</span>
+            </div>
+
+            <div class="imgList layui-row">
+                <div style="display: flex;flex-direction: column">
+                    <div class="imgListBox">
+                        <label class="layui-form-label form-label"><!--<span style="color:red;">*</span>-->车型列表图片:</label>
+
+                        <el-upload
+                                action="#"
+                                list-type="picture-card"
+                                :on-preview="handlePictureCardPreview"
+                                :on-remove="carhandleRemove"
+                                :on-change="modelcarchange"
+                                :auto-upload="false"
+                                :file-list="imgList"
+                                :limit="1">
+                            <i class="el-icon-plus"></i>
+                        </el-upload>
+
+                    </div>
+                    <!-- 大图查看-->
+                    <el-dialog :visible.sync="dialogVisible">
+                        <img  :src="dialogImageUrl"  />
+                    </el-dialog>
+                    <div class="label-tip" style="color: black;font: 14px Helvetica Neue,Helvetica,PingFang SC,微软雅黑,Tahoma,Arial,sans-serif;">
+                        附件说明：上传最多一张，最佳图片尺寸600*300，附件最大支持5M，支持格式：JPG、PNG
+                    </div>
+                </div>
+            </div>
+
+            <div class="imgListLbt layui-row">
+                <div style="display: flex;flex-direction: column">
+                    <div class="imgListBox">
+                        <label class="layui-form-label form-label"><!--<span style="color:red;">*</span>-->车型详情轮播图片:</label>
+
+                        <el-upload
+                                action="#"
+                                list-type="picture-card"
+                                :on-preview="handlePictureCardPreview"
+                                :on-remove="handleRemove"
+                                :on-change="handlechange"
+                                :auto-upload="false"
+                                :file-list="imgListlbt">
+                            <i class="el-icon-plus"></i>
+                        </el-upload>
+
+                    </div>
+                    <!-- 大图查看-->
+                    <el-dialog :visible.sync="dialogVisible">
+                        <img  :src="dialogImageUrl"  />
+                    </el-dialog>
+                    <div class="label-tip" style="color: black;font: 14px Helvetica Neue,Helvetica,PingFang SC,微软雅黑,Tahoma,Arial,sans-serif;">
+                        附件说明：附件最大支持5M，支持格式：JPG、PNG
+                    </div>
+                </div>
+            </div>
+
+            <div class="imgListLbt layui-row">
+                <div style="display: flex;flex-direction: column">
+                    <div class="imgListBox">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"><!--<span style="color:red;">*</span>-->视频介绍:</label>
+                            <button type="button"  v-show="tCarModel.videoUrl == null" class="layui-btn cover" id="control_video_button">上传视频</button>
+                            <button type="button"  v-show="tCarModel.videoUrl != null" class="layui-btn layui-btn-danger cover" id="control_video_del" style="display:none">删除视频</button>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"></label>
+                            <div class="layui-input-block" v-show="tCarModel.videoUrl != null">
+                                <video :src="imageURL+tCarModel.videoUrl"  controls="controls" id="control_video_demo" style="width: 300px;height: 260px;">
+                                    您的浏览器不支持 video 标签。
+                                </video>
+                                <p id="demoText"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="label-tip" style="color: black;font: 14px Helvetica Neue,Helvetica,PingFang SC,微软雅黑,Tahoma,Arial,sans-serif;">
+                        支持视频，不超过5M，仅限1个视频
+                    </div>
+                </div>
+            </div>
+
+                    <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                        <label class="layui-form-label layui-form-label-txt"><span style="color:red">*</span>年折旧率(%):</label>
+                        <div class="layui-input-inline layui-input-inline-change">
+                            <input type="number" min="1" max="100" lay-verify="carDepreciate" id="carDepreciate" v-model="tCarModel.carDepreciate" autocomplete="off" placeholder="年折旧率" class="layui-input">
+                        </div>
+                    </div>
+
+
+            <div style="display: flex;">
+                <div class="layui-row "><label class="layui-form-label form-label">车型介绍:</label></div>
+                <div id="Editor" class="div2">
+                    <p></p>
+                </div>
+            </div>
+
+            <div style="display: flex;margin-top: 20px;">
+                <div class="layui-row "><label class="layui-form-label form-label">基础服务:</label></div>
+                <div id="basicServices" >
+                    <p></p>
+                </div>
+
+            </div>
+
+            <div style="display: flex;margin-top: 20px;">
+                <div class="layui-row "><label class="layui-form-label form-label">增值服务:</label></div>
+                <div id="incrementServices" >
+                    <p></p>
+                </div>
+
+            </div>
+
+            <div style="display: flex;margin-top: 20px;">
+                <div class="layui-row "><label class="layui-form-label form-label">公司介绍:</label></div>
+                <div id="companyIntroduction" >
+                    <p></p>
+                </div>
+
+            </div>
+        </section>
+    </div>
+    <div class="float-btn-group">
+        <a class="layui-btn reset-btn" @click="cancel">取消</a>
+        <a class="layui-btn search-btn" lay-submit lay-filter="saveOrUpdate">保存</a>
+    </div>
+</form>
+</div>
+
+
+<script src="../../statics/js/modules/element-ui/index.js"></script>
+<script src="../../statics/js/modules/element-ui/wangEditor.min.js"></script>
+<script src="../../statics/js/modules/car/tcarmodeledit.js"></script>
+</body>
+</html>

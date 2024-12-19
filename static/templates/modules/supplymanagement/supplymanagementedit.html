@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>货源管理</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+    <style>
+        .hideCard .el-upload--picture-card {
+            display: none;
+        }
+    </style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <!-- 新增表单 -->
+    <form class="layui-form ren-form" style="margin-bottom: 60px;">
+        <div class="form-content-box">
+            <!--<div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                货源管理基本信息
+            </div>-->
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>项目跳转类型:</label>
+                            <div class="layui-input-inline">
+                                <!--项目跳转类型(1外部链接，2内部展示)-->
+                                <input type="radio" name="jumpType" value="2" title="内部展示"   v-model="supplyManagement.jumpType"   lay-filter="jumpType">
+                                <input type="radio" name="jumpType" value="1" title="外部链接"   v-model="supplyManagement.jumpType"   lay-filter="jumpType">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content" id="connectionAddress" style="margin-left: 170px;">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" >
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_connectionAddress"  v-model="supplyManagement.connectionAddress" autocomplete="off" placeholder="请输入跳转链接(例如:http://www.baidu.com)" class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content" id="listImage">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>活动列表图片展示:</label>
+                            <div class="layui-input-inline">
+                                <el-upload
+                                        action="#"
+                                        list-type="picture-card"
+                                        :on-preview="handlePictureCardPreview"
+                                        :on-remove="handleRemove"
+                                        :on-change="handlechange"
+                                        :file-list="fileList"
+                                        :class="{hideCard:hideUploadEdit}"
+                                        :before-upload="beforeAvatarUpload"
+                                        :auto-upload="true" >
+                                    <i class="el-icon-plus"></i>
+                                </el-upload>
+                            </div>
+                            <!-- 大图查看-->
+                            <el-dialog :visible.sync="dialogVisible">
+                                <img  :src="imageURL+supplyManagement.listImage"  width="100%"/>
+                            </el-dialog>
+                            <div style="margin-left: 170px;margin-top: 20px;"><span>附件说明：附件最大支持5M，支持格式：JPG、PNG</span></div>
+                        </div>
+                    </div>
+
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>项目名称:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_projectName"  v-model="supplyManagement.projectName"  maxlength="150" autocomplete="off" placeholder="项目名称"  class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">城市:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_city" v-model="supplyManagement.city" autocomplete="off" placeholder="请输入城市" class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content" v-if="supplyManagement.jumpType==2">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>联系人:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_contact" v-model="supplyManagement.contact"   autocomplete="off" placeholder="请输入联系人" class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content" v-if="supplyManagement.jumpType==1">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">联系人:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_contact" v-model="supplyManagement.contact"   autocomplete="off" placeholder="请输入联系人" class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">所需车辆数/台:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_vehicleNumber"  v-model="supplyManagement.vehicleNumber" autocomplete="off" placeholder="请输入所需车辆数/台"  class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content" v-if="supplyManagement.jumpType==2">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>所需车辆要求:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_vehicleRequirements" v-model="supplyManagement.vehicleRequirements" autocomplete="off"  placeholder="请输入所需车辆要求" class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content" v-if="supplyManagement.jumpType==1">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">所需车辆要求:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"  v-model="supplyManagement.vehicleRequirements" autocomplete="off"  placeholder="请输入所需车辆要求" class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">项目说明:</label>
+                            <div class="layui-input-inline">
+                               <!-- <input type="text" lay-verify="validate_projectDescription"  v-model="supplyManagement.projectDescription"  maxlength="150"  autocomplete="off"  placeholder="请输入项目说明" class="layui-input searchVal">-->
+                                <textarea maxlength="255"  v-model="supplyManagement.projectDescription"  placeholder="请输入项目说明" class="layui-textarea" ></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">价格:</label>
+                            <div class="layui-input-inline">
+                               <!-- <input type="text" lay-verify="validate_price" v-model="supplyManagement.price"
+                                       oninput="value=moneyInput(value)"    autocomplete="off" placeholder="请输入价格" class="layui-input searchVal">
+                              -->  <input type="text" maxlength="50" v-model="supplyManagement.price"
+                                           autocomplete="off" placeholder="请输入价格" class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>项目状态:</label>
+                            <div class="layui-input-inline">
+                                <input type="checkbox" v-model="supplyManagement.projectStatus"  lay-filter="projectStatus_filter"   lay-skin="switch" lay-text="启用|禁用">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">报名开始时间:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_registrationStartTime"  v-model="supplyManagement.registrationStartTime" autocomplete="off" id="registrationStartTime"
+                                       placeholder="请选择报名开始时间" class="layui-input searchVal" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">报名结束时间:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_registrationClosingTime"
+                                       v-model="supplyManagement.registrationClosingTime" autocomplete="off" id="registrationClosingTime"
+                                       placeholder="请选择报名结束时间" class="layui-input searchVal" readonly>
+                            </div>
+                        </div>
+                     </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">备注信息:</label>
+                            <div class="layui-input-inline">
+                                <textarea placeholder="如需其他描述可用进行备注说明" lay-verify="remarks"  v-model="supplyManagement.remarks"  maxlength="200"  class="layui-textarea" name="desc"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">短信接收人:</label>
+                            <div class="layui-input-inline" style="width: 200px;">
+                                <input type="text"   v-model="supplyManagement.deptName" @click="deptTree"  placeholder="请选择组织机构" class="layui-input">
+                            </div>
+                            <div class="layui-input-inline" style="width: 200px;">
+                                <select name="handoverUserId"  v-model="supplyManagement.sysUserId" lay-filter="handoverUserId">
+                                    <option value="">请选择用户</option>
+                                    <option v-for="r in handoveruserlist" :value="r.userId">{{r.username}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="float-btn-group bottom-bar">
+            <a class="layui-btn reset-btn" id="closePage">取消</a>
+            <a class="layui-btn search-btn" lay-submit lay-filter="save" id="save">保存</a>
+        </div>
+    </form>
+</div>
+<!-- 选择部门 -->
+<div id="deptLayer" style="display: none;padding:10px;">
+    <ul id="deptTree" class="ztree"></ul>
+</div>
+<script src="../../statics/js/modules/element-ui/index.js"></script>
+<script src="../../statics/js/modules/element-ui/wangEditor.min.js"></script>
+<script src="../../statics/js/modules/supplymanagement/supplymanagementedit.js?_${.now?long}"></script>
+</body>
+</html>

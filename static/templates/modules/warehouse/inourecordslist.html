@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>仓库管理</title>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="Author" content="larry" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+    <script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/common.js"></script>
+    <script type="text/javascript" src="../../statics/js/upload.js"></script>
+    <script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+    <link rel="stylesheet" href="../../statics/new_css/jxcPublicAll.css" media="all">
+    <link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../statics/common/step/steps.css">
+    <link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/viewer.min.css">
+    <script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+    <script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+    <script src="../../statics/common/layui/autocomplete.js"></script>
+    <script src="../../statics/js/modules/viewer/viewer.min.js"></script>
+    <script src="../../statics/common/print-js/print.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+    <script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/searchview.js"></script>
+    <script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+    <!-- 引入组件库 -->
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css">
+    <style>
+        .details-tab-content-box .flex{
+            cursor: pointer;
+        }
+        .layui-form-label{
+            width: 120px !important;
+        }
+    </style>
+</head>
+<body class="ren-body">
+    <div id="rrapp" v-cloak>
+
+        <div class="mvvm-table">
+<!--            <div class="details-conteiner">-->
+<!--                    <div class="details-layui-row">-->
+                        <div class="list-search-title-box">
+                            <!-- <div class="list-search-sup-title">筛选条件: </div> -->
+                            <form class="layui-form" style="box-shadow: 0 0 20px #eee;padding-right: 15px;">
+                                <section class="jxc-section" style="display: flex;align-items: flex-start;white-space: nowrap;">
+                                    <div class="card layui-row" style="flex: 1">
+                                        <div class="layui-form-item ">
+                                            <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                                <label class="layui-form-label">车架号/车牌号</label>
+                                                <div class="layui-input-inline">
+                                                    <input v-model="q.carPlate" type="text" class="layui-input searchVal"
+                                                        placeholder="请输入车架号/车牌号" />
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                                <label class="layui-form-label">任务类型</label>
+                                                <div class="layui-input-inline">
+                                                    <select name="transferType" lay-filter="transferType"
+                                                        v-model="q.transferType">
+                                                        <!--移库类型 0入库 1出库-->
+                                                        <option value="">请选择任务类型</option>
+                                                        <option value=0>入库</option>
+                                                        <option value=1>出库</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                                <label class="layui-form-label">仓库名称</label>
+                                                <div class="layui-input-inline">
+                                                    <input v-model="q.warehouseNameRecord" type="text"
+                                                        style="cursor:pointer;" @click="selectwarehouse" readonly="readonly"
+                                                        class="layui-input searchVal" placeholder="请选择仓库" />
+                                                </div>
+                                            </div>
+                                            <section v-show="isFilterRecord">
+                                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                                    <label class="layui-form-label">移库原因</label>
+                                                    <div class="layui-input-inline">
+                                                        <select v-model="q.transferReason" lay-filter="transferReasonSerch">
+                                                            <option value="">请选择移库原因</option>
+                                                            <option v-for="(item,index) in transferReasonList"
+                                                                :value="item.code">{{item.value}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                                    <label class="layui-form-label">移库时间</label>
+                                                    <div class="layui-input-inline">
+                                                        <input type="text" class="layui-input searchVal" id="transferTime"
+                                                            v-model="q.transferTimeStr" placeholder="开始时间-结束时间" readonly />
+                                                    </div>
+                                                </div>
+                                            </section>
+<!--                                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs12" v-if="isFilterRecord"></div>-->
+                                            <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12" >
+<!--                                                <label class="layui-form-label"></label>-->
+                                                <div style="display: flex;align-items: center;width:100%;justify-content: flex-end">
+                                                    <a class="layui-btn search-btn" @click="recordQuery">查询</a>
+                                                    <a class="layui-btn reset-btn" @click="recordReset">重置</a>
+                                                    <div class="df-color" @click="bindFilterRecord"
+                                                        style="margin-left: 10px;cursor: pointer;user-select: none;">
+                                                        <span >高级筛选</span>
+                                                        <i class="icon layui-icon-extend layui-extend-shaixuan"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </section>
+<!--                                <div style="display: flex;align-items: center;justify-content: center;" v-if="false">-->
+<!--                                    <div class="layui-form-item layui-row">-->
+<!--                                        <div class="list-search-form-button">-->
+<!--                                            <a class="layui-btn search-btn" @click="recordQuery">查询</a>-->
+<!--                                            <a class="layui-btn reset-btn" @click="recordReset">重置</a>-->
+<!--                                            &lt;!&ndash; <a class="layui-btn reset-btn"  @click="exportInOutRecord">导出</a>&ndash;&gt;-->
+<!--                                        </div>-->
+<!--                                        &lt;!&ndash;<div @click="bindFilterRecord" style="position: absolute;right: 30px;font-size: 14px;color: #1a1f33;">-->
+<!--                                            <span>高级筛选</span>-->
+<!--                                            <i class="layui-icon" :class="isFilterRecord?'layui-icon-up':'layui-icon-down'"  data-cascader="icon"></i>-->
+<!--                                        </div>&ndash;&gt;-->
+<!--                                    </div>-->
+<!--                                </div>-->
+                            </form>
+                        </div>
+                        <div class="list-search-title-box ground-search-btn">
+                            <form class="layui-form">
+                                <div style="display:flex;width: 100%;">
+                                    <div class="layui-form-item layui-row" style="width: 100%;">
+                                        <div class="list-search-form-button" style="width: 100%;">
+                                            <a class="layui-btn btn-warning" @click="exports"
+                                               v-m-perm="['inoutrecords:inourecords:export']">导出</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="layui-tab-item layui-show">
+                            <table class="layui-hide" id="recordGrid" lay-filter="recordGrid" lay-data="{height: 'full'}">
+                            </table>
+                        </div>
+                    </div>
+
+<!--            </div>-->
+<!--        </div>-->
+        <!-- 新增/修改表单-->
+        <div v-show="editForm" class="layui-form ren-form" id="editForm">
+            <div class="form-content-box">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed"> </div>
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label"><span style="color:red;">*</span>仓库名称:</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" lay-verify="warehouseNameVerify" maxlength="40"
+                                        v-model="warehouse.warehouseName" autocomplete="off" placeholder="请输入仓库/城市名称"
+                                        class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <label class="layui-form-label">备注:</label>
+                                <div class="layui-input-inline">
+                                    <textarea maxlength="200" placeholder="请输入备注" v-model="warehouse.remarks"
+                                        class="layui-textarea" style="width: 570px;"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="float-btn-group">
+                <a class="layui-btn reset-btn" @click="cancel">取消</a>
+                <button class="layui-btn" id="saveReceivables" lay-submit lay-filter="saveOrUpdate">确定</button>
+            </div>
+        </div>
+
+
+        <!-- 表单 查看 -->
+        <div v-show="showForm" class="layui-form ren-form" id="showForm">
+            <div class="jxc-detail layui-form ren-form">
+                <section class="jxc-section">
+                    <legend class="aTitle">仓库信息</legend>
+                    <hr class="layui-bg-gray">
+                    <div class="card">
+                        <div class="layui-row form-group">
+                            <div class="column layui-col-xs4">
+                                <span style="font-size: 16px;font-weight: bold;">仓库名称: </span>
+                                <span>{{warehouse.warehouseName}}</span>
+                            </div>
+                            <div class="column layui-col-xs4">
+                                <span style="font-size: 16px;font-weight: bold;">仓库状态:</span>
+                                <span>{{warehouseStatusStr}}</span></span>
+                            </div>
+                        </div>
+                        <div class="layui-row form-group">
+                            <div class="column layui-col-xs4">
+                                <span style="font-size: 16px;font-weight: bold;">在库车辆数: </span>
+                                <a style="text-decoration:underline;color:#419BEA;cursor: pointer;"
+                                    @click="showCarList(warehouse.warehouseId,1)">{{warehouse.carNum}}台</a>
+                            </div>
+                        </div>
+                        <div class="layui-row form-group">
+                            <div class="column layui-col-xs4">
+                                <span style="font-size: 16px;font-weight: bold;">备注: </span>
+                                <span>{{warehouse.remarks}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="float-btn-group">
+                <a class="layui-btn reset-btn" @click="cancel">取消</a>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/html" id="recordBarTpl">
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="check" more-btn-index="{{d.LAY_INDEX-1}}">查看</a>
+</script>
+
+    <script src="../../statics/js/modules/warehouse/inourecordslist.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../statics/newImages/logo/logo@2x.png">
+    <title>跟进线索首页</title>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/global.css" media="all">-->
+
+    <!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/fonts/larry-icon.css" media="all">-->
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+    <!-- 放开后表格无法拖动   <link rel="stylesheet" type="text/css" href="../../statics/new_css/larryms.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/new_css/normalize.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <!-- Import style -->
+    <link rel="stylesheet" href="../../statics/js/element-plus/index.css"/>
+    <!-- 页面样式 -->
+    <link rel="stylesheet" href="../../statics/new_css/mf-layout.css"/>
+
+</head>
+<style>
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    .title .el-input {
+        width: 220px;
+        margin: 0 10px 0 20px;
+    }
+
+    .state-wrap {
+        margin-top: 15px;
+        justify-content: space-between;
+    }
+
+    .state-item {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        width: 140px;
+        /*height: 80px;*/
+        aspect-ratio: 1/0.59;
+        padding-left: 20px;
+        background-size: 100% 100%;
+        margin-right: 10px;
+        border-radius: 6px;
+        box-sizing: border-box;
+    }
+
+    .state-name {
+        font-size: 14px;
+        color: #333;
+    }
+
+    .state-count {
+        font-size: 18px;
+        margin-top: 2px;
+    }
+
+    .child .el-input {
+        width: 150px !important;
+    }
+
+    .child .el-date-editor--date {
+        width: 150px !important;
+        margin-left: 15px;
+    }
+
+    .stock-wrap {
+        /*height: 450px;*/
+        margin-top: 15px;
+        display: flex;
+        flex-direction: column;
+        background-size: 100% 100%;
+        aspect-ratio: 1/0.625;
+
+    }
+
+    .bg-light-blue {
+        background: #F5FBFB;
+        border-radius: 8px;
+    }
+
+    .stock-title {
+        display: flex;
+        aspect-ratio: 1/0.07;
+    }
+
+    .stock-title-wrap {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .stock-title-wrap img {
+        width: 20px;
+        height: 20px;
+    }
+
+    .stock-title-wrap span {
+        font-size: 16px;
+        margin-left: 5px;
+    }
+
+    .stock-chart {
+        margin: 15px;
+        background: #F8FFFF;
+        flex: 1;
+        border-radius: 8px;
+        display: flex;
+    }
+
+    .salesman-wrap {
+        aspect-ratio: 1/0.85;
+        border-radius: 8px;
+        overflow-y: scroll;
+        margin-top: 15px;
+    }
+
+    .salesman-item {
+        height: 80px;
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+
+    }
+
+    .salesman-name {
+        color: #666;
+        margin-left: 28px;
+        flex: 1;
+    }
+
+    .salesman-avatar {
+        width: 47px;
+        height: 47px;
+        border-radius: 25px;
+        margin-left: 40px;
+    }
+
+    #stock_0 {
+        width: 100vw;
+        height: 69vh;
+    }
+
+    #stock_02 {
+        width: 100vw;
+        height: 69vh;
+    }
+
+    #stock_1 {
+        width: 95vw;
+        height: 62vh;
+    }
+
+    #stock_2 {
+        width: 95vw;
+        height: 62vh;
+    }
+
+    #stock_3 {
+        width: 95vw;
+        height: 62vh;
+    }
+
+    #stock_4 {
+        width: 47vw;
+        height: 72vh;
+    }
+
+    #stock_5 {
+        width: 47vw;
+        height: 72vh;
+    }
+
+    .bg-blue {
+        background: rgba(245, 251, 251, 1);
+        border-radius: 8px;
+    }
+
+    .part3 {
+        aspect-ratio: 1/1;
+    }
+
+    .d-flex {
+        display: flex;
+    }
+
+    .part-center {
+        aspect-ratio: 1/0.33;
+        margin: 15px 10px 0 0;
+    }
+
+    .part2 {
+        aspect-ratio: 1/0.7;
+    }
+
+    .title-card{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 120px;
+        height: 40px;
+        border-radius: 4px;
+        background: #fff;
+        border: 1px solid #BED7DE;
+        margin-right: 20px;
+        color: #333;
+        box-sizing: border-box;
+        cursor: pointer;
+    }
+
+    .title-active{
+        background: #3facb3;
+        color: #fff;
+    }
+
+    .count-item{
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        margin-right: 20px;
+        /*height: 120px;*/
+        /*aspect-ratio: 1/0.40;*/
+        justify-content: center;
+        padding: 13px 20px;
+        box-sizing: border-box;
+        background: #fff;
+        border-radius: 8px;
+    }
+
+    .count-count{
+        margin-top: 7px;
+        font-size: 18px;
+    }
+
+    .stat_type{
+        display: flex;
+        margin-left: 25px;
+    }
+
+    .stat_item_left{
+        width: 88px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px #D9D9D9 solid;
+        border-radius: 4px 0 0 4px;
+        border-right: none;
+        color: #000000;
+        cursor: pointer;
+    }
+
+    .stat_item_right{
+        width: 88px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px #D9D9D9 solid;
+        border-radius: 0 4px 4px 0;
+        border-left: none;
+        color: #000000;
+        cursor: pointer;
+    }
+
+    .stat_active{
+        border: 1px solid #3FACB3;
+        /*border-left: inherit;*/
+        /*border-right: inherit;*/
+        color: #3FACB3;
+    }
+
+    .table-title{
+        display:flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 50px;
+    }
+
+    .wait-warp{
+        flex: 1;
+        margin-right: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 15px;
+    }
+
+    .select-wrap{
+        flex: 1;
+        margin-left: 6px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 15px;
+    }
+
+    .config-add{
+        color: #3facb3;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    .el-select-dropdown.is-multiple .el-select-dropdown__item.selected::after {
+        width: 18px;
+        height: 18px;
+        right: 10px;
+        mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDI0IDEwMjQiIGRhdGEtdi1lYTg5MzcyOD0iIj48cGF0aCBmaWxsPSJjdXJyZW50Q29sb3IiIGQ9Ik03Ny4yNDggNDE1LjA0YTY0IDY0IDAgMCAxIDkwLjQ5NiAwbDIyNi4zMDQgMjI2LjMwNEw4NDYuNTI4IDE4OC44YTY0IDY0IDAgMSAxIDkwLjU2IDkwLjQ5NmwtNTQzLjA0IDU0My4wNC0zMTYuOC0zMTYuOGE2NCA2NCAwIDAgMSAwLTkwLjQ5NnoiPjwvcGF0aD48L3N2Zz4=");
+    }
+
+    .el-select .el-select__tags .el-tag{
+        color: #333 !important;
+    }
+
+    .el-transfer-panel__body {
+        weight: 300px;
+        height: 400px;
+    }
+
+    .el-transfer-panel__list {
+        weight: 300px;
+        height: 400px;
+    }
+
+    .el-select-dropdown__item.hover{
+        background: #fff;
+    }
+
+    /*.el-table__header tr .el-table__header th {*/
+    /*    padding: 0 !important;*/
+    /*    height: 30px !important;*/
+    /*    line-height: 30px !important;*/
+    /*}*/
+
+    /*.el-dialog{*/
+    /*    height: 80% !important;*/
+    /*}*/
+
+
+</style>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <div class="card-wrap flex column" style="padding: 20px 10px 20px 20px">
+<!--            <div style="flex: 1"></div>-->
+        <el-row >
+                <el-col :span="6">
+                    <div class="flex title" style="justify-content: flex-start">
+                        <div class="title-card" :class="0==pageType?'title-active':''" @click="pageChange(0)">
+                            收益总览
+                        </div>
+                        <div class="title-card" :class="1==pageType?'title-active':''" @click="pageChange(1)">
+                            收益明细
+                        </div>
+                    </div>
+                </el-col>
+
+                <el-col :span="9"></el-col>
+                <el-col :span="9" v-if="0==pageType">
+                    <div style="display: flex;justify-content: flex-end">
+                        <el-select style="width: 260px;" v-model="q.deptList" collapse-tags
+                                   collapse-tags-tooltip
+                                   multiple placeholder="请选择公司"
+                                   clearable @change="change0">
+                            <el-option
+                                    v-for="(item, index) in storeLists"
+                                    :key="index"
+                                    :label="item.name"
+                                    :value="item.deptId">
+                            </el-option>
+                        </el-select>
+                        <el-date-picker
+                                style="margin-left: 10px"
+                                v-model="q.date0"
+                                type="monthrange"
+                                range-separator="至"
+                                value-format="YYYY-MM"
+                                format="YYYY-MM"
+                                :clearable="false"
+                                unlink-panels
+                                :disabled-date="disabledDateFn"
+                                @change="change0_"
+                                start-placeholder="开始月份"
+                                end-placeholder="结束月份">
+                        </el-date-picker>
+                    </div>
+                </el-col>
+            </el-row>
+    </div>
+
+    <div v-show="0==pageType">
+        <div class="flex" style="margin-bottom: 20px;margin-right: -20px">
+            <div class="count-item" v-for="(item, index) in countList" :key="index">
+                <div class="space-between" style="display: flex">
+                    <span style="color: #333;font-size: 16px;margin-top: 2px">{{item.name}}</span>
+                    <img style="width: 36px;height: 36px" :src="item.img">
+                </div>
+                <span class="count-count" :style="{color:item.color}">￥{{item.count}}</span>
+            </div>
+        </div>
+
+        <div class="card-wrap flex column" v-loading="loading" style="padding: 20px 10px 20px 20px">
+            <div class="d-flex align-center" style="margin: -10px 20px 10px">
+                <div class="add-title-wrap" >收益统计</div>
+                <div class="stat_type">
+                    <div class="stat_item_left" :class="0==statType?'stat_active':''" @click="statChange(0)">公司统计</div>
+                    <div class="stat_item_right" :class="1==statType?'stat_active':''" @click="statChange(1)">车型统计</div>
+                </div>
+
+                <div style="flex: 1"></div>
+
+                <el-select v-model="q.carModelList"
+                           collapse-tags
+                           collapse-tags-tooltip
+                           multiple placeholder="车型选择" clearable @change="change1">
+                    <el-option
+                            v-for="(item, index) in modelList"
+                            :key="index"
+                            :label="item.modelName"
+                            :value="item.id">
+                    </el-option>
+                </el-select>
+            </div>
+
+            <div id="stock_0" v-show="1==statType"></div>
+            <div id="stock_02" v-show="0==statType"></div>
+
+        </div>
+
+        <div class="card-wrap flex column" style="padding: 20px 10px 20px 20px">
+            <div class="flex column part-center">
+
+                <div class="add-title-wrap" style="margin: -10px 20px 10px">收益走势</div>
+
+                <div id="stock_1">
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div v-show="1==pageType" class="table-content">
+        <div class="list-search-title-box">
+            <el-form class="layui-form" :model="q2" ref="form" style="padding: 15px 25px 0;">
+
+                <el-row :gutter="20">
+                    <el-col :span="6">
+                        <el-form-item label="所属公司/部门" prop="deptName">
+<!--                            <el-input @click="deptTree" readonly v-model="q2.deptName" placeholder="请选择所属公司/部门" >-->
+<!--                            </el-input>-->
+
+                            <el-select v-model="deptName"
+                                       placeholder="请选择所属公司/部门"
+                                       :popper-append-to-body="false"
+                                       @change="changeStore">
+                                <el-option
+                                        :value="storeIdValue"
+                                        style="height: auto">
+
+                                    <el-tree
+                                            :data="storeList"
+                                            show-checkbox
+                                            default-expand-all
+                                            node-key="id"
+                                            ref="tree"
+                                            highlight-current
+                                            :props="defaultTreeProps"
+                                            check-strictly
+                                            @check="handleNodeClick">
+                                    </el-tree>
+                                </el-option>
+                            </el-select>
+
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="6">
+                        <el-form-item label="车牌号/车架号" prop="carNo">
+                            <el-input v-model="q2.carNo" placeholder="请输入车牌号/车架号" clearable/>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="6">
+                        <el-form-item label="车辆所在仓库" prop="depotName">
+                            <el-select style="width: 100%"
+                                       v-model="q2.depotName" placeholder="请选择车辆状态" clearable>
+                                <el-option v-for="(item, index) in storageList" :key="index" :label="item.warehouseName" :value="item.warehouseName"></el-option>
+                            </el-select>
+
+<!--                            <el-input readonly @click="chooseWarehouse" v-model="q2.depotName" placeholder="请选择车辆所在仓库" />-->
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="6" v-show="!isFilter">
+                        <div class="df-color" style="display: flex;align-items: center;justify-content: flex-end">
+                            <el-button @click="reset">重置</el-button>
+                            <el-button type="primary" @click="query">查询</el-button>
+                            <div @click="bindFilter" style="margin-left: 10px;cursor: pointer;user-select: none;">
+                                <span>高级筛选</span>
+                                <i class="icon layui-icon-extend layui-extend-shaixuan"></i>
+                            </div>
+                        </div>
+                    </el-col>
+
+                    <el-col :span="6" v-show="isFilter">
+                        <el-form-item label="车辆来源" prop="sourceType">
+
+                            <el-select style="width: 100%"
+                                    @change="sourceTypeChange"
+                                    v-model="q2.sourceType" placeholder="请选择车辆来源" clearable>
+                                <el-option label="直购" :value="1"></el-option>
+                                <el-option label="租赁" :value="2"></el-option>
+                                <el-option label="租售" :value="3"></el-option>
+                            </el-select>
+
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="6" v-show="isFilter">
+                        <el-form-item label="品牌/车系/车型">
+
+                            <el-cascader style="width: 100%"
+                                    v-model="carBrandName"
+                                    ref="model"
+                                    :options="brandList"
+                                    @change="handleBrandChange"
+                                    placeholder="请选择"
+                                    clearable/>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="6" v-show="isFilter">
+                        <el-form-item label="供应商" prop="supplierName">
+                            <el-input v-model="q2.supplierName" placeholder="请输入供应商" clearable/>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="6" v-show="isFilter">
+                        <el-form-item label="车辆状态" prop="businessType">
+                            <el-select style="width: 100%"
+                                    @change="businessTypeChange"
+                                    v-model="q2.businessType" placeholder="请选择车辆状态" clearable>
+                                <el-option label="整备中" :value="1"></el-option>
+                                <el-option label="备发车" :value="2"></el-option>
+                                <el-option label="预定中" :value="3"></el-option>
+                                <el-option label="用车中" :value="4"></el-option>
+                                <el-option label="已过户" :value="5"></el-option>
+                                <el-option label="已处置" :value="6"></el-option>
+                                <el-option label="已出售" :value="7"></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="6" v-show="isFilter">
+                        <el-form-item label="入库时间" prop="warehouseStr">
+                            <el-date-picker
+                                    value-format="YYYY-MM-DD"
+                                    v-model="q2.warehouseStr2"
+                                    type="daterange"
+                                    range-separator="至"
+                                    unlink-panels
+                                    :disabled-date="disabledDateFn"
+                                    start-placeholder="开始日期"
+                                    end-placeholder="结束日期" @change="timeChange"></el-date-picker>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="6" v-show="isFilter">
+                        <el-form-item label="账单时间" prop="timeStr">
+                            <el-date-picker
+                                    value-format="YYYY-MM-DD"
+                                    v-model="q2.timeStr2"
+                                    type="daterange"
+                                    range-separator="至"
+                                    unlink-panels
+                                    :disabled-date="disabledDateFn"
+                                    start-placeholder="开始日期"
+                                    end-placeholder="结束日期" @change="timeChange2"></el-date-picker>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="18" v-show="isFilter">
+                        <div class="df-color" style="display: flex;align-items: center;justify-content: flex-end">
+                            <el-button @click="reset">重置</el-button>
+                            <el-button type="primary" @click="query">查询</el-button>
+                            <div @click="bindFilter" style="margin-left: 10px;cursor: pointer;user-select: none;">
+                                <span>高级筛选</span>
+                                <i class="icon layui-icon-extend layui-extend-shaixuan"></i>
+                            </div>
+                        </div>
+                    </el-col>
+                </el-row>
+
+            </el-form>
+        </div>
+        <div class="list-search-title-box ground-search-btn">
+            <div class="table-title" style="margin:0 20px; justify-content: flex-end">
+                <el-button type="warning" plain @click="exportdata" v-m-perm="['report:financeReport:export']">导出</el-button>
+                <el-button type="success" plain @click="openConfig" v-m-perm="['report:financeReport:export']">列表设置</el-button>
+<!--                <el-icon @click="openConfig"><Operation /></el-icon>-->
+            </div>
+
+            <div style="margin: 10px 20px">
+<!--                <el-table :header-cell-style="{'background-color':'#f6f8f8','color':'#000'}"-->
+                <el-table :header-cell-style="headerStyle"
+                          :data="tableData"
+                          style="width: 100%" border>
+<!--                    0/车辆基础信息 1/营业收入 2/费用支出 3/车辆折旧费 4/税费 5/坏账金额 6/车辆总收益-->
+                    <template v-for="(item, index) in groupedArray" :key="`${index}`">
+                        <el-table-column align="center" >
+<!--                            <template #header v-if="item.items.length>1">-->
+                            <template #header >
+                                <div style="display: flex;justify-content: center;align-items: center;cursor:pointer;" @click="item.toggle=!item.toggle">
+                                    <span style="flex: 1;text-align: center">{{0==item.type?'车辆基础信息':
+                                            1==item.type?'营业收入':
+                                            2==item.type?'费用支出':
+                                            3==item.type?'车辆折旧费':
+                                            4==item.type?'税费':
+                                            5==item.type?'坏账金额':
+                                            6==item.type?'车辆总收益':''}}</span>
+    <!--                                <i class="el-icon-delete"></i>-->
+                                    <div v-if="item.items.length>1">
+                                        <svg v-if="item.toggle" style="width: 13px; height: 13px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" data-v-ea893728=""><path fill="currentColor" d="M529.408 149.376a29.12 29.12 0 0 1 41.728 0 30.592 30.592 0 0 1 0 42.688L259.264 511.936l311.872 319.936a30.592 30.592 0 0 1-.512 43.264 29.12 29.12 0 0 1-41.216-.512L197.76 534.272a32 32 0 0 1 0-44.672l331.648-340.224zm256 0a29.12 29.12 0 0 1 41.728 0 30.592 30.592 0 0 1 0 42.688L515.264 511.936l311.872 319.936a30.592 30.592 0 0 1-.512 43.264 29.12 29.12 0 0 1-41.216-.512L453.76 534.272a32 32 0 0 1 0-44.672l331.648-340.224z"></path></svg>
+                                        <svg v-else style="width: 13px; height: 13px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" data-v-ea893728=""><path fill="currentColor" d="M452.864 149.312a29.12 29.12 0 0 1 41.728.064L826.24 489.664a32 32 0 0 1 0 44.672L494.592 874.624a29.12 29.12 0 0 1-41.728 0 30.592 30.592 0 0 1 0-42.752L764.736 512 452.864 192a30.592 30.592 0 0 1 0-42.688m-256 0a29.12 29.12 0 0 1 41.728.064L570.24 489.664a32 32 0 0 1 0 44.672L238.592 874.624a29.12 29.12 0 0 1-41.728 0 30.592 30.592 0 0 1 0-42.752L508.736 512 196.864 192a30.592 30.592 0 0 1 0-42.688z"></path></svg>
+                                    </div>
+                                </div>
+                            </template>
+
+                            <template v-for="(citem, cindex) in item.items">
+
+                                <el-table-column
+                                        show-overflow-tooltip
+                                        v-if="0==cindex||item.toggle"
+                                        align="center" min-width="160px"
+                                        :label="citem.filedName">
+    <!--                                <template slot="header">1-->
+    <!--                                    <div>测试数据类1</div>-->
+    <!--                                </template>-->
+                                    <template v-slot="{row}">
+                                        <span v-if="'businessType'==citem.filedKey">
+                                            {{1==row[citem.filedKey]?'整备中':
+                                                2==row[citem.filedKey]?'备发车':
+                                                3==row[citem.filedKey]?'预定中':
+                                                4==row[citem.filedKey]?'用车中':
+                                                5==row[citem.filedKey]?'已过户':
+                                                6==row[citem.filedKey]?'已处置':
+                                                7==row[citem.filedKey]?'已出售':'--'
+                                            }}
+                                        </span>
+                                        <span v-else-if="'sourceType'==citem.filedKey">
+                                            {{1==row[citem.filedKey]?'直购':
+                                                2==row[citem.filedKey]?'租赁':
+                                                3==row[citem.filedKey]?'租售':'--'
+                                            }}
+                                        </span>
+
+                                        <span v-else
+                                            @click="goCarDetail(row, citem)"
+                                            :style="{color:'carNo'==citem.filedKey?'#0094ff':'#606060',
+                                                    cursor:'carNo'==citem.filedKey?'pointer':''
+                                                    }">
+                                            {{'number' == typeof row[citem.filedKey] ? row[citem.filedKey].toFixed(2): row[citem.filedKey] ||'--'}}
+                                        </span>
+                                    </template>
+                                </el-table-column>
+                            </template>
+                        </el-table-column>
+                    </template>
+
+                </el-table>
+            </div>
+
+            <el-row justify="end" style="margin: 10px">
+                <el-pagination
+                        :current-page="q2.page"
+                        :page-size="q2.limit"
+                        :page-sizes="[10, 50, 100, 200]"
+                        :small="false"
+                        :disabled="false"
+                        :background="false"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="totalCount"
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                />
+            </el-row>
+        </div>
+    </div>
+
+    <el-dialog
+            title="列表设置"
+            v-model="showConfig"
+            top="10px"
+            width="60%">
+        <div style="display: flex;justify-content: center">
+<!--            <div class="wait-warp">-->
+<!--                <div class="flex space-between align-center">-->
+<!--                    备选维度-->
+
+<!--                    <span class="config-add">全部添加</span>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="select-wrap">-->
+
+<!--            </div>-->
+
+<!--            <el-transfer-->
+<!--                    v-model="configValue"-->
+<!--                    filterable-->
+<!--                    :filter-method="filterMethod"-->
+<!--                    filter-placeholder="输入关键字"-->
+<!--                    :data="configData"-->
+<!--            />-->
+
+            <el-transfer filterable
+                    :titles="['备选列表', '已选列表']"
+                    v-model="configValue" :data="configData" @change="configChange"></el-transfer>
+
+        </div>
+        <template #footer>
+          <span class="dialog-footer">
+            <el-button @click="openConfig">清除本次设置</el-button>
+            <el-button @click="showConfig = false">取 消</el-button>
+            <el-button type="primary" @click="confirmConfig">
+              确 定
+            </el-button>
+          </span>
+        </template>
+    </el-dialog>
+
+</div>
+
+<!-- Import Vue 3 -->
+<!-- Import Vue 3 -->
+<script src="../../statics/js/vue3/vue.global.js"></script>
+<!-- Import component library -->
+<script src="../../statics/js/element-plus/index.full.js"></script>
+<script src="../../statics/js/element-plus/icons-vue.js"></script>
+<script src="../../statics/plugins/jquery.min.js"></script>
+<script src="../../statics/common/layui/layui.js"></script>
+<script src="../../statics/js/common.js"></script>
+<script src="../../statics/js/moment.js"></script>
+<script src="../../statics/js/element-plus/locale-cn.js"></script>
+<!--<script type="text/javascript" src="../../statics/common/plus/echarts.min.js"></script>-->
+<script type="text/javascript" src="../../statics/common/plus/echarts5.4.3.js"></script>
+<script>
+    // 基于准备好的dom，初始化echarts实例
+    // console.log('echarts', echarts)
+    // var myChart = echarts.init(document.getElementById('main'));
+    //
+    // // 指定图表的配置项和数据
+    // var option = {
+    //     title: {
+    //         text: 'ECharts 入门示例'
+    //     },
+    //     tooltip: {},
+    //     legend: {
+    //         data: ['销量']
+    //     },
+    //     xAxis: {
+    //         data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
+    //     },
+    //     yAxis: {},
+    //     series: [
+    //         {
+    //             name: '销量',
+    //             type: 'bar',
+    //             data: [5, 20, 36, 10, 10, 20]
+    //         }
+    //     ]
+    // };
+    //
+    // // 使用刚指定的配置项和数据显示图表。
+    // myChart.setOption(option);
+</script>
+<script src="../../statics/js/modules/cluesSale/dict.js"></script>
+<script src="../../statics/js/modules/carprofitreport/carprofitreport_new.js?_${.now?long}"></script>
+</body>
+
+</html>

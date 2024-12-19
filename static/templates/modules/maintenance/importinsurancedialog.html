@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>保险识别导入</title>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="Author" content="larry"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+    <script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+    <script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/common.js"></script>
+    <script type="text/javascript" src="../../statics/js/upload.js"></script>
+    <script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+    <link rel="stylesheet" href="../../statics/css/jxcPublicAll.css" media="all">
+    <link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../statics/common/step/steps.css">
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+    <script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+    <script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+    <script src="../../statics/common/layui/autocomplete.js"></script>
+    <script src="../../statics/js/modules/viewer/viewer.min.js"></script>
+    <script src="../../statics/common/print-js/print.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+    <script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/searchview.js"></script>
+    <script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/fonts/larry-icon.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/fontdemo.css" media="all">
+    <!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+    <!-- 引入组件库 -->
+    <link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+    <style>
+        .ren-form {
+            margin-top: 0;
+        }
+        .content-tips{
+            background: #eee;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            margin: 0 10px;
+            padding: 10px;
+        }
+
+        .upload-content{
+            margin: 10px;
+            border: 1px solid #ddd;
+            background: white;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+
+
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <div class="layui-form ren-form">
+        <div class="layui-form-item">
+
+            <div class="content-tips">
+                <h3 style="font-size: 14px;">保险识别导入：系统自动识别保单图片内容，并生成保险记录！(导入前请务必仔细阅读下方说明）</h3>
+                <br>
+                <h2 style="color: red;font-size: 15px;">注意事项：</h2>
+                <h4 style="font-size: 14px;">1、保险单将通过第三方识别，按识别数量收费，如未开通请联系售后；</h4>
+                <h4 style="font-size: 14px;">2、仅支持交强险、商业险类型的保单识别，其他类型将导入失败；</h4>
+                <h4 style="font-size: 14px;">3、保险单导入前，请确保车辆已存在系统(车架号与系统中车辆资料匹配)，否则将导入失败；</h4>
+                <h4 style="font-size: 14px;">4、请确保提供正确保单图片或PDF，否则将导入失败，但系统仍会识别产生扣费。</h4>
+                <br>
+                <h2 style="color: red;font-size: 15px;">操作指引：</h2>
+                <h4 style="font-size: 14px;">1.直接选中需识别的保单图片/PDF进行压缩，压缩包及保单图片/PDF命名无特殊要求。</h4>
+                <img style="margin: 3px" src="/statics/images/sample_insurance.png">
+                <h4 style="font-size: 14px;">2.选择压缩文件，上传至系统中，确认后完成上传。</h4>
+
+                <div class="upload-content">
+                    <button type="button" class="layui-btn" @click="callUpload">
+                        <i class="layui-icon layui-icon-upload"></i> 选择压缩文件
+                    </button>
+                    <h3 style="margin-top: 5px">支持扩展名: .zip</h3>
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
+
+
+<script src="../../statics/js/modules/maintenance/importInsurance.js"></script>
+</body>
+</html>

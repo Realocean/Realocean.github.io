@@ -1,0 +1,384 @@
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.module-page {
+    box-sizing: border-box;
+    padding: 20px 30px;
+    background: #f6f8f8;
+    height: 100vh;
+    color: #1a1f33;
+}
+
+
+/* 面包屑*/
+.breadcrumb {
+    padding: 0 30px;
+    height: 60px;
+    background: #fff;
+    font-size: 18px;
+    line-height: 60px;
+    cursor: pointer;
+    border-radius: 2px;
+}
+
+.itme-breadcrumb {
+    position: relative;
+    padding-right: 30px;
+}
+
+.itme-breadcrumb:after {
+    content: '|';
+    position: absolute;
+    right: 8px;
+    color: #f6f8f8;
+}
+
+.itme-breadcrumb:last-child:after {
+    content: '';
+}
+
+.first {
+    color: #3FACB3;
+}
+
+
+/* tab */
+.module-tab {
+    box-sizing: border-box;
+    padding: 20px 30px;
+    background: #ffffff;
+    border-radius: 2px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.tab-title {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.tab-ul {
+    display: flex;
+    /*justify-content: space-between;*/
+    align-items: center;
+    cursor: pointer;
+}
+
+.tab-item {
+    width: 200px;
+    box-sizing: border-box;
+    padding: 10px 15px;
+    border: 1px solid #dbe2ec;
+    border-radius: 3px;
+    text-align: center;
+    margin-right: 16px;
+    font-size: 14px;
+}
+
+.tabActive {
+    background: #3FACB3;
+    color: #ffffff;
+}
+
+
+/*主体 内容*/
+
+.module-main {
+    box-sizing: border-box;
+    padding: 30px;
+    background: #fff;
+    border-radius: 2px;
+}
+
+.border-top {
+    border-top: 1px dotted #dbe2ec;
+}
+
+.module-body {
+
+
+    /*border-bottom: 1px dotted #dbe2ec;*/
+}
+
+.module-file {
+    width: 70%;
+    margin: 0 auto;
+}
+
+.import—tab {
+    display: flex;
+    justify-content: space-around;
+    font-size: 18px;
+    font-weight: 400;
+    padding: 30px 0;
+}
+
+.uploading-item, .import-item {
+    position: relative;
+}
+
+.uploading-item:before, .import-item:before {
+    content: '1';
+    position: absolute;
+    left: -40px;
+    top: -3px;
+    width: 30px;
+    height: 30px;
+    background: #3FACB3;
+    border-radius: 2px;
+    text-align: center;
+    line-height: 30px;
+    color: #ffffff;
+    font-size: 18px;
+}
+
+.import-item:before {
+    content: '2';
+    background: #f6f8f8;
+    color: #1a1f33;
+}
+
+.import—download-box {
+    display: flex;
+    align-items: center;
+    padding: 30px;
+    margin-bottom: 30px;
+    border: 1px dotted #dbe2ec;
+}
+
+.import—download-file {
+    flex: 1;
+
+}
+
+.import—download {
+    width: 72px;
+    height: 72px;
+    margin-right: 15px;
+}
+
+.img {
+    width: 100%;
+    height: 100%;
+}
+
+.download-title {
+    font-weight: 500;
+}
+
+.download-tip {
+    color: #afafaf;
+    margin: 5px 0;
+}
+
+.download-href {
+    display: flex;
+    align-items: center;
+    color: #3FACB3;
+}
+
+.download-icon, .tip-icon {
+    width: 14px;
+    height: 14px;
+    margin: 0 5px;
+}
+
+.reminder-box {
+    padding: 10px 20px;
+    background: #f6f8f8;
+    border-radius: 2px;
+    color: #afafaf;
+    font-size: 12px;
+    margin-bottom: 30px;
+}
+
+.reminder-tip {
+    color: #5f616b;
+}
+
+.btn-group {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 30px;
+    border-top: 1px dotted #dbe2ec;
+}
+
+.btn {
+    width: 120px;
+    height: 40px;
+    margin: 0 10px;
+    background: #ffffff;
+    border: 1px solid #dbe2ec;
+    border-radius: 3px;
+    cursor: pointer;
+    outline: none;
+}
+
+.btn.next-btn {
+    background: #3FACB3;
+    color: #fff;
+}
+
+
+/* 进度条*/
+.progress {
+    margin: 30px 0;
+}
+
+.progress-tip {
+    font-size: 14px;
+    text-align: center;
+    color: #1a1f33;
+    margin-top: 30px;
+    margin-bottom: 80px;
+}
+
+/* 导入失败*/
+.file-error {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.import—error-box {
+    width: 70%;
+    display: flex;
+    align-items: center;
+    padding: 30px 0;
+    margin-bottom: 30px;
+}
+
+.import—error {
+    width: 44px;
+    height: 44px;
+    margin-right: 15px;
+}
+
+.error-tip {
+    color: #fb5463;
+}
+
+.download-btn-error {
+    width: 180px;
+    height: 40px;
+    margin-bottom: 15px;
+    border: 1px solid #dbe2ec;
+    text-align: center;
+    line-height: 40px;
+    border-radius: 3px;
+
+}
+
+.err-tip {
+    color: #afafaf;
+    text-align: center;
+}
+
+.success-tip {
+    color: #afafaf;
+}
+
+.download-error {
+    width: 14px;
+    height: 14px;
+}
+
+.button-error {
+    outline: none;
+    border: none;
+    background: transparent;
+}
+
+.file-header-btn {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 30px;
+}
+
+.file-header-btn .btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/*zip上传*/
+.upload-file {
+    display: flex;
+    align-items: center;
+    height: 110px;
+    padding-left: 30px;
+}
+
+.uploading-icon {
+    width: 72px;
+    height: 72px;
+    margin-right: 10px;
+}
+
+.zip-tip {
+    color: #afafaf;
+}
+
+.el-upload {
+    width: 100%;
+}
+
+.el-upload-dragger {
+    width: 100%;
+    height: 110px;
+}
+
+.reminder-tab {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+}
+
+.reminder-tip-item {
+    text-align: center;
+    font-size: 12px;
+    color: #999;
+}
+
+.reminder-tip-text {
+    color: #afafaf;
+}
+
+.upload-demo {
+    margin-bottom: 50px;
+}
+
+.el-upload-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.el-upload-list__item {
+    margin-top: 10px;
+    width: 45%;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.font-size-14 {
+    font-size: 14px;
+}
+
+.font-size-16 {
+    font-size: 16px;
+}
+
+.font-size-18 {
+    font-size: 18px;
+}
+
+

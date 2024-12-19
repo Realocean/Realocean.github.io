@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>车辆更换申请单</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+    <style media=print type="text/css">
+        .noprint{visibility:hidden}
+    </style>
+    <style>
+        .table_border,.table_border tr td{
+            border: solid 1px #000;
+        }
+        table td{
+            width: 150px;
+            text-align: center;
+        }
+        .remark{
+            margin-top:10px;
+        }
+        .fee{
+            padding-left: 30px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body class="ren-body">
+<div style="padding:0 100px 50px 100px;"  id="rrapp" v-cloak>
+    <h1 align="center">车辆更换申请单</h1>
+    <button class="noprint" onclick="window.print()" style="position:absolute;top:20px;left:930px;font-size:20px;padding:10px;">打印</button>
+    <table style="margin-top:30px;" class="table_border">
+        <tbody>
+            <tr>
+                <td>换车事由</td>
+                <td colspan="3">{{transferData.reason}}</td>
+            </tr>
+
+            <tr>
+                <td>原车牌号</td>
+                <td>{{transferData.oldCarPlateNo}}</td>
+                <td>更换车辆车牌号</td>
+                <td>{{transferData.newCarPlateNo}}</td>
+            </tr>
+
+            <tr>
+                <td>原车押金</td>
+                <td>{{transferData.oldDeposit}}</td>
+                <td>更换车辆押金</td>
+                <td>{{transferData.newDeposit}}</td>
+            </tr>
+
+            <tr>
+                <td>原车租金</td>
+                <td>{{transferData.oldRentMonth}}</td>
+                <td>更换车辆租金</td>
+                <td>{{transferData.newRentMonth}}</td>
+            </tr>
+
+            <tr v-for="(feeItem,index) in transferData.feeItemLst">
+                <td colspan="4" class="fee">{{feeItem.feeItemName}}:{{feeItem.feeItemAmount}}</td>
+            </tr>
+
+            <tr>
+                <td colspan="4" class="fee">车辆更换费用合计：{{transferData.feeCount}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="remark">申请人(客户):{{transferData.customerName}}申请时间:{{transferData.nowDate}} </div>
+    <div class="remark">销售部：</div>
+    <div class="remark">财务部：</div>
+    <div class="remark">本申请由销售部发起，一式三份，客户、销售部、车辆管理部各一份，车辆管理部以此作为换车凭证。</div>
+</div>
+<script src="../../statics/js/modules/order/print_transfer.js"></script>
+</body>
+</html>

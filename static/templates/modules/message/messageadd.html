@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>短信消息模板表</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <!-- 新增表单 -->
+    <form class="layui-form ren-form" style="margin-bottom: 60px;">
+        <div class="form-content-box">
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md12 layui-col-sm6 layui-col-xs6">
+                            <label class="xrequired layui-form-label">消息标题:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="message.title"
+                                        placeholder="请输入消息标题"/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm6 layui-col-xs6">
+                            <label class="xrequired layui-form-label">消息内容:</label>
+                            <div class="layui-input-inline">
+                                <textarea placeholder="如果需要备注，请记录备注信息"
+                                          class="layui-textarea"
+                                          v-model="message.content"
+                                          maxlength="200"
+                                          onkeyup="texLength(this, 200, 'textarea_length');"
+                                          ></textarea><span class="red" id="textarea_length">0</span>/<span class="num_count">200</span>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">附件:</label>
+                            <div class="layui-input-inline">
+                                <div class="layui-input-inline-upload">
+                                    <div :id="deliveryFileLstId" class="layui-input-inline-upload-show box-rect"
+                                         v-for="(item,index) in deliveryFileLst">
+                                        <div v-show="item.typeFile == 1" class="layui-input-inline-upload-button">
+                                            <img :src="imageURL + item.url" class="view-img">
+                                        </div>
+                                        <div v-show="item.typeFile != 1" class="layui-input-inline-upload-button">
+                                            {{item.nameAccessory}}
+                                        </div>
+                                        <div class="layui-input-inline-upload-show-delete btn-event"
+                                             @click="delDeliveryFile(item.id)">
+                                            删除
+                                        </div>
+                                    </div>
+                                    <div class="layui-input-inline-upload-button box-rect box-rect-event"
+                                         id="addDeliveryFile">
+                                        <img src="../../statics/images/inline-upload@2x.png">
+                                    </div>
+                                </div>
+                                <div class="layui-input-inline-upload-text" style="padding-bottom: 10px">附件说明：附件最大支持50M，
+                                    <br/>
+                                    支持格式：PDF、Word、Excel、JPG、PNG 、ZIP、RAR
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm6 layui-col-xs6">
+                            <label class="xrequired layui-form-label">发送对象:</label>
+                            <div class="layui-input-inline">
+                                <input type="radio" name="sendObject" lay-filter="sendObjectbox" lay-skin="primary"
+                                       value=1 title="全部员工">
+                                <!--<input type="checkbox" name="sendObject" lay-filter="sendObjectbox" lay-skin="primary"-->
+                                <!--value=2 title="全部渠道商">-->
+                                <input type="radio" name="sendObject" lay-filter="sendObjectbox" lay-skin="primary"
+                                       value=3 title="自定义员工">
+                            </div>
+                        </div>
+                        <div v-show="selectShow" style="margin-left: 15%;" class="demo-transfer" id="test2"></div>
+                        <!--<div  v-show="selectShow" class="layui-inline layui-col-md12 layui-col-sm6 layui-col-xs6">-->
+                        <!--<label class="layui-form-label">已选对象:</label>-->
+                        <!--<div class="layui-input-inline">-->
+                        <!--<textarea class="layui-textarea"-->
+                        <!--v-model="selectedName" readonly="readonly"></textarea>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <div class="layui-inline layui-col-md12 layui-col-sm6 layui-col-xs6">
+                            <label class="xrequired layui-form-label">推送时间:</label>
+                            <div class="layui-input-inline">
+                                <select id="sendTime" name="sendTime" lay-filter="sendTime" v-model="message.pushType">
+                                    <option value=1>立即发送</option>
+                                    <option value=2>定时发送</option>
+                                </select>
+                                <input v-show="regularly" type="text" class="layui-input searchVal"
+                                       id="regularlySend"
+                                       v-model="message.regularlySend"
+                                       readonly="readonly"
+                                       placeholder="年-月-日 时:分:秒"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="float-btn-group">
+            <a class="layui-btn reset-btn" @click="cancel">返回</a>
+            <a class="layui-btn search-btn" @click="save">保存</a>
+            <a class="layui-btn search-btn" @click="send">发送</a>
+        </div>
+    </form>
+
+
+</div>
+<script src="../../statics/js/modules/message/messageadd.js?_${.now?long}"></script>
+</body>
+</html>

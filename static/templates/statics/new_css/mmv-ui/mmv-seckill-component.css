@@ -1,0 +1,253 @@
+#mmv-seckill-component_namespace.seckill-component {
+    background: linear-gradient(to right, #eec5de, #ffecdb);
+    width: 375px;
+    font-size: 14px;
+    margin: 0 auto;
+}
+
+#mmv-seckill-component_namespace .app-header-nav {
+    height: 90px;
+    width: 100%;
+}
+
+#mmv-seckill-component_namespace .app-header-banner {
+    height: 246px;
+    width: 100%;
+    position: relative;
+}
+
+#mmv-seckill-component_namespace .app-header-banner .app-header-card {
+    width: 100%;
+    height: 110px;
+    position: relative;
+    position: absolute;
+    left: 0;
+    top: 140px;
+    padding: 16px;
+    box-sizing: border-box;
+    border-radius: 32px;
+    background: #fffefe;
+}
+
+#mmv-seckill-component_namespace .app-header-banner .app-header-card .card_right {
+    width: 140px;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+#mmv-seckill-component_namespace .app-header-banner .app-header-card .last-title {
+    width: 140px;
+    position: absolute;
+    text-align: right;
+    right: 16px;
+    top: 0;
+    bottom: 0;
+    transform: translate(0, 50%);
+    margin-bottom: 40px;
+    color: #fff;
+}
+
+#mmv-seckill-component_namespace .app-header-banner .app-header-card .last-title .last-name {
+    margin-bottom: 6px;
+    font-size: 13px;
+}
+
+#mmv-seckill-component_namespace .app-header-banner .app-header-card .last-title .last-time-item {
+    background: #fff;
+    padding: 6px 4px;
+    /* margin: 0 4px; */
+    margin: 0;
+    font-size: 12px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    color: #ff676c;
+}
+
+#mmv-seckill-component_namespace .app-header-banner .app-header-card .app-header-card-title {
+    font-size: 16px;
+    font-weight: 700;
+    display: inline-block;
+}
+
+#mmv-seckill-component_namespace .app-header-banner .app-header-card .app-header-card-price .seckill .card_seckill {
+    width: 44px;
+    height: 20px;
+}
+
+#mmv-seckill-component_namespace .app-header-banner .app-header-card .app-header-card-price {
+    margin: 10px 0;
+}
+
+#mmv-seckill-component_namespace .app-header-banner .app-header-card .app-header-card-price div {
+    position: relative;
+    display: inline-block;
+    height: 20px;
+}
+
+#mmv-seckill-component_namespace .app-header-banner .app-header-card .app-header-card-time {
+    width: 100%;
+    position: relative;
+    margin-top: 8px;
+}
+
+#mmv-seckill-component_namespace .app-header-banner .app-header-card .app-header-card-time .card_time_img {
+    height: 20px;
+    width: 220px;
+    line-height: 20px;
+}
+
+#mmv-seckill-component_namespace .app-header-banner .app-header-card .app-header-card-time .card_time_text {
+    position: absolute;
+    height: 20px;
+    margin: 0 8px;
+    font-size: 12px;
+    top: 0;
+    left: 0;
+    line-height: 20px;
+    color: #fff;
+}
+
+#mmv-seckill-component_namespace .app-header-banner .app-header-card .app-header-card-price .seckill {
+    position: relative;
+    height: 20px;
+    vertical-align: middle;
+}
+
+p {
+    margin: 0;
+}
+
+#mmv-seckill-component_namespace .app-header-banner .app-header-card .app-header-card-price .seckill .card_text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    height: 20px;
+    line-height: 20px;
+    color: #fff;
+    /* margin: 0 4px; */
+    margin: 0;
+    font-size: 10px;
+}
+
+#mmv-seckill-component_namespace .red {
+    color: #eb2963;
+}
+
+#mmv-seckill-component_namespace .weight {
+    font-weight: 600;
+}
+
+#mmv-seckill-component_namespace .oringe {
+    margin: 0 6px;
+    text-decoration: line-through;
+    color: #999;
+}
+
+#mmv-seckill-component_namespace .app-content {
+    padding: 0 16px;
+    box-sizing: border-box;
+}
+
+#mmv-seckill-component_namespace .app-content-store-name {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+#mmv-seckill-component_namespace .app-content-store-address {
+    font-size: 13px;
+    color: #999999;
+    margin-bottom: 20px;
+}
+
+#mmv-seckill-component_namespace .app-content-title {
+    font-size: 16px;
+    color: #333333;
+    font-weight: 700;
+    display: inline-block;
+    margin: 24px 0 16px;
+}
+
+#mmv-seckill-component_namespace .app-content-line {
+    border-radius: 2px;
+    height: 4px;
+    background: linear-gradient(to bottom, #ffb97a, #f5295e, #c12984);
+}
+
+#mmv-seckill-component_namespace .commodity-list-item-1 {
+    margin-bottom: 8px;
+}
+
+#mmv-seckill-component_namespace .commodity-list-item-2 {
+    font-size: 14px;
+}
+
+#mmv-seckill-component_namespace .vertical-center {
+    text-align: center;
+    position: relative;
+    right: 0%;
+    transform: translateY(50%);
+    margin-bottom: 12px;
+}
+
+#mmv-seckill-component_namespace .vertical-center-item-1 {
+    margin-right: 24px;
+}
+
+#mmv-seckill-component_namespace .project-name,
+#mmv-seckill-component_namespace .project-number {
+    width: 50%;
+    font-size: 14px;
+    display: inline-block;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+#mmv-seckill-component_namespace .project-capacity,
+#mmv-seckill-component_namespace .project-price {
+    font-size: 14px;
+    display: inline-block;
+    width: 50%;
+    margin-bottom: 20px;
+    color: #999999;
+}
+
+#mmv-seckill-component_namespace .price-total {
+    font-weight: 700;
+    font-size: 14px;
+}
+
+#mmv-seckill-component_namespace .card_introduce {
+    width: 100%;
+    height: 229px;
+    margin-bottom: 10px;
+}
+
+#mmv-seckill-component_namespace .content /deep/ img {
+    width: 340px !important;
+    margin: 0 auto;
+}
+
+#mmv-seckill-component_namespace .app-footer .app-footer-btn {
+    width: 50%;
+    height: 48px;
+    line-height: 48px;
+    display: inline-block;
+    text-align: center;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+#mmv-seckill-component_namespace .app-footer .btn-share {
+    background: #fff;
+    color: #666;
+}
+
+#mmv-seckill-component_namespace .app-footer .btn-buy {
+    background: linear-gradient(to bottom, #ff666c, #ffb97a);
+    color: #fff;
+}

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>保险续保</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <form class="layui-form">
+        <input v-model="insuranceManage.carId" id="carId" value="" type="hidden" class="layui-input searchVal"  />
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                基础信息
+            </div>
+            <form class="layui-form">
+
+                <div class="details-layui-row">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车牌号：</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="insuranceManage.carNo"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车辆品牌/车型：</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="insuranceManage.carBrandModelName"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车架号：</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="insuranceManage.vinNo"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车辆状态：</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="insuranceManage.carStatusStr"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车辆所属公司：</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="insuranceManage.carBelongCompanyName"
+                                        disabled/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="form-content-box" id = "jqxdiv">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    交强险
+                    <div class="fr display ">
+                        <div class="details-layui-fr-sup-title" style="color: red;">
+                            <span>到期时间：</span>
+                            <span class="">{{compulsoryEnTimeNs}}&nbsp;&nbsp;&nbsp;</span>
+                            <span>保单时效：</span>
+                            <span class="">{{insuranceManage.jqPolicyPrescription}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">交强险保险公司:</label>
+                                <div class="layui-input-inline">
+                                    <select  name="compulsoryCompanyId"  lay-verify="compulsoryCompanyIdVerify"   v-model="insuranceManage.compulsoryCompanyId" lay-filter="compulsoryCompanyId"   class="layui-select"   >
+                                        <option value="">请选择保险公司</option>
+                                        <option v-for="r in compulsoryInsuranceList" :value="r.id">{{r.companyName}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">交强险保单号:</label>
+                                <div class="layui-input-inline">
+                                    <input v-model="insuranceManage.compulsoryNo"   type="text"   lay-verify="compulsoryNoVerify" class="layui-input searchVal"  placeholder="请输入交强险保单号" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">交强险开始时间:</label>
+                                <div class="layui-input-inline">
+                                    <input v-model = "insuranceManage.compulsoryStartTime" type="hidden">
+                                    <input v-model="insuranceManage.compulsoryStTime" readonly id="compulsoryStartTime" lay-verify="compulsoryStartTimeVerify" type="text" class="layui-input searchVal"   placeholder="请选择交强险开始时间" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">交强险结束时间:</label>
+                                <div class="layui-input-inline">
+                                    <input  v-model="insuranceManage.compulsoryEnTime" readonly id="compulsoryEndTime" type="text"  lay-verify="compulsoryEndTimeVerify" class="layui-input searchVal"   placeholder="请选择交强险结束时间" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">交强险费用:</label>
+                                <div class="layui-input-inline">
+                                    <input  v-model="insuranceManage.compulsoryAmount" type="text"  lay-verify="compulsoryAmountVerify"  class="layui-input searchVal" placeholder="请填写交强险保单费用" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <label class="layui-form-label">备注:</label>
+                                <div class="layui-input-inline">
+                                    <textarea v-model="insuranceManage.compulsoryRemark" placeholder="请输入交强险备注说明" class="layui-textarea"></textarea>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="layui-row layui-form-row-content">
+                                    <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                        <label class="layui-form-label">交强险保单照片:</label>
+                                        <div class="layui-input-inline">
+                                            <div class="layui-input-inline">
+                                                <div class="layui-input-inline-upload">
+                                                    <div :id="fileLstId" class="layui-input-inline-upload-show box-rect" v-for="(item,index) in jqxFileList">
+                                                        <div v-show="item.typeFile == 1" class="layui-input-inline-upload-button">
+                                                            <img :src="imageURL + item.url" class="view-img">
+                                                        </div>
+                                                        <div v-show="item.typeFile != 1" class="layui-input-inline-upload-button">
+                                                            {{item.nameAccessory}}
+                                                        </div>
+                                                        <div class="layui-input-inline-upload-show-delete btn-event" @click="delJqxFile(item.id)">
+                                                            删除
+                                                        </div>
+                                                    </div>
+                                                    <div class="layui-input-inline-upload-button box-rect box-rect-event" id="jqxImages">
+                                                        <img src="../../statics/images/inline-upload@2x.png">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-input-inline-upload-text">
+                                                    附件说明：附件最大支持30M，
+                                                    支持格式：PDF、Word、Excel、JPG、PNG 、ZIP、RAR</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-content-box" id = "syxdiv">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    商业险
+                    <div class="fr display ">
+                        <div class="details-layui-fr-sup-title" style="color: red;">
+                            <span>到期时间：</span>
+                            <span >{{commercialEnTimeNs}}&nbsp;&nbsp;&nbsp;</span>
+                            <span>保单时效：</span>
+                            <span >{{insuranceManage.syPolicyPrescription}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">商业险保险公司:</label>
+                                <div class="layui-input-inline">
+                                    <select  name="commercialCompanyId"   v-model="insuranceManage.commercialCompanyId" lay-verify="commercialCompanyIdVerify"  lay-filter="commercialCompanyId"   class="layui-select"   >
+                                        <option value="">请选择保险公司</option>
+                                        <option v-for="r in commercialInsuranceList" :value="r.id">{{r.companyName}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">商业险保单号:</label>
+                                <div class="layui-input-inline">
+                                    <input v-model="insuranceManage.commercialNo"   type="text"   class="layui-input searchVal" lay-verify="commercialNoVerify"  placeholder="请输入商业险保单号" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">商业险开始时间:</label>
+                                <div class="layui-input-inline">
+                                    <input v-model = "insuranceManage.commercialStartTime" type="hidden">
+                                    <input v-model="insuranceManage.commercialStTime" readonly id="commercialStartTime" type="text" class="layui-input searchVal" lay-verify="commercialStartTimeVerify"   placeholder="请选择商业险开始时间" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">商业险结束时间:</label>
+                                <div class="layui-input-inline">
+                                    <input  v-model="insuranceManage.commercialEnTime" readonly id="commercialEndTime" type="text"  class="layui-input searchVal"  lay-verify="commercialEndTimeVerify"  placeholder="请选择商业险结束时间" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">商业险总费用:</label>
+                                <div class="layui-input-inline">
+                                    <input  v-model="insuranceManage.commercialAmount" id="commercialAmount"  type="text"  class="layui-input searchVal" lay-verify="commercialAmountVerify"  placeholder="请输入商业险总费用" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <label class="layui-form-label">备注:</label>
+                                <div class="layui-input-inline">
+                                    <textarea v-model="insuranceManage.commercialRemark" placeholder="请输入商业险备注说明" class="layui-textarea"></textarea>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="layui-row layui-form-row-content">
+                                    <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                        <label class="layui-form-label">商业险保单照片:</label>
+                                        <div class="layui-input-inline">
+                                            <div class="layui-input-inline">
+                                                <div class="layui-input-inline-upload">
+                                                    <div :id="fileLstId" class="layui-input-inline-upload-show box-rect" v-for="(item,index) in syxxFileList">
+                                                        <div v-show="item.typeFile == 1" class="layui-input-inline-upload-button">
+                                                            <img :src="imageURL + item.url" class="view-img">
+                                                        </div>
+                                                        <div v-show="item.typeFile != 1" class="layui-input-inline-upload-button">
+                                                            {{item.nameAccessory}}
+                                                        </div>
+                                                        <div class="layui-input-inline-upload-show-delete btn-event" @click="delSyxFile(item.id)">
+                                                            删除
+                                                        </div>
+                                                    </div>
+                                                    <div class="layui-input-inline-upload-button box-rect box-rect-event" id="syxImages">
+                                                        <img src="../../statics/images/inline-upload@2x.png">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-input-inline-upload-text">
+                                                    附件说明：附件最大支持30M，
+                                                    支持格式：PDF、Word、Excel、JPG、PNG 、ZIP、RAR </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">商业险种:</label>
+                                <div class="layui-input-inline">
+                                    <select  name="insuranceTypeNo"   v-model="insuranceManage.insuranceTypeNo" lay-verify="insuranceTypeNoVerify"   lay-filter="selectInsuranceTypeNo"  class="layui-select" >
+                                        <option value="">请选择险种</option>
+                                        <option v-for="item in insuranceTypeList" :value="item.code">{{item.value}}</option>
+                                    </select>
+                                </div>
+                                <div style="margin-left: 750px;margin-top: -30px;">
+                                    <a class="layui-btn search-btn" @click="addTo">添加</a>
+                                </div>
+                                <div  style="margin-left: 1200px;margin-top: -30px;">
+                                    <div  class="layui-input-inline" >
+                                        <label class="layui-form-label"><span>合计费用:￥{{insuranceManage.commercialTotalAmount}}</span></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <table class="layui-hide" id="insuranceTypeGrid" lay-filter="insuranceTypeGrid" ></table>
+
+            <!-- <table class="layui-hide" id="newinsuranceTypeGrid" lay-filter="newinsuranceTypeGrid" style="display:none;"></table>-->
+
+            <div class="float-btn-group">
+                <a class="layui-btn reset-btn" @click="cancel">取消</a>
+                <button class="layui-btn" id="saveReceivables" lay-submit lay-filter="saveOrUpdate">确定</button>
+            </div>
+    </form>
+</div>
+
+
+<script type="text/html" id="barTpl">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
+</script>
+<script src="../../statics/js/modules/maintenance/carinsurancewarnrenewal.js"></script>
+</body>
+</html>

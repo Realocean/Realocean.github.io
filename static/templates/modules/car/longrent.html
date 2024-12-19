@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>填写长租方案</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+</head>
+<body  class="ren-body">
+<div id="rrapp" v-cloak>
+    <form class="layui-form ren-form" style="margin-bottom: 60px;">
+        <div class="form-content-box">
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">租赁开始时间<span style="color:red;">*</span>:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="carBasicSource.rentStartDate"
+                                       type="text"
+                                       class="layui-input searchVal"
+                                       readonly
+                                       id="rentStartDate"
+                                       :disabled="isDetail"
+                                       placeholder="请选择租赁开始时间"
+                                       lay-verify="rentStartDateVerify"
+                                />
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">租赁结束时间<span style="color:red;">*</span>:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="carBasicSource.rentEndDate"
+                                       type="text"
+                                       class="layui-input searchVal"
+                                       readonly
+                                       id="rentEndDate"
+                                       :disabled="isDetail"
+                                       placeholder="请选择租赁结束时间"
+                                       lay-verify="rentEndDateVerify"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">提车时间<span style="color:red;">*</span>:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="carBasicSource.handleDate"
+                                       type="text"
+                                       class="layui-input searchVal"
+                                       readonly
+                                       id="handleDate"
+                                       :disabled="isDetail"
+                                       lay-verify="handleDateVerify"
+                                       placeholder="请选择提车开始时间"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">月租金/台/元<span style="color:red;">*</span>:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="carBasicSource.rentMonthPrice"
+                                       type="text"
+                                       class="layui-input searchVal"
+                                       :readonly="isDetail"
+                                       placeholder="请输入月租金/台/元"
+                                       lay-verify="rentMonthPriceVerify"
+                                       @keyup="inputRentMonthPrice"
+                                       />
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">付款日期<span style="color:red;">*</span>:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" readonly
+                                       style="position: absolute;line-height: 0;border-width: 0;border-style: hidden;background-color: rgba(0, 0, 0, 0);border-radius: 0;text-indent: -99999px;"
+                                       id="dueDate" class="layui-input" v-show="!isDetail">
+                                <input type="text" id="dueDateVal" lay-verify="dueDateVerify"
+                                       v-model="carBasicSource.dueDate" readonly
+                                       :disabled="isDetail"
+                                       autocomplete="off" placeholder="请选择付款日" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">月租金还款方式<span style="color:red;">*</span>:</label>
+                            <div class="layui-input-inline">
+                                <select lay-filter="repaymentSelect" :disabled="isDetail" v-model="carBasicSource.repayment" lay-verify="repaymentVerify">
+                                    <option value="">请选择月租金还款方式</option>
+                                    <option value=1>月付</option>
+                                    <option value=2>季付</option>
+                                    <option value=3>年付</option>
+                                    <option value=4>一次性付款</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="!isDetail">
+                            <label class="layui-form-label">费用项:</label>
+                            <div class="layui-input-inline">
+                                <select name="feeItem" lay-filter="feeItem" lay-search="" v-model="feeItemId">
+                                    <option value="">请选择费用项</option>
+                                    <option v-for="(item,index) in feeItemLst" :value="item.id">{{item.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="!isDetail">
+                            <div class="layui-input-inline">
+                                <a class="layui-btn layui-btn-normal" @click="addFeeItem">添加</a>
+                            </div>
+                        </div>
+                        <div class="layui-row form-group">
+                            <div class="table">
+                                <table class="layui-hide" id="feeLst" lay-filter="feeLst"></table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">已支付总金额/台/元:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="carBasicSource.amountPaid"
+                                       type="text"
+                                       class="layui-input searchVal"
+                                       :readonly="isDetail"
+                                       @keyup="inputAmountPaid"
+                                       placeholder="请输入已支付总金额/台/元" />
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">支付方式:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="carBasicSource.payType"
+                                       type="text"
+                                       class="layui-input searchVal"
+                                       :readonly="isDetail"
+                                       placeholder="请输入支付方式" />
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车辆来源订单备注:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="carBasicSource.remark"
+                                       type="text"
+                                       class="layui-input searchVal"
+                                       :readonly="isDetail"
+                                       placeholder="备注说明" />
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label">附件:</label>
+                            <div class="layui-input-inline" v-show="isDetail">
+                                <div class="layui-input-inline-upload">
+                                    <div :id="fileLstId" class="layui-input-inline-upload-show box-rect" v-for="(item,index) in fileLst">
+                                        <div v-show="item.typeFile == 1" class="layui-input-inline-upload-button">
+                                            <img :src="imageURL + item.url" class="view-img">
+                                        </div>
+                                        <div v-show="item.typeFile != 1" class="layui-input-inline-upload-button">
+                                            {{item.nameAccessory}}
+                                        </div>
+                                        <div v-show="item.typeFile != 1"
+                                             class="layui-input-inline-upload-show-delete btn-event" @click="downDoc(item.nameFile, item.url)">
+                                            下载
+                                        </div>
+                                        <div v-show="item.typeFile == 1"
+                                             class="layui-input-inline-upload-show-delete btn-event" @click="showDoc(item.nameAccessory, item.url)">
+                                            预览
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-input-inline-upload-text">附件说明：附件最大支持50M，支持格式：PDF、Word、Excel、JPG、PNG 、ZIP、RAR</div>
+                            </div>
+                            <div class="layui-input-inline" v-show="!isDetail">
+                                <div class="layui-input-inline-upload">
+                                    <div :id="fileLstId" class="layui-input-inline-upload-show box-rect" v-for="(item,index) in fileLst">
+                                        <div v-show="item.typeFile == 1" class="layui-input-inline-upload-button">
+                                            <img :src="imageURL + item.url" class="view-img">
+                                        </div>
+                                        <div v-show="item.typeFile != 1" class="layui-input-inline-upload-button">
+                                            {{item.nameAccessory}}
+                                        </div>
+                                        <div class="layui-input-inline-upload-show-delete btn-event" style="width: 49%;" @click="delFile(item.id)">
+                                            删除
+                                        </div>
+                                        <div v-show="item.typeFile != 1" style="width: 49%;left: 51%"
+                                             class="layui-input-inline-upload-show-delete btn-event" @click="downDoc(item.nameFile, item.url)">
+                                            下载
+                                        </div>
+                                        <div v-show="item.typeFile == 1" style="width: 49%;left: 51%"
+                                             class="layui-input-inline-upload-show-delete btn-event" @click="showDoc(item.nameAccessory, item.url)">
+                                            预览
+                                        </div>
+                                    </div>
+                                    <div class="layui-input-inline-upload-button box-rect box-rect-event" id="addFile">
+                                        <img src="../../statics/images/inline-upload@2x.png">
+                                    </div>
+                                </div>
+                                <div class="layui-input-inline-upload-text">附件说明：附件最大支持50M，支持格式：PDF、Word、Excel、JPG、PNG 、ZIP、RAR</div>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="promptFlag">
+                            <div class="layui-input-inline">
+                                <div class="layui-input-inline-upload-text" style="color:red;">说明：如果需要生成，选择了费用项，金额和付款日期就必须填</div>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="!isEdit">
+                            <label class="layui-form-label">是否需要根据方案生成车辆订单:</label>
+                            <div class="layui-input-inline">
+                                <input type="radio" :disabled="isDetail" lay-filter="isCreateOrder" name="isCreateOrder" v-model="carBasicSource.isCreateOrder" value="1" lay-skin="primary" title="否">
+                                <input type="radio" :disabled="isDetail" lay-filter="isCreateOrder" name="isCreateOrder" v-model="carBasicSource.isCreateOrder" value="2" lay-skin="primary" title="是">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="float-btn-group" v-show="!isDetail">
+            <a class="layui-btn reset-btn" @click="closePage">取消</a>
+            <a class="layui-btn search-btn" lay-submit lay-filter="save" id="save">确定</a>
+        </div>
+    </form>
+
+</div>
+<script type="text/html" id="feeItemBarTpl">
+    <a class="layui-grid-btn-xs" lay-event="delect">删除</a>
+</script>
+<script src="../../statics/js/modules/car/longrent.js"></script>
+</body>
+</html>

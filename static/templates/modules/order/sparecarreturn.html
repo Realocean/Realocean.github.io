@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>备用车退还登记</title>
+    <link rel="stylesheet" type="text/css" href="../../statics/css/public/header.css">
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <form class="layui-form ren-form" style="margin-bottom: 60px;">
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                订单基本信息
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">订单类型:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="spareCarReturn.rentTypeStr || '-'"
+                                       placeholder="订单类型" style="border:0px;" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">订单号:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="spareCarReturn.orderCarCode || '-'"
+                                       placeholder="订单编号" style="border:0px;" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">客户名称:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="spareCarReturn.customerName || '-'"
+                                       placeholder="客户名称" style="border:0px;" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">联系电话:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="spareCarReturn.customerTel || '-'"
+                                       placeholder="联系电话" style="border:0px;" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">联系人:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="spareCarReturn.contactPerson || '-'"
+                                       placeholder="联系人" style="border:0px;" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">出租方:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="spareCarReturn.lessorName || '-'"
+                                       placeholder="出租方" style="border:0px;" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">租赁开始时间:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="spareCarReturn.timeStartRent || '-'"
+                                       placeholder="租赁开始时间" style="border:0px;" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">租赁结束时间:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="spareCarReturn.timeFinishRent || '-'"
+                                       placeholder="租赁结束时间" style="border:0px;" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车架号:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="spareCarReturn.vinNo || '-'"
+                                       placeholder="车架号" style="border:0px;" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车牌号:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="spareCarReturn.carNo || '-'"
+                                       placeholder="车牌号" style="border:0px;" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车辆品牌/车系/车型:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="spareCarReturn.carBrandModel || '-'"
+                                       placeholder="车辆品牌/车系/车型" style="border:0px;" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车辆归属:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="spareCarReturn.deptName || '-'"
+                                       placeholder="车辆归属" style="border:0px;" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                备用车信息
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">申请原因:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="spareCarReturn.applyReason || '-'"
+                                       placeholder="申请原因" style="border:0px;" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">备用车品牌/车系/车型:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="spareCarReturn.spareCarBrandModel || '-'"
+                                       placeholder="备用车品牌/车系/车型" style="border:0px;" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">备用车车牌号:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="spareCarReturn.spareCarNo || '-'"
+                                       placeholder="备用车品牌/车系/车型" style="border:0px;" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">备用车交车时间:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="spareCarReturn.spareCarHandleTime || '-'"
+                                       placeholder="备用车交车时间" style="border:0px;" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">备用车预计归还时间:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="spareCarReturn.spareCarReturnTime || '-'"
+                                       placeholder="备用车预计归还时间" style="border:0px;" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                备用车退车信息
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">备用车退车时间<span style="color:red;">*</span>:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="spareCarReturn.returnTime" id="returnTime" readonly
+                                       type="text"
+                                       class="layui-input searchVal"
+                                       placeholder="请选择退车时间" />
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">退车里程:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="spareCarReturn.returnMile"
+                                       type="text"
+                                       @keyup="inputReturnMile"
+                                       class="layui-input searchVal"
+                                       placeholder="请输入退车里程" />
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车辆所在仓库:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="spareCarReturn.depotName"
+                                       @click="chooseWarehouse"
+                                       readonly
+                                       type="text"
+                                       class="layui-input searchVal"
+                                       placeholder="请选择车辆所在仓库" />
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label">退车原因:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="spareCarReturn.returnReason"
+                                       type="text"
+                                       class="layui-input searchVal"
+                                       placeholder="请输入退车原因" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                备用车退车结算信息
+                <div class="fr display ">
+                    <div class="details-layui-fr-sup-title">
+                        <span class="xz-header-title__text" v-if="spareCarReturn.feeType == 0">客户需补缴金额：</span>
+                        <span class="xz-header-title__text" v-if="spareCarReturn.feeType == 1">需退还金额：</span>
+                        <span class="description">{{feeValue}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                            <div>
+                                <label style="font-size: 15px;">可退金额</label>
+                            </div>
+                        </div>
+<!--                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="spareCarReturn.rentType == 1">-->
+<!--                            <label class="layui-form-label">可退车辆保证金:</label>-->
+<!--                            <div class="layui-input-inline">-->
+<!--                                <input v-model="spareCarReturn.margin"-->
+<!--                                       type="text"-->
+<!--                                       class="layui-input searchVal"-->
+<!--                                       @change="marginChange"-->
+<!--                                       placeholder="自动带出" />-->
+<!--                            </div>-->
+<!--                        </div><br/>-->
+                        <div style="width: 100%;display: flex;justify-content: space-between;flex-wrap: wrap">
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-for="(item,index) in backAmount"
+                                 style="height:60px;line-height: 60px;width:400px;display: flex;align-items: center;">
+                                <label class="layui-form-label">{{item.serviceName}}:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model=spareCarReturn[item.serviceField]
+                                            :serviceProperty="item.serviceProperty"
+                                            @keyup="check(spareCarReturn[item.serviceField],item.serviceField)"
+                                            name="dgl"
+                                            @change="change(item.serviceField)"
+                                            :placeholder="`请输入${item.serviceName}`"
+                                            autocomplete="off"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                            <div>
+                                <label style="font-size: 15px;">违章费用</label>
+                            </div>
+                        </div>
+                        <div style="width: 100%;display: flex;justify-content: space-between;flex-wrap: wrap">
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6"  v-for="(item,index) in illLegalAmount"
+                                 style="height:60px;line-height: 60px;width:400px;display: flex;align-items: center;">
+                                <label class="layui-form-label">{{item.serviceName}}:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            :serviceProperty="item.serviceProperty"
+                                            v-model=spareCarReturn[item.serviceField]
+                                            @keyup="check(spareCarReturn[item.serviceField],item.serviceField)"
+                                            name="dgl"
+                                            @change="change(item.serviceField)"
+                                            :placeholder="`请输入${item.serviceName}`"
+                                            autocomplete="off"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                            <div>
+                                <label style="font-size: 15px;">保险费用</label>
+                            </div>
+
+                        </div>
+                        <div style="width: 100%;display: flex;justify-content: space-between;flex-wrap: wrap">
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-for="(item,index) in insuranceAmount"
+                                 style="height:60px;line-height: 60px;width:400px;display: flex;align-items: center;">
+                                <label class="layui-form-label">{{item.serviceName}}:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model=spareCarReturn[item.serviceField]
+                                            :serviceProperty="item.serviceProperty"
+                                            @keyup="check(spareCarReturn[item.serviceField],item.serviceField)"
+                                            @change="change(item.serviceField)"
+                                            :placeholder="`请输入${item.serviceName}`"
+                                            autocomplete="off"/>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                            <div>
+                                <label style="font-size: 15px;">扣款费用</label>
+                            </div>
+
+                        </div><br/>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="spareCarReturn.rentType != 6">
+                            <label class="layui-form-label">租金欠款金额:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="spareCarReturn.rentPay"
+                                       type="text"
+                                       class="layui-input searchVal"
+                                       @keyup="inputRentPay"
+                                       @change="rentPayChange"
+                                       placeholder="自动带出" />
+                            </div>
+                        </div>
+
+                        <div style="width: 100%;display: flex;justify-content: space-between;flex-wrap: wrap">
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-for="(item,index) in decutionAmount"
+                                 style="height:60px;line-height: 60px;width:400px;display: flex;align-items: center;">
+                                <label class="layui-form-label">{{item.serviceName}}:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model=spareCarReturn[item.serviceField]
+                                            :serviceProperty="item.serviceProperty"
+                                            @keyup="check(spareCarReturn[item.serviceField],item.serviceField)"
+                                            @change="change(item.serviceField)"
+                                            :placeholder="`请输入${item.serviceName}`"
+                                            autocomplete="off"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                            <div>
+                                <label style="font-size: 15px;">银行信息</label>
+                            </div>
+
+                        </div>
+                        <div style="width: 100%;display: flex;justify-content: space-between;flex-wrap: wrap">
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-for="(item,index) in bankInfo"
+                                 style="height:60px;line-height: 60px;width:400px;display: flex;align-items: center;">
+                                <label class="layui-form-label">{{item.serviceName}}:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model=spareCarReturn[item.serviceField]
+                                            @change="change(item.serviceField)"
+                                            :serviceProperty="item.serviceProperty"
+                                            :placeholder="`请输入${item.serviceName}`"
+                                            autocomplete="off"/>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+<!--                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+<!--                            <label class="layui-form-label">车辆违章分数:</label>-->
+<!--                            <div class="layui-input-inline">-->
+<!--                                <input v-model="spareCarReturn.illegalScore"-->
+<!--                                       type="text"-->
+<!--                                       @keyup="inputIllegalScore"-->
+<!--                                       class="layui-input searchVal"-->
+<!--                                       placeholder="请输入违章分数" />-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+<!--                            <label class="layui-form-label">车辆违章费用:</label>-->
+<!--                            <div class="layui-input-inline">-->
+<!--                                <input v-model="spareCarReturn.illegalFee"-->
+<!--                                       type="text"-->
+<!--                                       @keyup="inputIllegalFee"-->
+<!--                                       class="layui-input searchVal"-->
+<!--                                       placeholder="请输入车辆违章费用/元" />-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+<!--                            <label class="layui-form-label">车辆出险次数</label>-->
+<!--                            <div class="layui-input-inline">-->
+<!--                                <input v-model="spareCarReturn.outInsurance"-->
+<!--                                       type="text"-->
+<!--                                       @keyup="inputOutInsurance"-->
+<!--                                       class="layui-input searchVal"-->
+<!--                                       placeholder="请输入车辆出险次数" />-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+<!--                            <label class="layui-form-label">车辆出险费用:</label>-->
+<!--                            <div class="layui-input-inline">-->
+<!--                                <input v-model="spareCarReturn.outFee"-->
+<!--                                       type="text"-->
+<!--                                       @keyup="inputOutFee"-->
+<!--                                       class="layui-input searchVal"-->
+<!--                                       placeholder="请输入车辆出险费用/元" />-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+<!--                            <label class="layui-form-label">车辆定损实际金额:</label>-->
+<!--                            <div class="layui-input-inline">-->
+<!--                                <input v-model="spareCarReturn.actualFee"-->
+<!--                                       type="text"-->
+<!--                                       @keyup="inputActualFee"-->
+<!--                                       class="layui-input searchVal"-->
+<!--                                       placeholder="请输入车辆定损实际金额/元" />-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+<!--                            <label class="layui-form-label">车辆可抵扣金额:</label>-->
+<!--                            <div class="layui-input-inline">-->
+<!--                                <input v-model="spareCarReturn.discountFee"-->
+<!--                                       type="text"-->
+<!--                                       @keyup="inputDiscountFee"-->
+<!--                                       class="layui-input searchVal"-->
+<!--                                       placeholder="请输入车辆可抵扣金额/元" />-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+<!--                            <label class="layui-form-label">车辆其他欠款金额:</label>-->
+<!--                            <div class="layui-input-inline">-->
+<!--                                <input v-model="spareCarReturn.otherFee"-->
+<!--                                       type="text"-->
+<!--                                       @keyup="inputOtherFee"-->
+<!--                                       class="layui-input searchVal"-->
+<!--                                       placeholder="请输入车辆其他欠款金额/元" />-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+<!--                            <label class="layui-form-label">车辆违约金额:</label>-->
+<!--                            <div class="layui-input-inline">-->
+<!--                                <input v-model="spareCarReturn.defaultFee"-->
+<!--                                       type="text"-->
+<!--                                       @keyup="inputDefaultFee"-->
+<!--                                       class="layui-input searchVal"-->
+<!--                                       placeholder="请输入车辆违约金额/元" />-->
+<!--                            </div>-->
+<!--                        </div>-->
+                        <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                            <div>
+                                <label style="font-size: 15px;">备用车说明</label>
+                            </div>
+
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label">费用说明:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="spareCarReturn.feeDesc"
+                                       type="text"
+                                       class="layui-input searchVal"
+                                       placeholder="请输入费用说明" />
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label">上传附件:</label>
+                            <div class="layui-input-inline">
+                                <div class="layui-input-inline-upload">
+                                    <div :id="fileLstId" class="layui-input-inline-upload-show box-rect" v-for="(item,index) in fileLst">
+                                        <div v-show="item.typeFile == 1" class="layui-input-inline-upload-button">
+                                            <img :src="imageURL + item.url" class="view-img">
+                                        </div>
+                                        <div v-show="item.typeFile != 1" class="layui-input-inline-upload-button">
+                                            {{item.nameAccessory}}
+                                        </div>
+                                        <div class="layui-input-inline-upload-show-delete btn-event" style="width: 49%;" @click="delFile(item.id)">
+                                            删除
+                                        </div>
+                                        <div v-show="item.typeFile != 1" style="width: 49%;left: 51%"
+                                             class="layui-input-inline-upload-show-delete btn-event" @click="downDoc(item.nameFile, item.url)">
+                                            下载
+                                        </div>
+                                        <div v-show="item.typeFile == 1" style="width: 49%;left: 51%"
+                                             class="layui-input-inline-upload-show-delete btn-event" @click="showDoc(item.nameAccessory, item.url)">
+                                            预览
+                                        </div>
+                                    </div>
+                                    <div class="layui-input-inline-upload-button box-rect box-rect-event" id="addFile">
+                                        <img src="../../statics/images/inline-upload@2x.png">
+                                    </div>
+                                </div>
+                                <div class="layui-input-inline-upload-text">附件说明:附件最大支持50M,支持格式:PDF、Word、Excel、JPG、PNG</div>
+                            </div>
+                        </div>
+                        <div style="width: 100%;display: flex;justify-content: space-between;flex-wrap: wrap">
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-for="(item,index) in notice"
+                                 style="height:60px;line-height: 60px;width:400px;display: flex;align-items: center;">
+                                <label class="layui-form-label">{{item.serviceName}}:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model=applyForDTO[item.serviceField]
+                                            :serviceProperty="item.serviceProperty"
+                                            :placeholder="`请输入${item.serviceName}`"
+                                            autocomplete="off"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="float-btn-group bottom-bar">
+            <a class="layui-btn reset-btn" @click="cancel">取消</a>
+            <a class="layui-btn search-btn" lay-submit lay-filter="save">保存</a>
+        </div>
+    </form>
+</div>
+
+<script src="../../statics/js/modules/order/sparecarreturn.js"></script>
+</body>
+</html>

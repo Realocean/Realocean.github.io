@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>编辑维修单</title>
+    <link rel="stylesheet" type="text/css" href="../../statics/css/public/flowChart.css">
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="Author" content="larry" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+    <script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+    <script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/common.js"></script>
+    <script type="text/javascript" src="../../statics/js/upload.js"></script>
+    <script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+    <link rel="stylesheet" href="../../statics/css/jxcPublicAll.css" media="all">
+    <link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../statics/common/step/steps.css">
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+    <script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+    <script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+    <script src="../../statics/common/layui/autocomplete.js"></script>
+    <script src="../../statics/js/modules/viewer/viewer.min.js"></script>
+    <script src="../../statics/common/print-js/print.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+    <script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/searchview.js"></script>
+    <script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+    <script type="text/javascript" src="../../statics/js/bpmchart.js"></script>
+    <!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+    <!-- 引入组件库 -->
+    <link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/new-edit.css">
+
+
+    <style>
+        .title-box {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .title-box-icon {
+            display: inline-block;
+            width: 6px;
+            height: 20px;
+            background-color: #3FACB3;
+            border-radius: 2px;
+            margin-right: 5px;
+        }
+
+        .layui-form-row-content .layui-inline .layui-form-label {
+            width: 120px !important;
+            font-weight: 500 !important;
+        }
+
+        .form-content-box {
+            width: 98%;
+            box-shadow: rgba(17, 45, 47, 0.12) 0px 2px 8px 0px;
+            padding: 20px;
+            background: rgb(255, 255, 255);
+            border-radius: 8px;
+        }
+
+        .layui-input,
+        .layui-select,
+        .layui-textarea {
+            height: 40px !important;
+        }
+
+        .layui-form-label-txt {
+            font-size: 16px;
+            height: 40px;
+            line-height: 40px;
+            padding: 0 15px !important;
+        }
+
+        .layui-input-value {
+            height: 40px !important;
+            line-height: 40px !important;
+            width: 100%;
+            border-radius: 4px;
+            border: 1px solid rgb(230, 230, 230);
+            padding-left: 10px;
+        }
+
+        .layui-input,
+        .layui-select,
+        .layui-textarea {
+            border-radius: 4px;
+        }
+
+        .layui-form-row-content .layui-inline .layui-input-inline-change {
+            width: 50%;
+
+        }
+
+        .layui-table-cell {
+            overflow: visible !important;
+        }
+
+        /* 使得下拉框与单元格刚好合适 */
+        td .layui-form-select {
+            /*margin-top: -10px;*/
+            margin-left: -15px;
+            margin-right: -15px;
+        }
+
+        /*解决下拉框被表格覆盖样式问题*/
+        .layui-form-select dl {
+            z-index: 9999;
+            max-height: 180px;
+        }
+
+        tr[data-index="0"] .layui-form-selectup dl,
+        tr[data-index="1"] .layui-form-selectup dl,
+        tr[data-index="2"] .layui-form-selectup dl {
+            bottom: auto;
+        }
+
+        div[lay-id="compulsoryInsurance1"] div.layui-table-box {
+            overflow: visible;
+        }
+
+        div[lay-id="compulsoryInsurance1"] div.layui-table-body {
+            overflow: visible;
+        }
+
+        .layui-table-body {
+            overflow: visible !important;
+        }
+
+        .layui-table-box,
+        layui-table-view {
+            overflow: visible !important;
+        }
+        .layui-table-view .layui-table {
+            width: 100%;
+            margin: auto;
+        }
+    </style>
+
+
+</head>
+
+<body class="ren-body">
+    <div id="rrapp" v-cloak>
+        <div class="form-content-box">
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">选择车牌号:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="carRepairOrder.carNo"
+                                    :disabled="viewTag1 != 'edit' && viewTag1 != 'reedit'" lay-verify="carNoVerify"
+                                    id="carPlateNo" @click="selectCarNo" type="text" class="layui-input searchVal"
+                                    placeholder="请选择车牌号" readonly />
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">选择车架号:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="carRepairOrder.vinNo"
+                                    :disabled="viewTag1 != 'edit' && viewTag1 != 'reedit'" lay-verify="vinNoVerify"
+                                    id="vinNo" @click="selectVinNo" type="text" class="layui-input searchVal"
+                                    placeholder="请选择车架号" readonly />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form class="layui-form">
+            <!--        <div class="form-content-box">-->
+            <!--            <div class="list-search-sup-title new-layui-title border-bottom-dashed">-->
+            <!--                <span class="fm-daoru-title">基础信息</span>-->
+            <!--            </div>-->
+            <!--            <div class="form-content-session-box">-->
+            <!--                <div class="card">-->
+            <!--                    <div class="layui-row layui-form-row-content">-->
+            <!--                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+            <!--                            <label class="layui-form-label">车辆品牌/车型:</label>-->
+            <!--                            <div class="layui-input-inline">-->
+            <!--                                <input v-model="carRepairOrder.carBrandModelName" id="carBrandModelName" value="" type="text" class="layui-input searchVal"  placeholder="" readonly/>-->
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+            <!--                            <label class="layui-form-label">车架号:</label>-->
+            <!--                            <div class="layui-input-inline">-->
+            <!--                                <input v-model="carRepairOrder.vinNo"  type="text" id = "carVinNo"  class="layui-input searchVal"  placeholder="" readonly/>-->
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+            <!--                            <label class="layui-form-label">客户名称:</label>-->
+            <!--                            <div class="layui-input-inline">-->
+            <!--                                <input v-model="carRepairOrder.customerName" id="customerName"  type="text" class="layui-input searchVal"   placeholder=""  readonly/>-->
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+            <!--                            <label class="layui-form-label">车辆状态:</label>-->
+            <!--                            <div class="layui-input-inline">-->
+            <!--                                <input  v-model="carRepairOrder.carStatusStr" id="carStatusStr" type="text"   class="layui-input searchVal"   placeholder=""  readonly/>-->
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+            <!--                            <label class="layui-form-label">车辆订单号:</label>-->
+            <!--                            <div class="layui-input-inline">-->
+            <!--                                <input  v-model="carRepairOrder.departureNo" type="text"   class="layui-input searchVal" placeholder=""  readonly/>-->
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                        <div class="layui-inline layui-col-md6 layui-col-sm12 layui-col-xs6">-->
+            <!--                            <label class="layui-form-label">车辆所属公司:</label>-->
+            <!--                            <div class="layui-input-inline">-->
+            <!--                                <input  v-model="carRepairOrder.belongCompanyName" type="text" class="layui-input searchVal" placeholder=""  readonly/>-->
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+            <!--                            <label class="layui-form-label">租赁开始时间:</label>-->
+            <!--                            <div class="layui-input-inline">-->
+            <!--                                <input  v-model="carRepairOrder.timeStartRent" type="text"  class="layui-input searchVal" placeholder="" readonly/>-->
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                        <div class="layui-inline layui-col-md6 layui-col-sm12 layui-col-xs6">-->
+            <!--                            <label class="layui-form-label">租赁结束时间:</label>-->
+            <!--                            <div class="layui-input-inline">-->
+            <!--                                <input  v-model="carRepairOrder.timeFinishRent" type="text"   class="layui-input searchVal" placeholder="" readonly/>-->
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                        <div class="layui-inline layui-col-md6 layui-col-sm12 layui-col-xs6">-->
+            <!--                            <label class="layui-form-label">车辆当前里程数:</label>-->
+            <!--                            <div class="layui-input-inline">-->
+            <!--                                <input  v-model="carRepairOrder.sumOdograph" type="text"   class="layui-input searchVal" placeholder="" readonly/>-->
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                        <div class="layui-inline layui-col-md6 layui-col-sm12 layui-col-xs6">-->
+            <!--                            <label class="layui-form-label">车辆用途:</label>-->
+            <!--                            <div class="layui-input-inline">-->
+            <!--                                <input  v-model="carRepairOrder.rentTypeStr" type="text"   class="layui-input searchVal" placeholder="" readonly/>-->
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                        <div class="layui-inline layui-col-md6 layui-col-sm12 layui-col-xs6">-->
+            <!--                            <label class="layui-form-label">车辆所属仓库:</label>-->
+            <!--                            <div class="layui-input-inline">-->
+            <!--                                <input  v-model="carRepairOrder.depotName" type="text"   class="layui-input searchVal" placeholder="" readonly/>-->
+            <!--                                <input  v-model="carRepairOrder.depotId" type="hidden"   class="layui-input searchVal" placeholder="" readonly/>-->
+
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                    </div>-->
+            <!--                </div>-->
+            <!--            </div>-->
+            <!--        </div>-->
+            <div class="form-content-box">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    <span class="fm-daoru-title">维修信息</span>
+                </div>
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">维修厂名称:</label>
+                                <div class="layui-input-inline">
+                                    <input :readonly="viewTag != 'edit' && viewTag != 'reedit'"
+                                        v-model="carRepairOrder.serviceName" lay-verify="serviceNameVerify" type="text"
+                                        class="layui-input searchVal" placeholder="请输入维修厂名称" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">故障描述:</label>
+                                <div class="layui-input-inline">
+                                    <input :readonly="viewTag != 'edit' && viewTag != 'reedit'"
+                                        v-model="carRepairOrder.faultDesc" maxlength="20" lay-verify="faultDescVerify"
+                                        type="text" class="layui-input searchVal" placeholder="请描述故障/字数限制20字以内" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">维修厂报价/元:</label>
+                                <div class="layui-input-inline">
+                                    <input :readonly="viewTag != 'edit' && viewTag != 'reedit'"
+                                        v-model="carRepairOrder.repairShopQuotation" id="repairShopQuotation"
+                                        lay-verify="repairShopQuotationVerify" type="text" class="layui-input searchVal"
+                                        placeholder="请输入维修厂报价" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">车辆公里数:</label>
+                                <div class="layui-input-inline">
+                                    <input :readonly="viewTag != 'edit' && viewTag != 'reedit'"
+                                        v-model="carRepairOrder.carMileage" lay-verify="serviceNameVerify" type="number"
+                                        class="layui-input searchVal" placeholder="请输入车辆公里数" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">维修开始时间:</label>
+                                <div class="layui-input-inline">
+                                    <input :disabled="viewTag != 'edit' && viewTag != 'reedit'"
+                                        v-model="carRepairOrder.repairStartDate" id="repairStartDate"
+                                        lay-verify="repairStartDateVerify" type="text" class="layui-input searchVal"
+                                        placeholder="请选择维修开始时间" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">维修结束时间：</label>
+                                <div class="layui-input-inline">
+                                    <input v-model="carRepairOrder.repairEndDate" :disabled="viewTag == 'approveDetail'"
+                                        id="repairEndDate" lay-verify="repairEndDateVerify" type="text"
+                                        class="layui-input searchVal" placeholder="请选择维修结束时间" readonly />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">维修项目明细</label>
+                                <div class="multiple-cell" style="padding-left: 50px">
+                                    <a class="layui-btn layui-btn-normal" @click="addMaintenanceItem">添加</a>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">用户支付金额/元:</label>
+                                <div class="layui-input-inline">
+                                    <input :readonly="viewTag != 'edit' && viewTag != 'reedit'"
+                                        v-model="carRepairOrder.userPay" id="userPayId" lay-verify="userPayVerify"
+                                        type="text" class="layui-input searchVal" placeholder="请输入金额" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">平台支付金额/元:</label>
+                                <div class="layui-input-inline">
+                                    <input :readonly="viewTag != 'edit' && viewTag != 'reedit'"
+                                        v-model="carRepairOrder.platformPay" id="platformPayId"
+                                        lay-verify="platformPayVerify" type="text" class="layui-input searchVal"
+                                        placeholder="请输入金额" />
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <div class="layui-row form-group">
+                            <div class="table">
+                                <table class="layui-show" id="maintenanceItemTableList"
+                                    lay-filter="maintenanceItemTableList"></table>
+                            </div>
+                        </div>
+
+                        <div class="layui-row layui-form-row-content">
+
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">保险支付金额/元:</label>
+                                <div class="layui-input-inline">
+                                    <input :readonly="viewTag != 'edit' && viewTag != 'reedit'"
+                                        v-model="carRepairOrder.insurancePay" id="insurancePayId"
+                                        lay-verify="insurancePayVerify" type="text" class="layui-input searchVal"
+                                        placeholder="请输入金额" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">总金额/元:</label>
+                                <div class="layui-input-inline">
+                                    <input :readonly="viewTag != 'edit' && viewTag != 'reedit'"
+                                        v-model="carRepairOrder.totalPay" lay-verify="totalPayVerify" type="text"
+                                        class="layui-input searchVal" readonly />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">维修内容:</label>
+                                <div class="layui-input-inline">
+                                    <input :readonly="viewTag != 'edit' && viewTag != 'reedit'"
+                                        v-model="carRepairOrder.repairContent" lay-verify="repairContentVerify"
+                                        type="text" class="layui-input searchVal" placeholder="请输入维修内容" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">司机电话:</label>
+                                <div class="layui-input-inline">
+                                    <input :readonly="viewTag != 'edit' && viewTag != 'reedit'"
+                                        v-model="carRepairOrder.driverPhone" maxlength="20" lay-verify="faultDescVerify"
+                                        type="text" class="layui-input searchVal" placeholder="请描述司机电话" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">是否已结算:</label>
+                                <div class="layui-input-inline">
+                                    <!--费用结算 1未结算 2已结算-->
+                                    <select lay-filter="costSettlement" v-model="carRepairOrder.costSettlement"
+                                        :disabled="viewTag == 'approveDetail'">
+                                        <option value="">请选择是否已结算</option>
+                                        <option value="1">未结算</option>
+                                        <option value="2">已结算</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">维修反馈意见:</label>
+                                <div class="layui-input-inline">
+                                    <textarea :readonly="viewTag == 'approveDetail'"
+                                        v-model="carRepairOrder.repairFeedback" placeholder="请输入维修反馈意见"
+                                        class="layui-textarea"></textarea>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">是否提供备用车:</label>
+                                <div class="layui-input-inline">
+                                    <!--是否提供备用车 1是 2否-->
+                                    <select :disabled="viewTag != 'edit' && viewTag != 'reedit'" lay-filter="isSpareCar"
+                                        v-model="carRepairOrder.isSpareCar" lay-verify="isSpareCarVerify">
+                                        <option value="">请选择是否提供备用车</option>
+                                        <option value=1>是</option>
+                                        <option value=2>否</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">备用车车牌号:</label>
+                                <div class="layui-input-inline">
+                                    <input :readonly="viewTag != 'edit' && viewTag != 'reedit'"
+                                        v-model="carRepairOrder.spareCarNo" type="text" lay-verify="spareCarNoVerify"
+                                        class="layui-input searchVal" placeholder="请输入备用车车牌号" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs4">
+                                    <label class=" layui-form-label-txt"
+                                        style="font-weight: 800!important">维修相关费用信息</label>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label layui-form-label-txt">费用类型:</label>
+                                    <div class="layui-input-inline layui-input-inline-change">
+                                        <select v-model="carRepairOrder.expenseType" lay-filter="insuranceTtype3">
+                                            <option v-for=" (item,index) in expenseArr" :value='item.value'
+                                                :lable="item.lable">{{item.value}}</option>
+                                        </select>
+
+                                    </div>
+                                    <a @click="addExpense" class="layui-btn search-btn"
+                                        style="margin-left: 20px;">添加</a>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <table id="compulsoryInsurance2" lay-filter="test2"></table>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <label class="layui-form-label">备注:</label>
+                                <div class="layui-input-inline">
+                                    <textarea :readonly="viewTag != 'edit' && viewTag != 'reedit'"
+                                        v-model="carRepairOrder.remark" placeholder="请输入备注内容" class="layui-textarea"
+                                        maxlength="200"></textarea>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12 bottom20">
+                                <label class="layui-form-label">维修附件:</label>
+                                <div class="layui-input-inline" id="addFile"></div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-content-box" v-show="viewTag1 != 'edit'">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    <span class="fm-daoru-title">车辆维修流程</span>
+                </div>
+                <div class="car-details-info car-padding">
+                    <div class="car-flowChart" id="bpmChart"></div>
+                </div>
+            </div>
+            <div class="float-btn-group">
+                <a class="layui-btn reset-btn" @click="cancel">取消</a>
+                <a class="layui-btn search-btn" v-show="isRecall()" id="recall">撤回</a>
+                <button v-show="viewTag1 == 'edit' || viewTag1 == 'reedit'" class="layui-btn layui-btn-radius"
+                    id="saveReceivables" lay-submit lay-filter="saveOrUpdate">确定</button>
+                <a v-show="viewTag1 == 'approve'" class="layui-btn search-btn" @click="reject">审核驳回</a>
+                <a v-show="viewTag1 == 'approve'" class="layui-btn search-btn" @click="approve">审核通过</a>
+                <a v-show="viewTag1 == 'applyDetail' && instanceStatus == 6 && nodeType == 1"
+                    class="layui-btn search-btn" @click="reeditSubmit">重新提交</a>
+            </div>
+        </form>
+
+        <form class="layui-form ren-form" v-show="boxShow" id="boxShow">
+            <div class="details-conteiner">
+                <div class="details-content-box">
+                    <div class="form-content-session-box" :style="boxInputShow?'':'text-align: center;'">
+                        <PRE>{{boxMark}}</PRE>
+                        <br />
+                        <div class="card" v-show="boxInputShow">
+                            <textarea style="min-width: 400px;min-height: 90px;max-width: 400px;max-height: 120px"
+                                type="text" v-model="boxTxt" autocomplete="off" :placeholder="boxHolder"
+                                class="layui-input"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="details-content-box">
+                    <div class="form-content-session-box">
+                        <label class="layui-form-label">审批附件:</label>
+                        <div class="layui-input-inline" id="addFile2"></div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <script type="text/html" id="maintenanceItemBarTpl">
+    <a class="layui-grid-btn-xs" lay-event="delect">删除</a>
+</script>
+    <script src="../../statics/js/modules/carrepairorder/carrepairorderedit.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/new_css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/viewer.min.css">
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <div class="list-header-content-box">
+        <div class="list-header-card">
+            <div id="all" class="flex no_active" @click="changeStatus(0)">
+                <div class="list-header-card-text">
+                    <span class="title">全部</span>
+                </div>
+                <div class="list-header-card-number">{{total.all}}</div>
+            </div>
+            <div id="field1" class="flex no_active" @click="changeStatus(1)">
+                <div class="list-header-card-text">
+                    <span class="title">逾期超过{{dateConfig1}}天</span>
+                </div>
+                <div class="list-header-card-number">{{total.field1}}</div>
+            </div>
+            <div id="field2" class="flex no_active" @click="changeStatus(2)">
+                <div class="list-header-card-text">
+                    <span class="title">逾期超过{{dateConfig2}}天</span>
+                </div>
+                <div class="list-header-card-number">{{total.field2}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="mvvm-table">
+        <div class="list-search-title-box">
+            <form class="layui-form" style="box-shadow: 0 0 20px #eee;padding-right: 15px;">
+                <section class="jxc-section" style="display: flex;align-items: flex-start;white-space: nowrap;">
+                    <div class="card layui-row" style="flex: 1">
+                        <div class="layui-form-item">
+                            <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                <label class="layui-form-label">车牌号/车架号</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input searchVal" v-model="q.carNo"  placeholder="请输入车牌号/车架号"/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                <label class="layui-form-label">车辆归属:</label>
+                                <div class="layui-input-inline">
+                                    <input v-model="q.deptName" type="text"   style="cursor:pointer;"   @click="deptTree" readonly="readonly" class="layui-input searchVal"
+                                        placeholder="请选择车辆归属" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                <label class="layui-form-label">品牌/车系/车型</label>
+                                <div class="layui-input-inline">
+                                    <input type="text"  id="carBrandSeriesModel"  class="layui-input" placeholder="请选择品牌/车系/车型" readonly="readonly"/>
+                                </div>
+                            </div>
+
+                            <section v-show="isFilter">
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">供应商名称</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text"  class="layui-input searchVal" v-model="q.supplierName"  placeholder="请输入供应商名称" />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">车辆来源</label>
+                                    <div class="layui-input-inline">
+                                        <select name="leaseType" lay-filter="leaseType" v-model="q.leaseType">
+                                            <option value="">全部</option>
+                                            <option value="1">经租</option>
+                                            <option value="2">以租代购</option>
+                                            <option value="3">展示车</option>
+                                            <option value="4">试驾车</option>
+                                            <option value="5">融租</option>
+                                            <option value="6">直购</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">车辆所有人</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal"  v-model="q.carOwner" placeholder="请输入车辆所有人"/>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">合同编号</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal" v-model="q.contractNo"  placeholder="请输入合同编号"/>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">车辆状态</label>
+                                    <div class="layui-input-inline">
+                                        <select name="carStatus" lay-filter="carStatusSelect" v-model="q.carStatusStr">
+                                            <!-- 车辆状态(当前状态 1整备中，2备发车，3 预定中  4.用车中 5.已过户)-->
+                                            <option value="">全部</option>
+                                            <option value="1">整备中</option>
+                                            <option value="2">备发车</option>
+                                            <option value="3">预定中</option>
+                                            <option value="4">用车中</option>
+                                            <option value="5">已过户</option>
+                                            <option value="6">已处置</option>
+                                            <option value="7">已出售</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">欠款类型</label>
+                                    <div class="layui-input-inline">
+                                        <!-- 付款类型：0、其他，1、保证金，2、租金，3、首付款，4、退车结算款，5、换车结算款，6、备用车结算款，7、整备费，8、尾款，9、定金，10、其他费用，11、车辆总单价-->
+                                        <select id="oweMoneyType" name="oweMoneyType" lay-filter="oweMoneyType" v-model="q.oweMoneyType">
+                                            <option value="">全部</option>
+                                            <option value=1>保证金</option>
+                                            <option value=2>租金</option>
+                                            <option value=3>首付款</option>
+                                            <option value=4>退车结算款</option>
+                                            <option value=5>换车结算款</option>
+                                            <option value=6>备用车结算款</option>
+                                            <option value=7>整备费</option>
+                                            <option value=8>尾款</option>
+                                            <option value=9>定金</option>
+                                            <option value=10>其他费用</option>
+                                            <option value=11>车辆总单价</option>
+                                            <option value=0>其他</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="flex-box layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <label class="layui-form-label">租赁开始时间</label>
+                                    <div class="list-search-sup-title new-layui-title">
+                                        <div class="task-content-box-tab">
+                                            <div class="display task-content-box-tab layui-col-md8 layui-col-sm8 layui-col-xs12"  type="timeStartRentType">
+                                                <div value="0" class="layui-col-md2 layui-col-sm2 layui-col-xs2">昨天</div>
+                                                <div value="1" class="layui-col-md2 layui-col-sm2 layui-col-xs2">今天</div>
+                                                <div value="2" class="layui-col-md2 layui-col-sm2 layui-col-xs2">上周</div>
+                                                <div value="3" class="layui-col-md2 layui-col-sm2 layui-col-xs2">本周</div>
+                                                <div value="4" class="layui-col-md2 layui-col-sm2 layui-col-xs2">上月</div>
+                                                <div value="5" class="layui-col-md2 layui-col-sm2 layui-col-xs2">本月</div>
+                                                <div value="6" class="layui-col-md2 layui-col-sm2 layui-col-xs2">本季</div>
+                                                <div value="7"class="layui-col-md2 layui-col-sm2 layui-col-xs2">本年</div>
+                                            </div>
+                                            <div class="layui-col-md4 layui-col-sm4 layui-col-xs12">
+                                                <input type="text" class="layui-input" id="timeStartRentStr" v-model="q.timeStartRentStr"   readonly placeholder="选择日期范围" style="width: 300px;" autocomplete="off">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-box layui-inline layui-col-md9 layui-col-sm12 layui-col-xs12">
+                                    <label class="layui-form-label">租赁结束时间</label>
+                                    <div class="list-search-sup-title new-layui-title">
+                                        <div class="task-content-box-tab">
+                                            <div class="display task-content-box-tab layui-col-md8 layui-col-sm8 layui-col-xs12"  type="timeFinishRentType">
+                                                <div value="0" class="layui-col-md2 layui-col-sm2 layui-col-xs2">昨天</div>
+                                                <div value="1" class="layui-col-md2 layui-col-sm2 layui-col-xs2">今天</div>
+                                                <div value="2" class="layui-col-md2 layui-col-sm2 layui-col-xs2">上周</div>
+                                                <div value="3" class="layui-col-md2 layui-col-sm2 layui-col-xs2">本周</div>
+                                                <div value="4" class="layui-col-md2 layui-col-sm2 layui-col-xs2">上月</div>
+                                                <div value="5" class="layui-col-md2 layui-col-sm2 layui-col-xs2">本月</div>
+                                                <div value="6" class="layui-col-md2 layui-col-sm2 layui-col-xs2">本季</div>
+                                                <div value="7"class="layui-col-md2 layui-col-sm2 layui-col-xs2">本年</div>
+                                            </div>
+                                            <div class="layui-col-md4 layui-col-sm4 layui-col-xs12">
+                                                <input type="text" class="layui-input" id="timeFinishRentStr" v-model="q.timeFinishRentStr"   readonly placeholder="选择日期范围" style="width: 300px;" autocomplete="off">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                <label class="layui-form-label"> </label>
+                                <div class="df-color" style="display: flex;align-items: center;">
+                                    <a class="layui-btn search-btn" @click="query">查询</a>
+                                    <a class="layui-btn reset-btn" @click="reset">重置</a>
+                                    <div @click="bindFilter" style="margin-left: 10px;cursor: pointer;user-select: none;">
+                                        <span>高级筛选</span>
+                                        <i class="icon layui-icon-extend layui-extend-shaixuan"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </form>
+        </div>
+        <div class="list-search-title-box ground-search-btn">
+            <form class="layui-form">
+                    <div style="display:flex;width: 100%;">
+                    <div class="layui-form-item layui-row" style="width: 100%;">
+                        <div class="list-search-form-button" style="width: 100%;">
+                            <a class="layui-btn btn-warning" @click="exports" v-m-perm="['supplierPayWarn:supplierpaywarn:export']">导出</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="list-table-content-box">
+            <table class="layui-hide" id="grid" lay-filter="grid"></table>
+        </div>
+    </div>
+</div>
+
+<!--操作-->
+<script type="text/html" id="barTpl">
+    <mperm v-m-perm="['supplierPayWarn:supplierpaywarn:update']">
+        {{#if(d.dealStatus === 0){}}
+            <a class="layui-grid-btn-xs" lay-event="edit" more-btn-index="{{d.LAY_INDEX-1}}">处理</a>
+        {{#}}}
+    </mperm>
+    <a class="layui-grid-btn-xs" lay-event="view" more-btn-index="{{d.LAY_INDEX-1}}">详情</a>
+
+</script>
+
+<script src="../../statics/js/modules/warn/supplierpaywarn.js?_${.now?long}"></script>
+</body>
+</html>

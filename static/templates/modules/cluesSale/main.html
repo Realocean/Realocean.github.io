@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../statics/newImages/logo/logo@2x.png">
+    <title>跟进线索首页</title>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/global.css" media="all">-->
+
+<!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/fonts/larry-icon.css" media="all">-->
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+<!-- 放开后表格无法拖动   <link rel="stylesheet" type="text/css" href="../../statics/new_css/larryms.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/new_css/normalize.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <!-- Import style -->
+    <link rel="stylesheet" href="../../statics/js/element-plus/index.css" />
+    <!-- 页面样式 -->
+    <link rel="stylesheet" href="../../statics/new_css/mf-layout.css" />
+
+</head>
+<style>
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    .el-input {
+        /*width: 220px;*/
+        width: 170px !important;
+        margin: 0 10px 0 20px;
+    }
+
+    .state-wrap{
+        margin-top: 15px;
+        justify-content: space-between;
+    }
+
+    .state-item{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        width: 140px;
+        /*height: 80px;*/
+        aspect-ratio: 1/0.59;
+        padding-left: 20px;
+        background-size: 100% 100%;
+        margin-right: 10px;
+        border-radius: 6px;
+        box-sizing: border-box;
+    }
+
+    .state-name{
+        font-size: 14px;
+        color: #333;
+    }
+
+    .state-count{
+        font-size: 18px;
+        margin-top: 2px;
+    }
+
+    .child .el-input{
+        width: 150px !important;
+    }
+
+    .child .el-date-editor--date{
+        width: 150px !important;
+        margin-left: 15px;
+    }
+
+    .stock-wrap{
+        /*height: 450px;*/
+        margin-top: 15px;
+        display: flex;
+        flex-direction: column;
+        background-size: 100% 100%;
+        aspect-ratio: 1/0.625;
+
+    }
+
+    .bg-light-blue{
+        background: #F5FBFB;
+        border-radius: 8px;
+    }
+
+    .stock-title{
+        display: flex;
+        aspect-ratio: 1/0.07;
+    }
+
+    .stock-title-wrap{
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .stock-title-wrap img{
+        width: 20px;
+        height: 20px;
+    }
+
+    .stock-title-wrap span{
+        font-size: 16px;
+        margin-left: 5px;
+    }
+
+    .stock-chart{
+        margin: 15px;
+        background: #F8FFFF;
+        flex: 1;
+        border-radius: 8px;
+        display: flex;
+    }
+
+    .salesman-wrap{
+        aspect-ratio: 1/0.85;
+        border-radius: 8px;
+        overflow-y: scroll;
+        margin-top: 15px;
+    }
+
+    .salesman-item{
+        height: 80px;
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+
+    }
+
+    .salesman-name{
+        color: #666;
+        margin-left: 28px;
+        flex: 1;
+    }
+
+    .salesman-avatar{
+        width: 47px;
+        height: 47px;
+        border-radius: 25px;
+        margin-left: 40px;
+    }
+
+    #stock_0{
+        width: 43vw;
+        height: 50vh;
+    }
+
+    #stock_01{
+        width: 43vw;
+        height: 50vh;
+    }
+
+    #stock_1{
+        width: 43vw;
+        height: 70vh;
+    }
+
+    #stock_2{
+        width: 55vw;
+        height: 65vh;
+    }
+
+    .el-input__prefix-inner .el-input__icon{
+        position: relative;
+    }
+
+    .el-input__prefix-inner .el-input__icon svg{
+        opacity: 0;
+    }
+
+    .date-wrap{
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .date-type{
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 16%;
+        z-index: 999;
+        cursor: pointer;
+    }
+
+</style>
+<body class="ren-body">
+<div id="rrapp" v-cloak >
+    <div class="card-wrap flex column" style="padding: 20px 10px 20px 20px">
+        <div class="flex title" style="align-self: flex-end">
+
+
+            <el-select v-model="q.f_store" placeholder="全部" filterable :clearable="1==userType" @change="fchange">
+                <el-option
+                        v-for="(item, index) in storeLists"
+                        :key="index"
+                        :label="item.name"
+                        :value="item.deptId">
+                </el-option>
+            </el-select>
+
+            <div class="date-wrap">
+                <span class="date-type" style="left: 15%" @click="fswitch">{{q.f_type?'日':'月'}}</span>
+
+                <el-date-picker
+                        v-model="q.f_date"
+                        :type="q.f_type?'date':'month'"
+                        @change="fchange2"
+                        :value-format="q.f_type?'YYYY-MM-DD':'YYYY-MM'"
+                        placeholder="请选择"/>
+            </div>
+        </div>
+
+        <div class="flex state-wrap">
+            <div v-for="(item, index) in tabList"
+                 :key="index"
+                 class="state-item"
+                 @click="stateClick(index)"
+                 :style="{'backgroundImage':`url('${item.img}')`, 'border': item.select?`1px solid ${item.color}`:'none'}">
+                <span class="state-name">{{item.name}}</span>
+                <span class="state-count" :style="{color:item.color}">{{item.count}}</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="flex">
+        <div class="card-wrap flex child column">
+            <div class="flex align-center space-between">
+                <div class="add-title-wrap" style="margin: 0 0 0 20px;white-space: nowrap">库存统计</div>
+
+                <div class="flex" style="justify-content: flex-end">
+
+                    <el-select v-model="q.s_store" placeholder="全部" size="default"  :clearable="1==userType" @change="schange">
+                        <el-option
+                                v-for="(item, index) in storeLists"
+                                :key="index"
+                                :label="item.name"
+                                :value="item.deptId">
+                        </el-option>
+                    </el-select>
+
+                    <div class="date-wrap">
+                        <span class="date-type" @click="sswitch">{{q.s_type?'日':'月'}}</span>
+
+                        <el-date-picker
+                                v-model="q.s_date"
+                                :type="q.s_type?'date':'month'"
+                                @change="schange2"
+                                :value-format="q.s_type?'YYYY-MM-DD':'YYYY-MM'"
+                                placeholder="请选择"/>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="stock-wrap" :style="{'backgroundImage':(stockSel===0?'url(\'../../statics/images/clues/clue_switch_bg.png\')':'url(\'../../statics/images/clues/clue_switch_bg1.png\')')}">
+                <div class="stock-title">
+                    <div class="stock-title-wrap" @click="stockClick(0)">
+                        <img :src="stockSel===0?'../../statics/images/clues/clue_car.png':'../../statics/images/clues/clue_car1.png'" alt="">
+                        <span :style="{'color':stockSel===0?'#ffffff':'#3FACB3'}">车型统计</span>
+                    </div>
+                    <div class="stock-title-wrap" @click="stockClick(1)">
+                        <img :src="stockSel===1?'../../statics/images/clues/clue_brand1.png':'../../statics/images/clues/clue_brand.png'" alt="">
+                        <span :style="{'color':stockSel===1?'#ffffff':'#3FACB3'}">品牌统计</span>
+                    </div>
+                </div>
+
+                <div class="stock-chart">
+                    <div v-show="stockSel===0" id="stock_0">
+                    </div>
+                    <div v-show="stockSel===1" id="stock_01">
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div style="width: 15px"></div>
+        <div class="card-wrap flex child column">
+            <div class="flex align-center space-between">
+                <div class="add-title-wrap" style="margin: 0 0 0 20px;white-space: nowrap">线索统计</div>
+
+                <div class="flex" style="justify-content: flex-end">
+
+                    <el-select v-model="q.c_store" placeholder="全部" size="default"  :clearable="1==userType" @change="cchange">
+                        <el-option
+                                v-for="(item, index) in storeLists"
+                                :key="index"
+                                :label="item.name"
+                                :value="item.deptId">
+                        </el-option>
+                    </el-select>
+
+                    <div class="date-wrap">
+                        <span class="date-type" @click="cswitch">{{q.c_type?'日':'月'}}</span>
+
+                        <el-date-picker
+                                v-model="q.c_date"
+                                :type="q.c_type?'date':'month'"
+                                @change="cchange2"
+                                :value-format="q.c_type?'YYYY-MM-DD':'YYYY-MM'"
+                                placeholder="请选择"/>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="stock-wrap bg-light-blue">
+                <div id="stock_1">
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="flex">
+        <div class="card-wrap flex child column">
+            <div class="flex align-center space-between">
+                <div class="add-title-wrap" style="margin: 0 0 0 20px;white-space: nowrap">销售之星</div>
+
+                <div class="flex" style="justify-content: flex-end">
+
+                    <el-select v-model="q.m_store" placeholder="全部" size="default"  :clearable="1==userType" @change="mchange">
+                        <el-option
+                                v-for="(item, index) in storeLists"
+                                :key="index"
+                                :label="item.name"
+                                :value="item.deptId">
+                        </el-option>
+                    </el-select>
+
+                    <div class="date-wrap">
+                        <span class="date-type" @click="mswitch">{{q.m_type?'日':'月'}}</span>
+
+                        <el-date-picker
+                                v-model="q.m_date"
+                                :type="q.m_type?'date':'month'"
+                                @change="mchange2"
+                                :value-format="q.m_type?'YYYY-MM-DD':'YYYY-MM'"
+                                placeholder="请选择"/>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="salesman-wrap">
+
+                <div v-for="(item, index) in salerList" :key="index"
+                     :style="{background:index%2===0?'#F5FBFB':'#E4F8F8'}"
+                     class="salesman-item">
+                    <el-image class="salesman-avatar" src="https://img1.baidu.com/it/u=2738614934,4015134810&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500" ></el-image>
+                    <div class="salesman-name">{{item.salesName}}</div>
+                    <div style="color: #FF5700">{{item.salesNum}}</div>
+                    <div style="margin-right: 50px;">辆</div>
+
+                </div>
+
+
+
+            </div>
+
+        </div>
+        <div style="width: 15px"></div>
+        <div class="card-wrap flex child column" style="flex: 2">
+
+            <div class="flex align-center space-between">
+                <div class="add-title-wrap" style="margin: 0 0 0 20px;white-space: nowrap">销售数量</div>
+
+                <div class="flex" style="justify-content: flex-end">
+
+                    <el-select v-model="q.n_store" placeholder="全部" size="default"  :clearable="1==userType" @change="nchange">
+                        <el-option
+                                v-for="(item, index) in storeLists"
+                                :key="index"
+                                :label="item.name"
+                                :value="item.deptId">
+                        </el-option>
+                    </el-select>
+
+                    <div class="date-wrap">
+                        <span class="date-type" @click="nswitch">{{q.n_type?'日':'月'}}</span>
+
+                        <el-date-picker
+                                v-model="q.n_date"
+                                :type="q.n_type?'date':'month'"
+                                @change="nchange2"
+                                :value-format="q.n_type?'YYYY-MM-DD':'YYYY-MM'"
+                                placeholder="请选择"/>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="stock-wrap bg-light-blue" style="aspect-ratio: 1/0.45">
+                <div id="stock_2">
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- Import Vue 3 -->
+<script src="../../statics/js/vue3/vue.global.js"></script>
+<!-- Import component library -->
+<script src="../../statics/js/element-plus/index.full.js"></script>
+<script src="../../statics/js/element-plus/icons-vue.js"></script>
+<script src="../../statics/plugins/jquery.min.js"></script>
+<script src="../../statics/common/layui/layui.js"></script>
+<script src="../../statics/js/common.js"></script>
+<script src="../../statics/js/element-plus/locale-cn.js"></script>
+<!--<script type="text/javascript" src="../../statics/common/plus/echarts.min.js"></script>-->
+<script type="text/javascript" src="../../statics/common/plus/echarts5.4.3.js"></script>
+<script>
+    // 基于准备好的dom，初始化echarts实例
+    // console.log('echarts', echarts)
+    // var myChart = echarts.init(document.getElementById('main'));
+    //
+    // // 指定图表的配置项和数据
+    // var option = {
+    //     title: {
+    //         text: 'ECharts 入门示例'
+    //     },
+    //     tooltip: {},
+    //     legend: {
+    //         data: ['销量']
+    //     },
+    //     xAxis: {
+    //         data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
+    //     },
+    //     yAxis: {},
+    //     series: [
+    //         {
+    //             name: '销量',
+    //             type: 'bar',
+    //             data: [5, 20, 36, 10, 10, 20]
+    //         }
+    //     ]
+    // };
+    //
+    // // 使用刚指定的配置项和数据显示图表。
+    // myChart.setOption(option);
+</script>
+<script src="../../statics/js/modules/cluesSale/dict.js"></script>
+<script src="../../statics/js/modules/cluesSale/main.js?_${.now?long}"></script>
+</body>
+
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>订单车辆还款明细表</title>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/new_css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/viewer.min.css">
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common-tabs.css">
+    <style>
+        .layui-table-cell {
+            padding:0 5px;
+            height:inherit;
+            overflow:visible;
+            text-overflow:inherit;
+            white-space:normal;
+            word-break: break-all;
+        }
+
+        .carSkip {
+            cursor: pointer;
+            color:#3393ff;
+        }
+
+        .list-header-card .flex{
+            max-width:190px;
+        }
+
+        .list-header-card-title{
+            font-size: 14px;
+        }
+
+        .list-header-card .layui-icon.layui-icon-about{
+            margin-left: 0;
+        }
+    </style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <div class="list-header-content-box">
+        <div class="list-header-card display">
+            <div
+                    v-for="(item, index) in statusLst"
+                    :key="index"
+                    :sname="item.key"
+                    class="flex" :class="item.key == statusIndex ? 'active' : ''" @click="changeStatus(item,index)" style="cursor:pointer;margin-right: 10px;width:170px !important">
+                <div v-if="item.key == '0'" class="list-header-card-title">{{item.name}}</div>
+                <div v-if="item.key != '0'" class="list-header-card-title">{{item.name}}&nbsp;<i  @mouseout.stop="mouseout" @mousemove="move(item.key)"  class="layui-icon layui-icon-about" style="color: #3FACB3;" :id=preId+item.key></i></div>
+                <div class="list-header-card-count">{{item.count}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="mvvm-table">
+        <div id="searchId">
+            <div class="list-search-title-box">
+                <form class="layui-form">
+                    <div style="display:flex;width: 100%;">
+                        <div class="layui-form-item layui-row" style="width: 100%;">
+                            <div class="list-search-form-button" style="width: 100%;">
+                                <a class="layui-btn btn-primary" @click="add" v-m-perm="['customer:save']">新增</a>
+                                <a class="layui-btn layui-btn-danger layui-btn-normal btn-warning" id="exports" v-m-perm="['customer:export']">导出</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="list-table-content-box">
+            <table class="layui-hide" id="grid" lay-filter="grid"></table>
+        </div>
+    </div>
+</div>
+
+<!--操作-->
+<script type="text/html" id="barTpl">
+    <div style="min-width: 150px;">
+<!--    <#if shiro.hasPermission("customer:info")>-->
+    <a class="layui-grid-btn-xs" lay-event="details" v-m-perm="['customer:info']" more-btn-index="{{d.LAY_INDEX-1}}">详情</a>
+<!--    </#if>-->
+<!--    <#if shiro.hasPermission("customer:update")>-->
+    <a class="layui-grid-btn-xs" lay-event="update" v-m-perm="['customer:update']" more-btn-index="{{d.LAY_INDEX-1}}">编辑</a>
+    {{#if(d.state===1){}}
+    <a class="layui-grid-btn-xs" lay-event="blacklist" v-m-perm="['customer:update']" more-btn-index="{{d.LAY_INDEX-1}}">拉入黑名单</a>
+    {{#}else if(d.state===2){}}
+    <a class="layui-grid-btn-xs" lay-event="cancelBlacklist" v-m-perm="['customer:update']" more-btn-index="{{d.LAY_INDEX-1}}">取消黑名单</a>
+    {{#}}}
+<!--    </#if>-->
+</div>
+</script>
+<script type="text/html" id="skipOrder">
+    <a class="layui-grid-btn-xs" lay-event="skipOrderView">{{d.orderCarCode}}</a>
+</script>
+<script src="../../statics/js/modules/customer/customerlist.js"></script>
+</body>
+</html>

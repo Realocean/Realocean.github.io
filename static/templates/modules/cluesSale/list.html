@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../statics/newImages/logo/logo@2x.png">
+    <title>公海</title>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/global.css" media="all">-->
+
+<!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/fonts/larry-icon.css" media="all">-->
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+<!-- 放开后表格无法拖动   <link rel="stylesheet" type="text/css" href="../../statics/new_css/larryms.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/new_css/normalize.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <!-- Import style -->
+    <link rel="stylesheet" href="../../statics/js/element-plus/index.css" />
+    <!-- 页面样式 -->
+    <link rel="stylesheet" href="../../statics/new_css/mf-layout.css" />
+
+</head>
+<style>
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    .el-checkbox{
+        font-weight: normal;
+    }
+
+    #field1{
+        max-width: 300px;
+    }
+    #field2{
+        max-width: 300px;
+    }
+    #rrapp .car-stutas-dds {
+        padding: 10px 0;
+        margin-bottom: 16px;
+        border-radius: 4px;
+        background-color: #fff;
+    }
+
+    #rrapp .car-stutas-dd {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin:0px 14px
+    }
+
+    #rrapp .car-stutas-dd .car-stutas-dd-title {
+        width: 70px;
+        font-size: 14px;
+        /*font-weight: 700;*/
+        text-align: center;
+        margin-right: 10px;
+    }
+
+    #rrapp .car-stutas-dd .car-stutas-dd-list .car-stutas-dd-list-item {
+        display: inline-block;
+        width: 140px;
+        height: 36px;
+        line-height: 36px;
+        text-align: center;
+        font-size:14px;
+        margin-right:12px;
+        border:1px solid #BED7DE;
+        border-radius: 4px;
+        margin:6px 8px 6px 0px;
+        /*font-weight:700;*/
+    }
+
+    #rrapp .car-stutas-dd .car-stutas-dd-list .car-stutas-dd-list-item:hover {
+        border: 1px solid #3FACB3;
+        background: #3FACB3;
+        color: #fff;
+    }
+
+    /* #rrapp .car-stutas-dd .car-stutas-dd-list .car-stutas-dd-list-item::first-line{
+        margin-top:16px;
+    } */
+    #rrapp .car-stutas-dd .car-stutas-dd-list .car-stutas-dd-list-item.active {
+        border: 1px solid #3FACB3;
+        background: #3FACB3;
+        color: #fff;
+    }
+
+    #rrapp .car-stutas-dd .car-stutas-dd-list .car-stutas-dd-list-item:last-child {
+        margin-right: 0px;
+    }
+    .add-title-wrap{
+        margin-left: 16px;
+    }
+    .add-title-wrap:before {
+        top: 1px;
+    }
+
+    .table-content{
+        background: linear-gradient(#E1F3F4, white);
+        border-radius: 8px;
+        padding: 16px 12px;
+        box-sizing: border-box;
+    }
+
+    .list-search-title-box{
+        background: white;
+        border-radius: 8px !important;
+        padding-top: 15px;
+        box-shadow: 0px 2px 4px 0px rgba(25,95,99,0.13);
+    }
+
+    .ground-search-btn{
+        padding: 0px 15px 15px !important;
+    }
+
+    .table-title{
+        display:flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 70px;
+    }
+
+    .el-input{
+        width: 200px;
+    }
+
+    .date-oneday{
+        font-size: 14px;
+        color: #868686;
+        width: 49px;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .task-content-box-tab{
+        display: flex;
+        align-items: center;
+        margin-left: 0;
+    }
+
+    .actived{
+        color: #3facb3;
+        font-weight: bold;
+    }
+
+</style>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+<!--    <div class="list-header-content-box">-->
+<!--        <div class="car-stutas-dd">-->
+<!--            <span class="car-stutas-dd-title add-title-wrap">线索状态</span>-->
+<!--            <div class="car-stutas-dd-list">-->
+<!--                <div class="car-stutas-dd-list-item" v-for="(item, index) in statusLst" :key="index"-->
+<!--                     :class="item.key === statusIndex ? 'active' : ''"-->
+<!--                     style="cursor:pointer;">-->
+<!--                    <div class="list-header-sm-card-text">{{item.name}}（{{item.count}}）</div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+    <div class="table-content">
+        <div class="list-search-title-box">
+            <el-form class="layui-form" :model="q" ref="form" style="padding: 0 25px;">
+
+                <el-row>
+                    <el-col :span="6">
+                        <el-form-item label="客户名称" prop="customerName">
+                            <el-input v-model="q.customerName" placeholder="请输入客户信息进行搜索" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="所在地" prop="areaCode">
+                            <el-cascader
+                                    ref="region"
+                                    v-model="q.areaCode"
+                                    :options="province"
+                                    @change="handleChange"
+                                    placeholder="全部地区"
+                                    :props="provinceProp"
+                            ></el-cascader>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="12" v-show="!isFilter">
+                        <div class="df-color" style="display: flex;align-items: center;justify-content: flex-end">
+                            <el-button @click="reset">重置</el-button>
+                            <el-button type="primary" @click="query">查询</el-button>
+                            <div @click="bindFilter" style="margin-left: 10px;cursor: pointer;user-select: none;">
+                                <span>高级筛选</span>
+                                <i class="icon layui-icon-extend layui-extend-shaixuan"></i>
+                            </div>
+                        </div>
+                    </el-col>
+
+                    <el-col :span="24" v-show="isFilter">
+                        <el-form-item label="意向等级" prop="intentionLevelList">
+                            <el-checkbox-group v-model="q.intentionLevelList" @change="selectIntentionChange">
+                                <el-checkbox v-for="(item, index) in intentionLevel" :key="index" :label="item.code">{{item.name}}</el-checkbox>
+                            </el-checkbox-group>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="24" v-show="isFilter">
+                        <el-form-item label="客户类型" prop="customerTypeList">
+                            <el-checkbox-group v-model="q.customerTypeList" @change="selectCustomerChange">
+                                <el-checkbox v-for="(item, index) in customerType" :key="index" :label="item.code">{{item.name}}</el-checkbox>
+                            </el-checkbox-group>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="24" v-show="isFilter">
+                        <el-form-item label="线索来源" prop="cluesSourceList">
+                            <el-checkbox-group v-model="q.cluesSourceList" @change="selectCluesSourceChange">
+                                <el-checkbox v-for="(item, index) in cluesSource" :key="index" :label="item.code">{{item.name}}</el-checkbox>
+                            </el-checkbox-group>
+                        </el-form-item>
+                    </el-col>
+
+
+
+<!--                    <el-col :span="6">-->
+<!--                        <el-form-item label="意向等级" prop="intentionLevelList">-->
+
+<!--                            <el-select-->
+<!--                                    multiple-->
+<!--                                    collapse-tags-->
+<!--                                    collapse-tags-tooltip-->
+<!--                                    @change="selectIntentionChange"-->
+<!--                                    v-model="q.intentionLevelList" placeholder="请选择意向等级" clearable>-->
+<!--                                <el-option-->
+<!--                                        v-for="(item, index) in intentionLevel" :key="index"-->
+<!--                                        :label="item.name" :value="item.code"/>-->
+<!--                            </el-select>-->
+
+<!--                        </el-form-item>-->
+<!--                    </el-col>-->
+
+
+<!--                    <el-col :span="6" v-show="isFilter">-->
+<!--                        <el-form-item label="客户类型" prop="customerTypeList">-->
+<!--                            <el-select-->
+<!--                                    multiple-->
+<!--                                    collapse-tags-->
+<!--                                    collapse-tags-tooltip-->
+<!--                                    @change="selectCustomerChange"-->
+<!--                                    v-model="q.customerTypeList" placeholder="请选择客户类型" clearable>-->
+<!--                                <el-option-->
+<!--                                        v-for="(item, index) in customerType" :key="index"-->
+<!--                                        :label="item.name" :value="item.code"/>-->
+<!--                            </el-select>-->
+<!--                        </el-form-item>-->
+<!--                    </el-col>-->
+
+<!--                    <el-col :span="18" v-show="isFilter">-->
+<!--                        <el-form-item label="线索来源" prop="cluesSourceList">-->
+<!--                            <el-select-->
+<!--                                    multiple-->
+<!--                                    collapse-tags-->
+<!--                                    collapse-tags-tooltip-->
+<!--                                    @change="selectCluesSourceChange"-->
+<!--                                    v-model="q.cluesSourceList" placeholder="请选择线索来源" clearable>-->
+<!--                                <el-option-->
+<!--                                        v-for="(item, index) in cluesSource" :key="index"-->
+<!--                                        :label="item.name" :value="item.code"/>-->
+<!--                            </el-select>-->
+<!--                        </el-form-item>-->
+<!--                    </el-col>-->
+
+                    <el-col :span="18" v-show="isFilter">
+                        <el-form-item label="创建时间" prop="value1">
+                            <div class="task-content-box-tab">
+                                <div :class="selDateIndex==0?'actived':''" @click="getSearchDateByType(0)" value="0" class="date-oneday">昨天</div>
+                                <div :class="selDateIndex==1?'actived':''" @click="getSearchDateByType(1)" value="1" class="date-oneday">今日</div>
+                                <div :class="selDateIndex==2?'actived':''" @click="getSearchDateByType(2)" value="2" class="date-oneday">上周</div>
+                                <div :class="selDateIndex==3?'actived':''" @click="getSearchDateByType(3)" value="3" class="date-oneday">本周</div>
+                                <div :class="selDateIndex==4?'actived':''" @click="getSearchDateByType(4)" value="4" class="date-oneday">上月</div>
+                                <div :class="selDateIndex==5?'actived':''" @click="getSearchDateByType(5)" value="5" class="date-oneday">本月</div>
+                                <div :class="selDateIndex==6?'actived':''" @click="getSearchDateByType(6)" value="6" class="date-oneday">本季</div>
+                                <div :class="selDateIndex==7?'actived':''" @click="getSearchDateByType(7)" value="7" class="date-oneday">本年</div>
+
+                                <el-date-picker
+                                    value-format="YYYY-MM-DD"
+                                    v-model="q.value1"
+                                    type="daterange"
+                                    range-separator="至"
+                                    start-placeholder="开始日期" clearable
+                                    end-placeholder="结束日期" @change="timeChange"></el-date-picker>
+
+                            </div>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="6" v-show="isFilter">
+                        <div class="df-color" style="display: flex;align-items: center;justify-content: flex-end">
+                            <el-button @click="reset">重置</el-button>
+                            <el-button type="primary" @click="query">查询</el-button>
+                            <div @click="bindFilter" style="margin-left: 10px;cursor: pointer;user-select: none;">
+                                <span>高级筛选</span>
+                                <i class="icon layui-icon-extend layui-extend-shaixuan"></i>
+                            </div>
+                        </div>
+                    </el-col>
+                </el-row>
+
+            </el-form>
+        </div>
+        <div class="list-search-title-box ground-search-btn">
+            <div class="table-title">
+                    <div style="white-space: nowrap">
+                        共有线索{{totalCount}}个
+                    </div>
+
+                    <div style="display: flex">
+                        <el-button type="primary" plain @click="importdata" v-m-perm="['clues:crmClues:imports']">导入</el-button>
+                        <el-button type="success" plain @click="gotoAdd" v-m-perm="['crm:crmClues:save']">新增</el-button>
+                        <el-button type="info" plain @click="dispatchs" v-m-perm="['crm:crmClues:distribution']">一键分配</el-button>
+                        <el-button type="warning" plain @click="exportdata" v-m-perm="['crm:crmClues:export']">导出</el-button>
+<!--                        <el-button type="danger" plain @click="gotoMain">领导首页</el-button>-->
+<!--                        <el-button type="danger" plain @click="gotoSalesMain">销售首页</el-button>-->
+
+<!--                        <el-button type="danger" plain @click="gotoSubList">子公司线索列表</el-button>-->
+<!--                        <el-button type="danger" plain @click="gotoSalerList">销售任务列表</el-button>-->
+<!--                        <el-button type="danger" plain @click="gotoMainAnalyse">总公司跟进线索分析</el-button>-->
+                    </div>
+
+                </div>
+
+
+            <el-table :header-cell-style="{'background-color':'#f6f8f8','color':'#000'}"
+                      :data="tableData"
+                      @selection-change="handleSelectionChange"
+                      style="width: 100%" border>
+
+                <el-table-column type="selection" width="50" align="center"></el-table-column>
+                <el-table-column type="index" width="80" align="center" label="序号" ></el-table-column>
+                <el-table-column prop="customerName" label="客户名称" width="115" align="center"></el-table-column>
+                <el-table-column prop="phone" label="联系方式" align="center"></el-table-column>
+                <el-table-column prop="timeCreate" label="创建时间" align="center"></el-table-column>
+                <el-table-column prop="cluesSource" label="线索来源" width="115" align="center">
+                    <template v-slot="{row}">
+                        {{getCluesSource(row.cluesSource)}}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="brandName" label="意向车型" align="center" show-overflow-tooltip>
+                    <template v-slot="{row}">
+                        <div v-if="row.brandName && row.seriesName && row.modelName">{{row.brandName}}/{{row.seriesName}}/{{row.modelName}}</div>
+                        <div v-else>--</div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="intentionLevel" label="意向等级" width="100" align="center">
+                    <template v-slot="{row}">
+                        {{getIntentionLevel(row.intentionLevel)||'--'}}
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" align="center" fixed="left">
+                    <template v-slot="{row}">
+                        <div style="display: flex; align-items: center;justify-content: center">
+                            <el-button type="primary" text bg size="small" @click="gotoAdd(row)" v-m-perm="['crm:crmClues:update']">编辑线索</el-button>
+                            <el-button type="warning" v-if="row.followResult!=2&&row.followResult!=3&&row.followResult!=4" text bg size="small" @click="dispatch([row.cluesId])" v-m-perm="['crm:crmClues:distribution']">分配</el-button>
+                        </div>
+                    </template>
+                </el-table-column>
+
+            </el-table>
+
+            <el-row justify="end" style="margin-top: 10px">
+                <el-pagination
+                        :current-page="q.page"
+                        :page-size="q.limit"
+                        :page-sizes="[10, 50, 100, 200]"
+                        :small="false"
+                        :disabled="false"
+                        :background="false"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="totalCount"
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                />
+            </el-row>
+        </div>
+    </div>
+
+    <el-dialog
+            title="线索分配"
+            v-model="dispatchShow"
+            width="45%">
+        <div>
+            <el-form ref="form1" label-width="100px">
+                <el-form-item label="将线索分配给:" prop="storeIdList">
+
+                    <el-select v-model="seldeptId" placeholder="请选择" filterable clearable>
+                        <el-option
+                            v-for="(item, index) in storeLists"
+                            :key="index"
+                            :label="item.name"
+                            :value="item.deptId">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+
+            </el-form>
+        </div>
+        <template #footer>
+          <span class="dialog-footer">
+            <el-button @click="dispatchShow = false">取 消</el-button>
+            <el-button type="primary" @click="confirmDispatch">
+              确 定
+            </el-button>
+          </span>
+        </template>
+<!--        <span slot="footer" class="dialog-footer">-->
+<!--        <el-button @click="dispatchShow = false">取 消</el-button>-->
+<!--        <el-button type="primary" @click="confirmDispatch">确 定</el-button>-->
+<!--      </span>-->
+    </el-dialog>
+
+</div>
+
+<!-- Import Vue 3 -->
+<script src="../../statics/js/vue3/vue.global.js"></script>
+<!-- Import component library -->
+<script src="../../statics/js/element-plus/index.full.js"></script>
+<script src="../../statics/js/element-plus/icons-vue.js"></script>
+<script src="../../statics/plugins/jquery.min.js"></script>
+<script src="../../statics/common/layui/layui.js"></script>
+<script src="../../statics/js/common.js"></script>
+<script src="../../statics/js/element-plus/locale-cn.js"></script>
+<!--<script src="//unpkg.com/element-plus/dist/locale/zh-cn"></script>-->
+<script>
+    // // var openeds= []
+    // // const testindex = Vue.ref('1')
+    // // // 获取站点配置
+    // // function getWebConfig(){
+    // //     var url = `${baseURL}/sys/tConfig/systemConfig?tenantCode=${localStorage.getItem("tenantCode")}`;
+    // //     $.get(url, function (r) {
+    // //         if(!r || !r.data){
+    // //             return false;
+    // //         }
+    // //         $("[rel=icon]")[0].href = imageURL+r.data.webTitleIco;
+    // //         app.menuTopName = r.data.menuTopName;
+    // //         $("title").html(r.data.loginName);
+    // //         $(".title_logo").html(r.data.menuTopName);
+    // //         console.log("更新站点")
+    // //     });
+    // // }
+    // //
+    // // layui.cache.menusUrl = baseURL + '/sys/menu/nav';//这里设置 菜单数据项接口地址 或data参数
+    // // layui.cache.page = 'index';
+    // layui.config({ base: '../../statics/common/' }).extend({ larry: 'js/base' }).use('larry');
+    // // var openeds = []
+    // const App = {
+    //     data() {
+    //         return {
+    //             msg:'但是如何'
+    //         };
+    //     },
+    //     computed: {
+    //     },
+    //     created() {
+    //     },
+    //     mounted () {
+    //
+    //     },
+    //     methods: {
+    //         showmsg(){
+    //             alert(this.msg)
+    //         }
+    //     },
+    // };
+    // const app = Vue.createApp(App);
+    // for ([name, comp] of Object.entries(ElementPlusIconsVue)) {
+    //     app.component(name, comp);
+    // }
+    // app.use(ElementPlus);
+    // app.mount("#app");
+    // // $(function (){
+    // //     getWebConfig();
+    // // })
+</script>
+<script src="../../statics/js/modules/cluesSale/dict.js"></script>
+<script src="../../statics/js/modules/cluesSale/list.js?_${.now?long}"></script>
+</body>
+
+</html>

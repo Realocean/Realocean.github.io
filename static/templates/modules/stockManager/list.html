@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../statics/newImages/logo/logo@2x.png">
+    <title>库存管理</title>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/global.css" media="all">-->
+
+    <!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/fonts/larry-icon.css" media="all">-->
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+    <!-- 放开后表格无法拖动   <link rel="stylesheet" type="text/css" href="../../statics/new_css/larryms.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/new_css/normalize.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <!-- Import style -->
+    <link rel="stylesheet" href="../../statics/js/element-plus/index.css"/>
+    <!-- 页面样式 -->
+    <link rel="stylesheet" href="../../statics/new_css/mf-layout.css"/>
+
+</head>
+<style>
+    #field1 {
+        max-width: 300px;
+    }
+
+    #field2 {
+        max-width: 300px;
+    }
+
+    #rrapp .car-stutas-dds {
+        padding: 10px 0;
+        margin-bottom: 16px;
+        border-radius: 4px;
+        background-color: #fff;
+    }
+
+    #rrapp .car-stutas-dd {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin: 0px 14px
+    }
+
+    #rrapp .car-stutas-dd .car-stutas-dd-title {
+        width: 70px;
+        font-size: 14px;
+        font-weight: 700;
+        text-align: center;
+        margin-right: 10px;
+    }
+
+    #rrapp .car-stutas-dd .car-stutas-dd-list .car-stutas-dd-list-item {
+        display: inline-block;
+        padding: 4px 8px;
+        font-size: 14px;
+        margin-right: 12px;
+        border: 1px solid #BED7DE;
+        border-radius: 4px;
+        margin: 6px 8px 6px 0px;
+        font-weight: 700;
+    }
+
+    #rrapp .car-stutas-dd .car-stutas-dd-list .car-stutas-dd-list-item:hover {
+        border: 1px solid #3FACB3;
+        background: #3FACB3;
+        color: #fff;
+    }
+
+    /* #rrapp .car-stutas-dd .car-stutas-dd-list .car-stutas-dd-list-item::first-line{
+        margin-top:16px;
+    } */
+    #rrapp .car-stutas-dd .car-stutas-dd-list .car-stutas-dd-list-item.active {
+        border: 1px solid #3FACB3;
+        background: #3FACB3;
+        color: #fff;
+    }
+
+    #rrapp .car-stutas-dd .car-stutas-dd-list .car-stutas-dd-list-item:last-child {
+        margin-right: 0px;
+    }
+
+    .table-content {
+        background: linear-gradient(#E1F3F4, white);
+        border-radius: 8px;
+        padding: 16px 12px;
+        box-sizing: border-box;
+    }
+
+    .list-search-title-box {
+        background: white;
+        border-radius: 8px !important;
+        padding-top: 15px;
+        box-shadow: 0px 2px 4px 0px rgba(25, 95, 99, 0.13);
+    }
+
+    .ground-search-btn {
+        padding: 0px 15px 15px !important;
+    }
+
+    .table-title {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        height: 70px;
+    }
+
+    .el-input {
+        width: 200px;
+    }
+
+    .date-oneday {
+        font-size: 14px;
+        color: #868686;
+        width: 49px;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .task-content-box-tab {
+        display: flex;
+        align-items: center;
+        margin-left: 0;
+    }
+
+    .actived {
+        color: #3facb3;
+        font-weight: bold;
+    }
+    .el-dropdown-link{
+        color: #3facb3;
+        display: flex;
+        align-items: center;
+    }
+    .el-checkbox{
+        font-weight: normal;
+    }
+</style>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <div class="table-content">
+        <div class="list-search-title-box">
+            <el-form class="layui-form" ref="form" :model="q" style="padding: 0 25px;">
+                <el-row>
+
+                    <el-col :span="7">
+                        <el-form-item label="品牌/车系/车型">
+                            <el-cascader
+                                    v-model="modeldata"
+                                    :key="modelKey"
+                                    ref="model"
+                                    :options="brandList"
+                                    @change="handleBrandChange"
+                                    placeholder="请选择品牌/车系/车型"/>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="7">
+                        <el-form-item label="车辆VIN码" prop="vinNo">
+                            <el-input v-model="q.vinNo" placeholder="请输入车辆VIN码" clearable/>
+                        </el-form-item>
+                    </el-col>
+
+                    <el-col :span="10" v-show="!isFilter">
+                        <div class="df-color" style="display: flex;align-items: center;justify-content: flex-end">
+                            <el-button @click="reset">重置</el-button>
+                            <el-button type="primary" @click="query">查询</el-button>
+                            <div @click="bindFilter" style="margin-left: 10px;cursor: pointer;user-select: none;">
+                                <span>高级筛选</span>
+                                <i class="icon layui-icon-extend layui-extend-shaixuan"></i>
+                            </div>
+                        </div>
+                    </el-col>
+
+                    <el-col :span="18" v-show="isFilter">
+                        <el-form-item label="车辆级别" prop="productTypeList">
+                            <el-checkbox-group v-model="q.productTypeList" @change="selectCluesSourceChange">
+                                <el-checkbox v-for="(item, index) in carType" :key="index" :label="item.code">{{item.value}}</el-checkbox>
+                            </el-checkbox-group>
+                        </el-form-item>
+                    </el-col>
+
+<!--                    <el-col :span="7">-->
+<!--                        <el-form-item label="车辆级别">-->
+<!--                            <el-select-->
+<!--                                    v-model="q.productType" placeholder="请选择车辆级别">-->
+<!--                                <el-option-->
+<!--                                        v-for="(item, index) in carType" :key="index"-->
+<!--                                        :label="item.value" :value="item.code"/>-->
+<!--                            </el-select>-->
+<!--                        </el-form-item>-->
+<!--                    </el-col>-->
+
+                    <el-col :span="6" v-show="isFilter">
+                        <div class="df-color" style="display: flex;align-items: center;justify-content: flex-end">
+                            <el-button @click="reset">重置</el-button>
+                            <el-button type="primary" @click="query">查询</el-button>
+                            <div @click="bindFilter" style="margin-left: 10px;cursor: pointer;user-select: none;">
+                                <span>高级筛选</span>
+                                <i class="icon layui-icon-extend layui-extend-shaixuan"></i>
+                            </div>
+                        </div>
+                    </el-col>
+
+                </el-row>
+
+            </el-form>
+        </div>
+        <div class="list-search-title-box ground-search-btn">
+            <div class="table-title">
+                <el-button type="success" plain @click="gotoAdd" v-m-perm="['crm:crmCarBasic:save']">新增车辆</el-button>
+                <el-button type="warning" plain @click="batchImport" v-m-perm="['crm:crmCarBasic:imports']">批量导入</el-button>
+                <el-button type="info" plain @click="exportdata" v-m-perm="['crm:crmCarBasic:export']">导出</el-button>
+            </div>
+
+            <el-table :header-cell-style="{'background-color':'#f6f8f8','color':'#000'}" :data="tableData" style="width: 100%" border>
+                <el-table-column prop="vinNo" label="车辆VIN码" align="center" min-width="120px"></el-table-column>
+                <el-table-column prop="brandName" label="车辆品牌" align="center" min-width="120px"></el-table-column>
+                <el-table-column prop="seriesName" label="车系" align="center" min-width="120px"></el-table-column>
+                <el-table-column prop="modelName" label="车型" align="center" min-width="120px" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="batteryBrand" label="电池品牌" align="center" min-width="120px">
+                    <template v-slot="{row}">
+                        {{row.batteryBrandValue || '--'}}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="batteryDegreeValue" label="度数" align="center" min-width="120px">
+                    <template v-slot="{row}">
+                        {{row.batteryDegreeValue || '--'}}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="productionTime" label="合格证日期" align="center" min-width="120px">
+                    <template v-slot="{row}">
+                        {{row.certificateExpireTime || '--'}}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="customerName" label="车辆状态" align="center" min-width="120px">
+                    <template v-slot="{row}">
+<!--                        1、在库 2、出库 3、在途-->
+                        {{row.inventoryStatus == 1 ? '在库' : row.inventoryStatus == 2 ? '出库' : '在途'}}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="carStorage" label="车辆存放地址" align="center" width="120px" show-overflow-tooltip>
+                    <template v-slot="{row}">
+                        {{row.carStorage || '--'}}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="toStoreTime" label="到店日期" align="center" min-width="120px">
+                    <template v-slot="{row}">
+                        {{row.toStoreTime || '--'}}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="operatorName" label="录入人员" align="center" min-width="120px"></el-table-column>
+                <el-table-column label="操作" align="center" width="190" fixed="left">
+                    <template v-slot="{row}">
+                        <div style="display: flex; align-items: center;justify-content: center">
+                            <template v-if="row.inventoryStatus==1">
+                                <el-button style="width: 30px" type="primary" text plain @click="gotoOutcar(row)" v-m-perm="['crm:crmCarOrder:save']">出库</el-button>
+                                <el-button style="width: 30px" type="primary" text plain @click="gotoEdit(row)" v-m-perm="['crm:crmCarBasic:update']">修改</el-button>
+                                <el-button style="width: 30px" type="primary" text plain @click="deleteData(row)" v-m-perm="['crm:crmCarBasic:delete']">删除</el-button>
+                            </template>
+                            <el-button style="width: 30px" type="primary" text plain @click="gotoDetail(row)" v-m-perm="['crm:crmCarBasic:info']">详情</el-button>
+                        </div>
+<!--                        <div style="display: flex; align-items: center;justify-content: center">-->
+
+<!--                            <el-button type="warning" text bg size="small" @click="gotoAdd(row)">修改</el-button>-->
+<!--                            <el-button type="error" text bg size="small" @click="gotoExamorder(row, 1)">车管审核</el-button>-->
+<!--                            <el-button type="error" text bg size="small" @click="gotoExamorder(row, 2)">销售确认</el-button>-->
+<!--                            <el-button type="error" text bg size="small" @click="gotoExamorder(row, 3)">财务确认</el-button>-->
+<!--                        </div>-->
+                    </template>
+                </el-table-column>
+            </el-table>
+
+            <el-row justify="end" style="margin-top: 10px">
+                <el-pagination
+                        :current-page="q.page"
+                        :page-size="q.limit"
+                        :page-sizes="[10, 50, 100, 200]"
+                        :small="false"
+                        :disabled="false"
+                        :background="false"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="totalCount"
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                />
+            </el-row>
+        </div>
+
+
+        <!--                            <a class="layui-btn btn-success" @click="outcar">出库</a>-->
+        <!--                            <a class="layui-btn btn-success" @click="examorder">车管审查</a>-->
+    </div>
+</div>
+
+<script src="../../statics/js/vue3/vue.global.js"></script>
+<script src="../../statics/js/element-plus/index.full.js"></script>
+<script src="../../statics/js/element-plus/icons-vue.js"></script>
+<script src="../../statics/plugins/jquery.min.js"></script>
+<script src="../../statics/common/layui/layui.js"></script>
+<script src="../../statics/js/common.js"></script>
+<script src="../../statics/js/element-plus/locale-cn.js"></script>
+
+
+<script src="../../statics/js/modules/stockManager/list.js?_${.now?long}"></script>
+</body>
+
+</html>

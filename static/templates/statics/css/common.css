@@ -1,0 +1,220 @@
+.ren-body{padding:10px 10px 10px 0;}
+[v-cloak] {
+    display: none;
+}
+/* 权限按钮默认隐藏 */
+[v-m-perm] {
+    display: none;
+}
+.grid-btn{
+    margin-bottom:12px;
+}
+.grid-btn .btn{
+    margin-right:10px;
+}
+.pointer{cursor: pointer;}
+.not-underline a:focus,.not-underline a:hover{
+    text-decoration: none;
+}
+.ren-form{margin-top: 13px;}
+
+
+
+/*  �����Ʒ����ʽ  */
+
+.layui-elem-quote {
+	border-left: 5px solid #3FACB3 !important;
+}
+
+ul.larryms-tab-title .layui-this,
+.layui-bg-green,
+.layui-laypage .layui-laypage-curr .layui-laypage-em {
+	background-color: #3FACB3 !important;
+}
+
+.layui-form-onswitch {
+	border-color: #3FACB3 !important;
+	background-color:#3FACB3 !important;
+}
+
+.layui-layer-molv .layui-layer-title {
+	background: #3FACB3 !important;
+}
+
+.layui-layer-molv .layui-layer-btn a {
+	background: #3FACB3 !important;
+	border-color: #3FACB3 !important;
+	
+}
+
+.layui-layer-molv .layui-layer-btn .layui-layer-btn1 {
+	background: #8fd5ff !important;
+}
+
+/* .layui-form-checked span, .layui-form-checked:hover span {
+	background-color: rgba(23, 119, 205, 1) !important;
+} */
+
+.jxc-section .aTitle:before {
+	background: #3FACB3 !important;
+}
+
+.layui-form-select dl dd.layui-this {
+	background-color: #3FACB3 !important;
+}
+
+.layui-form-radio>i:hover, .layui-form-radioed>i {
+	color: #3FACB3 !important;
+}
+
+.larryms-right .larryms-tab .larryms-title-box .larryms-btn-default i {
+	color: #3FACB3 !important;
+}
+
+.layui-grid-btn-xs{
+	color: #3FACB3;
+	cursor: pointer;
+}
+
+.layui-grid-div{
+	width: 200px !important;
+}
+.user-div{
+	width: 170px !important;
+}
+
+/*.laytable-cell-1-0-0{*/
+/*	width: 200px !important;*/
+/*}*/
+
+.shape-toolbar-boottom-float {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: 49px;
+	line-height: 49px;
+	padding-bottom: 10px;
+	background-color: white;
+	z-index: 1024;
+}
+
+.shape-toolbar-boottom-float>a.btn-toolbar-clear {
+	margin-left: 400px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	background-color: white !important;
+}
+
+.shape-toolbar-boottom-float>a.btn-toolbar-submit {
+	margin-left: 10px;
+	margin-top: 10px;
+	margin-bottom: 10px
+}
+
+.layui-input-inline-upload>div.box-rect {
+	margin-top: 8px;
+	cursor: default;
+}
+
+.layui-input-inline-upload>div.box-rect>div {
+	display:flex;
+	align-items:center;
+	justify-content:center;
+}
+
+.layui-input-inline-upload>div.box-rect-event, .layui-input-inline-upload>div>div.btn-event{
+	cursor: pointer;
+}
+
+.layui-input-inline-upload>div.box-rect>div>img.view-img{
+	width: 99%;
+	height: 99%;
+}
+
+.select-nobottom{
+	padding-bottom: 0 !important;
+}
+
+.select-option-float-btn{
+	text-align: center;
+	position: sticky;
+	left: 10px;
+	bottom: 0;
+	background-color: white !important;
+	color: black;
+}
+
+.table-empty-left {
+	margin-left: 0 !important;
+}
+
+.bottom-bar {
+
+}
+.layui-form-item .layui-inline {
+	display: flex;
+}
+
+.ren-body{
+	padding: 0 !important;
+}
+
+#rrapp{
+	border-radius: 8px;
+	/*padding-bottom: 0 !important;*/
+	padding: 20px !important;
+}
+
+.layui-table, .layui-table-view{
+	margin: 15px 0;
+}
+
+thead th .layui-table-cell {
+	font-size: 14px !important;
+	color: #000 !important;
+}
+
+.layui-table-cell{
+	height: 35px;
+	line-height: 35px;
+}
+
+
+.pdfview{
+	z-index: 198910202 !important;
+}
+/**
+	新增页面头部样式
+ */
+/*.layui-layer{*/
+/*	background-color: #f6f8f8 !important;*/
+/*}*/
+
+/*.layui-layer-title{*/
+/*	background-color: #f6f8f8 !important;*/
+/*}*/
+
+/*.layui-layer-title{*/
+/*	border: none !important;*/
+/*	!*background-color: #f6f8f8 !important;*!*/
+/*	padding: 0 40px 0 20px !important;*/
+/*	position: relative;*/
+/*	width: 60px !important;*/
+/*	height: 30px !important;*/
+/*	line-height: 30px !important;*/
+/*	background-color: #fff !important;*/
+/*	border-radius: 5px !important;*/
+/*	box-shadow: 5px 5px 5px #eaeaea !important;*/
+/*	margin: 0 0 15px 0 !important;*/
+/*	color: #333 !important;*/
+/*	font-weight: normal !important;*/
+/*}*/
+
+/*.layui-layer-setwin{*/
+/*	left: 80px;*/
+/*	top: 8px !important;*/
+/*}*/
+/*.layui-layer-setwin>.layui-layer-close1{*/
+/*	color: #fff !important;*/
+/*}*/

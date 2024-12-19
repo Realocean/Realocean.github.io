@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>车辆违章余额明细</title>
+        <script type="text/javascript" src="/statics/common/include/head.js"></script>
+    </head>
+    <body class="ren-body">
+        <div id="rrapp" v-cloak>
+            <!--搜索条件-->
+            <div class="list-search-title-box">
+                <form class="layui-form" style="box-shadow: 0 0 20px #eee;padding-right: 15px;">
+                    <section class="jxc-section" style="display: flex;align-items: flex-start;white-space: nowrap;">
+                        <div class="card layui-row" style="flex: 1">
+                            <div class="layui-form-item ">
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12"
+                                     style="margin-bottom: 5px !important">
+                                    <label class="layui-form-label">账户余额：</label>
+                                    <div class="layui-input-inline">
+                                        <label class="layui-form-label" style="font-weight:bold;font-size: 40px">{{balance}}元</label>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs12"
+                                     style="margin-bottom: 5px !important">
+                                    <label class="layui-form-label">开始日期：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal" readonly
+                                               id="startDate"
+                                               placeholder="请选择开始日期"
+                                               lay-verify="startDate"
+                                               v-model="q.startDate"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs12"
+                                     style="margin-bottom: 5px !important">
+                                    <label class="layui-form-label">结束日期：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal" readonly
+                                               id="endDate"
+                                               placeholder="请选择结束日期"
+                                               lay-verify="endDate"
+                                               v-model="q.endDate"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex;align-items: center;">
+                            <a class="layui-btn search-btn" @click="query">查询</a>
+                        </div>
+                    </section>
+                </form>
+            </div>
+            <!--搜索区按钮-->
+            <div class="list-search-title-box">
+                <form class="layui-form">
+                    <div style="display:flex;width: 100%;">
+                        <div class="layui-form-item layui-row">
+                            <div class="list-search-form-button">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <table class="layui-hide" id="grid" lay-filter="grid"></table>
+            <!-- 表单 -->
+            <form v-show="showForm" class="layui-form ren-form" id="editForm">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">金额</label>
+                    <div class="layui-input-block">
+                        <input type="number" lay-verify="required" v-model="consume" maxlength="50"
+                               placeholder="请输入金额" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="recharge" @click="recharge">确定</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </body>
+    <script src="/statics/js/modules/car/balanceRecordList.js?_${.now?long}"></script>
+</html>

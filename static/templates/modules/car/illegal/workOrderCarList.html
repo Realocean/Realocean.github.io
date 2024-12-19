@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>违章工单车辆列表</title>
+        <script type="text/javascript" src="/statics/common/include/head.js"></script>
+        <style>
+            .fm-daoru-title {
+                font-size: 16px;
+                border-left: 5px solid #3FACB3;
+                padding: 0 0 0 10px;
+                margin: 10px 0;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body class="ren-body">
+        <div id="rrapp">
+            <div class="layui-row layui-form-row-content">
+                <div class="fm-daoru-title">基础信息</div>
+                <div class="layui-inline layui-col-md3 layui-col-sm3 layui-col-xs3">
+                    <label>工单号：</label>
+                    <div class="layui-input-inline">
+                        <span>{{workOrderNo}}</span>
+                    </div>
+                </div>
+                <div class="layui-inline layui-col-md2 layui-col-sm2 layui-col-xs2">
+                    <label>提交人：</label>
+                    <div class="layui-input-inline">
+                        <span>{{commitMan}}</span>
+                    </div>
+                </div>
+                <div class="layui-inline layui-col-md7 layui-col-sm7 layui-col-xs7">
+                    <label>提交时间：</label>
+                    <div class="layui-input-inline">
+                        <span>{{commitTime}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row layui-form-row-content">
+                <div class="layui-inline layui-col-md3 layui-col-sm3 layui-col-xs3">
+                    <label>处理状态：</label>
+                    <div class="layui-input-inline">
+                        <span>{{processingStatusStr}}</span>
+                    </div>
+                </div>
+                <div class="layui-inline layui-col-md2 layui-col-sm2 layui-col-xs2">
+                    <label>处理时间：</label>
+                    <div class="layui-input-inline">
+                        <span>{{processingTime}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="fm-daoru-title">车辆信息</div>
+            <table class="layui-hide" id="grid" lay-filter="grid"></table>
+        </div>
+    </body>
+    <script src="/statics/js/modules/car/workOrderCarList.js?_${.now?long}"></script>
+</html>

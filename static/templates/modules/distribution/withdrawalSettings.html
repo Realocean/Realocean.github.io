@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>提现设置</title>
+        <meta charset="utf-8">
+        <script type="text/javascript" src="/statics/common/include/head.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../statics/css/new-edit.css">
+        <style>
+            .fm-daoru-title {
+                font-size: 16px;
+                /*border-left: 5px solid #3FACB3;*/
+                padding: 0 0 0 10px;
+                margin: 10px 0;
+                font-weight: bold;
+            }
+            .fm-daoru-title:before{
+                left: -1px;
+                top: 2px;
+            }
+            /*单选按钮提示文字*/
+            .u35_text{
+                font-family: 'Microsoft Tai Le';
+                font-weight: 400;
+                font-style: normal;
+                font-size: 14px;
+                color: rgba(0, 0, 0, 0.647058823529412);
+                text-align: left;
+                line-height: 22px;
+            }
+
+            .generate .layui-form-select{
+                width: 100px;
+            }
+            .label-span{
+                display: inline-block;
+                width:100px;
+                padding:0 12px;
+                box-sizing: border-box;
+            }
+            .gps .layui-input{
+                width:calc(100% - 100px);
+                display: inline-block;
+            }
+            .gpsItem{
+                margin-top: 0px;
+            }
+            .groundBtn .addBtn{
+                font-size: 18px;
+                font-weight: 700;
+                cursor: pointer;
+                color:#3FACB3;
+                margin-right:20px;
+            }
+            .groundBtn .delBtn{
+                font-weight: 700;
+                font-size: 18px;
+                cursor: pointer;
+                color:#3FACB3;
+            }
+            .sysColor{
+                color:#3FACB3;
+            }
+            .layui-form-radioed{
+                width: auto !important;
+            }
+        </style>
+    </head>
+    <body class="ren-body">
+    <div id="rrapp" v-cloak>
+        <!-- 新增表单 -->
+        <form class="layui-form ren-form" style="margin-bottom: 60px;">
+
+            <div class="form-content-box">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    提现相关设置
+                </div>
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md7 layui-col-sm7 layui-col-xs7">
+                                <div class="layui-input-inline">
+                                    <div class="fm-daoru-title">佣金提现</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md7 layui-col-sm7 layui-col-xs7">
+                                <div class="layui-input-inline">
+                                    <span>开启后，佣金可以提现：</span> <input type="checkbox" name="autoQueryIllegalEnable" lay-skin="switch"
+                                           lay-filter="withdrawalOnOff"
+                                           v-model="controlCenter.autoQueryIllegalEnable"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md7 layui-col-sm7 layui-col-xs7">
+                                <div class="layui-input-inline">
+                                    <div class="fm-daoru-title">佣金提现审核</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md7 layui-col-sm7 layui-col-xs7">
+                                <div class="layui-input-inline">
+                                    <span>开启后，佣金提现需要进行审核：</span> <input type="checkbox" name="autoQueryIllegalEnable" lay-skin="switch"
+                                                                    lay-filter="withdrawalApplyOnOff"
+                                                                    v-model="controlCenter.autoQueryIllegalEnable"/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md7 layui-col-sm7 layui-col-xs7">
+                                <div class="layui-input-inline">
+                                    提现金额限制：<input type="number" class="layui-input" v-model="withholdCenter.graceDays" style="width: 60px;display: inline-block"/>
+                                    至 <input type="number" class="layui-input" v-model="withholdCenter.lateRatio" style="width: 60px;display: inline-block"/>
+
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md7 layui-col-sm7 layui-col-xs7">
+                                <div class="layui-input-inline">
+                                    提现手续费比例：<input type="number" class="layui-input" v-model="withholdCenter.graceDays" style="width: 60px;display: inline-block"/>
+                                    %
+                                </div>
+                            </div>
+
+                            <div class="layui-inline layui-col-md7 layui-col-sm7 layui-col-xs7">
+                                <div class="layui-input-inline">
+                                    月提现次数：<input type="number" class="layui-input" v-model="withholdCenter.graceDays" style="width: 60px;display: inline-block"/>
+                                    次
+                                </div>
+                            </div>
+
+                            <div class="layui-inline layui-col-md7 layui-col-sm7 layui-col-xs7">
+                                <div class="layui-input-inline">
+                                    提现支持账户：
+                                    <input type="checkbox" name="types[1]"  lay-filter="supportType" lay-skin="primary" title="微信支付" value="1">
+                                    <input type="checkbox" name="types[2]"  lay-filter="supportType" lay-skin="primary" title="支付宝" value="2">
+                                    <input type="checkbox" name="types[3]"  lay-filter="supportType" lay-skin="primary" title="线下支付" value="3">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+           
+            <div class="float-btn-group bottom-bar">
+                <a class="layui-btn search-btn" lay-submit @click="saveOrUpdate">保存</a>
+            </div>
+        </form>
+    </div>
+    <script type="text/html" id="barTplArea">
+        <div>
+            <a class="layui-grid-btn-xs" lay-event="areaEdit">修改</a>
+            <a class="layui-grid-btn-xs" lay-event="areaDel">删除</a>
+        </div>
+    </script>
+    <script type="text/html" id="barTplKeys">
+        <div>
+            <a class="layui-grid-btn-xs" lay-event="keysEdit">修改</a>
+            <a class="layui-grid-btn-xs" lay-event="keysDel">删除</a>
+        </div>
+    </script>
+    <script type="text/html" id="barTplStaffing">
+            <a class="layui-grid-btn-xs" lay-event="staffingDel">删除</a>
+    </script>
+    <script type="text/html" id="barTplStaffingCheck">
+        <input type="checkbox" name="status" lay-filter="status" data-id="{{d.id}}" data-enableFlag="{{d.enableFlag}}" lay-skin="switch" lay-text="启用|禁用" {{d.enableFlag == 1 ? 'checked' : ''}}>
+    </script>
+    <script src="../../statics/js/modules/distribution/withdrawalSettings.js?_${.now?long}"></script>
+    </body>
+</html>

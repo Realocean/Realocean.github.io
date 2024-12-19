@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>用户管理</title>
+	<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/new-edit.css">
+
+
+
+
+
+	<style>
+		.ztree li ul.line{ height: 80%; }
+	</style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+	<!-- 表单 -->
+	<form v-show="showForm" class="layui-form" id="editForm">
+		<div class="form-content-box">
+			<div class="list-search-sup-title new-layui-title border-bottom-dashed">
+				<span class="fm-daoru-title">基础信息</span>
+			</div>
+			<div class="form-content-session-box">
+				<div class="card">
+					<div class="layui-row layui-form-row-content">
+						<div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+							<label class="layui-form-label">用户名<span style="color:red;">*</span>：</label>
+							<div class="layui-input-inline">
+								<input type="text" lay-verify="username" v-model="user.username"  maxlength="50"  placeholder="请输入用户名" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+							<label class="layui-form-label">密码<span style="color:red;">*</span>：</label>
+							<div class="layui-input-inline">
+								<input type="text" lay-verify="password" style="border: none;" class="layui-input searchVal" v-model="user.password" placeholder="密码"   readonly>
+								<a class="layui-btn search-btn" @click="refreshPassword" v-show="user.userId != null">恢复初始密码</a>
+							</div>
+						</div>
+						<div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+							<label class="layui-form-label">姓名：</label>
+							<div class="layui-input-inline">
+								<input type="text"  v-model="user.realname" maxlength="50"  placeholder="请输入用户姓名" class="layui-input" >
+							</div>
+						</div>
+
+						<div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+							<label class="layui-form-label">手机号<span style="color:red;">*</span>：</label>
+							<div class="layui-input-inline">
+								<input type="text" lay-verify="phone" v-model="user.mobile" maxlength="11"  placeholder="请输入手机号" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+							<label class="layui-form-label">邮箱：</label>
+							<div class="layui-input-inline">
+								<input type="text"   v-model="user.email" lay-verify="emailV"   placeholder="请输入邮箱" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+							<label class="layui-form-label">所属公司/部门<span style="color:red;">*</span>：</label>
+							<div class="layui-input-inline">
+								<input type="text" lay-verify="deptName"  v-model="user.deptName" @click="deptTree" readonly="readonly" placeholder="所属部门" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+							<label class="layui-form-label">合作商：</label>
+							<div class="layui-input-inline">
+								<input type="text"  v-model="user.officialPartner" maxlength="50"  placeholder="请输入合作商" class="layui-input" >
+							</div>
+						</div>
+						<div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+							<label class="layui-form-label">用户状态<span style="color:red;">*</span>：</label>
+							<div class="layui-input-inline">
+								<input type="checkbox" v-model="user.status" lay-filter="status" lay-verify="status"  lay-skin="switch" lay-text="正常|禁用">
+							</div>
+						</div>
+						<div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+							<label class="layui-form-label">管理员(是/否)：</label>
+							<div class="layui-input-inline">
+								<input type="radio" name="type" :value="0" v-model="user.isAdmin" title="否" lay-filter="choiceRadio">
+								<input type="radio" name="type" :value="1" v-model="user.isAdmin" title="是" lay-filter="choiceRadio">
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-content-box">
+			<div class="list-search-sup-title new-layui-title border-bottom-dashed">
+				<span class="fm-daoru-title">小程序二维码</span>
+			</div>
+			<div class="form-content-session-box">
+				<div class="card">
+					<div class="layui-row form-group">
+						<div class="layui-input-inline-upload" v-show="user.wxQrcode != null">
+							<div  class="layui-input-inline-upload-show box-rect">
+								<div  class="layui-input-inline-upload-button">
+									<img :src="imageURL + user.wxQrcode" class="view-img">
+								</div>
+								<div>
+									<div style="width: 49%;" @click="downDoc(user.username+'二维码.jpeg',user.wxQrcode)" class="layui-input-inline-upload-show-delete btn-event">下载</div>
+									<div style="width: 50%;margin-left:51%;" @click="showDoc(user.username+'二维码',user.wxQrcode)" class="layui-input-inline-upload-show-delete btn-event">预览</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+
+
+		<div class="form-content-box">
+			<div class="list-search-sup-title new-layui-title border-bottom-dashed">
+				<span class="fm-daoru-title">权限设置</span> <span style="font-size: 16px;">&nbsp;&nbsp;&nbsp;权限说明：权限分为操作权限和数据权限，操作权限和角色关联，选择对应角色就可进行对应功能操作，数据权限是指当前用户可以看到的数据</span>
+			</div>
+			<div class="form-content-session-box">
+				<div class="card">
+					<div class="layui-row layui-form-row-content">
+						<div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+							<label class="layui-form-label">账户角色<span style="color:red;">*</span>：</label>
+							<div class="layui-input-inline">
+								<span v-for="role in roleList">
+									<input type="checkbox" :value="role.roleId"  lay-filter="roleIdList" lay-verify="roleIdList" v-model="user.roleIdList" :title="role.roleName" >
+								</span>
+							</div>
+						</div>
+						<div class="layui-row layui-form-row-content">
+							<div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+								<label class="layui-form-label">数据权限：</label>
+								<div class="layui-input-inline">
+									    <div>
+											<input type="radio" name="permissionsType"  lay-filter="permissionsType" lay-verify="permissionsType" v-model="user.permissionsType" value="3" title="全公司">
+											<i @mouseout.stop="mouseout" @mousemove="move(1)" class="layui-icon layui-icon-about"
+											   style="color: #3FACB3" id="LAY_layedit_code1"></i>
+										</div>
+									    <div>
+											<input type="radio" name="permissionsType" lay-filter="permissionsType" lay-verify="permissionsType" v-model="user.permissionsType"  value="1" title="自己" >
+											<i @mouseout.stop="mouseout" @mousemove="move(2)" class="layui-icon layui-icon-about"
+											   style="color: #3FACB3" id="LAY_layedit_code2"></i>
+										</div>
+									     <div>
+											 <input type="radio" name="permissionsType" lay-filter="permissionsType" lay-verify="permissionsType" v-model="user.permissionsType"  value="2" title="所属部门">
+											 <i @mouseout.stop="mouseout" @mousemove="move(3)" class="layui-icon layui-icon-about"
+												style="color: #3FACB3" id="LAY_layedit_code3"></i>
+										 </div>
+									    <div>
+											<input type="radio" name="permissionsType"  lay-filter="permissionsType" lay-verify="permissionsType" v-model="user.permissionsType" value="4" title="指定公司/部门">
+											<i @mouseout.stop="mouseout" @mousemove="move(4)" class="layui-icon layui-icon-about"
+											   style="color: #3FACB3" id="LAY_layedit_code4"></i>
+
+										</div>
+								</div>
+							</div>
+						</div>
+						<div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="showPermissions">
+							<label class="layui-form-label">选择数据权限<span style="color:red;">*</span>：</label>
+							<div class="layui-input-inline">
+								<ul id="dataTree" class="ztree" style="overflow:auto;"></ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="float-btn-group bottom-bar" style="margin-top:100px;">
+			<a class="layui-btn reset-btn"  @click="closePage" >取消</a>
+			<a class="layui-btn search-btn" lay-submit lay-filter="saveOrUpdate">提交</a>
+		</div>
+	</form>
+</div>
+
+<!-- 选择部门 -->
+<div id="deptLayer" style="display: none;padding:10px;">
+	<ul id="deptTree" class="ztree"></ul>
+</div>
+<script type="text/javascript" src="../../statics/js/modules/sys/useredit.js"></script>
+</body>
+</html>

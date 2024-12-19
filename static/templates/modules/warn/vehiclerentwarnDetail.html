@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>车辆租金预警详情</title>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="Author" content="larry"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+    <script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+    <script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/common.js"></script>
+    <script type="text/javascript" src="../../statics/js/upload.js"></script>
+    <script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+    <link rel="stylesheet" href="../../statics/new_css/jxcPublicAll.css" media="all">
+    <link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../statics/common/step/steps.css">
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/viewer.min.css">
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+    <script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+    <script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+    <script src="../../statics/common/layui/autocomplete.js"></script>
+    <script src="../../statics/js/modules/viewer/viewer.min.js"></script>
+    <script src="../../statics/common/print-js/print.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+    <script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/searchview.js"></script>
+    <script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+    <!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+    <!-- 引入组件库 -->
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/common-new.css">
+
+
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <!--查看 -->
+    <div class="details-tab-content">
+        <div class="details-tab-content-box display">
+
+            <div class="layui-tab">
+                <ul class="layui-tab-title">
+                    <li :class="0==index?'layui-this':''" @click="detailsTabContentBindtap(index)"
+                        v-for="(item, index) in detailsSupTabContentList" :key="index">{{ item }}
+                    </li>
+                </ul>
+            </div>
+
+            <!--            <div-->
+            <!--                    class="flex"-->
+            <!--                    v-for="(item, index) in detailsTabContentList"-->
+            <!--                    :key="index"-->
+            <!--                    :class="index === detailsTabContentListActiveIndex ? 'active1A51FF' : ''"-->
+            <!--                    @click="detailsTabContentBindtap(index)">-->
+            <!--                {{ item }}-->
+            <!--                <div>-->
+            <!--                    <div :class="index === detailsTabContentListActiveIndex ? 'details-tab-content-box-absolute-bottom' : ''"></div>-->
+            <!--                </div>-->
+            <!--            </div>-->
+        </div>
+    </div>
+
+    <div class="details-conteiner">
+        <div
+                class="details-content-box"
+                v-show="detailsSupTabContentListActiveValue === '租金记录信息'">
+            <div class="left-before">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    租金记录信息
+                </div>
+            </div>
+            <form class="layui-form">
+                <div class="details-layui-row">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">合同编号:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="选择车牌号自动获取"
+                                        v-model="vehiclerentwarn.contractNo"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">车辆用途:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="选择车牌号自动获取"
+                                        v-model="vehiclerentwarn.leaseType"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">发车单号:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="选择车牌号自动获取"
+                                        v-model="vehiclerentwarn.carOrderNo"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">售卖方:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="选择车牌号自动获取"
+                                        v-model="vehiclerentwarn.lessorName"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">购买方:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="选择车牌号自动获取"
+                                        v-model="vehiclerentwarn.customerName"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">联系电话:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="选择车牌号自动获取"
+                                        v-model="vehiclerentwarn.concatMobile"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">付款方式:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="选择车牌号自动获取"
+                                        v-model="vehiclerentwarn.paymentMethod"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">交租日期:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="选择车牌号自动获取"
+                                        v-model="vehiclerentwarn.deliveryDate"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">已收款金额:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="选择车牌号自动获取"
+                                        v-model="vehiclerentwarn.receiveAmount"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">应付总金额:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="选择车牌号自动获取"
+                                        v-model="vehiclerentwarn.receivableAmount"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">欠款类型:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="选择车牌号自动获取"
+                                        v-model="vehiclerentwarn.collectionType"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">欠款总金额:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="选择车牌号自动获取"
+                                        v-model="vehiclerentwarn.uncollectedAmount"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">逾期总天数:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="选择车牌号自动获取"
+                                        v-model="vehiclerentwarn.overdueDay"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">车辆订单状态:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="选择车牌号自动获取"
+                                        v-model="vehiclerentwarn.carStatus"
+                                        disabled/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="details-layui-row">
+                <div class="table">
+                    <table class="layui-hide" id="vehicleRentTable"></table>
+                </div>
+            </div>
+        </div>
+
+        <div class="details-content-box"
+             v-show="detailsSupTabContentListActiveValue === '消息提醒记录'">
+            <div class="left-before">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    消息提醒记录
+                </div>
+            </div>
+
+            <div class="details-layui-row">
+                <div class="table">
+                    <table class="layui-hide" id="msg1List" lay-filter="msg1List"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script src="../../statics/js/modules/warn/vehiclerentwarnDetail.js?_${.now?long}"></script>
+</body>
+</html>

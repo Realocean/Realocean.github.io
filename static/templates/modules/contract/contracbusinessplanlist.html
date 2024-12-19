@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>企业合同车型方案</title>
+<#include "/header.html">
+    <style>
+        .layui-table-cell {
+            padding:0 5px;
+            height:inherit;
+            overflow:visible;
+            text-overflow:inherit;
+            white-space:normal;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <div class="list-search-title-box">
+        <div class="list-search-sup-title">
+            筛选条件
+        </div>
+        <form class="layui-form" id="searchId">
+            <div style="display: flex;align-items: center;justify-content: center;">
+                <div class="layui-form-item layui-row">
+                    <div class="list-search-form-button">
+                        <a class="layui-btn search-btn" id="query">查询</a>
+                        <a class="layui-btn reset-btn" id="reset">重置</a>
+                        <#if shiro.hasPermission("contract:contracbusinessplan:export")>
+                        <a class="layui-btn search-btn" id="exports">导出</a>
+                        </#if>
+                        <#if shiro.hasPermission("contract:contracbusinessplan:inport")>
+                        <a class="layui-btn reset-btn" id="inports">导入</a>
+                        </#if>
+                        <#if shiro.hasPermission("contract:contracbusinessplan:save")>
+                        <a class="layui-btn search-btn" @click="add">新增</a>
+                        </#if>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="list-table-content-box">
+        <table class="layui-hide" id="grid" lay-filter="grid"></table>
+    </div>
+    <form id="downLoadXls" style="display: none" method="post" target="">
+        <input type="text" name="datas"/>
+    </form>
+</div>
+
+<!--操作-->
+<script type="text/html" id="barTpl">
+    <#if shiro.hasPermission("contract:contracbusinessplan:info")>
+    <a class="layui-grid-btn-xs" lay-event="view">查看</a>
+    </#if>
+    <#if shiro.hasPermission("contract:contracbusinessplan:update")>
+    <a class="layui-grid-btn-xs" lay-event="edit">编辑</a>
+    </#if>
+    <#if shiro.hasPermission("contract:contracbusinessplan:delete")>
+    <a class="layui-grid-btn-xs" lay-event="del">删除</a>
+    </#if>
+</script>
+
+<script src="${request.contextPath}/statics/js/modules/contract/contracbusinessplanlist.js?_${.now?long}"></script>
+</body>
+</html>

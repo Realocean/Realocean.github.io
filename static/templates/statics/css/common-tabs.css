@@ -1,0 +1,47 @@
+.list-header-card .flex {
+    width:100%;
+    max-width:210px;
+    text-align: center;
+    border: 1px solid #BED7DE;
+    border-radius: 8px;
+    height:62px !important;
+    margin: 8px 16px 8px 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #000;
+}
+.list-header-card .flex.active {
+    border: 1px solid #3FACB3;
+    background: #3FACB3;
+    color: #fff;
+    height:62px !important;
+    box-shadow: 0 0;
+}
+.list-header-card .flex:hover {
+    box-shadow: 0 0 10px #c7c6c6;
+}
+
+.list-header-content-box{
+    background-color: #fff;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+.list-header-card, .list-header-sub-card{
+    padding:0;
+    margin-top:0;
+}
+
+.list-header-card-title{
+    font-size: 16px;
+    margin-top: 0;
+}
+
+
+.list-header-card-count{
+    font-size: 18px;
+    margin: 3px 0 0 0;
+    font-weight: bold;
+}

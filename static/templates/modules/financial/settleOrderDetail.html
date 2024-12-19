@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>结算单详情</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common-new.css">
+
+
+
+
+
+
+        </head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <!--查看 -->
+    <div class="details-tab-content">
+        <div class="details-tab-content-box display">
+
+            <div class="layui-tab">
+                <ul class="layui-tab-title">
+                    <li :class="0==index?'layui-this':''" @click="detailsTabContentBindtap(index)"
+                        v-for="(item, index) in detailsTabContentList" :key="index">{{ item }}
+                    </li>
+                </ul>
+            </div>
+<!--            <div-->
+<!--                    class="flex"-->
+<!--                    v-for="(item, index) in detailsTabContentList"-->
+<!--                    :key="index"-->
+<!--                    :class="index === detailsTabContentListActiveIndex ? 'active1A51FF' : ''"-->
+<!--                    @click="detailsTabContentBindtap(index)">-->
+<!--                {{ item }}-->
+<!--                <div>-->
+<!--                    <div :class="index === detailsTabContentListActiveIndex ? 'details-tab-content-box-absolute-bottom' : ''"></div>-->
+<!--                </div>-->
+<!--            </div>-->
+        </div>
+    </div>
+
+    <div class="details-conteiner">
+        <!-- 年检详情 -->
+        <div class="details-content-box"
+             v-show="detailsSupTabContentListActiveValue === '详情'">
+
+            <div class="left-before">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    结算单详情
+                    <div class="fr display ">
+                        <div class="details-layui-fr-sup-title">
+                            <span style="color:red;">状态：</span>
+                            <span style="color:red;">{{status}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form class="layui-form">
+                <div class="details-layui-row">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">合同编号:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        :value="list.contractNo || '--'"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">车辆订单号:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="list.vehicleOrderNo"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">结算单号:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="list.settleOrderNo"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">结算方名称:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="list.settlePersonName"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">结算方类型:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="list.settlePersonType"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">售卖方名称:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="list.lessor"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">租赁类型:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="list.leaseType"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">付款方式:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        :value="list.paymentMethod || '--'"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div v-if="list.leaseType != '融租'"
+                             class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">付款日:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="list.paymentDay"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">车辆品牌/车系:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="list.brand"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">车型:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="list.carModel"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">车牌号:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="list.carNo"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">车架号:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="list.vinNo"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">随身物品:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        :value="list.accessoryItems || '--'"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div v-if="list.leaseType == '以租代购'"
+                             class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">整备费/元:</label>
+                            <div class="layui-input-inline" v-if="list.settleType != 3">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="list.downPayment"
+                                        disabled/>
+                            </div>
+                            <div class="layui-input-inline" v-if="list.settleType == 3">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="list.spareCarFeeItem.servicingFee"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div v-if="list.leaseType == '融租'"
+                             class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">首付款/元:</label>
+                            <div class="layui-input-inline" v-if="list.settleType != 3">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="list.downPayment"
+                                        disabled/>
+                            </div>
+                            <div class="layui-input-inline" v-if="list.settleType == 3">
+                                <input
+                                       type="text"
+                                       class="layui-input searchVal"
+                                       v-model="list.spareCarFeeItem.downPayment"
+                                       disabled/>
+                            </div>
+                        </div>
+                        <div v-if="list.leaseType != '以租代购' && list.leaseType != '融租' && list.leaseType != '挂靠'"
+                             class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">保证金/元:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="list.cashDeposit"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label" v-if="list.leaseType == '挂靠'">挂靠费/元:</label>
+                            <label class="layui-form-label" v-if="list.leaseType != '挂靠'">租金/元:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        :value="list.monthlyRent || '0'"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">租赁开始时间:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="list.timeStartRent"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">租赁结束时间:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="list.timeFinishRent"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">退款类型:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="list.settleTypeShow"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">退车时间:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="list.timeApply"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">退款/收款日期:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="list.refundTime"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4" v-show="returnTypeDiv">
+                            <label class="layui-form-label">退车类型:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="list.returnType"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">退换车原因:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="list.alterationDesc"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">退车附件:</label>
+                            <div class="layui-input-inline">
+                                <a class="layui-btn layui-btn-radius " @click="viewAccessory">附件查看</a>
+                                <!-- <a class="layui-btn layui-btn-normal"  @click="download">文档下载</a>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div class="left-before margintop30">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    退车结算费用明细
+                    <div class="fr display ">
+                        <div class="details-layui-fr-sup-title">
+                            <span style="color:red;">{{settleName}}</span>
+                            <span style="color:red;">{{list.settleMoney}}元</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form class="layui-form">
+                <div class="details-layui-row">
+                    <!-- v-show="list.settleType != 3"-->
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4"
+                             v-for="(item,i) in list.feeItems">
+                            <label class="layui-form-label">{{list.leaseType == '挂靠' && item.feeItemCode == 'ZJQKF'?'车辆挂靠费欠款金额/元':item.feeItemName}}:</label>
+                            <div v-if="item.valueType == 1" class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        :value="item.feeItemAmount || '0'"
+                                        disabled/>
+                            </div>
+                            <div v-if="item.valueType == 2" class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        :value="item.feeItemValue || '--'"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                            <label class="layui-form-label">费用说明:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        :value="list.feeDesc || '--'"
+                                        disabled/>
+                            </div>
+                        </div>
+                    </div>
+                    <!--                    <div v-if="list.settleType == 3 && list.spareCarFeeItem != null"-->
+                    <!--                         class="layui-row layui-form-row-content">-->
+                    <!--                        <div v-if="list.leaseType != 2 && list.spareCarFeeItem.margin != null && list.spareCarFeeItem.margin != '' && list.leaseType != '挂靠'"-->
+                    <!--                             class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+                    <!--                            <label class="layui-form-label">可退保证金:</label>-->
+                    <!--                            <div class="layui-input-inline">-->
+                    <!--                                <input-->
+                    <!--                                        type="text"-->
+                    <!--                                        class="layui-input searchVal"-->
+                    <!--                                        :value="list.spareCarFeeItem.margin || '0'"-->
+                    <!--                                        disabled/>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+                    <!--                            <label class="layui-form-label" v-if="list.leaseType == '挂靠'">车辆挂靠费欠款金额:</label>-->
+                    <!--                            <label class="layui-form-label" v-if="list.leaseType != '挂靠'">车辆租金欠款金额:</label>-->
+                    <!--                            <div class="layui-input-inline">-->
+                    <!--                                <input-->
+                    <!--                                        type="text"-->
+                    <!--                                        class="layui-input searchVal"-->
+                    <!--                                        :value="list.spareCarFeeItem.rentPay || '0'"-->
+                    <!--                                        disabled/>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+                    <!--                            <label class="layui-form-label">车辆违章分数:</label>-->
+                    <!--                            <div class="layui-input-inline">-->
+                    <!--                                <input-->
+                    <!--                                        type="text"-->
+                    <!--                                        class="layui-input searchVal"-->
+                    <!--                                        :value="list.spareCarFeeItem.illegalScore || '0'"-->
+                    <!--                                        disabled/>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+                    <!--                            <label class="layui-form-label">车辆违章费用:</label>-->
+                    <!--                            <div class="layui-input-inline">-->
+                    <!--                                <input-->
+                    <!--                                        type="text"-->
+                    <!--                                        class="layui-input searchVal"-->
+                    <!--                                        :value="list.spareCarFeeItem.illegalFee || '0'"-->
+                    <!--                                        disabled/>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+                    <!--                            <label class="layui-form-label">车辆出险次数:</label>-->
+                    <!--                            <div class="layui-input-inline">-->
+                    <!--                                <input-->
+                    <!--                                        type="text"-->
+                    <!--                                        class="layui-input searchVal"-->
+                    <!--                                        :value="list.spareCarFeeItem.outInsurance || '0'"-->
+                    <!--                                        disabled/>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+                    <!--                            <label class="layui-form-label">车辆出险费用:</label>-->
+                    <!--                            <div class="layui-input-inline">-->
+                    <!--                                <input-->
+                    <!--                                        type="text"-->
+                    <!--                                        class="layui-input searchVal"-->
+                    <!--                                        :value="list.spareCarFeeItem.outFee || '0'"-->
+                    <!--                                        disabled/>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+                    <!--                            <label class="layui-form-label">车辆定损实际金额:</label>-->
+                    <!--                            <div class="layui-input-inline">-->
+                    <!--                                <input-->
+                    <!--                                        type="text"-->
+                    <!--                                        class="layui-input searchVal"-->
+                    <!--                                        :value="list.spareCarFeeItem.actualFee || '0'"-->
+                    <!--                                        disabled/>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+                    <!--                            <label class="layui-form-label">车辆可抵扣金额:</label>-->
+                    <!--                            <div class="layui-input-inline">-->
+                    <!--                                <input-->
+                    <!--                                        type="text"-->
+                    <!--                                        class="layui-input searchVal"-->
+                    <!--                                        :value="list.spareCarFeeItem.discountFee || '0'"-->
+                    <!--                                        disabled/>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+                    <!--                            <label class="layui-form-label">车辆其它欠款金额:</label>-->
+                    <!--                            <div class="layui-input-inline">-->
+                    <!--                                <input-->
+                    <!--                                        type="text"-->
+                    <!--                                        class="layui-input searchVal"-->
+                    <!--                                        :value="list.spareCarFeeItem.otherFee || '0'"-->
+                    <!--                                        disabled/>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+                    <!--                            <label class="layui-form-label">车辆违约金额:</label>-->
+                    <!--                            <div class="layui-input-inline">-->
+                    <!--                                <input-->
+                    <!--                                        type="text"-->
+                    <!--                                        class="layui-input searchVal"-->
+                    <!--                                        :value="list.spareCarFeeItem.defaultFee || '0'"-->
+                    <!--                                        disabled/>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">-->
+                    <!--                            <label class="layui-form-label">费用说明:</label>-->
+                    <!--                            <div class="layui-input-inline">-->
+                    <!--                                <input-->
+                    <!--                                        type="text"-->
+                    <!--                                        class="layui-input searchVal"-->
+                    <!--                                        :value="list.spareCarFeeItem.feeDesc || '0'"-->
+                    <!--                                        disabled/>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+
+                </div>
+            </form>
+
+        </div>
+
+        <!-- 操作记录 -->
+        <div class="details-content-box"
+             v-show="detailsSupTabContentListActiveValue === '操作记录'">
+
+            <div class="left-before">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    操作记录
+                </div>
+            </div>
+
+            <form class="layui-form" v-show="operationLog">
+                <div class="details-layui-row">
+                    <div class="layui-row layui-form-row-content">
+                        <table class="layui-hide" id="log" lay-filter="log"></table>
+                    </div>
+                </div>
+            </form>
+
+            <div class="details-layui-row" v-if="false">
+                <div class="table">
+                    <table class="layui-hide" id="operationRecord"></table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="../../statics/js/modules/financial/settleOrderDetail.js"></script>
+</body>
+</html>

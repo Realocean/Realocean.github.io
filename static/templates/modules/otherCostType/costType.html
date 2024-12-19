@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>其他费用类型</title>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/new_css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/new-edit.css">
+
+
+
+
+	<style>
+		.layui-inline {
+			margin-bottom: 5px !important;
+		}
+		.layui-form-radio {
+			width: 100px !important;
+		}
+	</style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+	<div class="mvvm-table">
+		<div class="list-search-title-box">
+			<form class="layui-form" style="box-shadow: 0 0 20px #eee;padding-right: 15px;">
+				<section class="jxc-section" style="display: flex;align-items: flex-start;white-space: nowrap;">
+					<div class="card layui-row" style="flex: 1">
+						<div class="layui-form-item ">
+							<div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12" style="margin-bottom: 5px !important">
+								<div class="layui-input-inline">
+									<input type="text" class="layui-input searchVal" v-model="q.costName" @keyup.enter="query" placeholder="费用名称" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div style="display: flex;align-items: center;">
+						<a class="layui-btn search-btn" @click="query">查询</a>
+						<a class="layui-btn search-btn" @click="reset">重置</a>
+					</div>
+				</section>
+			</form>
+		</div>
+		<div class="list-search-title-box">
+			<form class="layui-form">
+				<div style="display:flex;width: 100%;">
+					<div class="layui-form-item layui-row" style="width: 100%;">
+						<div class="list-search-form-button" style="width: 100%;">
+							<a class="layui-btn btn-primary" @click="add" v-m-perm="['otherCostType:costType:save']">新增</a>
+							<!--<a class="layui-btn btn-warning delBatch" v-m-perm="['sys:schedule:delete']">批量删除</a>
+							<a class="layui-btn btn-success logList" v-m-perm="['sys:schedule:log']">日志列表</a>-->
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<table class="layui-hide" id="grid" lay-filter="grid"></table>
+	</div>
+	<!-- 表单 -->
+	<form v-show="showForm" class="layui-form ren-form" id="editForm">
+
+		<div class="card">
+			<div class="layui-row layui-form-row-content">
+				<div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+					<label class="layui-form-label"><span style="color:red;">*</span>费用名称:</label>
+					<div class="layui-input-inline layui-input-inline-change">
+						<input type="text" lay-verify="costName" v-model="costType.costName" maxlength="50" autocomplete="off" placeholder="费用名称" class="layui-input">
+					</div>
+				</div>
+			</div>
+			<div class="layui-row layui-form-row-content">
+				<div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+					<label class="layui-form-label"><span style="color:red;">*</span>费用归类:</label>
+					<div class="layui-input-inline" style="background-color: #fff;">
+						<div class="layui-input-inline-checkbox" id="accessoryGroup"></div>
+					</div>
+				</div>
+			</div>
+
+
+			<!--<div class="layui-row layui-form-row-content">
+				<div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+					<label class="layui-form-label"><span style="color:red;">*</span>费用归类:</label>
+					<div class="layui-block">
+						<input type="radio" lay-verify="costTypes"  lay-filter="platform" name="platform"
+							   v-for="item in costTypeDict" :value="item.key"
+							   v-model="costType.costType"
+							   lay-skin="primary" :title="item.label"/>
+					</div>
+				</div>
+			</div>-->
+		</div>
+
+		<div class="layui-form-item">
+			<div class="layui-input-block">
+				<button class="layui-btn" lay-submit lay-filter="saveOrUpdate">确定</button>
+				<button class="layui-btn" @click="cancel">取消</button>
+			</div>
+		</div>
+	</form>
+</div>
+
+
+<!--操作-->
+<script type="text/html" id="barTpl">
+	{{#if(d.startOrStop==1){}}
+	<a class="layui-grid-btn-xs" lay-event="start" v-m-perm="['otherCostType:costType:startOrStop']">启用</a>
+	<a class="layui-grid-btn-xs" lay-event="edit" v-m-perm="['otherCostType:costType:update']" >编辑</a>
+	<a class="layui-grid-btn-xs" lay-event="del" v-m-perm="['otherCostType:costType:deleteById']" >删除</a>
+	{{#}else{}}
+	<a class="layui-grid-btn-xs" lay-event="stop" v-m-perm="['otherCostType:costType:startOrStop']" >禁用</a>
+	{{#}}}
+</script>
+
+<script src="../../statics/js/modules/otherCostType/costType.js?_${.now?long}"></script>
+</body>
+</html>

@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>企业客户信息表</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <div class="approval-container">
+        <div class="approval-process">
+            <div class="initiate-node node-box">
+                <div class="title">{{ approvalNode.title }}</div>
+                <div class="content">
+                    发起人：
+                    <span>{{ approvalNode.person }}</span>
+                    <div class="right-arrow">
+                        <img src="../../statics/images/reght-arrow.png" alt="">
+                    </div>
+                </div>
+                <div class="step-content">
+                    <div class="line"></div>
+                    <div class="add-button" @click="addApprovalContentBindtap()">+</div>
+                    <div class="line-bottom">
+                        <img src="../../statics/images/step-bottom.png" alt="">
+                    </div>
+                    <div
+                        class="add-approval-content"
+                        v-if="addApprovalContentShow">
+                        <div @click="addApprovalNodesBindtap">
+                            <span class="img"></span>
+                            审批节点
+                        </div>
+                        <div @click="addTranslationsNodesBindtap">
+                            <span class="img"></span>
+                            抄送节点
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="node-box"
+                v-for="(item, index) in 10"
+                :key="item.index"
+                :class="index === 3 || index === 9 ? 'translations-node' : 'approval-node'">
+                <div class="title">{{ approvalNode.title }}</div>
+                <div class="content">
+                    {{ index === 3 || index === 9 ? '抄送人：' : '审批人：' }}
+                    <span>{{ approvalNode.person }}{{ index }}</span>
+                    <div v-if="index === 3 || index === 9" class="right-arrow" @click="addTranslationsNodesBindtap">
+                        <img src="../../statics/images/reght-arrow.png" alt="">
+                    </div>
+                    <div v-else class="right-arrow" @click="addApprovalNodesBindtap">
+                        <img src="../../statics/images/reght-arrow.png" alt="">
+                    </div>
+                </div>
+                <div class="step-content">
+                    <div class="line"></div>
+                    <!-- <div class="add-button">+</div> -->
+                    <div class="line-bottom">
+                        <img src="../../statics/images/step-bottom.png" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="end-approval">
+                <div>流程结束</div>
+            </div>
+        </div>
+    </div>
+    <div class="list-header-content-box">
+        <div class="list-header-card display">
+            <div
+                v-for="item in 5"
+                :key="item"
+                class="flex">
+                <div class="list-header-card-text">全部车辆</div>
+                <div class="list-header-card-number">2</div>
+            </div>
+        </div>
+        <div class="list-header-sub-card">
+            <div v-for="item in 4" :key="item">
+                <div class="list-header-sub-card-text">全部车辆</div>
+                <div class="list-header-sub-card-number">2</div>
+            </div>
+        </div>
+    </div>
+<!--    <blockquote class="layui-elem-quote quoteBox">-->
+    <div class="list-search-title-box">
+        <div class="list-search-sup-title">
+            筛选条件
+        </div>
+        <form class="layui-form">
+            <section class="jxc-section">
+                <div class="card">
+                    <div class="layui-form-item layui-row">
+                        <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs12">
+                            <label class="layui-form-label">222供应商名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" v-model="q.supplierName"
+                                       placeholder="请输入供应商名称"/>
+                            </div>
+                        </div>
+                        <!-- <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs12">
+                            <label class="layui-form-label">类型</label>
+                            <div class="layui-input-inline">
+                                <select name="type" lay-filter="types" v-model="q.type">
+                                    <option value="">全部</option>
+                                    <option value=1>内部</option>
+                                    <option value=2>外部</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs12">
+                            <label class="layui-form-label">审核状态</label>
+                            <div class="layui-input-inline">
+                                <select name="auditStatus" lay-filter="auditStatus" v-model="q.auditStatus">
+                                    <option value="">全部</option>
+                                    <option value=0>草稿</option>
+                                    <option value=1>审核中</option>
+                                    <option value=2>已审核</option>
+                                    <option value=3>审核不通过</option>
+                                    <option value=4>退回修改</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs12">
+                            <label class="layui-form-label">启用</label>
+                            <div class="layui-input-inline">
+                                <select name="isUse" lay-filter="isUse" v-model="q.isUse">
+                                    <option value="">全部</option>
+                                    <option value=0>启用</option>
+                                    <option value=1>停用</option>
+                                </select>
+                            </div>
+                        </div> -->
+
+<!--                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">-->
+<!--                            <label class="layui-form-label"></label>-->
+<!--                            <a class="layui-btn search_btn" @click="query">查询</a>-->
+<!--                            <a class="layui-btn search_btn" @click="reset">重置</a>-->
+<!--                            <a class="layui-btn layui-btn-danger layui-btn-normal" @click="exports">导出</a>-->
+<!--                            <mperm v-m-perm="['supplier:supplier:save']">-->
+<!--                            <a class="layui-btn layui-btn-normal" @click="add">新增供应商</a>-->
+<!--                        </mperm>-->
+                    </div>
+                </div>
+            </section>
+        </form>
+        <div class="list-search-form-button">
+            <a class="layui-btn search-btn" @click="query">查询</a>
+            <a class="layui-btn reset-btn" @click="reset">重置</a>
+            <a class="layui-btn search-btn" @click="add">新建</a>
+        </div>
+    </div>
+
+    <div class="leftTree" class=""></div>
+<!--    </blockquote>-->
+    <div class="list-table-content-box">
+        <table class="layui-hide" id="grid" lay-filter="grid"></table>
+    </div>
+    <!-- 表单 修改 -->
+    <div v-show="editForm" class="layui-form ren-form" id="editForm">
+        <!--
+            <div class="jxc-detail layui-form ren-form">
+                <section class="jxc-section">
+                    <legend class="aTitle">供应商信息</legend>
+                    <hr class="layui-bg-gray">
+                    <div class="card">
+                        <div class="layui-row form-group">
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label"><span style="color:red">*</span>供应商名称</label>
+                                <div class="layui-input-block">
+                                    <input type="text" lay-verify="required" v-model="supplier.supplierName"
+                                        autocomplete="off" placeholder="请输入供应商名称" class="layui-input">
+                                </div>
+                            </div>
+                            <djiniv class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label"><span style="color:red">*</span>地址</label>
+                                <div class="layui-input-block">
+                                    <input type="text" lay-verify="required" v-model="supplier.address" autocomplete="off"
+                                        placeholder="请输入地址" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label"><span style="color:red">*</span>法人代表</label>
+                                <div class="layui-input-block">
+                                    <input type="text" lay-verify="required" v-model="supplier.corporateRepresentative"
+                                        autocomplete="off" placeholder="请输入法人代表姓名" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label"><span style="color:red">*</span>统一社会信用代码</label>
+                                <div class="layui-input-block">
+                                    <input type="text" lay-verify="required" v-model="supplier.creditCode"
+                                        autocomplete="off" placeholder="请输入统一社会信用代码" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label"><span style="color:red">*</span>企业性质</label>
+                                <div class="layui-input-block">
+                                    <select name="nature" lay-filter="nature" v-model="supplier.nature">
+                                        <option value="">请选择企业性质</option>
+                                        <option value=1>合资</option>
+                                        <option value=2>独资</option>
+                                        <option value=3>国有</option>
+                                        <option value=4>私营</option>
+                                        <option value=5>全民所有制</option>
+                                        <option value=6>集体所有制</option>
+                                        <option value=7>股份制</option>
+                                        <option value=8>有限责任</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label"><span style="color:red">*</span>成立时间</label>
+                                <div class="layui-input-block">
+                                    <input type="text" lay-verify="required" id="establishmentTimeId"
+                                        v-model="supplier.establishmentTime" autocomplete="off" placeholder="成立时间"
+                                        class="layui-input">
+                                </div>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label"><span style="color:red">*</span>注册资本</label>
+                                <div class="layui-input-block">
+                                    <div style="display: table; width: 100%">
+                                        <input type="text" lay-verify="required" v-model="supplier.registeredCapital"
+                                            autocomplete="off" placeholder="请输入注册资本" class="layui-input" style="">
+                                        <span style="display: table-cell">万</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label">登记机关</label>
+                                <div class="layui-input-block">
+                                    <input type="text" lay-verify="required" v-model="supplier.registration"
+                                        autocomplete="off" placeholder="请输入登记机关" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label"><span style="color:red">*</span>负责人</label>
+                                <div class="layui-input-block">
+                                    <input type="text" lay-verify="required" v-model="supplier.person" autocomplete="off"
+                                        placeholder="请输入负责人" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label"><span style="color:red">*</span>联系手机</label>
+                                <div class="layui-input-block">
+                                    <input type="text" lay-verify="required" v-model="supplier.phone" autocomplete="off"
+                                        placeholder="请输入联系手机" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label">办公电话</label>
+                                <div class="layui-input-block">
+                                    <input type="text" lay-verify="required" v-model="supplier.officePhone"
+                                        autocomplete="off" placeholder="请输入办公电话" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label">传真号码</label>
+                                <div class="layui-input-block">
+                                    <input type="text" lay-verify="required" v-model="supplier.faxNumber" autocomplete="off"
+                                        placeholder="请输入传真号码" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label"><span style="color:red">*</span>供应商类型</label>
+                                <div class="layui-input-block">
+                                    <select name="level" lay-filter="type" v-model="supplier.type">
+                                        <option value="">请选供应商类型</option>
+                                        <option value=1>内部</option>
+                                        <option value=2>外部</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label"><span style="color:red">*</span>邮箱</label>
+                                <div class="layui-input-block">
+                                    <input type="text" lay-verify="required" v-model="supplier.contactEmail" autocomplete="off"
+                                        placeholder="请输入邮箱" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <legend class="aTitle"><span style="color:red">*</span>附件资料</legend>
+                    <a class="layui-btn layui-btn-normal" id="addDoc" style="float: right;">上传附件</a>
+                    <hr class="layui-bg-gray">
+                    <div class="card">
+                        <table class="layui-hide" id="docTable" lay-filter="docTable"></table>
+                    </div>
+
+                    <legend class="aTitle"><span style="color:red">*</span>供应商紧急联系人</legend>
+                    <a class="layui-btn layui-btn-normal" id="addContact" style="float: right;">添加紧急联系人</a>
+                    <hr class="layui-bg-gray">
+                    <div class="card">
+                        <table class="layui-hide" id="contactTable" lay-filter="contactTable"></table>
+                    </div>
+                </section>
+            </div>
+        -->
+
+        <div class="form-content-box">
+            <div class="form-update-content-box display">
+                <div class="">
+                    <div class="form-update-content-box-title">上传行驶证照片自动识别信息</div>
+                    <div class="form-update-content-box-text form-update-content-box-text1">说明：</div>
+                    <div class="form-update-content-box-text">上传行驶证自动识别行驶证注册日期、</div>
+                    <div class="form-update-content-box-text">车牌号、车架号、发动机号；</div>
+                </div>
+                <div class="">
+                    <div class="form-update-content-box-img">
+                        <img src="../../statics/images/upload@2x.png" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form class="layui-form">
+            <div class="form-content-box">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    筛选条件
+                </div>
+
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">供应商:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="请输入供应商名称" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">供应商:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="请输入供应商名称" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">供应商:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="请输入供应商名称" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">供应商:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="请输入供应商名称" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">供应商:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="请输入供应商名称" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-content-box">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    基础信息
+                </div>
+
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">供应商:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="请输入供应商名称" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">供应商:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="请输入供应商名称" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">供应商:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="请输入供应商名称" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">供应商:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="请输入供应商名称" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">供应商:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="请输入供应商名称" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <label class="layui-form-label">车辆备注:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="请输入供应商名称" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <label class="layui-form-label">车辆备注:</label>
+                                <div class="layui-input-inline">
+                                    <div class="layui-input-inline-upload">
+                                        <div class="layui-input-inline-upload-show">
+                                            <div class="layui-input-inline-upload-show-delete">
+                                                删除
+                                            </div>
+                                        </div>
+                                        <div class="layui-input-inline-upload-button">
+                                            <img src="../../statics/images/inline-upload@2x.png" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="layui-input-inline-upload-text">说明：车辆照片在APP车辆详情页面展示；</div>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <label class="layui-form-label">随车物品:</label>
+                                <div class="layui-input-inline">
+                                    <div class="layui-input-inline-checkbox">
+                                        <input type="checkbox" name="like1[write]" lay-skin="primary" title="写作" checked="">
+                                        <input type="checkbox" name="like1[read]" lay-skin="primary" title="阅读">
+                                        
+                                    </div>
+                                    <div class="layui-input-inline-input">
+                                        <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="随车备注说明" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+    <!--查看 -->
+    <div v-show="showForm" class="layui-form ren-form" id="showForm">
+        <!--
+            <div class="jxc-detail layui-form ren-form">
+                <section class="jxc-section">
+                    <legend class="aTitle">供应商信息:</legend>
+                    <hr class="layui-bg-gray">
+                    <div class="card">
+                        <div class="layui-row form-group">
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <span>供应商名称:</span><span>{{supplier.supplierName}}</span>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <span>地址:</span><span>{{supplier.address}}</span>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <span>法人代表:</span><span>{{supplier.corporateRepresentative}}</span>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <span>统一社会信用代码:</span><span>{{supplier.creditCode}}</span>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <span>企业性质:</span><span>{{natureStr}}</span>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <span>成立时间:</span><span>{{supplier.establishmentTime}}</span>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <span>注册资本:</span><span>{{supplier.registeredCapital}}</span>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <span>登记机关:</span><span>{{supplier.registration}}</span>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <span>负责人:</span><span>{{supplier.person}}</span>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <span>联系手机:</span><span>{{supplier.phone}}</span>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <span>办公电话:</span><span>{{supplier.officePhone}}</span>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <span>传真号码:</span><span>{{supplier.faxNumber}}</span>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <span>供应商类型:</span><span>{{typeStr}}</span>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <span>邮箱:</span><span>{{supplier.contactEmail}}</span>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <span>审核状态:</span><span>{{auditStatusStr}}</span>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <span>启用状态:</span><span>{{isUseStr}}</span>
+                                &nbsp; &nbsp;&nbsp; &nbsp;<span id="checkRecord" @click="checkRecord" style="color: blue">查看启停用记录</span>
+                            </div>
+                        </div>
+                        <div class="layui-row form-group" id="reason">
+                            <div class="column layui-col-xs4">
+                                <span>停用原因:</span><span>{{supplier.reason}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <legend class="aTitle">附件资料</legend>
+                    <hr class="layui-bg-gray">
+                    <div class="card">
+                        <table class="layui-table">
+                            <colgroup>
+                                <col width="300">
+                                <col width="300">
+                                <col width="300">
+                                <col width="300">
+                                <col width="300">
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th>资料类型</th>
+                                <th>上传时间</th>
+                                <th>上传人</th>
+                                <th>文件名</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="(item,index) in supplier.docLst" :key="index">
+                                <td>{{item.nameDesc == null||item.nameDesc == '' ?'---':item.nameDesc}}</td>
+                                <td>{{item.timeCreate}}</td>
+                                <td>{{item.operationName}}</td>
+                                <td>{{item.nameFile}}</td>
+                                <td>
+                                    <a v-show="item.typeFile == 1" class="layui-btn layui-btn-xs"
+                                    @click="showDoc(item.url, item.nameFile)">详情</a>
+                                    <a class="layui-btn layui-btn-xs" @click="downDoc(item.url, item.nameFile)">下载</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <legend class="aTitle">客户方紧急联系人</legend>
+                    <hr class="layui-bg-gray">
+                    <div class="card">
+                        <table class="layui-table">
+                            <colgroup>
+                                <col width="300">
+                                <col width="300">
+                                <col width="300">
+                                <col width="300">
+                                <col width="300">
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th>联系人姓名</th>
+                                <th>联系手机</th>
+                                <th>办公电话</th>
+                                <th>地址</th>
+                                <th>与客户企业关系</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="(item,index) in supplier.contactLst" :key="index">
+                                <td>{{item.name}}</td>
+                                <td>{{item.tel}}</td>
+                                <td>{{item.officeTel}}</td>
+                                <td>{{item.address}}</td>
+                                <td>{{item.relation}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <legend class="aTitle">审批记录</legend>
+                    <hr class="layui-bg-gray">
+                    <div class="card">
+                        <div id="approveLog" style="padding: 0px 50px 0px 50px;"></div>
+                    </div>
+                </section>
+            </div>
+
+        -->
+
+
+        <div class="details-tab-content">
+            <div class="details-tab-content-box display">
+                <div
+                    class="flex"
+                    v-for="(item, index) in detailsTabContentList"
+                    :key="index"
+                    :class="index === detailsTabContentListActiveIndex ? 'active1A51FF' : ''"
+                    @click="detailsTabContentBindtap(index)">
+                    {{ item }}
+                    <div>
+                        <div :class="index === detailsTabContentListActiveIndex ? 'details-tab-content-box-absolute-bottom' : ''"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="details-conteiner">
+            
+            <div class="details-sub-tab-content" v-if="detailsTabContentListActiveIndex === 0">
+                <div class="details-sub-tab-content-box display">
+                    <div
+                        class="flex"
+                        v-for="(item, index) in detailsSupTabContentList"
+                        :key="index"
+                        :class="index === detailsSupTabContentListActiveIndex ? 'active-linear-gradient' : ''"
+                        @click="detailsSupTabContentBindtap(index, item)">
+                        {{ item }}
+                    </div>
+                </div>
+            </div>
+            <!-- 基础信息 -->
+            <div
+                class="details-content-box"
+                v-if="detailsSupTabContentListActiveValue === '车辆基础信息'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        基础信息
+
+                        <div class="fr display ">
+                            <div class="details-layui-fr-sup-title">
+                                <span>车辆状态：</span>
+                                <span class="description">空闲中</span>
+                            </div>
+                            <div class="details-layui-fr-sup-button">当前车辆位置</div>
+                            <div class="details-layui-fr-sup-button">轨迹回放</div>
+                        </div>
+                    </div>
+                </div>
+                <form class="layui-form">
+                    <div class="details-layui-row">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">供应商:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        value="1234153"
+                                        disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">供应商:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        value="1234153"
+                                        disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">供应商:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        value="1234153"
+                                        disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">供应商:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        value="1234153"
+                                        disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">供应商:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        value="1234153"
+                                        disabled/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table">
+                            <table class="layui-hide" id="test"></table>
+                        </div>
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <label class="layui-form-label">随车物品:</label>
+                                <div class="layui-input-inline">
+                                    <div class="layui-input-inline-checkbox">
+                                        <input
+                                            type="checkbox"
+                                            name="like1[write]"
+                                            lay-skin="primary"
+                                            title="写作"
+                                            disabled>
+                                        <input
+                                            type="checkbox"
+                                            name="like1[read]"
+                                            lay-skin="primary"
+                                            title="阅读"
+                                            disabled>
+                                        <input
+                                            type="checkbox"
+                                            name="like1[game]"
+                                            lay-skin="primary"
+                                            title="游戏"
+                                            disabled>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <label class="layui-form-label">行驶证照片:</label>
+                                <div class="layui-input-inline">
+                                    <div class="layui-input-inline-driver-img">
+                                        <img src="./../images/upload@2x.png" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <label class="layui-form-label">车辆备注:</label>
+                                <div class="layui-input-inline">
+                                    <div class="layui-input-inline-upload">
+                                        <div class="layui-input-inline-upload-show">
+                                        </div>
+                                        <div class="layui-input-inline-upload-show">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- 违章信息 -->
+            <div
+                class="details-content-box"
+                v-if="detailsSupTabContentListActiveValue === '车辆基础信息' ||
+                detailsSupTabContentListActiveValue === '违章信息'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        违章信息
+                    </div>
+                </div>
+                <div class="details-layui-row">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table">
+                        <table class="layui-hide" id="test1"></table>
+                    </div>
+                </div>
+            </div>
+            <!-- 保险信息 -->
+            <div class="details-content-box"
+                v-if="detailsSupTabContentListActiveValue === '车辆基础信息' ||
+                detailsSupTabContentListActiveValue === '保险信息'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        保险信息
+                    </div>
+                </div>
+                <div class="details-layui-row">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table">
+                        <table class="layui-hide" id="test2"></table>
+                    </div>
+                </div>
+            </div>
+            <!-- 年检信息 -->
+            <div class="details-content-box"
+                v-if="detailsSupTabContentListActiveValue === '车辆基础信息' ||
+                detailsSupTabContentListActiveValue === '年检信息'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        年检信息
+                    </div>
+                </div>
+                <div class="details-layui-row">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table">
+                        <table class="layui-hide" id="test3"></table>
+                    </div>
+                </div>
+            </div>
+            <!-- 保养信息 -->
+            <div class="details-content-box"
+                v-if="detailsSupTabContentListActiveValue === '车辆基础信息' ||
+                detailsSupTabContentListActiveValue === '保养信息'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        保养信息
+                    </div>
+                </div>
+                <div class="details-layui-row">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table">
+                        <table class="layui-hide" id="test4"></table>
+                    </div>
+                </div>
+            </div>
+            <!-- 出险信息 -->
+            <div class="details-content-box"
+                v-if="detailsSupTabContentListActiveValue === '车辆基础信息' ||
+                detailsSupTabContentListActiveValue === '出险信息'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        出险信息
+                    </div>
+                </div>
+                <div class="details-layui-row">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table">
+                        <table class="layui-hide" id="test5"></table>
+                    </div>
+                </div>
+            </div>
+            <!-- 维保信息 -->
+            <div class="details-content-box"
+                v-if="detailsSupTabContentListActiveValue === '车辆基础信息' ||
+                detailsSupTabContentListActiveValue === '维保信息'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        维保信息
+                    </div>
+                </div>
+                <div class="details-layui-row">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table">
+                        <table class="layui-hide" id="test6"></table>
+                    </div>
+                </div>
+            </div>
+            <!-- 车辆订单记录 -->
+            <div class="details-content-box"
+                v-if="detailsSupTabContentListActiveValue === '车辆基础信息' ||
+                detailsSupTabContentListActiveValue === '车辆订单记录'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        车辆订单记录
+                    </div>
+                </div>
+                <div class="details-layui-row">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table">
+                        <table class="layui-hide" id="test7"></table>
+                    </div>
+                </div>
+            </div>
+            <!-- 车辆档案 -->
+            <div class="details-content-box"
+                v-if="detailsSupTabContentListActiveValue === '车辆基础信息' ||
+                detailsSupTabContentListActiveValue === '车辆档案'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        车辆档案
+                    </div>
+                </div>
+                <div class="details-layui-row">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table">
+                        <table class="layui-hide" id="test8"></table>
+                    </div>
+                </div>
+            </div>
+            <!-- 车辆移库记录 -->
+            <div class="details-content-box"
+                v-if="detailsSupTabContentListActiveValue === '车辆基础信息' ||
+                detailsSupTabContentListActiveValue === '车辆移库记录'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        车辆移库记录
+                    </div>
+                </div>
+                <div class="details-layui-row">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table">
+                        <table class="layui-hide" id="test9"></table>
+                    </div>
+                </div>
+            </div>
+            <!-- 车辆档案记录 -->
+            <div class="details-content-box"
+                v-if="detailsSupTabContentListActiveValue === '车辆档案记录'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        车辆档案记录
+                    </div>
+                </div>
+                <div class="details-layui-row">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">供应商:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                    type="text"
+                                    class="layui-input searchVal"
+                                    value="1234153"
+                                    disabled/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table">
+                        <table class="layui-hide" id="test9"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 节点 -->
+    <div v-show="approvalFrom" class="layui-form ren-form" id="approvalFrom">
+        <div class="initiate-content">    
+            <div class="sys-node-header">
+                <div>
+                    <span class="lable-name">发起节点名称：</span>
+                    <input type="text" placeholder="请输入名称"/>
+                </div>
+                <div class="">
+                    <span class="lable-name-status">节点状态：</span>
+                    <input
+                        type="checkbox"
+                        placeholder="请输入名称"
+                        name="open"
+                        lay-skin="switch"
+                        lay-filter="switchTest"
+                        lay-text="ON/OFF" />
+                </div>
+                <!-- <span class="fr">删除</span> -->
+            </div>
+            <div class="sys-node-select">
+                <div>申请人设置</div>
+                <div class="select-radio">
+                    <input type="radio" name="node" />
+                    <span>工作去可填</span>
+                </div>
+                <div class="select-radio">
+                    <input type="radio" name="node" />
+                    <span>指定成员可填</span>
+                </div>
+            </div>
+            <div class="display">
+                <div class="">
+                    <div class="tree-content display">
+                        <div class="left-tree">
+                            <div class="tree-title">成员/角色</div>
+                            <div id="leftTree" class="demo-tree-more"></div>
+                        </div>
+                        <div class="right-tree">
+                            <div class="tree-title">已选择成员/角色</div>
+                            <div id="rightTree">
+                                <div
+                                    v-for="item in rightTree"
+                                    :key="item.index">
+                                    <div class="checked-tree-item">
+                                        {{ item.title }}
+                                        <!-- <div class="remove-tree-item" @click="removeBindtap(item)"></div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="authority-content">
+            <div class="display">
+                <div
+                    class="flex authority-header-child"
+                    v-for="(item, index) in authorityHeader"
+                    :key="item.index"
+                    :class="index === authorityHeaderActiveIndex ? 'authority-header-child-active' : ''"
+                    @click="authorityHeaderBindtap(index)">
+                    {{ item }}
+                </div>
+            </div>
+            <div class="field-setting">
+                <div class="" v-if="authorityHeaderActiveIndex === 0">
+                    <div class="radio-box">
+                        <span>全局配置：</span>
+                        <input type="radio" name="globalName" value="1" /> 仅可见
+                        <input type="radio" name="globalName" value="2" /> 可编辑
+                    </div>
+                    <div class="radio-box">
+                        <span>提单业务模块：</span>
+                        <input type="radio" name="businessName" value="1" /> 仅可见
+                        <input type="radio" name="businessName" value="2" /> 可编辑
+                        <input type="radio" name="businessName" value="3" /> 隐藏
+                    </div>
+                    <div class="display field-header">
+                        <div class="name flex">字段名称</div>
+                        <div class="edit">可编辑</div>
+                        <div class="visible">仅可见</div>
+                        <div class="hide">隐藏</div>
+                        <div class="required">是否必填</div>
+                    </div>
+                    <div class="display field-session" v-for="(item, index) in allTableData" :key="item.index">
+                        <div class="name flex">{{ item.name }}</div>
+                        <div class="edit" @click="editChildBindtap(index, item.allEditStatus)">
+                            <span v-if="item.allEditStatus">可编辑</span>
+                            <span v-else>{{ item.editImg }}</span>
+<!--                            <img v-else :src="item.editImg" />-->
+                        </div>
+                        <div class="visible">仅可见</div>
+                        <div class="hide">隐藏</div>
+                        <div class="required">是否必填</div>
+                    </div>
+                </div>
+                <div class="" v-if="authorityHeaderActiveIndex === 1">
+                    <div class="radio-box">
+                        <span>是否触发车辆状态预定中：</span>
+                        <input type="radio" name="scheduledName" value="1" /> 是
+                        <input type="radio" name="scheduledName" value="2" /> 否
+                    </div>
+                    <div class="radio-box">
+                        <span>是否触发车辆状态用车中：</span>
+                        <input type="radio" name="useCarName" value="1" /> 是
+                        <input type="radio" name="useCarName" value="2" /> 否
+                    </div>
+                    <div class="radio-box">
+                        <span>是否触发财务应收账单：</span>
+                        <input type="radio" name="billName" value="1" /> 是
+                        <input type="radio" name="billName" value="2" /> 否
+                    </div>
+                    <div class="radio-box">
+                        <span>关于其他业务模块：</span>
+                        <span
+                            class="other"
+                            v-for="(item, index) in settingOtherList"
+                            :key="item.index"
+                            :class="index === settingOtherListActiveIndex ? 'other-active' : ''"
+                            @click="otherBindtap(index)">
+                            {{ item }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--启用停用表单-->
+    <div v-show="startOrstopForm" class="layui-form ren-form" id="startOrstopForm">
+        <!-- <div class="layui-form-item">
+            <label class="layui-form-label" style="width: 100px;"><span style="color: red">*</span>启用/停用原因</label>
+            <div class="layui-input-block">
+                <textarea lay-verify="startOrstopReason" v-model="supplier.startOrstopReason" placeholder="请输入启用/停用原因"
+                          class="layui-textarea" style="width: 500px;"></textarea>
+            </div>
+        </div> -->
+        
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <a class="layui-btn layui-btn-normal" @click="cancel"
+                   style="margin-left: 120px;margin-top: 30px;">关闭</a>
+                <button class="layui-btn site-demo-active" lay-submit lay-filter="startOrstopReasonSave"
+                        style="margin-top: 30px;">确定
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--操作-->
+<script type="text/html" id="barTpl">
+    <a class="layui-btn layui-btn-xs" lay-event="show">详情</a>
+    <a class="layui-btn layui-btn-xs" lay-event="carList">车辆列表</a>
+    {{#if(d.auditStatus == 0 || d.auditStatus == 4 || d.auditStatus ==2 ){}}
+    <mperm v-m-perm="['supplier:supplier:update']">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+    </mperm>
+    {{# }}}
+    {{#if(d.auditStatus == 0){}}
+    <a class="layui-btn layui-btn-xs" lay-event="apply">发起申请</a>
+    {{# }}}
+    {{#if(d.auditStatus == 4){}}
+    <a class="layui-btn layui-btn-xs" lay-event="applyAgain">再次申请</a>
+    {{# }}}
+    <!--0启用，1停用-->
+    {{#if(d.isUse ==1 && d.auditStatus == 2){}}
+    <mperm v-m-perm="['supplier:supplier:start']">
+    <a class="layui-btn layui-btn-xs" lay-event="start">启用</a>
+    </mperm>
+    {{# }}}
+    {{#if(d.isUse ==0 && d.auditStatus == 2){}}
+    <mperm v-m-perm="['supplier:supplier:stop']">
+    <a class="layui-btn layui-btn-xs" lay-event="stop">停用</a>
+    </mperm>
+    {{# }}}
+
+</script>
+
+<script type="text/html" id="docTableBarTpl">
+    {{#if(d.typeFile == 1){}}
+    <a class="layui-btn layui-btn-xs" lay-event="show">详情</a>
+    {{# }}}
+    <a class="layui-btn layui-btn-xs" lay-event="down">下载</a>
+    <a v-show="editForm" class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
+</script>
+
+<script type="text/html" id="contactTableBarTpl">
+    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
+</script>
+
+<script src="../../statics/js/modules/supplier/supplier.js?_${.now?long}"></script>
+</body>
+</html>

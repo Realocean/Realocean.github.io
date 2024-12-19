@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>秒杀活动</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+    <style>
+        .multiple-cell {
+            display: table-cell;
+            padding-right: 8px;
+            padding-left: 10px;
+        }
+
+        .multiple-cell>label {
+            width: 90px !important;
+        }
+
+        .multiple-cell>img {
+            display: none;
+        }
+
+        .multiple-table {
+            margin-bottom: 9px;
+            display: table;
+            margin-left: 78px;
+        }
+
+        .lable-span {
+            width: 90px !important;
+        }
+
+        .span-item-center {
+            text-align: center;
+            display: inherit;
+        }
+    </style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <!-- 查看表单 -->
+    <form class="layui-form ren-form" style="margin-bottom: 60px;">
+        <div class="details-tab-content">
+            <div class="details-tab-content-box display">
+                <div name="tabTitle" class="flex" v-for="(item, index) in detailsTabContentList" :key="index"
+                     :class="index === detailsTabContentListActiveIndex ? 'active1A51FF' : ''"
+                     @click="detailsTabContentBindtap(index)">
+                    {{ item }}
+                    <div>
+                        <div :class="index === detailsTabContentListActiveIndex ? 'details-tab-content-box-absolute-bottom' : ''"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="details-conteiner">
+
+            <div class="details-content-box">
+                <div class="details-layui-row">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">活动标题:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" :value="scActivitySeckill.seckillName"
+                                       disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">活动状态:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" :value="transformTypeByMap(scActivitySeckill.status, {1:'未开始', 2:'进行中', 3:'暂停中', 4:'已结束'})"
+                                       disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label">活动门店/部门:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" :value="scActivitySeckill.applicableUnit"
+                                       disabled/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="details-content-box"
+                 v-show="detailsSupTabContentListActiveValue === '活动数据'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        活动数据
+                    </div>
+                </div>
+                <div class="details-layui-row">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <div class="multiple-table">
+                                <div class="multiple-cell">
+                                    <label class="layui-form-label lable-span"><span class="span-item-center">访问次数</span><br/><span class="span-item-center">{{scActivitySeckillStatisticsDatas.visitCount}}</span></label>
+                                </div>
+                                <div class="multiple-cell">
+                                    <img src="../../statics/images/u14424.png" class="u14424">
+                                </div>
+                                <div class="multiple-cell">
+                                    <label class="layui-form-label lable-span"><span class="span-item-center">访客数量</span><br/><span class="span-item-center">{{scActivitySeckillStatisticsDatas.browseCount}}</span></label>
+                                </div>
+                                <div class="multiple-cell">
+                                    <img src="../../statics/images/u14424.png" class="u14424">
+                                </div>
+                                <div class="multiple-cell">
+                                    <label class="layui-form-label lable-span"><span class="span-item-center">新客户总购买人数</span><br/><span class="span-item-center">{{scActivitySeckillStatisticsDatas.turnoverNewCustomers}}</span></label>
+                                </div>
+                                <div class="multiple-cell">
+                                    <img src="../../statics/images/u14424.png" class="u14424">
+                                </div>
+                                <div class="multiple-cell">
+                                    <label class="layui-form-label lable-span"><span class="span-item-center">老客户总购买人数</span><br/><span class="span-item-center">{{scActivitySeckillStatisticsDatas.turnoverOldCustomers}}</span></label>
+                                </div>
+                                <div class="multiple-cell">
+                                    <img src="../../statics/images/u14424.png" class="u14424">
+                                </div>
+                                <div class="multiple-cell">
+                                    <label class="layui-form-label lable-span"><span class="span-item-center">今日成交订单数</span><br/><span class="span-item-center">{{scActivitySeckillStatisticsDatas.turnoverToday}}</span></label>
+                                </div>
+                                <div class="multiple-cell">
+                                    <img src="../../statics/images/u14424.png" class="u14424">
+                                </div>
+                                <div class="multiple-cell">
+                                    <label class="layui-form-label lable-span"><span class="span-item-center">总成交订单数</span><br/><span class="span-item-center">{{scActivitySeckillStatisticsDatas.turnoverTotle}}</span></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <div class="multiple-table">
+                                <div class="multiple-cell">
+                                    <label class="layui-form-label lable-span"><span class="span-item-center">新客户转化购买率</span><br/><span class="span-item-center">{{div(scActivitySeckillStatisticsDatas.browseCount, scActivitySeckillStatisticsDatas.turnoverNewCustomers)}}/%</span></label>
+                                </div>
+                                <div class="multiple-cell">
+                                    <img src="../../statics/images/u14424.png" class="u14424">
+                                </div>
+                                <div class="multiple-cell">
+                                    <label class="layui-form-label lable-span"><span class="span-item-center">老客户转化购买率</span><br/><span class="span-item-center">{{div(scActivitySeckillStatisticsDatas.browseCount, scActivitySeckillStatisticsDatas.turnoverOldCustomers)}}/%</span></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-tab layui-tab-brief" lay-filter="tabChange">
+                            <ul class="layui-tab-title">
+                                <li class="layui-this" lay-id="1" >已购买客户</li>
+                                <li lay-id="2">浏览客户</li>
+                            </ul>
+                            <div class="layui-tab-content">
+                                <div id="turnoverCustomer" class="layui-tab-item layui-show">
+                                    <div class="layui-row layui-form-row-content">
+                                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                            <div class="multiple-table">
+                                                <div class="multiple-cell">
+                                                    <input type="text" v-model="q.turnoverCustomerKeyword" autocomplete="off" placeholder="请输入客户姓名/客户性质/手机号"
+                                                           style="width: 300px" class="layui-input searchVal">
+                                                </div>
+                                                <div class="multiple-cell">
+                                                    <a class="layui-btn search-btn" @click="queryActivitySeckillTurnoverCustomer">查询</a>
+                                                </div>
+                                                <div class="multiple-cell">
+                                                    <a class="layui-btn reset-btn" @click="resetActivitySeckillTurnoverCustomer">重置</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-row layui-form-row-content">
+                                        <div class="table">
+                                            <table class="layui-hide" id="scActivitySeckillTurnoverCustomerLst"></table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="browseCustomer" class="layui-tab-item">
+                                    <div class="layui-row layui-form-row-content">
+                                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                            <div class="multiple-table">
+                                                <div class="multiple-cell">
+                                                    <input type="text" v-model="q.browseCustomerKeyword" autocomplete="off" placeholder="请输入客户姓名/客户性质/手机号"
+                                                           style="width: 300px" class="layui-input searchVal">
+                                                </div>
+                                                <div class="multiple-cell">
+                                                    <a class="layui-btn search-btn" @click="queryActivitySeckillBrowseCustomer">查询</a>
+                                                </div>
+                                                <div class="multiple-cell">
+                                                    <a class="layui-btn reset-btn" @click="resetActivitySeckillBrowseCustomer">重置</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-row layui-form-row-content">
+                                        <div class="table">
+                                            <table class="layui-hide" id="scActivitySeckillBrowseCustomerLst"></table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="details-content-box"
+                 v-show="detailsSupTabContentListActiveValue === '客户分佣数据'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        客户分佣数据
+                    </div>
+                </div>
+                <div class="details-layui-row">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <div class="multiple-table">
+                                <div class="multiple-cell">
+                                    <label class="layui-form-label lable-span"><span class="span-item-center">分享用户总数</span><br/><span class="span-item-center">{{scActivitySeckillCommissionDatas.shareCustomerCount}}</span></label>
+                                </div>
+                                <div class="multiple-cell">
+                                    <img src="../../statics/images/u14424.png" class="u14424">
+                                </div>
+                                <div class="multiple-cell">
+                                    <label class="layui-form-label lable-span"><span class="span-item-center">一级分佣总金额</span><br/><span class="span-item-center">{{scActivitySeckillCommissionDatas.primaryDistributionAmount}}/元</span></label>
+                                </div>
+                                <div class="multiple-cell">
+                                    <img src="../../statics/images/u14424.png" class="u14424">
+                                </div>
+                                <div class="multiple-cell">
+                                    <label class="layui-form-label lable-span"><span class="span-item-center">二级分佣总金额</span><br/><span class="span-item-center">{{scActivitySeckillCommissionDatas.secondaryDistributionAmount}}/元</span></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <div class="multiple-table">
+                                <div class="multiple-cell">
+                                    <input type="text" v-model="q.customerCommissionKeyword" autocomplete="off" placeholder="请输入客户姓名/客户性质/手机号"
+                                           style="width: 300px" class="layui-input searchVal">
+                                </div>
+                                <div class="multiple-cell">
+                                    <a class="layui-btn search-btn" @click="queryActivitySeckillCommission">查询</a>
+                                </div>
+                                <div class="multiple-cell">
+                                    <a class="layui-btn reset-btn" @click="resetActivitySeckillCommission">重置</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="table">
+                            <table class="layui-hide" id="scActivitySeckillCommissionLst"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="details-content-box"
+                 v-show="detailsSupTabContentListActiveValue === '员工提成数据'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        员工提成数据
+                    </div>
+                </div>
+                <div class="details-layui-row">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <div class="multiple-table">
+                                <div class="multiple-cell">
+                                    <label class="layui-form-label lable-span"><span class="span-item-center">提成员工总数</span><br/><span class="span-item-center">{{scActivitySeckillBonusDatas.bonusUserCount}}</span></label>
+                                </div>
+                                <div class="multiple-cell">
+                                    <img src="../../statics/images/u14424.png" class="u14424">
+                                </div>
+                                <div class="multiple-cell">
+                                    <label class="layui-form-label lable-span"><span class="span-item-center">总售出金额</span><br/><span class="span-item-center">{{scActivitySeckillBonusDatas.saleAmount}}/元</span></label>
+                                </div>
+                                <div class="multiple-cell">
+                                    <img src="../../statics/images/u14424.png" class="u14424">
+                                </div>
+                                <div class="multiple-cell">
+                                    <label class="layui-form-label lable-span"><span class="span-item-center">提成总金额</span><br/><span class="span-item-center">{{scActivitySeckillBonusDatas.bonusAmount}}/元</span></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <div class="multiple-table">
+                                <div class="multiple-cell">
+                                    <input type="text" v-model="q.userName" autocomplete="off" placeholder="请输入员工名称"
+                                           style="width: 300px" class="layui-input searchVal">
+                                </div>
+                                <div class="multiple-cell">
+                                    <a class="layui-btn search-btn" @click="queryActivitySeckillBonus">查询</a>
+                                </div>
+                                <div class="multiple-cell">
+                                    <a class="layui-btn reset-btn" @click="resetActivitySeckillBonus">重置</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="table">
+                            <table class="layui-hide" id="scActivitySeckillBonusLst"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+    <div class="float-btn-group bottom-bar">
+        <a class="layui-btn reset-btn" id="closePage">关闭</a>
+    </div>
+</div>
+
+<script src="../../statics/js/modules/scactivity/scactivityseckilldatas.js?_${.now?long}"></script>
+</body>
+</html>

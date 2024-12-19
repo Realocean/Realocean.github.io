@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>订单续租记录表</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+    <style>
+        .title-box{
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        .title-box-icon{
+            display: inline-block;
+            width:6px;
+            height:20px;
+            background-color: #3FACB3;
+            border-radius: 2px;
+            margin-right: 5px;
+        }
+         .layui-input, .layui-select, .layui-textarea{
+            height: 40px !important;
+        }
+        .layui-form-label-txt{
+            font-size: 16px;
+            height: 40px;
+            line-height: 40px;
+            padding:0 15px !important;
+        }
+        .layui-input-value{
+            height: 40px !important;
+            line-height: 40px !important;
+            width:100%;
+            border-radius: 4px;
+            border: 1px solid rgb(230, 230, 230);
+            padding-left: 10px;
+        }
+        .layui-input, .layui-select, .layui-textarea{
+            border-radius: 4px;
+        }
+        .layui-form-row-content .layui-inline .layui-input-inline-change{
+            width:50%;
+
+        }
+        .input-readonly{
+            border: none;
+        }
+
+        .multiple-cell {
+            display: table-cell;
+            padding-right: 8px;
+            height: 36px;
+            vertical-align: middle;
+        }
+
+        .multiple-table {
+            margin-bottom: 9px;
+            display: table;
+            margin-left: 78px;
+        }
+
+        .layui-form-radio {
+            line-height: 28px;
+            margin: 0;
+            padding-right: 10px;
+            cursor: pointer;
+            font-size: 0;
+        }
+
+        td[data-field="paymentMethod"] div.layui-table-cell {
+            overflow: visible !important;
+        }
+
+        td[data-field="paymentMethod"] .layui-form-select {
+            margin-left: -15px;
+            margin-right: -15px;
+        }
+
+        td[data-field="paymentMethod"] div.layui-form-select dl {
+            z-index: 9999;
+        }
+
+        .layui-table-box {
+            overflow: visible;
+        }
+
+        .layui-table-body {
+            overflow: visible;
+        }
+    </style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <!-- 新增表单 -->
+    <form class="layui-form ren-form" style="margin-bottom: 60px;">
+
+        <!-- 车辆信息 -->
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title  title-box">
+                <span class='title-box-icon'></span>
+                <span>车辆信息</span>
+            </div>
+            <div class="form-content-session-box" :id="selectCar.orderCarId">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                <label class="layui-form-label layui-form-label-txt"><span style="color:red">*</span>选择车牌号</label>
+                                <div class="layui-input-inline layui-input-inline-change">
+                                    <input type="text" id="selectCar" class="layui-input" lay-verify="validate_selectCar" v-model="selectCar.carNo" placeholder="请选择车牌号" readonly>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                <label class="layui-form-label layui-form-label-txt">客户名称</label>
+                                <div class="layui-input-inline layui-input-inline-change">
+                                    <input type="text" :value="selectCar.customerName||'--'" class="layui-input input-readonly" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                <label class="layui-form-label layui-form-label-txt">售卖方名称</label>
+                                <div class="layui-input-inline layui-input-inline-change">
+                                    <input type="text" :value="selectCar.lessorName||'--'" class="layui-input input-readonly" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                <label class="layui-form-label layui-form-label-txt">租赁类型</label>
+                                <div class="layui-input-inline layui-input-inline-change">
+                                    <input type="text" :value="selectCar.rentTypeStr||'--'" class="layui-input input-readonly" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                <label class="layui-form-label layui-form-label-txt">租赁开始时间</label>
+                                <div class="layui-input-inline layui-input-inline-change">
+                                    <input type="text" :value="selectCar.timeStartRent||'--'" class="layui-input input-readonly" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                <label class="layui-form-label layui-form-label-txt">租赁结束时间</label>
+                                <div class="layui-input-inline layui-input-inline-change">
+                                    <input type="text" :value="selectCar.timeFinishRent||'--'" class="layui-input input-readonly" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label layui-form-label-txt">付款方式</label>
+                            <div class="layui-input-inline layui-input-inline-change">
+                                <input type="text" :value="selectCar.paymentMethodStr||'--'" class="layui-input input-readonly" disabled>
+                            </div>
+                        </div>
+                        <!-- <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label">付款日</label>
+                            <div class="layui-input-inline">
+                                <input type="text" :value="selectCar.paymentDay" class="layui-input input-readonly" disabled>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="card" v-show="selectCar.planList != null && selectCar.planList.length > 0">
+                    <div class="table" v-show="selectCar.isOriginal != 1">
+                        <table class="layui-hide" id="quondamPlanLst" lay-filter="quondamPlanLst"></table>
+                    </div>
+                    <div class="table" v-show="selectCar.isOriginal == 1">
+                        <table class="layui-hide" id="quondamPlanObj" lay-filter="quondamPlanObj"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 续租信息 -->
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title  title-box">
+                <span class='title-box-icon'></span>
+                <span>续租信息</span>
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content" style="margin-bottom: 20px;">
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                <label class="layui-form-label layui-form-label-txt"><span style="color:red">*</span>开始时间</label>
+                                <div class="layui-input-inline layui-input-inline-change">
+                                    <input type="text" :value="orderRelerecord.timeStart||'--'" class="layui-input input-readonly" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                <label class="layui-form-label layui-form-label-txt"><span style="color:red">*</span>结束时间</label>
+                                <div class="layui-input-inline layui-input-inline-change">
+                                    <input type="text" lay-verify="validate_timeFinish"
+                                           v-model="orderRelerecord.timeFinish"
+                                           readonly id="timeFinish" autocomplete="off" placeholder="请选择结束时间"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                <label class="layui-form-label layui-form-label-txt"><span style="color:red">*</span>还款日</label>
+                                <div class="layui-input-inline layui-input-inline-change">
+                                    <input type="text" readonly
+                                           style="position: absolute;line-height: 0;border-width: 0;border-style: hidden;background-color: rgba(0, 0, 0, 0);border-radius: 0;text-indent: -99999px;"
+                                           id="paymentDay" class="layui-input">
+                                    <input type="text" id="paymentDayVal" lay-verify="validate_paymentDay"
+                                           v-model="orderRelerecord.paymentDay" readonly
+                                           autocomplete="off" placeholder="请选择付款日" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                <label class="layui-form-label layui-form-label-txt"><span style="color:red">*</span>续租所属业务员</label>
+                                <div class="layui-input-inline layui-input-inline-change">
+                                    <select lay-search="" lay-verify="validate_operationId" name="selectOperation"
+                                            lay-filter="selectOperation" v-model="orderRelerecord.operationId">
+                                        <option value="">请选择业务员</option>
+                                        <option v-for="(item,index) in usrLst" :value="item.userId">{{item.username}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                <label class="layui-form-label layui-form-label-txt">续租备注</label>
+                                <div class="layui-input-inline layui-input-inline-change">
+                                    <input type="text" v-model="orderRelerecord.desc"
+                                           autocomplete="off" placeholder="请输入备注" class="layui-input searchVal">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12s">
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <label class="layui-form-label layui-form-label-txt">续租附件:</label>
+                                <div class="layui-input-inline layui-input-inline-change" style="background: #fff;position: relative;">
+                                    <div v-show="!hetong" style="color:#3FACB3;cursor: pointer;text-align: right;position: absolute;left:0;top:0" @click="expandChange(1)">
+                                        <span>展开</span>
+                                        <img src="../../statics/images/packup.png" alt="">
+                                    </div>
+                                    <div v-show="hetong" style="color:#3FACB3;cursor: pointer;text-align: right;position: absolute;left:0;top:0" @click="retractChange(1)">
+                                        <span>收起</span>
+                                        <img src="../../statics/images/launch.png" alt="">
+                                    </div>
+                                    <div class="layui-input-inline-checkbox" id="releFileLst" v-show="hetong" style="margin-top: 25px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 续租费用项 -->
+        <div class="form-content-box" :id="feeViewId">
+            <div class="list-search-sup-title new-layui-title  title-box">
+                <span class='title-box-icon'></span>
+                <span>续租费用项</span>
+            </div>
+            <div class="form-content-session-box">
+                <!--<div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                <label class="layui-form-label layui-form-label-txt">免费用车天数</label>
+                                <div class="layui-input-block" style="margin-top: 5px;">
+                                    <input type="radio" lay-filter="hasFreeDays" name="hasFreeDays"
+                                           v-model="hasFreeDays" value="0"
+                                           lay-skin="primary" title="无">
+                                    <input type="radio" lay-filter="hasFreeDays" name="hasFreeDays"
+                                           v-model="hasFreeDays" value="1"
+                                           lay-skin="primary" title="有">
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                <label class="layui-form-label layui-form-label-txt">订单费用项调整</label>
+                                <div class="layui-input-block" style="margin-top: 5px;">
+                                    <input type="radio" lay-filter="planAdjust"
+                                           v-model="planAdjust" name="planAdjust" value="0"
+                                           lay-skin="primary" title="否">
+                                    <input type="radio" lay-filter="planAdjust"
+                                           v-model="planAdjust" name="planAdjust" value="1"
+                                           lay-skin="primary" title="是">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="hasFreeDays == 1">
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                <label class="layui-form-label layui-form-label-txt">免费用车天数类型</label>
+                                <div class="layui-input-inline layui-input-inline-change">
+                                    <select name="freeDaysType" lay-filter="freeDaysType" lay-verify="validate_freeDays"v-model="orderRelerecord.hasFreeDays">
+                                        <option value="1">租期后</option>
+                                        <option value="3">租期前</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                <label class="layui-form-label layui-form-label-txt">免费用车时间</label>
+                                <div class="layui-input-inline layui-input-inline-change">
+                                    <input type="text" lay-verify="validate_freeDays" v-model="orderRelerecord.freeDays"
+                                           oninput="numInteger(this)" maxlength="3"
+                                           autocomplete="off" placeholder="免费用车时间（天数/台）" class="layui-input searchVal">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>-->
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label">付款方式:</label>
+                            <div class="layui-input-inline">
+                                <input type="radio" lay-filter="paymentMethod" v-model="order.orderCar.paymentMethod"
+                                       name="paymentMethod" value="7" lay-skin="primary" title="日付">
+                                <input type="radio" lay-filter="paymentMethod" v-model="order.orderCar.paymentMethod"
+                                       name="paymentMethod" value="8" lay-skin="primary" title="周付">
+                                <input type="radio" lay-filter="paymentMethod" v-model="order.orderCar.paymentMethod"
+                                       name="paymentMethod" value="1" lay-skin="primary" title="月付">
+                                <input type="radio" lay-filter="paymentMethod" v-model="order.orderCar.paymentMethod"
+                                       name="paymentMethod" value="2" lay-skin="primary" title="两月付">
+                                <input type="radio" lay-filter="paymentMethod" v-model="order.orderCar.paymentMethod"
+                                       name="paymentMethod" value="3" lay-skin="primary" title="季付">
+                                <input type="radio" lay-filter="paymentMethod" v-model="order.orderCar.paymentMethod"
+                                       name="paymentMethod" value="6" lay-skin="primary" title="半年付">
+                                <input type="radio" lay-filter="paymentMethod" v-model="order.orderCar.paymentMethod"
+                                       name="paymentMethod" value="4" lay-skin="primary" title="年付">
+                                <input type="radio" lay-filter="paymentMethod" v-model="order.orderCar.paymentMethod"
+                                       name="paymentMethod" value="5" lay-skin="primary" title="一次性结清">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">免费用车天数:</label>
+                            <div class="layui-input-inline">
+                                <input type="radio" lay-filter="hasFreeDays" v-model="order.plan.hasFreeDays"
+                                       name="hasFreeDays" value="0" lay-skin="primary" title="无">
+                                <input type="radio" lay-filter="hasFreeDays" v-model="order.plan.hasFreeDays"
+                                       name="hasFreeDays" value="3" lay-skin="primary" title="租期前">
+                                <input type="radio" lay-filter="hasFreeDays" v-model="order.plan.hasFreeDays"
+                                       name="hasFreeDays" value="1" lay-skin="primary" title="租期后">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="order.plan.hasFreeDays != 0">
+                            <label class="layui-form-label">免费用车天数</label>
+                            <div class="layui-input-inline">
+                                <input type="text" oninput="editSimple(this, 'numInteger', '99999')"
+                                       v-model="order.plan.freeDays" autocomplete="off"
+                                       placeholder="请输入免费用车天数"
+                                       class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>保证金:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="order.plan.cashDeposit" lay-verify="validate_monthlyRent"
+                                       type="text"
+                                       oninput="editSimple(this, 'num', '9999999.99')"
+                                       class="layui-input searchVal cashDeposit"
+                                       placeholder="请输入保证金" />
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">保证金期数:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="order.plan.cashDepositPeriods"
+                                       type="text"
+                                       oninput="editSimple(this, 'numInteger', '99')"
+                                       class="layui-input searchVal cashDepositPeriods"
+                                       placeholder="请输入保证金期数" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>租金:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="order.plan.monthlyRent" lay-verify="validate_monthlyRent"
+                                       type="text"
+                                       oninput="editSimple(this, 'num', '9999999.99')"
+                                       class="layui-input searchVal monthlyRent"
+                                       placeholder="请输入租金" />
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">服务费:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="order.plan.coverCharge"
+                                       type="text"
+                                       oninput="editSimple(this, 'num', '9999999.99')"
+                                       class="layui-input searchVal coverCharge"
+                                       placeholder="请输入服务费" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <div class="layui-inline layui-col-md44 layui-col-sm4 layui-col-xs6">
+                                <label class="layui-form-label layui-form-label-txt">
+                                    <span style="color:red">*</span>账单计划
+                                    <span style="z-index: 999;position: inherit">
+                                        <i @mouseout.stop="mouseout" @mousemove="move('billView')" class="layui-icon layui-icon-about" style="color: #c9c2c2;" id="billView"></i>
+                                    </span>
+                                </label>
+                                <div class="layui-input-block" style="z-index: 998">
+                                    <div class="multiple-table">
+                                        <div class="multiple-cell">
+                                            <span style="color:red">（{{confirmationStatus==1?'待确认':'已确认'}}）</span>
+                                        </div>
+                                        <div class="multiple-cell">
+                                            <div v-show="!hetong5" style="color:#3FACB3;cursor: pointer;text-align: right;left:0;top:0" @click="expandChange(5)">
+                                                <img src="../../statics/images/packup.png" alt="">
+                                                <span>展开</span>
+                                            </div>
+                                            <div v-show="hetong5" style="color:#3FACB3;cursor: pointer;text-align: right;left:0;top:0" @click="retractChange(5)">
+                                                <img src="../../statics/images/launch.png" alt="">
+                                                <span>收起</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="hetong5">
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <label class="layui-form-label layui-form-label-txt">费用项</label>
+                                <div class="layui-input-block">
+                                    <div class="multiple-table">
+                                        <div class="multiple-cell" style="width: 15%">
+                                            <select class="layui-input-value" name="billFeeItem" lay-filter="billFeeItem"
+                                                    v-model="billFeeItem">
+                                                <option value="">请选择费用项</option>
+                                                <option value="other_fee">其他</option>
+                                            </select>
+                                        </div>
+                                        <div class="multiple-cell">
+                                            <a @click="addBillFeeItem" class="layui-btn search-btn">添加</a>
+                                        </div>
+                                        <div class="multiple-cell">
+                                            <a @click="regenBillView" class="layui-btn reset-btn" style="float: right">恢复默认<i @mouseout.stop="mouseout" @mousemove="move('regen')" class="layui-icon layui-icon-about" style="color: #c9c2c2;" id="regen"></i></a>
+                                            <a @click="confirmation" class="layui-btn search-btn" style="float: right;margin-right: 10px;">确认账单</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="hetong5">
+                            <div class="table">
+                                <table class="layui-hide" id="billLst" lay-filter="billLst"></table>
+                            </div>
+                            <span style="float: right;margin-right: 10px;">{{statisticsBillViewTxt}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 续租合同 -->
+        <div class="form-content-box" :id="contractModelId">
+            <div class="list-search-sup-title new-layui-title  title-box">
+                <span class='title-box-icon'></span>
+                <span>续租合同</span>
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label layui-form-label-txt">合同生成方式</label>
+                            <div class="layui-input-inline layui-input-inline-change " style="background-color: #fff;margin-top:5px">
+                                <input type="radio" lay-filter="contractType" v-model="contract.contractType"
+                                       name="contractType" value=1 lay-skin="primary" title="直接选择/填写合同信息">
+                                <input type="radio" lay-filter="contractType" v-model="contract.contractType"
+                                       name="contractType" value=2 lay-skin="primary" title="根据订单信息自动生成合同">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" v-show="contract.contractType == 2">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label layui-form-label-txt">合同模板</label>
+                            <div class="layui-input-inline layui-input-inline-change" style="display: flex;align-items: center">
+                                <input type="text" placeholder="请选择生成对应的合同模板" id="selectorTemplate"
+                                       autocomplete="off" class="layui-input" readonly
+                                       v-model="contract.templateName">
+                                <div class="multiple-cell" style="white-space: nowrap;line-height: 36px">
+                                    <span class="text-edit" id="editTemplateBody" style="color: #3FACB3;cursor: pointer" v-show="contract.templateId != null && contract.templateBody != null && contract.templateBody != ''">&nbsp;编辑</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" v-show="contract.contractType == 1">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label layui-form-label-txt">合同编号</label>
+                            <div class="layui-input-block">
+                                <div class="multiple-table">
+                                    <div class="multiple-cell">
+                                        <input type="text" placeholder="请输入合同编号"
+                                               autocomplete="off" class="layui-input"
+                                               v-model="contract.code">
+                                    </div>
+                                    <div class="multiple-cell"style="padding-left: 50px">
+                                        <a class="layui-btn layui-btn-normal" id="selectorContract">选择合同</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" v-show="contract.contractType == 1">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                            <label class="layui-form-label layui-form-label-txt">合同生效日期</label>
+                            <div class="layui-input-inline layui-input-inline-change">
+                                <input type="text" id="contracttimeStart" readonly v-model="contract.timeStart"
+                                       placeholder="请选择合同生效日期" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                            <label class="layui-form-label layui-form-label-txt">合同终止日期</label>
+                            <div class="layui-input-inline layui-input-inline-change">
+                                <input type="text" id="contracttimeFinish" readonly v-model="contract.timeFinish"
+                                       placeholder="请选择合同终止日期" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                            <label class="layui-form-label layui-form-label-txt">合同签署日期</label>
+                            <div class="layui-input-inline layui-input-inline-change">
+                                <input type="text" id="contracttimeSigned" readonly v-model="contract.timeSigned"
+                                       placeholder="请选择合同签署日期" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                            <label class="layui-form-label layui-form-label-txt">合同备注</label>
+                            <div class="layui-input-inline layui-input-inline-change">
+                                <input type="text" v-model="contract.desc" autocomplete="off" placeholder="合同备注说明"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label layui-form-label-txt">合同附件:</label>
+                            <div class="layui-input-inline layui-input-inline-change" style="background: #fff;position: relative;">
+                                <div v-show="!hetong1" style="color:#3FACB3;cursor: pointer;text-align: right;position: absolute;left:0;top:0" @click="expandChange(2)">
+                                    <span>展开</span>
+                                    <img src="../../statics/images/packup.png" alt="">
+                                </div>
+                                <div v-show="hetong1" style="color:#3FACB3;cursor: pointer;text-align: right;position: absolute;left:0;top:0" @click="retractChange(2)">
+                                    <span>收起</span>
+                                    <img src="../../statics/images/launch.png" alt="">
+                                </div>
+                                <div class="layui-input-inline-checkbox" id="contractFileLst" v-show="hetong1" style="margin-top: 25px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="float-btn-group bottom-bar">
+            <a class="layui-btn reset-btn" id="closePage">取消</a>
+            <a class="layui-btn search-btn" lay-submit lay-filter="save" id="save">保存</a>
+        </div>
+    </form>
+
+
+</div>
+
+<script type="text/html" id="feeItemBarTpl">
+    <a class="layui-grid-btn-xs" lay-event="delect">删除</a>
+</script>
+<script type="text/html" id="selectPaymentMethod">
+    <select name="feeItemPaymentMethod" sid="{{d.serializeId}}" sname="{{d.typeFieldName}}" lay-filter="feeItemPaymentMethod">
+        <option value="">请选择付款方式</option>
+        <option {{ d.multiple == 1 ? 'disabled' : '' }} value="7">日付</option>
+        <option {{ d.multiple == 1 ? 'disabled' : '' }} value="8">周付</option>
+        <option {{ d.multiple == 1 ? 'disabled' : '' }} value="1">月付</option>
+        <option {{ d.multiple == 1 ? 'disabled' : '' }} value="2">两月付</option>
+        <option {{ d.multiple == 1 ? 'disabled' : '' }} value="3">季付</option>
+        <option {{ d.multiple == 1 ? 'disabled' : '' }} value="6">半年付</option>
+        <option {{ d.multiple == 1 ? 'disabled' : '' }} value="4">年付</option>
+        <option value="5">一次性结清</option>
+        <!--<option {{ d.multiple == 0 ? 'disabled' : '' }} value="5">一次性结清</option>-->
+    </select>
+</script>
+<script type="text/html" id="billItemBarTpl">
+    <a class="layui-grid-btn-xs" lay-event="regen">重置</a>
+    {{# if (d.typeFieldName === 'other_fee') { }}
+    <a class="layui-grid-btn-xs" lay-event="delect">删除</a>
+    {{# } }}
+</script>
+<script src="../../statics/js/modules/order/orderrelerecordedit.js?_${.now?long}"></script>
+</body>
+</html>

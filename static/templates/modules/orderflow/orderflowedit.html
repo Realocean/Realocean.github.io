@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>订单表</title>
+    <link rel="stylesheet" type="text/css" href="../../statics/css/public/flowChart.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/public/header.css">
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+<script type="text/javascript" src="../../statics/js/bpmchart.js"></script>
+<script src="../../statics/js/modules/element-ui/index.js"></script>
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+    <script src="../../statics/common/components/ImageCommon.js"></script>
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common-new.css">
+    <style>
+        .rentType {
+            width: 130px !important;
+            cursor: pointer;
+            margin-left: 5px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+
+        .layui-table-cell {
+            overflow: visible !important;
+        }
+
+        div[lay-id="operationlogid"] .layui-table-cell {
+            padding:0 5px;
+            height:inherit;
+            overflow:visible;
+            text-overflow:inherit;
+            white-space:normal;
+            word-break: break-all;
+        }
+
+        /* 使得下拉框与单元格刚好合适 */
+        td .layui-form-select {
+            /*margin-top: -10px;*/
+            margin-left: -15px;
+            margin-right: -15px;
+        }
+
+        /*解决下拉框被表格覆盖样式问题*/
+        .layui-form-select dl {
+            z-index: 9999;
+        }
+
+        div[lay-id="balancePaymentLstid"] div.layui-table-box {
+            overflow: visible;
+        }
+
+        div[lay-id="balancePaymentLstid"] div.layui-table-body {
+            overflow: visible;
+        }
+
+        div[lay-id="feeLstid"] div.layui-table-box {
+            overflow: visible;
+        }
+
+        div[lay-id="feeLstid"] div.layui-table-body {
+            overflow: visible;
+        }
+
+        div[lay-id="carLstid"] div.layui-table-box {
+            overflow: visible;
+        }
+
+        div[lay-id="carLstid"] div.layui-table-body {
+            overflow: visible;
+        }
+
+        /*.layui-table-box {
+             overflow-x: scroll;
+         }*/
+
+        /*div[lay-id="carLstid"] div.layui-table-body {
+            overflow-x: auto;
+        }*/
+
+        /*.layui-form-row-content .layui-inline .layui-form-label {*/
+        /*width: 180px !important;*/
+        /*}*/
+
+        .multiple-cell {
+            display: table-cell;
+            padding-right: 8px;
+            height: 36px;
+            vertical-align: middle;
+        }
+
+        .multiple-table {
+            margin-bottom: 9px;
+            display: table;
+            margin-left: 78px;
+        }
+
+        .layui-form-radio {
+            line-height: 28px;
+            margin: 0;
+            padding-right: 10px;
+            cursor: pointer;
+            font-size: 0;
+        }
+
+        .input-readonly{
+            border: none;
+        }
+        .form-content-box, .details-content-box{
+            margin-top:0px;
+        }
+        .layui-input, .layui-select, .layui-textarea{
+            padding:5px;
+        }
+
+        /*.layui-layer .layui-layer-content .details-conteiner:first-child{*/
+        /*    padding: 25px;*/
+        /*}*/
+
+        form .details-content-box>.form-content-session-box>label{
+            width: auto !important;
+            padding: 0 !important;
+        }
+
+        .el-dialog__footer {
+            text-align: center;
+        }
+
+        .el-dialog__title {
+            font-size: 16px;
+        }
+
+        .el-dialog {
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <!-- 新增表单 -->
+    <form class="layui-form ren-form" style="margin-bottom: 60px;">
+        <div class="details-tab-content">
+            <div class="details-tab-content-box display">
+                <div class="layui-tab">
+                    <ul class="layui-tab-title">
+                        <li :class="detailsTabContentListActiveIndex==index?'layui-this':''" @click="detailsTabContentBindtap(index, item)" v-for="(item, index) in detailsTabContentList" :key="index">{{ item }}</li>
+                    </ul>
+                    </div>
+            </div>
+        </div>
+
+
+        <div class="details-conteiner" v-show="dataSuccess && detailsSupTabContentListActiveValue === '业务信息'">
+            <!--订单基本信息-->
+            <div class="form-content-box details-content-box" v-if="nodeFields.billLading && nodeFields.billLading.show" v-show="detailsSupTabContentListActiveValue !== '操作记录' && nodeFields.billLading.show">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        订单基本信息
+
+                    <span style="float: right;">
+                        <span style="float: right;"><span style="color: #FFC000;font-size: 18px;margin-right: 10px">{{getAuditStatusStr()}}</span><span>车辆订单状态：</span><span style="color: #1951FF">{{getOrderStatusStr()}}</span></span>
+                        <span v-show="isShowContent()" style="float: left;">
+                            <span style="color: #FFC000;font-size: 18px;width: 700px;text-align: end;display: block;height: auto;white-space: pre-wrap;word-break: break-all;overflow: hidden;word-wrap: break-word;">{{getAuditMarkType()}}：{{getAuditMarkStr()}}</span>
+                        </span>
+                    </span>
+                    </div>
+                </div>
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="nodeFields.billLading_orderCar_code.show">
+                                <label class="layui-form-label">车辆订单号</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" :value="order.orderCar.code" class="layui-input input-readonly" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-show="nodeFields.billLading_order_customerName.show">
+                                <label class="layui-form-label">客户名称</label>
+                                <div class="layui-input-inline" @click="showCustomer(order.customerId)">
+                                    <input type="text" style="color:#419BEA;cursor: pointer;width: inherit;" :value="order.customerName" class="layui-input input-readonly" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-show="nodeFields.billLading_order_customerAddr.show">
+                                <label class="layui-form-label">联系地址</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" :value="order.customerAddr || '--'" class="layui-input input-readonly" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-show="nodeFields.billLading_order_contactPerson.show">
+                                <label class="layui-form-label">联系人</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" :value="order.contactPerson" class="layui-input input-readonly" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-show="nodeFields.billLading_order_customerTel.show">
+                                <label class="layui-form-label">联系电话</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" :value="order.customerTel" class="layui-input input-readonly" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-show="nodeFields.billLading_order_lessorName.show">
+                                <label class="layui-form-label">{{lessor_title}}名称</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" :value="order.lessorName" class="layui-input input-readonly" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-show="nodeFields.billLading_orderCar_rentType.show">
+                                <label class="layui-form-label">租赁类型</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" :value="getRentTypeStr(order.orderCar.rentType)" class="layui-input input-readonly" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-show="nodeFields.billLading_orderCar_paymentMethod.show"  v-if="order.orderCar.rentType < 5 || order.orderCar.rentType == 7">
+                                <label class="layui-form-label">付款方式</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" :value="getPeyTypeStr(order.orderCar.paymentMethod)" class="layui-input input-readonly" disabled>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-if="order.orderCar.rentType != 6" v-show="nodeFields.billLading_orderCar_timeStartRent.show">
+                                <label class="layui-form-label">租赁开始时间</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" :value="order.orderCar.timeStartRent" class="layui-input input-readonly" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-if="order.orderCar.rentType != 6" v-show="nodeFields.billLading_orderCar_timeFinishRent.show">
+                                <label class="layui-form-label">租赁结束时间</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" :value="order.orderCar.timeFinishRent" class="layui-input input-readonly" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-if="order.orderCar.rentType == 6" v-show="nodeFields.billLading_orderCar_timeRepayment.show">
+                                <label class="layui-form-label">还款时间</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" :value="order.orderCar.timeRepayment" class="layui-input input-readonly" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-if="order.orderCar.rentType != 6" v-show="nodeFields.billLading_orderCar_tenancy.show">
+                                <label class="layui-form-label">租期</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" :value="order.orderCar.tenancy" id="tenancy" class="layui-input input-readonly" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-if="order.orderCar.rentType != 5 && order.orderCar.rentType != 6" v-show="nodeFields.billLading_orderCar_paymentDay.show">
+                                <label class="layui-form-label" v-show="nodeFields.billLading_orderCar_paymentDay.edit">
+                                    <span style="color:red">{{nodeFields.billLading_orderCar_paymentDay.required?'*':''}}</span>还款日
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.billLading_orderCar_paymentDay.edit">还款日</label>
+                                <div class="layui-input-block" v-show="nodeFields.billLading_orderCar_paymentDay.edit">
+                                    <div class="multiple-table">
+                                        <div class="multiple-cell">
+                                            <input type="radio" lay-filter="paymentDayType"
+                                                   v-model="order.orderCar.paymentDayType" name="paymentDayType" value="1"
+                                                   lay-skin="primary" title="">
+                                        </div>
+                                        <div class="multiple-cell">
+                                            <span>还款日与交车日一致<i @mouseout.stop="mouseout" @mousemove="move('paymentDayType')" class="layui-icon layui-icon-about" style="color: #c9c2c2;" id="paymentDayType"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="multiple-table">
+                                        <div class="multiple-cell">
+                                            <input type="radio" lay-filter="paymentDayType"
+                                                   v-model="order.orderCar.paymentDayType" name="paymentDayType" value="2"
+                                                   lay-skin="primary" title="">
+                                        </div>
+                                        <div class="multiple-cell">
+                                            <input type="text" readonly
+                                                   style="position: absolute;line-height: 0;border-width: 0;border-style: hidden;background-color: rgba(0, 0, 0, 0);border-radius: 0;width: 182px;text-indent: -99999px !important;"
+                                                   id="paymentDay" class="layui-input">
+                                            <input type="text" id="paymentDayVal" :lay-verify="order.orderCar.paymentDayType == 2?nodeFields.billLading_orderCar_paymentDay.verify:''"
+                                                   v-model="order.orderCar.paymentDay" readonly style="width: 182px;"
+                                                   autocomplete="off" placeholder="请选择还款日" class="layui-input">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-input-inline" v-show="!nodeFields.billLading_orderCar_paymentDay.edit">
+                                    <input type="text" :value="order.orderCar.paymentDay" class="layui-input input-readonly" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-if="order.orderCar.rentType == 2 || order.orderCar.rentType == 5" v-show="nodeFields.billLading_orderCar_timeTransferEstimated.show">
+                                <label class="layui-form-label" v-show="nodeFields.billLading_orderCar_timeTransferEstimated.edit">
+                                    <span style="color:red">{{nodeFields.billLading_orderCar_timeTransferEstimated.required?'*':''}}</span>预计过户时间
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.billLading_orderCar_timeTransferEstimated.edit">预计过户时间</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" v-model="order.orderCar.timeTransferEstimated" id="timeTransferEstimated"
+                                           autocomplete="off" placeholder="请选择预计过户时间" readonly
+                                           v-show="nodeFields.billLading_orderCar_timeTransferEstimated.edit"
+                                           :lay-verify="nodeFields.billLading_orderCar_timeTransferEstimated.verify"
+                                           class="layui-input searchVal">
+                                    <input type="text" :value="order.orderCar.timeTransferEstimated"
+                                           v-show="!nodeFields.billLading_orderCar_timeTransferEstimated.edit" class="layui-input input-readonly" disabled>
+                                </div>
+                            </div>
+                            <div class="card" v-if="order.orderCar.rentType == 2 || order.orderCar.rentType == 1" v-show="nodeFields.billLading_plan_rentGenerationMethod.show">
+                                <div class="layui-row layui-form-row-content">
+                                    <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                        <label class="layui-form-label">租金生成方式</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" :value="transformTypeByMap(order.plan.rentGenerationMethod,{ 1: '当月生成', 2: '次月生成', 4: '自定义首期租金' })" class="layui-input input-readonly" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-show="order.plan.rentGenerationMethod == 4">
+                                        <label class="layui-form-label">首期租金</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" :value="order.plan.firstRent" class="layui-input input-readonly" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+<!--
+                            <div class="card" v-if="order.orderCar.rentType == 2 || order.orderCar.rentType == 1" v-show="nodeFields.billLading_plan_rentGenerationMethod.show">
+                                <div class="layui-row layui-form-row-content">
+                                    <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                        <label class="layui-form-label" v-show="nodeFields.billLading_plan_rentGenerationMethod.edit">
+                                            <span style="color:red">{{nodeFields.billLading_plan_rentGenerationMethod.required?'*':''}}</span>租金生成方式
+                                        </label>
+                                        <label class="layui-form-label" v-show="!nodeFields.billLading_plan_rentGenerationMethod.edit">租金生成方式</label>
+                                        <div class="layui-input-inline" v-show="nodeFields.billLading_plan_rentGenerationMethod.edit">
+                                            <input type="radio" lay-filter="rentGenerationMethod" v-model="order.plan.rentGenerationMethod"
+                                                   name="rentGenerationMethod" value="1" lay-skin="primary" title="当期生成">
+                                            <input type="radio" lay-filter="rentGenerationMethod" v-model="order.plan.rentGenerationMethod"
+                                                   name="rentGenerationMethod" value="2" lay-skin="primary" title="次期生成">
+                                        </div>
+                                        <div class="layui-input-inline" v-show="!nodeFields.billLading_plan_rentGenerationMethod.edit">
+                                            <input type="text" :value="order.plan.rentGenerationMethod" class="layui-input input-readonly" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+-->
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-show="nodeFields.billLading_orderCar_channel.show">
+                                <label class="layui-form-label" v-show="nodeFields.billLading_orderCar_channel.edit">
+                                    <span style="color:red">{{nodeFields.billLading_orderCar_channel.required?'*':''}}</span>所属渠道商
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.billLading_orderCar_channel.edit">所属渠道商</label>
+                                <div class="layui-input-inline" v-if="nodeFields.billLading_orderCar_channel.edit">
+                                    <select lay-search="" name="channel" lay-filter="channel" :lay-verify="nodeFields.billLading_orderCar_channel.verify"
+                                            v-model="order.orderCar.channelId">
+                                        <option value="">请选择渠道商</option>
+                                        <option v-for="(item,index) in chlLst" :value="item.id">{{item.channelName}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline" v-show="!nodeFields.billLading_orderCar_channel.edit">
+                                    <input type="text" :value="order.orderCar.channelName" class="layui-input input-readonly" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-show="nodeFields.billLading_orderCar_salePerson.show">
+                                <label class="layui-form-label" v-show="nodeFields.billLading_orderCar_salePerson.edit">
+                                    <span style="color:red">{{nodeFields.billLading_orderCar_salePerson.required?'*':''}}</span>所属销售员
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.billLading_orderCar_salePerson.edit">所属销售员</label>
+                                <div class="layui-input-inline" v-if="nodeFields.billLading_orderCar_salePerson.edit">
+                                    <select lay-search="" name="salePerson" lay-filter="salePerson" :lay-verify="nodeFields.billLading_orderCar_salePerson.verify"
+                                            v-model="order.orderCar.salePersonId">
+                                        <option value="">请选择销售员</option>
+                                        <option v-for="(item,index) in salePersonList" :value="item.userId">{{item.username}}</option>
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline" v-show="!nodeFields.billLading_orderCar_salePerson.edit">
+                                    <input type="text" :value="order.orderCar.salePersonName" class="layui-input input-readonly" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-if="order.orderCar.rentType != 6" v-show="nodeFields.billLading_orderCar_insuranceItems.show">
+                                <label class="layui-form-label" v-show="nodeFields.billLading_orderCar_insuranceItems.edit">
+                                    <span style="color:red">{{nodeFields.billLading_orderCar_insuranceItems.required?'*':''}}</span>车辆已购保险
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.billLading_orderCar_insuranceItems.edit">车辆已购保险</label>
+                                <div class="layui-input-inline" id="insuranceGroup"></div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="nodeFields.billLading_orderCar_orderDesc.show">
+                                <label class="layui-form-label" v-show="nodeFields.billLading_orderCar_orderDesc.edit">
+                                    <span style="color:red">{{nodeFields.billLading_orderCar_orderDesc.required?'*':''}}</span>备注
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.billLading_orderCar_orderDesc.edit">备注</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" v-model="order.orderCar.orderDesc"
+                                           :lay-verify="nodeFields.billLading_orderCar_orderDesc.verify"
+                                           v-show="nodeFields.billLading_orderCar_orderDesc.edit"
+                                           autocomplete="off" placeholder="如果需要备注，请记录备注信息" class="layui-input searchVal">
+                                    <input type="text" :value="order.orderCar.orderDesc"
+                                           v-show="!nodeFields.billLading_orderCar_orderDesc.edit" class="layui-input input-readonly" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table" id="carLstTable" v-show="!nodeFields.billLading_orderCar_selectCarModel.hide
+                        || !nodeFields.billLading_plan_cashDeposit.hide
+                        || !nodeFields.billLading_plan_downPayment.hide
+                        || !nodeFields.billLading_plan_totalPrice.hide
+                        || !nodeFields.billLading_plan_servicingFee.hide
+                        || !nodeFields.billLading_plan_monthlyRent.hide
+                        || !nodeFields.billLading_plan_coverCharge.hide
+                        || !nodeFields.billLading_plan_balancePayment.hide
+                        || !nodeFields.billLading_plan_financeCompanyName.hide
+                        || !nodeFields.billLading_plan_chlRebate.hide
+                        || !nodeFields.billLading_plan_hasFreeDays.hide
+                        || !nodeFields.billLading_plan_freeDays.hide">
+                            <table class="layui-hide" id="carLst" lay-filter="carLst"></table>
+                        </div>
+                    </div>
+
+                    <div class="card" v-if="nodeFields.billLading_plan_billView.show" style="margin-top: 40px">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <div class="layui-inline layui-col-md44 layui-col-sm4 layui-col-xs6">
+                                    <label class="layui-form-label layui-form-label-txt">
+                                        <span style="color:red">*</span>账单计划
+                                        <span style="z-index: 999;position: inherit">
+                                        <i @mouseout.stop="mouseout" @mousemove="move('billView')" class="layui-icon layui-icon-about" style="color: #c9c2c2;" id="billView"></i>
+                                    </span>
+                                    </label>
+                                    <div class="layui-input-block" style="z-index: 998; margin-left: 0 !important;">
+                                        <div class="multiple-table">
+                                            <div class="multiple-cell">
+                                                <span style="color:red">（{{confirmationStatus==1?'待确认':'已确认'}}）</span>
+                                            </div>
+                                            <div class="multiple-cell">
+                                                <div v-show="!hetong5" style="color:#3FACB3;cursor: pointer;text-align: right;left:0;top:0" @click="expandChange(5)">
+                                                    <img src="../../statics/images/packup.png" alt="">
+                                                    <span>展开</span>
+                                                </div>
+                                                <div v-show="hetong5" style="color:#3FACB3;cursor: pointer;text-align: right;left:0;top:0" @click="retractChange(5)">
+                                                    <img src="../../statics/images/launch.png" alt="">
+                                                    <span>收起</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="hetong5" v-if="nodeFields.billLading_plan_billView.edit">
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <label class="layui-form-label layui-form-label-txt">费用项</label>
+                                    <div class="layui-input-block" style="margin-left: 0 !important;width: 95%">
+                                        <div class="multiple-table" style="width: 90%;">
+                                            <div class="multiple-cell" style="width: 15%;">
+                                                <select class="layui-input-value" name="billFeeItem" lay-filter="billFeeItem"
+                                                        v-model="billFeeItem">
+                                                    <option value="">请选择费用项</option>
+                                                    <option value="other_fee">其他</option>
+                                                </select>
+                                            </div>
+                                            <div class="multiple-cell">
+                                                <a @click="addBillFeeItem" class="layui-btn search-btn">添加</a>
+                                            </div>
+                                            <div class="multiple-cell">
+                                                <a @click="regenBillView" class="layui-btn reset-btn" style="float: right">恢复默认<i @mouseout.stop="mouseout" @mousemove="move('regen')" class="layui-icon layui-icon-about" style="color: #c9c2c2;" id="regen"></i></a>
+                                                <a @click="confirmation" class="layui-btn search-btn" style="float: right;margin-right: 10px;">确认账单</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="hetong5">
+                                <div class="table" style="width: 100%">
+                                    <table class="layui-hide" id="billLst" lay-filter="billLst"></table>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="hetong5">
+                                <div class="layui-input-block" style="margin-left: 0 !important;width: 95%">
+                                    <span style="float: right;margin-right: 10px;">{{statisticsBillViewTxt}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" v-if="nodeFields.billLading_plan_chlRebate.show" style="margin-top: 40px" v-if="order.orderCar.rentType != 7">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <label class="layui-form-label layui-form-label-txt">渠道返利计划</label>
+                                    <div class="layui-input-block">
+                                        <div class="multiple-table">
+                                            <div class="multiple-cell">
+                                                <span style="color:red">（{{confirmationChlRebateStatus==1?'待确认':'已确认'}}）</span>
+                                            </div>
+                                            <div class="multiple-cell">
+                                                <div v-show="!hetong6" style="color:#3FACB3;cursor: pointer;text-align: right;left:0;top:0" @click="expandChange(6)">
+                                                    <img src="../../statics/images/packup.png" alt="">
+                                                    <span>展开</span>
+                                                </div>
+                                                <div v-show="hetong6" style="color:#3FACB3;cursor: pointer;text-align: right;left:0;top:0" @click="retractChange(6)">
+                                                    <img src="../../statics/images/launch.png" alt="">
+                                                    <span>收起</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="hetong6">
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <label class="layui-form-label layui-form-label-txt">
+                                    </label>
+                                    <div class="layui-input-inline layui-input-inline-change" style="width: 100%;">
+                                        <a @click="regenChlRebate" class="layui-btn reset-btn" style="float: right;margin-right: 8px">恢复默认</a>
+                                        <a @click="confirmationChlRebate" class="layui-btn search-btn" style="float: right;margin-right: 10px;">确认账单</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="hetong6">
+                                <div class="table">
+                                    <table class="layui-hide" id="chlRebateBillLst" lay-filter="chlRebateBillLst"></table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="card" id="balancePaymentBox" v-if="(order.orderCar.rentType == 5 || order.orderCar.rentType == 2) && nodeFields.billLading_plan_hasBalancePayment.show">
+                        <div class="layui-row layui-form-row-content" v-show="nodeFields.billLading_plan_hasBalancePayment.edit">
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <label class="layui-form-label">是否有尾款</label>
+                                <div class="layui-input-inline">
+                                    <input type="radio" lay-filter="hasBalancePayment" v-model="order.plan.hasBalancePayment"
+                                           name="hasBalancePayment" value="0" lay-skin="primary" title="否">
+                                    <input type="radio" lay-filter="hasBalancePayment" v-model="order.plan.hasBalancePayment"
+                                           name="hasBalancePayment" value="1" lay-skin="primary" title="是">
+                                </div>
+                            </div>
+                        </div>
+                        <div id="balancePaymentPlan" v-if="nodeFields.billLading_plan_hasBalancePayment.edit" style="display: none">
+                            <div class="layui-row layui-form-row-content">
+                                <a class="layui-btn layui-btn-normal" @click="addBalancePaymentPlan" style="float: right;">添加尾款方案</a>
+                            </div>
+                            <div class="layui-row form-group">
+                                <div class="table">
+                                    <table class="layui-hide" id="balancePaymentLst" lay-filter="balancePaymentLst"></table>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="!nodeFields.billLading_plan_hasBalancePayment.edit">
+                            <div class="table">
+                                <table class="layui-table">
+                                    <thead>
+                                    <tr>
+                                        <th>尾款金额/元</th>
+                                        <th>尾款付款方式</th>
+                                        <th>预计第一次付款日期</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="(sItem,sIndex) in order.plan.balancePaymentLst" :key="sIndex">
+                                        <td>{{sItem.money}}</td>
+                                        <td>一次性结清</td>
+                                        <td>{{dateFormatYMD(sItem.timePayment1st)}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>-->
+                    <div class="card" v-show="nodeFields.billLading_orderCar_orderFile.show">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="nodeFields.billLading_orderCar_orderFile.show">
+                                <label class="layui-form-label" v-show="nodeFields.billLading_orderCar_orderFile.edit">
+                                    <span style="color:red">{{nodeFields.billLading_orderCar_orderFile.required?'*':''}}</span>订单附件:
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.billLading_orderCar_orderFile.edit">订单附件:</label>
+                                <div class="layui-input-inline" id="addOrderFile"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="card" v-if="order.orderCar.rentType == 6 && nodeFields.billLading_plan_feeItemLst.show" style="margin-top: 5px">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <label class="layui-form-label">费用项</label>
+                                <div class="layui-input-block">
+                                    <div class="multiple-table" v-show="nodeFields.billLading_plan_feeItemLst.edit">
+                                        <div class="multiple-cell">
+                                            <select name="feeItem" lay-filter="feeItem" lay-search="" v-model="feeItemId">
+                                                <option value="">请选择费用项</option>
+                                                <option v-for="(item,index) in feeItemLst" :value="item.fieldName">{{item.name}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="multiple-cell"style="padding-left: 50px">
+                                            <a class="layui-btn layui-btn-normal" @click="addFeeItem">添加</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row form-group" v-show="nodeFields.billLading_plan_feeItemLst.edit">
+                                <div class="table">
+                                    <table class="layui-hide" id="feeLst" lay-filter="feeLst"></table>
+                                </div>
+                            </div>
+                            <div class="layui-row form-group" v-show="!nodeFields.billLading_plan_feeItemLst.edit">
+                                <div class="table">
+                                    <table class="layui-table">
+                                        <thead>
+                                        <tr>
+                                            <th>类型</th>
+                                            <th>金额/元</th>
+                                            <th>付款方式</th>
+                                            <th>预计第一次付款日期</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr v-for="(sItem,sIndex) in order.plan.feeLst" :key="sIndex">
+                                            <td>{{sItem.typeFieldDesc}}</td>
+                                            <td>{{sItem.money}}</td>
+                                            <td>一次性结清</td>
+                                            <td>{{dateFormatYMD(sItem.timePayment1st)}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>-->
+                </div>
+            </div>
+            <!-- 代扣信息 -->
+            <div class="form-content-box details-content-box" v-if="daikouFlag == 1 && order.orderWay != 2" v-show="nodeFields.billLading_order_repaymentMethod.show">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        代扣信息
+                    </div>
+                </div>
+                <div class="form-content-session-box">
+                    <div class="card" :id="daikouMsgId">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <label class="layui-form-label" v-show="nodeFields.billLading_order_repaymentMethod.edit">
+                                    <span style="color:red">{{nodeFields.billLading_order_repaymentMethod.required?'*':''}}</span>是否需要代扣
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.billLading_order_repaymentMethod.edit">是否需要代扣</label>
+                                <div class="layui-input-inline" v-show="order.hasBank">
+                                    <input type="radio" lay-filter="repaymentMethod" v-model="order.repaymentMethod"
+                                           v-if="!nodeFields.billLading_order_repaymentMethod.edit" disabled="disabled"
+                                           name="hasBalancePayment" value="2" lay-skin="primary" title="否">
+                                    <input type="radio" lay-filter="repaymentMethod" v-model="order.repaymentMethod"
+                                           v-if="!nodeFields.billLading_order_repaymentMethod.edit" disabled="disabled"
+                                           name="hasBalancePayment" value="3" lay-skin="primary" title="是">
+                                    <input type="radio" lay-filter="repaymentMethod" v-model="order.repaymentMethod"
+                                           v-if="nodeFields.billLading_order_repaymentMethod.edit"
+                                           name="hasBalancePayment" value="2" lay-skin="primary" title="否">
+                                    <input type="radio" lay-filter="repaymentMethod" v-model="order.repaymentMethod"
+                                           v-if="nodeFields.billLading_order_repaymentMethod.edit"
+                                           name="hasBalancePayment" value="3" lay-skin="primary" title="是">
+                                </div>
+                                <div class="layui-input-inline" style="padding:5px;" v-show="!order.hasBank">
+                                    <span>当前客户没有维护代扣信息，请先到客户管理页面维护代扣信息</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 还款信息 -->
+            <div class="form-content-box" v-if="order.orderWay == 2">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    还款信息
+                </div>
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <label class="layui-form-label">还款方式</label>
+                                <div class="layui-input-inline">
+                                    <input type="radio" v-model="order.repaymentMethod"
+                                           disabled value="1" lay-skin="primary" title="微信">
+                                    <input type="radio" v-model="order.repaymentMethod"
+                                           disabled value="2" lay-skin="primary" title="其他">
+                                    <input v-if="daikouFlag == 1" type="radio" v-model="order.repaymentMethod"
+                                           disabled value="3" lay-skin="primary" title="代扣">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-content-box" v-if="order.repaymentMethod == 4 || order.repaymentMethod == 5" v-show="nodeFields.billLading_order_repaymentMethod.show">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    代扣信息
+                </div>
+                &nbsp;&nbsp;&nbsp;&nbsp;<input checked type="radio" name="repaymentMethod" value="4" lay-skin="primary" title="使用支付宝代扣(需引导客户使用下单手机号登录支付宝签约代扣协议并确认订单)">
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <label class="layui-form-label">配置滞纳金</label>
+                                <div class="layui-input-block">
+                                    <div class="multiple-table">
+                                        <input id="overdueFineConfDefault" style="width: 100px" type="checkbox" lay-skin="switch"
+                                               name="overdueFineConf" lay-filter="overdueFineConfDefault">
+                                        <div class="multiple-cell">
+                                            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;使用系统配置：&nbsp;&nbsp;</span>
+                                        </div>
+                                        <div class="multiple-cell">
+                                            <span style="visibility: hidden">*</span><span>宽限天数：{{overdueFineConf.graceDays}}天；每逾期1天收取当期应收金额的{{overdueFineConf.lateRatio}}%</span>
+                                        </div>
+                                    </div>
+                                    <div class="multiple-table">
+                                        <input id="overdueFineConfCustom" style="width: 100px" type="checkbox" lay-skin="switch"
+                                               name="overdueFineConf" lay-filter="overdueFineConfCustom">
+                                        <div class="multiple-cell">
+                                            <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&emsp;自定义配置：&nbsp;&nbsp;</span>
+                                        </div>
+                                        <div class="multiple-cell">
+                                            <span style="color:red">*</span><span>宽限天数：</span>
+                                        </div>
+                                        <div class="multiple-cell">
+                                            <input type="text" v-model="order.plan.gracePeriod" maxlength="5" lay-verify="validate_gracePeriod"
+                                                   style="width: 60px;" oninput="editSimple(this, 'numInteger', '99999')"
+                                                   autocomplete="off" class="layui-input searchVal">
+                                        </div>
+                                        <div class="multiple-cell">
+                                            <span>滞纳比例：</span><span style="color:red">*</span><span>每逾期1天收取当期应收金额的</span>
+                                        </div>
+                                        <div class="multiple-cell">
+                                            <input type="text" v-model="order.plan.overdueFineRatio" maxlength="5" lay-verify="validate_overdueFineRatio"
+                                                   style="width: 60px;" oninput="editSimple(this, 'num', '99.99')"
+                                                   autocomplete="off" class="layui-input searchVal">
+                                        </div>
+                                        <div class="multiple-cell">
+                                            <span>%作为滞纳金</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-content-box" v-if="order.repaymentMethod == 4" v-show="nodeFields.billLading_order_repaymentMethod.show">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    签约情况
+                </div>
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="table">
+                            <table class="layui-hide" id="signList" lay-filter="signList"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--车辆信息-->
+            <div class="form-content-box details-content-box" v-if="nodeFields.vehicleBusiness && nodeFields.vehicleBusiness.show" v-show="detailsSupTabContentListActiveValue !== '操作记录' && nodeFields.vehicleBusiness.show">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        车辆信息
+                    </div>
+                </div>
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content" :id="carUpdateId">
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-show="nodeFields.vehicleBusiness_orderCar_vinNo.show">
+                                <label class="layui-form-label" v-show="nodeFields.vehicleBusiness_orderCar_vinNo.edit">
+                                    <span style="color:red">{{nodeFields.vehicleBusiness_orderCar_vinNo.required?'*':''}}</span>选择车架号
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.vehicleBusiness_orderCar_vinNo.edit">选择车架号</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" :lay-verify="nodeFields.vehicleBusiness_orderCar_vinNo.verify" v-model="order.orderCar.vinNo"
+                                           @click="selectCar" readonly v-show="nodeFields.vehicleBusiness_orderCar_vinNo.edit"
+                                           autocomplete="off" placeholder="选择车架号" class="layui-input searchVal">
+                                    <input type="text" :value="order.orderCar.vinNo" disabled
+                                           v-show="!nodeFields.vehicleBusiness_orderCar_vinNo.edit" class="layui-input input-readonly">
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-show="nodeFields.vehicleBusiness_orderCar_carNo.show">
+                                <label class="layui-form-label" v-show="nodeFields.vehicleBusiness_orderCar_carNo.edit">
+                                    <span style="color:red">{{nodeFields.vehicleBusiness_orderCar_carNo.required?'*':''}}</span>选择车牌号
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.vehicleBusiness_orderCar_carNo.edit">选择车牌号</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" :lay-verify="nodeFields.vehicleBusiness_orderCar_carNo.verify" v-model="order.orderCar.carNo"
+                                           @click="selectCar" readonly v-show="nodeFields.vehicleBusiness_orderCar_carNo.edit"
+                                           autocomplete="off" placeholder="选择车牌号" class="layui-input searchVal">
+                                    <input type="text" :value="order.orderCar.carNo" disabled
+                                           v-show="!nodeFields.vehicleBusiness_orderCar_carNo.edit" class="layui-input input-readonly">
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-show="nodeFields.vehicleBusiness_orderCar_brandSeriesName.show">
+                                <label class="layui-form-label">车辆品牌/车系</label>
+                                <div class="layui-input-inline" v-show="nodeFields.vehicleBusiness_orderCar_brandSeriesName.edit">
+                                    <input type="text" readonly v-show="!(order.orderCar.carId != null && order.orderCar.carId != '')"
+                                           autocomplete="off" placeholder="选择车牌号/车架号自动获取" class="layui-input searchVal">
+                                    <input type="text" v-model="order.orderCar.brandSeriesName"
+                                           readonly v-show="(order.orderCar.carId != null && order.orderCar.carId != '')"
+                                           autocomplete="off" placeholder="选择车牌号/车架号自动获取" class="layui-input searchVal">
+                                </div>
+                                <div class="layui-input-inline" v-show="!nodeFields.vehicleBusiness_orderCar_brandSeriesName.edit">
+                                    <input type="text" disabled v-show="!(order.orderCar.carId != null && order.orderCar.carId != '')"
+                                           autocomplete="off" placeholder="选择车牌号/车架号自动获取" class="layui-input input-readonly">
+                                    <input type="text" :value="order.orderCar.brandSeriesName"
+                                           disabled v-show="(order.orderCar.carId != null && order.orderCar.carId != '')"
+                                           class="layui-input input-readonly">
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-show="nodeFields.vehicleBusiness_orderCar_modelName.show">
+                                <label class="layui-form-label">车型</label>
+                                <div class="layui-input-inline" v-show="nodeFields.vehicleBusiness_orderCar_modelName.edit">
+                                    <input type="text" readonly v-show="!(order.orderCar.carId != null && order.orderCar.carId != '')"
+                                           autocomplete="off" placeholder="选择车牌号/车架号自动获取" class="layui-input searchVal">
+                                    <input type="text" v-model="order.orderCar.modelName"
+                                           readonly v-show="(order.orderCar.carId != null && order.orderCar.carId != '')"
+                                           autocomplete="off" placeholder="选择车牌号/车架号自动获取" class="layui-input searchVal">
+                                </div>
+                                <div class="layui-input-inline" v-show="!nodeFields.vehicleBusiness_orderCar_modelName.edit">
+                                    <input type="text" :value="order.orderCar.modelName"
+                                           disabled v-show="(order.orderCar.carId != null && order.orderCar.carId != '')" class="layui-input input-readonly">
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-show="nodeFields.vehicleBusiness_orderCar_deptName.show">
+                                <label class="layui-form-label">车辆所属部门</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" v-model="order.orderCar.deptName" readonly v-show="nodeFields.vehicleBusiness_orderCar_deptName.edit"
+                                           autocomplete="off" placeholder="选择车牌号/车架号自动获取" class="layui-input searchVal">
+                                    <input type="text" :value="order.orderCar.deptName" disabled
+                                           v-show="!nodeFields.vehicleBusiness_orderCar_deptName.edit" class="layui-input input-readonly">
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-show="nodeFields.vehicleBusiness_orderCar_depotName.show">
+                                <label class="layui-form-label">车辆所在仓库/城市</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" v-model="order.orderCar.depotCityName" readonly v-show="nodeFields.vehicleBusiness_orderCar_depotName.edit"
+                                           autocomplete="off" placeholder="选择车牌号/车架号自动获取" class="layui-input searchVal">
+                                    <input type="text" :value="order.orderCar.depotCityName" disabled
+                                           v-show="!nodeFields.vehicleBusiness_orderCar_depotName.edit" class="layui-input input-readonly">
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-show="nodeFields.vehicleBusiness_orderCar_mileage.show">
+                                <label class="layui-form-label">车辆实时里程数</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" v-model="order.orderCar.mileage" readonly v-show="nodeFields.vehicleBusiness_orderCar_mileage.edit"
+                                           autocomplete="off" placeholder="选择车牌号/车架号自动获取" class="layui-input searchVal">
+                                    <input type="text" :value="order.orderCar.mileage" disabled
+                                           v-show="!nodeFields.vehicleBusiness_orderCar_mileage.edit" class="layui-input input-readonly">
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="nodeFields.vehicleBusiness_orderCar_accessoryItems.show">
+                                <label class="layui-form-label">随车物品</label>
+                                <div class="layui-input-inline">
+                                    <div class="layui-input-inline-checkbox" id="accessoryGroup"></div>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="nodeFields.vehicleBusiness_orderCar_carDesc.show">
+                                <label class="layui-form-label" v-show="nodeFields.vehicleBusiness_orderCar_carDesc.edit">
+                                    <span style="color:red">{{nodeFields.vehicleBusiness_orderCar_carDesc.required?'*':''}}</span>备注
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.vehicleBusiness_orderCar_carDesc.edit">备注</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" v-model="order.orderCar.carDesc" v-show="nodeFields.vehicleBusiness_orderCar_carDesc.edit"
+                                           :lay-verify="nodeFields.vehicleBusiness_orderCar_carDesc.verify"
+                                           autocomplete="off" placeholder="如果需要备注，请记录备注信息" class="layui-input searchVal">
+                                    <input type="text" :value="order.orderCar.carDesc" disabled
+                                           v-show="!nodeFields.vehicleBusiness_orderCar_carDesc.edit" class="layui-input input-readonly">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--交车信息-->
+            <div class="form-content-box details-content-box" v-if="nodeFields.payCarBusiness && nodeFields.payCarBusiness.show" v-show="detailsSupTabContentListActiveValue !== '操作记录' && nodeFields.payCarBusiness.show">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        交车信息
+                    </div>
+                </div>
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-show="nodeFields.payCarBusiness_orderCar_timeDelivery.show">
+                                <label class="layui-form-label" v-show="nodeFields.payCarBusiness_orderCar_timeDelivery.edit">
+                                    <span style="color:red">{{nodeFields.payCarBusiness_orderCar_timeDelivery.required?'*':''}}</span>交车时间
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.payCarBusiness_orderCar_timeDelivery.edit">交车时间</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" :lay-verify="nodeFields.payCarBusiness_orderCar_timeDelivery.verify"
+                                           v-model="order.orderCar.timeDelivery"
+                                           readonly id="timeDelivery" v-show="nodeFields.payCarBusiness_orderCar_timeDelivery.edit"
+                                           autocomplete="off" placeholder="请选择交车时间" class="layui-input">
+                                    <input type="text" :value="order.orderCar.timeDelivery"
+                                           v-show="!nodeFields.payCarBusiness_orderCar_timeDelivery.edit" disabled  class="layui-input input-readonly">
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-show="nodeFields.payCarBusiness_orderCar_deliveryOperationId.show">
+                                <label class="layui-form-label" v-show="nodeFields.payCarBusiness_orderCar_deliveryOperationId.edit">
+                                    <span style="color:red">{{nodeFields.payCarBusiness_orderCar_deliveryOperationId.required?'*':''}}</span>交车工作人员
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.payCarBusiness_orderCar_deliveryOperationId.edit">交车工作人员</label>
+                                <div class="layui-input-inline">
+                                    <select lay-search="" :lay-verify="nodeFields.payCarBusiness_orderCar_deliveryOperationId.verify" name="deliveryOperation"
+                                            v-if="nodeFields.payCarBusiness_orderCar_deliveryOperationId.edit"
+                                            lay-filter="deliveryOperation" v-model="order.orderCar.deliveryOperationId">
+                                        <option value="">请选择交车工作人员</option>
+                                        <option v-for="(item,index) in usrLst" :value="item.userId">{{item.username}}</option>
+                                    </select>
+                                    <input type="text" :value="order.orderCar.deliveryOperationName"
+                                           v-show="!nodeFields.payCarBusiness_orderCar_deliveryOperationId.edit" disabled  class="layui-input input-readonly">
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="nodeFields.payCarBusiness_orderCar_deliveryDesc.show">
+                                <label class="layui-form-label" v-show="nodeFields.payCarBusiness_orderCar_deliveryDesc.edit">
+                                    <span style="color:red">{{nodeFields.payCarBusiness_orderCar_deliveryDesc.required?'*':''}}</span>备注
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.payCarBusiness_orderCar_deliveryDesc.edit">备注</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" v-model="order.orderCar.deliveryDesc"
+                                           :lay-verify="nodeFields.payCarBusiness_orderCar_deliveryDesc.verify"
+                                           v-show="nodeFields.payCarBusiness_orderCar_deliveryDesc.edit"
+                                           autocomplete="off" placeholder="如果需要备注，请记录备注信息" class="layui-input searchVal">
+                                    <input type="text" :value="order.orderCar.deliveryDesc" disabled
+                                           v-show="!nodeFields.payCarBusiness_orderCar_deliveryDesc.edit" class="layui-input input-readonly">
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="nodeFields.payCarBusiness_orderCar_deliveryAddr.show">
+                                <label class="layui-form-label" v-show="nodeFields.payCarBusiness_orderCar_deliveryAddr.edit">
+                                    <span style="color:red">{{nodeFields.payCarBusiness_orderCar_deliveryAddr.required?'*':''}}</span>交车地点
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.payCarBusiness_orderCar_deliveryAddr.edit">交车地点</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" v-model="order.orderCar.deliveryAddr"
+                                           :lay-verify="nodeFields.payCarBusiness_orderCar_deliveryAddr.verify"
+                                           v-show="nodeFields.payCarBusiness_orderCar_deliveryAddr.edit"
+                                           autocomplete="off" placeholder="请输入交车地点" class="layui-input searchVal">
+                                    <input type="text" :value="order.orderCar.deliveryAddr" disabled
+                                           v-show="!nodeFields.payCarBusiness_orderCar_deliveryAddr.edit" class="layui-input input-readonly">
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="nodeFields.payCarBusiness_orderCar_deliveryFile.show">
+                                <label class="layui-form-label" v-show="nodeFields.payCarBusiness_orderCar_deliveryFile.edit">
+                                    <span style="color:red">{{nodeFields.payCarBusiness_orderCar_deliveryFile.required?'*':''}}</span>交车附件:
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.payCarBusiness_orderCar_deliveryFile.edit">交车附件:</label>
+                                <div class="layui-input-inline" id="addDeliveryFile"></div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-show="nodeFields.payCarBusiness_orderCar_deliveryMileage.show">
+                                <label class="layui-form-label" v-show="nodeFields.payCarBusiness_orderCar_deliveryMileage.edit">
+                                    <span style="color:red">{{nodeFields.payCarBusiness_orderCar_deliveryMileage.required?'*':''}}</span>交车当前里程数
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.payCarBusiness_orderCar_deliveryMileage.edit">交车当前里程数</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" :lay-verify="nodeFields.payCarBusiness_orderCar_deliveryMileage.verify"
+                                           v-model="order.orderCar.deliveryMileage" autocomplete="off"
+                                           placeholder="请确认当前里程数" oninput="num(this)" maxlength="10"
+                                           v-show="nodeFields.payCarBusiness_orderCar_deliveryMileage.edit"
+                                           class="layui-input searchVal">
+                                    <input type="text" :value="order.orderCar.deliveryMileage"
+                                           v-show="!nodeFields.payCarBusiness_orderCar_deliveryMileage.edit" disabled class="layui-input input-readonly">
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-show="nodeFields.payCarBusiness_orderCar_mileageNextMaintenance.show">
+                                <label class="layui-form-label" v-show="nodeFields.payCarBusiness_orderCar_mileageNextMaintenance.edit">
+                                    <span style="color:red">{{nodeFields.payCarBusiness_orderCar_mileageNextMaintenance.required?'*':''}}</span>下次保养公里数
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.payCarBusiness_orderCar_mileageNextMaintenance.edit">下次保养公里数</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" v-show="nodeFields.payCarBusiness_orderCar_mileageNextMaintenance.edit"
+                                           :lay-verify="nodeFields.payCarBusiness_orderCar_mileageNextMaintenance.verify" maxlength="10"
+                                           v-model="order.orderCar.mileageNextMaintenance" autocomplete="off" oninput="num(this)"
+                                           placeholder="请输入下次保养公里数" class="layui-input searchVal">
+                                    <input type="text" disabled v-show="!nodeFields.payCarBusiness_orderCar_mileageNextMaintenance.edit"
+                                           :value="order.orderCar.mileageNextMaintenance" class="layui-input input-readonly">
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-show="nodeFields.payCarBusiness_orderCar_mileageNextDate.show">
+                                <label class="layui-form-label" v-show="nodeFields.payCarBusiness_orderCar_mileageNextDate.edit">
+                                    <span style="color:red">{{nodeFields.payCarBusiness_orderCar_mileageNextDate.required?'*':''}}</span>下次保养时间
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.payCarBusiness_orderCar_mileageNextDate.edit">下次保养时间</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" readonly id="mileageNextDate" :lay-verify="nodeFields.payCarBusiness_orderCar_mileageNextDate.verify"
+                                           v-model="order.orderCar.mileageNextDate" autocomplete="off"
+                                           placeholder="请选择下次保养时间" v-show="nodeFields.payCarBusiness_orderCar_mileageNextDate.edit"
+                                           class="layui-input searchVal">
+                                    <input type="text" disabled v-show="!nodeFields.payCarBusiness_orderCar_mileageNextDate.edit"
+                                           :value="order.orderCar.mileageNextDate" class="layui-input input-readonly">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--合同信息-->
+            <div class="form-content-box details-content-box" v-if="nodeFields.contractBusiness && nodeFields.contractBusiness.show" v-show="detailsSupTabContentListActiveValue !== '操作记录' && nodeFields.contractBusiness.show" :id="contractModelId">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        合同信息
+                    </div>
+                </div>
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <label class="layui-form-label"><span style="color:red">*</span>合同生成方式</label>
+                                <div class="layui-input-inline">
+                                    <input type="radio" lay-filter="contractType" v-model="order.contract.contractType"
+                                           name="contractType" value=1 lay-skin="primary" title="直接选择/填写合同信息"
+                                           v-if="nodeFields.contractBusiness_contract_timeStart.show
+                                             ||nodeFields.contractBusiness_contract_timeFinish.show
+                                             ||nodeFields.contractBusiness_contract_timeSigned.show
+                                             ||nodeFields.contractBusiness_contract_desc.show
+                                             ||nodeFields.contractBusiness_contract_contractFile.show
+                                             ||nodeFields.contractBusiness_contract_code.show">
+                                    <input type="radio" lay-filter="contractType" v-model="order.contract.contractType"
+                                           name="contractType" value=2 lay-skin="primary" title="根据订单信息自动生成合同"
+                                           v-if="nodeFields.contractBusiness_contract_templateName.show">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" v-show="order.contract.contractType == 2||(nodeFields.contractBusiness_contract_timeStart.hide
+                                             &&nodeFields.contractBusiness_contract_timeFinish.hide
+                                             &&nodeFields.contractBusiness_contract_timeSigned.hide
+                                             &&nodeFields.contractBusiness_contract_desc.hide
+                                             &&nodeFields.contractBusiness_contract_contractFile.hide
+                                             &&nodeFields.contractBusiness_contract_code.hide)"
+                         v-if="nodeFields.contractBusiness_contract_templateName.show">
+                        <div class="layui-row layui-form-row-content" v-if="nodeFields.contractBusiness_contract_templateName.edit">
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-if="order.contract.base64 == null || order.contract.base64 == ''">
+                                <label class="layui-form-label" >
+                                    <span style="color:red">{{nodeFields.contractBusiness_contract_templateName.required?'*':''}}</span>合同模板
+                                </label>
+                                <div class="layui-input-block" style="margin-left: 0px !important;">
+                                    <div class="multiple-table">
+                                        <div class="multiple-cell">
+                                            <input type="text" placeholder="请选择生成对应的合同模板" id="selectorTemplate"
+                                                   :lay-verify="order.contract.contractType == 2 ? nodeFields.contractBusiness_contract_templateName.verify : ''"
+                                                   autocomplete="off" class="layui-input" readonly
+                                                   v-model="order.contract.templateName">
+                                        </div>
+                                        <div class="multiple-cell">
+                                            <span class="text-edit" @click="editTemplateBody" style="color: #3FACB3;cursor: pointer" v-show="order.contract.templateId != null && order.contract.templateBody != null && order.contract.templateBody != ''">&nbsp;编辑模板</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-if="order.contract.base64 != null && order.contract.base64 != ''">
+                                <label class="layui-form-label">合同模板</label>
+                                <div class="layui-input-block" style="margin-left: 0px !important;">
+                                    <div class="multiple-table">
+                                        <div class="multiple-cell">
+                                            <input type="text" disabled :value="order.contract.templateName" class="layui-input input-readonly">
+                                        </div>
+                                        <div class="multiple-cell">
+                                            <span class="text-edit" @click="editTemplateBody" style="color: #3FACB3;cursor: pointer" v-show="order.contract.templateId != null && order.contract.templateBody != null && order.contract.templateBody != ''">&nbsp;编辑模板</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row layui-form-row-content" v-if="!nodeFields.contractBusiness_contract_templateName.edit">
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                <label class="layui-form-label">合同模板</label>
+                                <div class="layui-input-block" style="margin-left: 0px !important;width: 700px">
+                                    <div class="multiple-table">
+                                        <div class="multiple-cell">
+                                            <input type="text" disabled :value="order.contract.templateName" class="layui-input input-readonly">
+                                        </div>
+                                        <div class="multiple-cell" style="width: 120px">
+                                            <span class="text-edit" @click="editTemplateBody" style="color: #3FACB3;cursor: pointer;" v-show="order.contract.templateId != null && order.contract.templateBody != null && order.contract.templateBody != ''">&nbsp;编辑模板</span>
+                                        </div>
+                                        <div class="multiple-cell" style="padding-left: 50px" v-show="(order.contract.contractType == 2 && order.contract.urlHtm != null && order.contract.urlHtm != '')">
+                                            <a class="layui-btn layui-btn-normal" @click="viewDoc">查看合同</a>
+                                        </div>
+                                        <div class="multiple-cell" style="padding-left: 10px" v-show="(order.contract.contractType == 2 && order.contract.urlHtm != null && order.contract.urlHtm != '')">
+                                            <a class="layui-btn layui-btn-normal" @click="downloadDoc">下载合同</a>
+                                        </div>
+                                        <div class="multiple-cell" style="padding-left: 10px" v-show="(order.contract.contractType == 2 && order.contract.urlHtm != null && order.contract.urlHtm != '')">
+                                            <a class="layui-btn layui-btn-normal" @click="printDoc">打印合同</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" v-show="(order.contract.contractType == 1 && nodeFields.contractBusiness_contract_code.show)||(nodeFields.contractBusiness_contract_templateName.hide)"
+                         v-if="nodeFields.contractBusiness_contract_timeStart.show
+                         ||nodeFields.contractBusiness_contract_timeFinish.show
+                         ||nodeFields.contractBusiness_contract_timeSigned.show
+                         ||nodeFields.contractBusiness_contract_desc.show
+                         ||nodeFields.contractBusiness_contract_contractFile.show
+                         ||nodeFields.contractBusiness_contract_code.show">
+                        <div class="layui-row layui-form-row-content" v-show="nodeFields.contractBusiness_contract_code.show">
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                <label class="layui-form-label" v-show="nodeFields.contractBusiness_contract_code.edit">
+                                    <span style="color:red">{{nodeFields.contractBusiness_contract_code.required?'*':''}}</span>合同编号
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.contractBusiness_contract_code.edit">合同编号</label>
+                                <div class="layui-input-block" style="margin-left: 0px !important;width: 700px" v-if="nodeFields.contractBusiness_contract_code.edit">
+                                    <div class="multiple-table">
+                                        <div class="multiple-cell">
+                                            <input type="text" placeholder="请输入合同编号"
+                                                   :lay-verify="order.contract.contractType == 1 ? nodeFields.contractBusiness_contract_code.verify : ''"
+                                                   autocomplete="off" class="layui-input"
+                                                   v-model="order.contract.code">
+                                        </div>
+                                        <div class="multiple-cell"style="padding-left: 50px">
+                                            <a class="layui-btn layui-btn-normal" id="selectorContract">选择合同</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-if="!nodeFields.contractBusiness_contract_code.edit"
+                                     class="layui-input-inline">
+                                    <input type="text" disabled :value="order.contract.code" class="layui-input input-readonly">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" v-show="order.contract.contractType == 1||(nodeFields.contractBusiness_contract_templateName.hide)"
+                         v-if="nodeFields.contractBusiness_contract_timeStart.show
+                         ||nodeFields.contractBusiness_contract_timeFinish.show
+                         ||nodeFields.contractBusiness_contract_timeSigned.show
+                         ||nodeFields.contractBusiness_contract_desc.show
+                         ||nodeFields.contractBusiness_contract_contractFile.show
+                         ||nodeFields.contractBusiness_contract_code.show">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-show="nodeFields.contractBusiness_contract_timeStart.show">
+                                <label class="layui-form-label" v-show="nodeFields.contractBusiness_contract_timeStart.edit">
+                                    <span style="color:red">{{nodeFields.contractBusiness_contract_timeStart.required?'*':''}}</span>合同生效日期
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.contractBusiness_contract_timeStart.edit">合同生效日期</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" id="timeStart" readonly v-model="order.contract.timeStart"
+                                           v-show="nodeFields.contractBusiness_contract_timeStart.edit"
+                                           :lay-verify="order.contract.contractType == 1 ? nodeFields.contractBusiness_contract_timeStart.verify : ''"
+                                           placeholder="请选择合同生效日期" class="layui-input">
+                                    <input type="text" disabled v-show="!nodeFields.contractBusiness_contract_timeStart.edit"
+                                           :value="order.contract.timeStart" class="layui-input input-readonly">
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-show="nodeFields.contractBusiness_contract_timeFinish.show">
+                                <label class="layui-form-label" v-show="nodeFields.contractBusiness_contract_timeFinish.edit">
+                                    <span style="color:red">{{nodeFields.contractBusiness_contract_timeFinish.required?'*':''}}</span>合同终止日期
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.contractBusiness_contract_timeFinish.edit">合同终止日期</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" id="timeFinish" readonly v-model="order.contract.timeFinish"
+                                           v-show="nodeFields.contractBusiness_contract_timeFinish.edit"
+                                           :lay-verify="order.contract.contractType == 1 ? nodeFields.contractBusiness_contract_timeFinish.verify : ''"
+                                           placeholder="请选择合同终止日期" class="layui-input">
+                                    <input type="text" disabled v-show="!nodeFields.contractBusiness_contract_timeFinish.edit"
+                                           :value="order.contract.timeFinish" class="layui-input input-readonly">
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-show="nodeFields.contractBusiness_contract_timeSigned.show">
+                                <label class="layui-form-label" v-show="nodeFields.contractBusiness_contract_timeSigned.edit">
+                                    <span style="color:red">{{nodeFields.contractBusiness_contract_timeSigned.required?'*':''}}</span>合同签署日期
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.contractBusiness_contract_timeSigned.edit">合同签署日期</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" id="timeSigned" readonly v-model="order.contract.timeSigned"
+                                           v-show="nodeFields.contractBusiness_contract_timeSigned.edit"
+                                           :lay-verify="order.contract.contractType == 1 ? nodeFields.contractBusiness_contract_timeSigned.verify : ''"
+                                           placeholder="请选择合同签署日期" class="layui-input">
+                                    <input type="text" disabled v-show="!nodeFields.contractBusiness_contract_timeSigned.edit"
+                                           :value="order.contract.timeSigned" class="layui-input input-readonly">
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="nodeFields.contractBusiness_contract_desc.show">
+                                <label class="layui-form-label" v-show="nodeFields.contractBusiness_contract_desc.edit">
+                                    <span style="color:red">{{nodeFields.contractBusiness_contract_desc.required?'*':''}}</span>合同备注
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.contractBusiness_contract_desc.edit">合同备注</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" v-model="order.contract.desc" autocomplete="off" placeholder="合同备注说明"
+                                           v-show="nodeFields.contractBusiness_contract_desc.edit"
+                                           :lay-verify="order.contract.contractType == 1 ? nodeFields.contractBusiness_contract_desc.verify : ''"
+                                           class="layui-input">
+                                    <input type="text" disabled v-show="!nodeFields.contractBusiness_contract_desc.edit"
+                                           :value="order.contract.desc" class="layui-input input-readonly">
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="nodeFields.contractBusiness_contract_contractFile.show">
+                                <label class="layui-form-label" v-show="nodeFields.contractBusiness_contract_contractFile.edit">
+                                    <span style="color:red">{{nodeFields.contractBusiness_contract_contractFile.required?'*':''}}</span>合同附件:
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.contractBusiness_contract_contractFile.edit">合同附件:</label>
+                                <div class="layui-input-inline" id="contractFileLst"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 过户信息 -->
+            <div class="form-content-box details-content-box" v-if="nodeFields.carTransfer && nodeFields.carTransfer.show">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        过户信息
+                    </div>
+                </div>
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-show="nodeFields.carTransfer_transfer_estimatedTransferTime.show">
+                                <label class="layui-form-label" v-show="nodeFields.carTransfer_transfer_estimatedTransferTime.edit">
+                                    <span style="color:red">{{nodeFields.carTransfer_transfer_estimatedTransferTime.required?'*':''}}</span>预计过户时间
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.carTransfer_transfer_estimatedTransferTime.edit">预计过户时间</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" readonly id="estimatedTransferTime" :lay-verify="nodeFields.carTransfer_transfer_estimatedTransferTime.verify"
+                                           v-model="order.orderCar.estimatedTransferTime" autocomplete="off"
+                                           placeholder="请选择预计过户时间" v-show="nodeFields.carTransfer_transfer_estimatedTransferTime.edit"
+                                           class="layui-input searchVal">
+                                    <input type="text" disabled v-show="!nodeFields.carTransfer_transfer_estimatedTransferTime.edit"
+                                           :value="order.orderCar.estimatedTransferTime" class="layui-input input-readonly">
+                                </div>
+                            </div>
+
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-show="nodeFields.carTransfer_transfer_transferTime.show">
+                                <label class="layui-form-label" v-show="nodeFields.carTransfer_transfer_transferTime.edit">
+                                    <span style="color:red">{{nodeFields.carTransfer_transfer_transferTime.required?'*':''}}</span>实际过户时间
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.carTransfer_transfer_transferTime.edit">实际过户时间</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" readonly id="transferTime" :lay-verify="nodeFields.carTransfer_transfer_transferTime.verify"
+                                           v-model="order.orderCar.transferTime" autocomplete="off"
+                                           placeholder="请选择实际过户时间" v-show="nodeFields.carTransfer_transfer_transferTime.edit"
+                                           class="layui-input searchVal">
+                                    <input type="text" disabled v-show="!nodeFields.carTransfer_transfer_transferTime.edit"
+                                           :value="order.orderCar.transferTime" class="layui-input input-readonly">
+                                </div>
+                            </div>
+
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6" v-show="nodeFields.carTransfer_transfer_operator.show">
+                                <label class="layui-form-label" v-show="nodeFields.carTransfer_transfer_operator.edit">
+                                    <span style="color:red">{{nodeFields.carTransfer_transfer_operator.required?'*':''}}</span>过户工作人员
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.carTransfer_transfer_operator.edit">过户工作人员</label>
+                                <div class="layui-input-inline">
+                                    <select lay-search="" :lay-verify="nodeFields.carTransfer_transfer_operator.verify" name="operator"
+                                            v-if="nodeFields.carTransfer_transfer_operator.edit"
+                                            lay-filter="operator" v-model="order.orderCar.operatorId">
+                                        <option value="">请选择过户工作人员</option>
+                                        <option v-for="(item,index) in usrLst" :value="item.userId">{{item.username}}</option>
+                                    </select>
+                                    <input type="text" :value="order.orderCar.operator"
+                                           v-show="!nodeFields.carTransfer_transfer_operator.edit" disabled  class="layui-input input-readonly">
+                                </div>
+                            </div>
+
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="nodeFields.carTransfer_transfer_remarks.show">
+                                <label class="layui-form-label" v-show="nodeFields.carTransfer_transfer_remarks.edit">
+                                    <span style="color:red">{{nodeFields.carTransfer_transfer_remarks.required?'*':''}}</span>备注
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.carTransfer_transfer_remarks.edit">备注</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" v-model="order.orderCar.remarks"
+                                           :lay-verify="nodeFields.carTransfer_transfer_remarks.verify"
+                                           v-show="nodeFields.carTransfer_transfer_remarks.edit"
+                                           autocomplete="off" placeholder="如果需要备注，请记录备注信息" class="layui-input searchVal">
+                                    <input type="text" :value="order.orderCar.remarks" disabled
+                                           v-show="!nodeFields.carTransfer_transfer_remarks.edit" class="layui-input input-readonly">
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="nodeFields.carTransfer_transfer_transferFileLst.show">
+                                <label class="layui-form-label" v-show="nodeFields.carTransfer_transfer_transferFileLst.edit">
+                                    <span style="color:red">{{nodeFields.carTransfer_transfer_transferFileLst.required?'*':''}}</span>过户附件:
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.carTransfer_transfer_transferFileLst.edit">过户附件:</label>
+                                <div class="layui-input-inline" id="addTransferFile"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--自定义字段-->
+            <div class="form-content-box" v-if="nodeFields.customField && nodeFields.customField.show" v-show="detailsSupTabContentListActiveValue !== '操作记录'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    </div>
+                </div>
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="nodeFields.customField_customField_isDepositPaid.show">
+                                <label class="layui-form-label" v-show="nodeFields.customField_customField_isDepositPaid.edit">
+                                    <span style="color:red">{{nodeFields.customField_customField_isDepositPaid.required?'*':''}}</span>订金是否已交
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.customField_customField_isDepositPaid.edit">订金是否已交</label>
+                                <div class="layui-input-inline">
+                                    <input type="radio" lay-filter="isDepositPaid" v-model="customField.isDepositPaid"
+                                           v-if="nodeFields.customField_customField_isDepositPaid.edit"
+                                           name="isDepositPaid" value="1" lay-skin="primary" title="是">
+                                    <input type="radio" lay-filter="isDepositPaid" v-model="customField.isDepositPaid"
+                                           v-if="nodeFields.customField_customField_isDepositPaid.edit"
+                                           name="isDepositPaid" value="0" lay-skin="primary" title="否">
+                                    <!--<input type="text" disabled v-show="!nodeFields.customField_customField_isDepositPaid.edit"-->
+                                    <!--:value="customField.isDepositPaid == 1 ? '是':'否'" class="layui-input input-readonly">-->
+                                    <span v-show="!nodeFields.customField_customField_isDepositPaid.edit" style="vertical-align: -webkit-baseline-middle;margin-left: 10px">{{customField.isDepositPaid == 1 ? '是':'否'}}</span>
+                                    <span v-show="isShowReceived()" name="viewReceived" style="vertical-align: -webkit-baseline-middle;margin-left: 30px;color: #3399FF;cursor: pointer">前往车辆订单应收页面</span>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="nodeFields.customField_customField_isCarNoRegistered.show">
+                                <label class="layui-form-label" v-show="nodeFields.customField_customField_isCarNoRegistered.edit">
+                                    <span style="color:red">{{nodeFields.customField_customField_isCarNoRegistered.required?'*':''}}</span>是否已上牌
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.customField_customField_isCarNoRegistered.edit">是否已上牌</label>
+                                <div class="layui-input-inline">
+                                    <input type="radio" lay-filter="isCarNoRegistered" v-model="customField.isCarNoRegistered"
+                                           v-if="nodeFields.customField_customField_isCarNoRegistered.edit"
+                                           name="isCarNoRegistered" value="1" lay-skin="primary" title="是">
+                                    <input type="radio" lay-filter="isCarNoRegistered" v-model="customField.isCarNoRegistered"
+                                           v-if="nodeFields.customField_customField_isCarNoRegistered.edit"
+                                           name="isCarNoRegistered" value="0" lay-skin="primary" title="否">
+                                    <!--<input type="text" disabled v-show="!nodeFields.customField_customField_isCarNoRegistered.edit"-->
+                                    <!--:value="customField.isCarNoRegistered == 1 ? '是':'否'" class="layui-input input-readonly">-->
+                                    <span v-show="!nodeFields.customField_customField_isCarNoRegistered.edit" style="vertical-align: -webkit-baseline-middle;margin-left: 10px">{{customField.isCarNoRegistered == 1 ? '是':'否'}}</span>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="nodeFields.customField_customField_isInsuranceConfirmed.show">
+                                <label class="layui-form-label" v-show="nodeFields.customField_customField_isInsuranceConfirmed.edit">
+                                    <span style="color:red">{{nodeFields.customField_customField_isInsuranceConfirmed.required?'*':''}}</span>保险是否已确认
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.customField_customField_isInsuranceConfirmed.edit">保险是否已确认</label>
+                                <div class="layui-input-inline">
+                                    <input type="radio" lay-filter="isInsuranceConfirmed" v-model="customField.isInsuranceConfirmed"
+                                           v-if="nodeFields.customField_customField_isInsuranceConfirmed.edit"
+                                           name="isInsuranceConfirmed" value="1" lay-skin="primary" title="是">
+                                    <input type="radio" lay-filter="isInsuranceConfirmed" v-model="customField.isInsuranceConfirmed"
+                                           v-if="nodeFields.customField_customField_isInsuranceConfirmed.edit"
+                                           name="isInsuranceConfirmed" value="0" lay-skin="primary" title="否">
+                                    <!--<input type="text" disabled v-show="!nodeFields.customField_customField_isInsuranceConfirmed.edit"-->
+                                    <!--:value="customField.isInsuranceConfirmed == 1 ? '是':'否'" class="layui-input input-readonly">-->
+                                    <span v-show="!nodeFields.customField_customField_isInsuranceConfirmed.edit" style="vertical-align: -webkit-baseline-middle;margin-left: 10px">{{customField.isInsuranceConfirmed == 1 ? '是':'否'}}</span>
+                                    <span v-show="isShowInsurance()" name="viewInsurance" style="vertical-align: -webkit-baseline-middle;margin-left: 30px;color: #3399FF;cursor: pointer">前往车辆保险列表页面</span>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="nodeFields.customField_customField_isContractConfirmed.show">
+                                <label class="layui-form-label" v-show="nodeFields.customField_customField_isContractConfirmed.edit">
+                                    <span style="color:red">{{nodeFields.customField_customField_isContractConfirmed.required?'*':''}}</span>合同是否已确认
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.customField_customField_isContractConfirmed.edit">合同是否已确认</label>
+                                <div class="layui-input-inline">
+                                    <input type="radio" lay-filter="isContractConfirmed" v-model="customField.isContractConfirmed"
+                                           v-if="nodeFields.customField_customField_isContractConfirmed.edit"
+                                           name="isContractConfirmed" value="1" lay-skin="primary" title="是">
+                                    <input type="radio" lay-filter="isContractConfirmed" v-model="customField.isContractConfirmed"
+                                           v-if="nodeFields.customField_customField_isContractConfirmed.edit"
+                                           name="isContractConfirmed" value="0" lay-skin="primary" title="否">
+                                    <!--<input type="text" disabled v-show="!nodeFields.customField_customField_isContractConfirmed.edit"-->
+                                    <!--:value="customField.isContractConfirmed == 1 ? '是':'否'" class="layui-input input-readonly">-->
+                                    <span v-show="!nodeFields.customField_customField_isContractConfirmed.edit" style="vertical-align: -webkit-baseline-middle;margin-left: 10px">{{customField.isContractConfirmed == 1 ? '是':'否'}}</span>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="nodeFields.customField_customField_isReceivedPayment.show">
+                                <label class="layui-form-label" v-show="nodeFields.customField_customField_isReceivedPayment.edit">
+                                    <span style="color:red">{{nodeFields.customField_customField_isReceivedPayment.required?'*':''}}</span>财务是否已收款确认
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.customField_customField_isReceivedPayment.edit">财务是否已收款确认</label>
+                                <div class="layui-input-inline">
+                                    <input type="radio" lay-filter="isReceivedPayment" v-model="customField.isReceivedPayment"
+                                           v-if="nodeFields.customField_customField_isReceivedPayment.edit"
+                                           name="isReceivedPayment" value="1" lay-skin="primary" title="是">
+                                    <input type="radio" lay-filter="isReceivedPayment" v-model="customField.isReceivedPayment"
+                                           v-if="nodeFields.customField_customField_isReceivedPayment.edit"
+                                           name="isReceivedPayment" value="0" lay-skin="primary" title="否">
+                                    <!--<input type="text" disabled v-show="!nodeFields.customField_customField_isReceivedPayment.edit"-->
+                                    <!--:value="customField.isReceivedPayment == 1 ? '是':'否'" class="layui-input input-readonly">-->
+                                    <span v-show="!nodeFields.customField_customField_isReceivedPayment.edit" style="vertical-align: -webkit-baseline-middle;margin-left: 10px">{{customField.isReceivedPayment == 1 ? '是':'否'}}</span>
+                                    <span v-show="isShowReceived()" name="viewReceived" style="vertical-align: -webkit-baseline-middle;margin-left: 30px;color: #3399FF;cursor: pointer">前往车辆订单应收页面</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" v-show="nodeFields.customField_customField_loanAmount.show">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                <label class="layui-form-label" v-show="nodeFields.customField_customField_loanAmount.edit">
+                                    <span style="color:red">{{nodeFields.customField_customField_loanAmount.required?'*':''}}</span>放款金额(元)
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.customField_customField_loanAmount.edit">放款金额(元)</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" v-model="customField.loanAmount" oninput="num(this)"
+                                           :lay-verify="nodeFields.customField_customField_loanAmount.verify"
+                                           v-show="nodeFields.customField_customField_loanAmount.edit" maxlength="10"
+                                           autocomplete="off" placeholder="请输入放款金额" class="layui-input searchVal">
+                                    <input type="text" :value="customField.loanAmount" disabled
+                                           v-show="!nodeFields.customField_customField_loanAmount.edit" class="layui-input input-readonly">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" v-if="order.orderCar.rentType != 7" v-show="nodeFields.customField_customField_collectBalance.show">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                <label class="layui-form-label" v-show="nodeFields.customField_customField_collectBalance.edit">
+                                    <span style="color:red">{{nodeFields.customField_customField_collectBalance.required?'*':''}}</span>待收尾款(元)
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.customField_customField_collectBalance.edit">待收尾款(元)</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" v-model="customField.collectBalance" oninput="num(this)"
+                                           :lay-verify="nodeFields.customField_customField_collectBalance.verify"
+                                           v-show="nodeFields.customField_customField_collectBalance.edit" maxlength="10"
+                                           autocomplete="off" placeholder="请输入待收尾款" class="layui-input searchVal">
+                                    <input type="text" :value="customField.collectBalance" disabled
+                                           v-show="!nodeFields.customField_customField_collectBalance.edit" class="layui-input input-readonly">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" v-show="nodeFields.customField_customField_paymentMethod.show">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                <label class="layui-form-label" v-show="nodeFields.customField_customField_paymentMethod.edit">
+                                    <span style="color:red">{{nodeFields.customField_customField_paymentMethod.required?'*':''}}</span>收款方式
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.customField_customField_paymentMethod.edit">收款方式</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" v-model="customField.paymentMethod"
+                                           :lay-verify="nodeFields.customField_customField_paymentMethod.verify"
+                                           v-show="nodeFields.customField_customField_paymentMethod.edit"
+                                           autocomplete="off" placeholder="请输入收款方式" class="layui-input searchVal">
+                                    <input type="text" :value="customField.paymentMethod" disabled
+                                           v-show="!nodeFields.customField_customField_paymentMethod.edit" class="layui-input input-readonly">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--流程进度-->
+            <div class="form-content-box details-content-box"
+            style="margin-top:16px;" v-show="detailsSupTabContentListActiveValue !== '操作记录'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        {{getRentTypeStr(order.orderCar.rentType)}}提单流程
+                    </div>
+                </div>
+                <div class="car-details-info car-padding" id="bpmChart"></div>
+            </div>
+
+        </div>
+        <div class="details-conteiner" v-show="dataSuccess && detailsSupTabContentListActiveValue === '操作记录'">
+            <!--操作记录-->
+            <div class="details-content-box">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        操作记录
+                    </div>
+                </div>
+
+                <div class="details-layui-row">
+                    <div class="table">
+                        <table class="layui-hide" id="operationlog" lay-filter="operationlog"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="float-btn-group bottom-bar" id="btnGrp">
+            <a class="layui-btn reset-btn" id="closePage">返回</a>
+            <a class="layui-btn search-btn" v-show="isRecall()" id="recall">撤回</a>
+            <a class="layui-btn search-btn" v-show="isDelect()" id="delect">删除</a>
+            <a class="layui-btn search-btn" v-show="isReedit()" id="reedit">重新编辑</a>
+            <a class="layui-btn search-btn" v-show="isEdit()" lay-submit lay-filter="approve" id="approve">审核通过</a>
+            <a class="layui-btn search-btn" v-show="isEdit()" id="reject">审核驳回</a>
+            <a class="layui-btn search-btn" v-show="isEdit()" id="refuse">审核拒绝</a>
+        </div>
+    </form>
+
+
+    <form class="layui-form ren-form" v-show="boxShow" id="boxShow">
+        <div class="details-conteiner">
+            <div class="details-content-box">
+                <div class="form-content-session-box" :style="boxInputShow?'':'text-align: center;'">
+                    <PRE>{{boxMark}}</PRE>
+                    <br/>
+                    <div class="card" v-show="boxInputShow">
+                        <textarea style="min-width: 400px;min-height: 90px;max-width: 400px;max-height: 120px" type="text" v-model="boxTxt" autocomplete="off" :placeholder="boxHolder" class="layui-input"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="details-content-box">
+                <div class="form-content-session-box">
+                    <label class="layui-form-label">审批附件:</label>
+                    <div class="layui-input-inline">
+                        <div class="layui-input-inline-upload">
+                            <div :id="fileLstId2" class="layui-input-inline-upload-show box-rect" v-for="(item,index) in fileLst2">
+                                <div v-show="item.typeFile == 1" class="layui-input-inline-upload-button">
+                                    <img :src="imageURL + item.url" class="view-img">
+                                </div>
+                                <div v-show="item.typeFile != 1" class="layui-input-inline-upload-button">
+                                    {{item.nameAccessory}}
+                                </div>
+                                <div class="layui-input-inline-upload-show-delete btn-event" @click="delFile2(item.id)">
+                                    删除
+                                </div>
+                            </div>
+                            <div class="layui-input-inline-upload-button box-rect box-rect-event" id="addFile2">
+                                <img src="../../statics/images/inline-upload@2x.png">
+                            </div>
+                        </div>
+                        <div class="layui-input-inline-upload-text" style="padding-bottom: 10px">附件说明：附件最大支持50M，
+                            <br/>
+                            支持格式：PDF、Word、Excel、JPG、PNG、ZIP、RAR
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+<!--    <el-dialog-->
+<!--            title="审核通过"-->
+<!--            :visible.sync="dialogVisible"-->
+<!--            width="45%">-->
+<!--        <el-form ref="form" :model="q" label-width="80px" style="margin-top: 10px">-->
+
+<!--            <el-form-item label="审核反馈">-->
+<!--                <el-input style="width: 95%" type="textarea" placeholder="可以输入审核意见/选填" v-model="q.keyword"></el-input>-->
+<!--            </el-form-item>-->
+
+<!--            <el-form-item label="审批附件">-->
+<!--                <image-common :disabled="true" :up-type="2" info="上传附件" :limit="1" v-model="q.urlPdf"></image-common>-->
+<!--            </el-form-item>-->
+
+<!--        </el-form>-->
+<!--        <span slot="footer" class="dialog-footer">-->
+<!--            <el-button size="mini" @click="dialogVisible = false">取 消</el-button>-->
+<!--            <el-button size="mini" type="primary" @click="dialogVisible = false">确 定</el-button>-->
+<!--        </span>-->
+<!--    </el-dialog>-->
+</div>
+
+
+
+<script type="text/html" id="balancePaymentBarTpl">
+    <a class="layui-grid-btn-xs" lay-event="delect">删除</a>
+</script>
+<script type="text/html" id="selectHasFreeDays">
+    <input style="width: 100px" type="checkbox" lay-skin="switch" lay-text="是|否" lay-filter="hasFreeDays" {{ d.hasFreeDays&1 == 1 ? 'checked' : '' }}>
+</script>
+<script type="text/html" id="selectHasFreeDaysType">
+    <select id="hasFreeDaysType" name="hasFreeDaysType" lay-filter="hasFreeDaysType">
+        <option value="">请选择免费用车天数类型</option>
+        <option value="1">租期后</option>
+        <option value="3">租期前</option>
+    </select>
+</script>
+<script type="text/html" id="selectPaymentMethod">
+    <select name="balancePaymentMethod" sid="{{d.serializeId}}" lay-filter="balancePaymentMethod">
+        <option value="">请选择尾款付款方式</option>
+        <option disabled="" value="7">日付</option>
+        <option disabled="" value="8">周付</option>
+        <option disabled="" value="1">月付</option>
+        <option disabled="" value="2">两月付</option>
+        <option disabled="" value="3">季付</option>
+        <option disabled="" value="6">半年付</option>
+        <option disabled="" value="4">年付</option>
+        <option value="5">一次性结清</option>
+    </select>
+</script>
+<script type="text/html" id="feeItemBarTpl">
+    <a class="layui-grid-btn-xs" lay-event="delect">删除</a>
+</script>
+<script type="text/html" id="billItemBarTpl">
+    <a class="layui-grid-btn-xs" lay-event="regen">重置</a>
+    {{# if (d.typeFieldName === 'other_fee') { }}
+    <a class="layui-grid-btn-xs" lay-event="delect">删除</a>
+    {{# } }}
+</script>
+<script type="text/html" id="selectFeeItemPaymentMethod">
+    <select name="feeItemPaymentMethod" sid="{{d.serializeId}}" lay-filter="feeItemPaymentMethod">
+        <option value="">请选择付款方式</option>
+        <option {{ d.multiple == 1 ? 'disabled' : '' }} value="7">日付</option>
+        <option {{ d.multiple == 1 ? 'disabled' : '' }} value="8">周付</option>
+        <option {{ d.multiple == 1 ? 'disabled' : '' }} value="1">月付</option>
+        <option {{ d.multiple == 1 ? 'disabled' : '' }} value="2">两月付</option>
+        <option {{ d.multiple == 1 ? 'disabled' : '' }} value="3">季付</option>
+        <option {{ d.multiple == 1 ? 'disabled' : '' }} value="6">半年付</option>
+        <option {{ d.multiple == 1 ? 'disabled' : '' }} value="4">年付</option>
+        <option value="5">一次性结清</option>
+        <!--<option {{ d.multiple == 0 ? 'disabled' : '' }} value="5">一次性结清</option>-->
+    </select>
+</script>
+<script type="text/html" id="chlRebateBillBarTpl">
+    <a class="layui-grid-btn-xs" lay-event="regen">重置</a>
+</script>
+<script src="../../statics/js/modules/orderflow/orderflowedit.js"></script>
+<link rel="stylesheet" href="../../statics/css/submit-approval.css">
+</body>
+</html>

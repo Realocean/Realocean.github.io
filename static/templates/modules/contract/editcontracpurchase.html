@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>采购合同列表</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <!-- 新增表单 -->
+    <form class="layui-form ren-form">
+        <div class="jxc-detail layui-form ren-form">
+            <section class="jxc-section">
+                <legend class="aTitle">编辑</legend>
+                <hr class="layui-bg-gray">
+                <div class="card">
+                    <div class="layui-row form-group">
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <label class="layui-form-label"><span style="color:red">*</span>选择车牌号</label>
+                            <div class="layui-input-block">
+                                <input type="text" lay-verify="validate_carNo" v-model="contracpurchase.carNo"
+                                       readonly="readonly" @click="selectCar"
+                                       autocomplete="off" placeholder="请选择车辆" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <label class="layui-form-label"><span style="color:red">*</span>选择车架号</label>
+                            <div class="layui-input-block">
+                                <input type="text" lay-verify="validate_vinNo" v-model="contracpurchase.vinNo"
+                                       readonly="readonly" @click="selectCar"
+                                       autocomplete="off" placeholder="请选择车辆" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <label class="layui-form-label"><span style="color:red">*</span>选择租赁类型</label>
+                            <div class="layui-input-block">
+                                <select name="rentType" lay-filter="rentType" v-model="contracpurchase.rentType">
+                                    <option value="">请选择租赁类型</option>
+                                    <option value=1>租赁</option>
+                                    <option value=2>租售</option>
+                                    <option value=3>直购</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <label class="layui-form-label"><span style="color:red">*</span>选择供应商</label>
+                            <div class="layui-input-block">
+                                <input type="text" lay-verify="validate_purchaseSupplierName"
+                                       v-model="contracpurchase.purchaseSupplierName" autocomplete="off"
+                                       readonly="readonly" @click="selectPurchaseSupplier"
+                                       placeholder="请选择供应商" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div v-show="contracpurchase.rentType == 3">
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label"><span style="color:red">*</span>直购单价/台/元</label>
+                                <div class="layui-input-block">
+                                    <input type="text" lay-verify="validate_pricePurchase"
+                                           v-model="contracpurchase.pricePurchase" autocomplete="off" placeholder="请输入金额"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label"><span style="color:red">*</span>购买时间</label>
+                                <div class="layui-input-block">
+                                    <input type="text" lay-verify="validate_timePurchase"
+                                           v-model="contracpurchase.timePurchase" autocomplete="off" placeholder="请选择购买时间"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label"><span style="color:red">*</span>支付方式</label>
+                                <div class="layui-input-block">
+                                    <input type="text" lay-verify="validate_paymethod" v-model="contracpurchase.paymethod"
+                                           autocomplete="off" placeholder="请输入支付方式" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div v-show="contracpurchase.rentType == 2">
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label"><span style="color:red">*</span>租赁开始时间</label>
+                                <div class="layui-input-block">
+                                    <input type="text" lay-verify="validate_timeRentStart"
+                                           v-model="contracpurchase.timeRentStart" autocomplete="off" placeholder="请选择租赁开始时间"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label"><span style="color:red">*</span>租赁结束时间</label>
+                                <div class="layui-input-block">
+                                    <input type="text" lay-verify="validate_timeRentFinish"
+                                           v-model="contracpurchase.timeRentFinish" autocomplete="off" placeholder="请选择租赁结束时间"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label"><span style="color:red">*</span>首付款/台/元</label>
+                                <div class="layui-input-block">
+                                    <input type="text" lay-verify="validate_priceDownpayment"
+                                           v-model="contracpurchase.priceDownpayment" autocomplete="off" placeholder="请输入首付款"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label"><span style="color:red">*</span>租金/台/元</label>
+                                <div class="layui-input-block">
+                                    <input type="text" lay-verify="validate_priceMonthlyrent"
+                                           v-model="contracpurchase.priceMonthlyrent" autocomplete="off" placeholder="请输入租金"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label"><span style="color:red">*</span>还款形式</label>
+                                <div class="layui-input-block">
+                                    <select name="returnmethod" lay-filter="returnmethod" v-model="contracpurchase.returnmethod">
+                                        <option value="">请选择还款形式</option>
+                                        <option value=1>金融公司</option>
+                                        <option value=2>租赁平台</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label"><span style="color:red">*</span>还款日</label>
+                                <div class="layui-input-block">
+                                    <input type="text" lay-verify="validate_dueDate" v-model="contracpurchase.dueDate"
+                                           autocomplete="off" placeholder="请输入还款日" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label"><span style="color:red">*</span>支付方式</label>
+                                <div class="layui-input-block">
+                                    <input type="text" lay-verify="validate_paymethod" v-model="contracpurchase.paymethod"
+                                           autocomplete="off" placeholder="支付方式" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label"><span style="color:red">*</span>已付金额</label>
+                                <div class="layui-input-block">
+                                    <input type="text" lay-verify="validate_pricePaid" v-model="contracpurchase.pricePaid"
+                                           autocomplete="off" placeholder="已付金额" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div v-show="contracpurchase.rentType == 1">
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label"><span style="color:red">*</span>租赁开始时间</label>
+                                <div class="layui-input-block">
+                                    <input type="text" lay-verify="validate_timeRentStart"
+                                           v-model="contracpurchase.timeRentStart" autocomplete="off" placeholder="租赁开始时间"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label"><span style="color:red">*</span>租赁结束时间</label>
+                                <div class="layui-input-block">
+                                    <input type="text" lay-verify="validate_timeRentFinish"
+                                           v-model="contracpurchase.timeRentFinish" autocomplete="off" placeholder="租赁结束时间"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label"><span style="color:red">*</span>保证金</label>
+                                <div class="layui-input-block">
+                                    <input type="text" lay-verify="validate_priceDeposit"
+                                           v-model="contracpurchase.priceDeposit" autocomplete="off" placeholder="保证金"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label"><span style="color:red">*</span>月租</label>
+                                <div class="layui-input-block">
+                                    <input type="text" lay-verify="validate_priceMonthlyrent"
+                                           v-model="contracpurchase.priceMonthlyrent" autocomplete="off" placeholder="月租"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label"><span style="color:red">*</span>支付方式</label>
+                                <div class="layui-input-block">
+                                    <input type="text" lay-verify="validate_paymethod" v-model="contracpurchase.paymethod"
+                                           autocomplete="off" placeholder="支付方式" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label"><span style="color:red">*</span>还款日</label>
+                                <div class="layui-input-block">
+                                    <input type="text" lay-verify="validate_dueDate" v-model="contracpurchase.dueDate"
+                                           autocomplete="off" placeholder="还款日" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                                <label class="layui-form-label"><span style="color:red">*</span>已付金额</label>
+                                <div class="layui-input-block">
+                                    <input type="text" lay-verify="validate_pricePaid" v-model="contracpurchase.pricePaid"
+                                           autocomplete="off" placeholder="已付金额" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <label class="layui-form-label"><span style="color:red">*</span>生效时间</label>
+                            <div class="layui-input-block">
+                                <input type="text" lay-verify="validate_timeStart" v-model="contracpurchase.timeStart"
+                                       autocomplete="off" placeholder="生效时间" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <label class="layui-form-label"><span style="color:red">*</span>结束时间</label>
+                            <div class="layui-input-block">
+                                <input type="text" lay-verify="validate_timeFinish" v-model="contracpurchase.timeFinish"
+                                       autocomplete="off" placeholder="结束时间" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <label class="layui-form-label"><span style="color:red">*</span>合同编号</label>
+                            <div class="layui-input-block">
+                                <input type="text" lay-verify="validate_code" v-model="contracpurchase.code"
+                                       autocomplete="off" placeholder="合同编号" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="column layui-col-xs12 layui-col-sm6 layui-col-md6">
+                            <label class="layui-form-label"><span style="color:red">*</span>描述</label>
+                            <div class="layui-input-block">
+                                <input type="text" lay-verify="validate_desc" v-model="contracpurchase.desc"
+                                       autocomplete="off" placeholder="描述" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div style="position: fixed; left: 0; bottom: 0; width: 100%; height: 49px; line-height: 49px; padding-bottom: 10px; background-color: white; z-index: 1024;">
+            <a style="margin-left: 400px;margin-top: 10px;margin-bottom: 10px"
+               class="layui-btn layui-btn-primary layui-btn-sm" id="closePage">取消</a>
+            <a style="margin-left: 10px;margin-top: 10px;margin-bottom: 10px" lay-submit lay-filter="save"
+               class="layui-btn layui-btn-normal layui-btn-sm" id="save">保存</a>
+        </div>
+    </form>
+
+
+</div>
+
+
+<script src="../../statics/js/modules/contract/editcontracpurchase.js?_${.now?long}"></script>
+</body>
+</html>

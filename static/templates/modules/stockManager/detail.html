@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../statics/newImages/logo/logo@2x.png">
+    <title>新增线索</title>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/global.css" media="all">-->
+
+    <!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/fonts/larry-icon.css" media="all">-->
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+    <!-- 放开后表格无法拖动   <link rel="stylesheet" type="text/css" href="../../statics/new_css/larryms.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/new_css/normalize.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <!-- Import style -->
+    <link rel="stylesheet" href="../../statics/js/element-plus/index.css" />
+    <!-- 页面样式 -->
+    <link rel="stylesheet" href="../../statics/new_css/mf-layout.css" />
+
+</head>
+<style>
+    .el-input {
+        width: 300px;
+    }
+
+    .detail-content{
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .el-textarea__inner{
+        width: 600px;
+    }
+
+</style>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <div class="list-header-content-box">
+        <div style="margin: 20px 70px 0 70px">
+            <el-descriptions
+                    border
+                    :column="3"
+            >
+                <el-descriptions-item label="品牌"> {{carDetail.brandName||'--'}}</el-descriptions-item>
+                <el-descriptions-item label="车系"> {{carDetail.seriesName}}</el-descriptions-item>
+                <el-descriptions-item label="车型">  {{carDetail.modelName}}</el-descriptions-item>
+                <el-descriptions-item label="车辆VIN码">{{carDetail.vinNo}}</el-descriptions-item>
+                <el-descriptions-item label="电池厂家"> {{getDicValueBatteryBrand(carDetail.batteryBrand)}}</el-descriptions-item>
+                <el-descriptions-item label="电池度数"> {{getDicValueBatteryDegree(carDetail.batteryDegree)}}</el-descriptions-item>
+                <el-descriptions-item label="电池数量"> {{getDicValueBatteryNum(carDetail.batteryNum)}}</el-descriptions-item>
+                <el-descriptions-item label="生产日期"> {{carDetail.productionTime||'--'}}</el-descriptions-item>
+                <el-descriptions-item label="到店日期"> {{carDetail.toStoreTime||'--'}}</el-descriptions-item>
+                <el-descriptions-item label="合格证时间"> {{carDetail.certificateExpireTime||'--'}}</el-descriptions-item>
+                <el-descriptions-item label="是否赎证"> {{1==carDetail.recertificationStatus?'是':2==carDetail.recertificationStatus?'否':'--'}}</el-descriptions-item>
+                <el-descriptions-item label="车辆库存地址"> {{carDetail.carStorage||'--'}}</el-descriptions-item>
+                <el-descriptions-item label="库存时间"> {{carDetail.inventoryTime||'--'}}</el-descriptions-item>
+                <el-descriptions-item label="车辆照片">
+                    <el-image
+                            v-if="carUrl && carUrl != ''"
+                            style="width: 178px; height: 178px"
+                            :src="carUrl"
+                            :zoom-rate="1.2"
+                            :max-scale="7"
+                            :min-scale="0.2"
+                            :preview-src-list="[carUrl]"
+                            :initial-index="0"
+                            fit="cover"
+                    >
+                    </el-image>
+                    <span v-else>--</span>
+                </el-descriptions-item>
+                <el-descriptions-item label="车辆合格证">
+                    <el-image
+                            v-if="certificateUrl && certificateUrl != ''"
+                            style="width: 178px; height: 178px"
+                            :src="certificateUrl"
+                            :zoom-rate="1.2"
+                            :max-scale="7"
+                            :min-scale="0.2"
+                            :preview-src-list="[certificateUrl]"
+                            :initial-index="0"
+                            fit="cover"
+                    >
+                    </el-image>
+                    <span v-else>--</span>
+                </el-descriptions-item>
+            </el-descriptions>
+        </div>
+    </div>
+</div>
+
+<!-- Import Vue 3 -->
+<script src="../../statics/js/vue3/vue.global.js"></script>
+<!-- Import component library -->
+<script src="../../statics/js/element-plus/index.full.js"></script>
+<script src="../../statics/js/element-plus/icons-vue.js"></script>
+<script src="../../statics/plugins/jquery.min.js"></script>
+<script src="../../statics/common/layui/layui.js"></script>
+<script src="../../statics/js/common.js"></script>
+<script src="../../statics/js/element-plus/locale-cn.js"></script>
+<script>
+
+</script>
+<script src="../../statics/js/modules/stockManager/detail.js?_${.now?long}"></script>
+</body>
+
+</html>

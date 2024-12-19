@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>配置中心</title>
+        <meta charset="utf-8">
+        <script type="text/javascript" src="/statics/common/include/head.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../statics/css/new-edit.css">
+        <style>
+            .fm-daoru-title {
+                font-size: 16px;
+                /*border-left: 5px solid #3FACB3;*/
+                padding: 0 0 0 10px;
+                margin: 10px 0;
+                font-weight: bold;
+            }
+            .fm-daoru-title:before{
+                left: -1px;
+                top: 2px;
+            }
+            /*单选按钮提示文字*/
+            .u35_text{
+                font-family: 'Microsoft Tai Le';
+                font-weight: 400;
+                font-style: normal;
+                font-size: 14px;
+                color: rgba(0, 0, 0, 0.647058823529412);
+                text-align: left;
+                line-height: 22px;
+            }
+
+            .generate .layui-form-select{
+                width: 100px;
+            }
+            .label-span{
+                display: inline-block;
+                width:100px;
+                padding:0 12px;
+                box-sizing: border-box;
+            }
+            .gps .layui-input{
+                width:calc(100% - 100px);
+                display: inline-block;
+            }
+            .gpsItem{
+                margin-top: 0px;
+            }
+            .groundBtn .addBtn{
+                font-size: 18px;
+                font-weight: 700;
+                cursor: pointer;
+                color:#3FACB3;
+                margin-right:20px;
+            }
+            .groundBtn .delBtn{
+                font-weight: 700;
+                font-size: 18px;
+                cursor: pointer;
+                color:#3FACB3;
+            }
+            .sysColor{
+                color:#3FACB3;
+            }
+            .layui-form-radioed{
+                width: auto !important;
+            }
+            .plat-wrap{
+                display: flex !important;
+                align-items: center;
+            }
+
+            .plat-wrap .layui-select-title input{
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body class="ren-body">
+    <div id="rrapp" v-cloak>
+        <!-- 新增表单 -->
+        <form class="layui-form ren-form" style="margin-bottom: 60px;">
+            <div class="form-content-box">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    日租订单财务审核配置
+                </div>
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <div class="layui-input-inline">
+                                    <input type="radio" lay-filter="dailyOrderApproval" name="dailyOrderApproval" value="1"
+                                           v-model="controlCenter.dailyOrderApproval"
+                                           lay-skin="primary" title="财务确认收款、退款"/>
+                                    <br/>
+                                    <label class="u35_text">业务员提交收款后，由财务人员确认收款。若订单发生退款，由财务人员确认已退款</label>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <div class="layui-input-inline">
+                                    <input type="radio" lay-filter="dailyOrderApproval" name="dailyOrderApproval" value="2"
+                                           v-model="controlCenter.dailyOrderApproval"
+                                           lay-skin="primary" title="财务仅确认收款"/>
+                                    <br/>
+                                    <label class="u35_text">业务员提交收款后，由财务人员确认收款。若订单发生退款，无需财务人员确认，账单直接为已退款账单</label>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <div class="layui-input-inline">
+                                    <input type="radio" lay-filter="dailyOrderApproval" name="dailyOrderApproval" value="3"
+                                           v-model="controlCenter.dailyOrderApproval"
+                                           lay-skin="primary" title="财务仅确认退款"/>
+                                    <br/>
+                                    <label class="u35_text">业务员提交收款后，无需财务人员确认收款，账单直接为已收账单。若订单发生退款，由财务人员确认已退款</label>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <div class="layui-input-inline">
+                                    <input type="radio" lay-filter="dailyOrderApproval" name="dailyOrderApproval" value="4"
+                                           v-model="controlCenter.dailyOrderApproval"
+                                           lay-skin="primary" title="收款、退款均无需财务"/>
+                                    <br/>
+                                    <label class="u35_text">业务员提交收款后，无需财务人员确认收款，账单直接为已收账单。若订单发生退款，无需财务人员确认，账单直接为已退款账单</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-content-box">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    车辆违章配置
+                </div>
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md7 layui-col-sm7 layui-col-xs7">
+                                <div class="layui-input-inline">
+                                    <div class="fm-daoru-title">自动查询车辆违章</div>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md5 layui-col-sm5 layui-col-xs5">
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="autoQueryIllegalEnable" lay-skin="switch"
+                                           lay-filter="titleOnOff"
+                                           v-model="controlCenter.autoQueryIllegalEnable"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md7 layui-col-sm7 layui-col-xs7">
+                                <div class="layui-input-inline">
+                                    查询频率：每隔<input type="number" class="layui-input" v-model="controlCenter.autoQueryIllegalDay" style="width: 60px;display: inline-block"/>
+                                    天,自动查询交管平台车辆违章信息
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md7 layui-col-sm7 layui-col-xs7">
+                                <div class="layui-input-inline">
+                                    <label>查询车辆：</label>
+                                    <input type="radio" lay-filter="autoQueryVehicleConfigNew"
+                                           name="autoQueryVehicleConfigNew" value="0"
+                                           v-model="controlCenter.autoQueryVehicleConfigNew"
+                                           lay-skin="primary" title="全部车辆"/>
+                                    <input type="radio" lay-filter="autoQueryVehicleConfigNew"
+                                           name="autoQueryVehicleConfigNew" value="1"
+                                           v-model="controlCenter.autoQueryVehicleConfigNew"
+                                           lay-skin="primary" title="部分车辆"/>
+                                    <div v-show="controlCenter.autoQueryVehicleConfigNew==1" id="purchaseSupplierId2"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md7 layui-col-sm7 layui-col-xs7">
+                                <div class="layui-input-inline">
+                                    <div class="fm-daoru-title">车辆违章预警</div>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md5 layui-col-sm5 layui-col-xs5">
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="illegalConditionEnable" lay-skin="switch"
+                                           lay-filter="titleOnOff"
+                                           v-model="controlCenter.illegalConditionEnable">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md8 layui-col-sm8 layui-col-xs8">
+                                <div class="layui-input-inline">
+                                    <select name="illegalConditionConfig" lay-filter="illegalConditionConfig" v-model="controlCenter.illegalConditionConfig">
+                                        <option v-for="(item,index) in illegalConditionConfigDict" :value="item.key">{{item.label}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!--<editor-fold desc="车辆违章预警多条件">-->
+                            <template v-for="(illegalConditionItem, index)  in controlCenter.illegalConditionList">
+                                <div class="layui-inline layui-col-md7 layui-col-sm7 layui-col-xs7">
+                                    <label class="unit">{{illegalConditionItem.label}}</label>
+                                    <input type="number" class="layui-input" v-model="illegalConditionItem.value"
+                                           style="width: 60px;display: inline-block"/>
+                                    <label class="unit">{{illegalConditionItem.unit}}</label>
+                                    <input type="checkbox" name="enable" lay-skin="switch" lay-filter="illegalConditionItem"
+                                           v-model="illegalConditionItem.enable"/>
+                                    <input type="hidden" name="illegalConditionItemIndex" v-model="index"/>
+                                </div>
+                                <!--<div class="layui-inline layui-col-md7 layui-col-sm7 layui-col-xs7">
+                                    <div class="layui-input-inline">
+                                        ；<label class="unit">未处理{{illegalConditionItem.tabTile}}超</label>
+                                        <input type="number" class="layui-input" v-model="illegalConditionItem.tabValue"
+                                               style="width: 60px;display: inline-block"/>
+                                        <label class="unit">{{illegalConditionItem.unit}}</label>
+                                        <input type="checkbox" name="enable" lay-skin="switch" lay-filter="illegalConditionItemCard"
+                                               v-model="illegalConditionItem.tabEnable"/>
+                                        <input type="hidden" name="illegalConditionItemIndex" v-model="index"/>
+                                    </div>
+                                </div>-->
+                            </template>
+                            <!--</editor-fold>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-content-box">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    司机薪资矫正项目配置
+                    <a style="margin-left: 10px" class="layui-btn btn-primary" id="add" @click="add">新增</a>
+                </div>
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md7 layui-col-sm7 layui-col-xs7">
+                                <div class="layui-input-inline">
+                                    <div class="fm-daoru-title">补项</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div v-for="(item, index) in flowData.feeItemsConfigList.find(item=>item.feeType==1).wagesFeeItemsInfo" :key="index" style="margin-left:20px;display:flex;align-items: center;width: 300px;justify-content: space-between">
+                            <span>{{item.feeItemName}}</span>
+                            <input type="checkbox" lay-skin="switch" lay-filter="additem" :name="index"
+                                   v-model="item.isOpen"/>
+                        </div>
+
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md7 layui-col-sm7 layui-col-xs7">
+                                <div class="layui-input-inline">
+                                    <div class="fm-daoru-title">扣项</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div v-for="(item, index) in flowData.feeItemsConfigList.find(item=>item.feeType==2).wagesFeeItemsInfo" :key="index" style="margin-left:20px;display:flex;align-items: center;width: 300px;justify-content: space-between">
+                            <span>{{item.feeItemName}}</span>
+                            <input type="checkbox" lay-skin="switch" lay-filter="subitem" :name="index"
+                                   v-model="item.isOpen"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-content-box">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    流水相关参数设置
+                </div>
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md7 layui-col-sm7 layui-col-xs7">
+                                <div class="layui-input-inline">
+                                    <div class="fm-daoru-title">司机跑车达标额</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md7 layui-col-sm7 layui-col-xs7">
+                                <div class="layui-input-inline">
+                                    月度跑车达标金额 <input
+                                        oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
+                                        class="layui-input" v-model="flowData.feeItemsConfigList.find(item=>item.feeType==3).wagesFeeItemsInfo[0].feeValue" style="width: 100px;display: inline-block"/>
+                                    元
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md7 layui-col-sm7 layui-col-xs7">
+                                <div class="layui-input-inline">
+                                    <div class="fm-daoru-title">车辆使用费</div>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md5 layui-col-sm5 layui-col-xs5">
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" lay-skin="switch" lay-filter="usefee"
+                                           v-model="flowData.feeItemsConfigList.find(item=>item.feeType==4).isOpen"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md7 layui-col-sm7 layui-col-xs7">
+                                <div class="layui-input-inline">
+                                    达标车辆使用 <input
+                                        oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
+                                        class="layui-input" v-model="flowData.feeItemsConfigList.find(item=>item.feeType==4).wagesFeeItemsInfo[0].feeValue" style="width: 100px;display: inline-block"/>
+                                    元
+                                </div>
+                                <div style="margin-top: 20px" class="layui-input-inline">
+                                    未达标车辆使用 <input
+                                        oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
+                                        class="layui-input" v-model="flowData.feeItemsConfigList.find(item=>item.feeType==4).wagesFeeItemsInfo[1].feeValue" style="width: 100px;display: inline-block"/>
+                                    元
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="form-content-box">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    工资生成参数设置
+                </div>
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md7 layui-col-sm7 layui-col-xs7">
+                                <div class="layui-input-inline">
+                                    <div class="fm-daoru-title">司机工资表生成时间</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md7 layui-col-sm7 layui-col-xs7 generate" style="display: flex;align-items: center">
+                                    每月&nbsp;
+                                        <select name="autogenerate" lay-filter="autogenerate" v-model="flowData.feeItemsConfigList.find(item=>item.feeType==5).wagesFeeItemsInfo[0].feeValue">
+                                            <option v-for="(item,index) in autogeneratelist" :value="item">{{item}}</option>
+                                        </select>
+                                    &nbsp;号自动生成上月司机工资表
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="form-content-box">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    车辆定位配置
+                </div>
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md8 layui-col-sm8 layui-col-xs8">
+                                <div class="layui-input-inline">
+                                    <div class="fm-daoru-title">电子围栏设置</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md8 layui-col-sm8 layui-col-xs8 generate" style="display: flex;align-items: center">
+                                行政区域电子围栏设置
+                                </div>
+                            <div class="layui-inline layui-col-md8 layui-col-sm8 layui-col-xs8 generate" style="display: flex;align-items: center">
+                                <table class="layui-hide" id="areaGrid" lay-filter="areaGrid"></table>
+                            </div>
+                        </div>
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md8 layui-col-sm8 layui-col-xs8 generate" style="display: flex;align-items: center">
+                                关键字围栏设置
+                                </div>
+                            <div class="layui-inline layui-col-md8 l8ui-col-sm8 layui-col-xs8 generate" style="display: flex;align-items: center">
+                                <table class="layui-hide" id="wordkeysGrid" lay-filter="wordkeysGrid"></table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <div class="layui-input-inline">
+                                    <div class="fm-daoru-title">告警自动通知（注：开通后，若车辆触发GPS告警，配置人员即可收到短信通知）</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md8 layui-col-sm8 layui-col-xs8 generate" style="display: flex;align-items: center">
+                                短信模板：
+                                </div>
+                            <div class="layui-inline layui-col-md8 layui-col-sm8 layui-col-xs8 generate" style="display: flex;align-items: center">
+                                <textarea name="" v-model.trim="controlCenter.alarmSmsTemplate"  placeholder="例如：车辆{车牌号}绑定的设备{设备编码}触发{告警类型}，时间为{预警发生时间}，定位地点为：{定位地点}。关联用车中订单{订单编号}，客户为{客户姓名 客户联系电话}" class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md8 layui-col-sm8 layui-col-xs8 generate" style="display: flex;justify-content: space-between;">
+                                <span>人员配置：</span> 
+                                <a class="layui-btn search-btn" lay-submit @click="setUser">设置人员</a>
+                                </div>
+                            <div class="layui-inline layui-col-md8 layui-col-sm8 layui-col-xs8 generate" style="display: flex;align-items: center">
+                                <table class="layui-hide" id="staffingGrid" lay-filter="staffingGrid"></table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md8 layui-col-sm8 layui-col-xs8">
+                                <div class="layui-input-inline">
+                                    <div class="fm-daoru-title">GPS账号设置</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row layui-form-row-content">
+                            <div v-for="(item,index) in controlCenter.gpsAccountList" :key="index" class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12 gps gpsItem" style="display: flex;align-items: center">
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12 generate"><span class="label-span"><span style="color:red">*</span>查询账号：</span><input  class="layui-input" v-model.trim="controlCenter.gpsAccountList[index].account"/></div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12 generate"><span class="label-span"><span style="color:red">*</span>查询密码：</span><input class="layui-input" v-model.trim="controlCenter.gpsAccountList[index].password"/></div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12 plat-wrap">
+                                    <!--<span class="label-span"><span style="color:red">*</span>所属平台：</span><input class="layui-input" v-model.trim="controlCenter.gpsAccountList[index].platform"/>-->
+                                    <span class="label-span"><span style="color:red">*</span>所属平台：</span>
+                                    <select lay-filter="gpsSelect" :id="index" v-model.trim="controlCenter.gpsAccountList[index].platform">
+                                        <option v-for="(item,index) in gpsTypeList" :value="item.value">{{item.name}}</option>
+                                    </select>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12 groundBtn" style="padding-left: 20px;">
+                                    <i class="layui-icon layui-icon-addition addBtn" @click="addGpsBtn(index)" v-if="controlCenter.gpsAccountList.length-1===index&&controlCenter.gpsAccountList.length<10"></i>   
+                                    <i class="layui-icon layui-icon-subtraction delBtn" @click="delGpsBtn(index)" v-if="controlCenter.gpsAccountList.length>1"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md7 layui-col-sm7 layui-col-xs7">
+                                <div class="layui-input-inline">
+                                    <div class="fm-daoru-title">其他设置</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12 generate" style="display: flex;align-items: center">
+                                <span class="label-span" style="width:150px">声音提醒：</span>
+                                <input type="radio" lay-filter="autoQueryVehicleConfigNew"
+                                name="autoQueryVehicleConfigNew" value="1"
+                                v-model="controlCenter.voiceReminderFlag"
+                                lay-skin="primary" title="开启"/>
+                                <input type="radio" lay-filter="autoQueryVehicleConfigNew"
+                                name="autoQueryVehicleConfigNew" value="0"
+                                v-model="controlCenter.voiceReminderFlag"
+                                lay-skin="primary" title="关闭"/>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12 gps" style="display: flex;align-items: center;">
+                                <span class="label-span" style="width:150px">设备到期预警：</span>
+                                设备距到期<input  class="layui-input" v-model.trim="controlCenter.deviceExpirationTime" style="width:100px;margin:0 12px"/>天，开始预警；SIM到期预警：SIM距到期  <input  class="layui-input" v-model.trim="controlCenter.simExpirationTime" style="width:100px;margin:0 12px"/>天，开始预警。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-content-box">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    支付宝代扣业务相关配置
+                </div>
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md7 layui-col-sm7 layui-col-xs7">
+                                <div class="layui-input-inline">
+                                    <div class="fm-daoru-title">自主支付模式</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12 generate" style="display: flex;align-items: center">
+                                <span class="label-span" style="width:170px">支付宝自主支付模式：</span>
+                                <input type="checkbox" name="autoPayModeEnable" lay-skin="switch"
+                                       lay-filter="withholdTitleOnOff"
+                                       v-model="withholdCenter.autoPayModeEnable"/><span class="label-span" style="width:600px">开启后，用户签约代扣协议失败，仍能正常下单，租金需用户自主支付，不进行代扣</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md7 layui-col-sm7 layui-col-xs7">
+                                <div class="layui-input-inline">
+                                    <div class="fm-daoru-title">滞纳金方案</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-input-inline">
+                                宽限天数：<input type="number" class="layui-input" v-model="withholdCenter.graceDays" style="width: 60px;display: inline-block"/>
+                                天; &nbsp;&nbsp;&nbsp;&nbsp;
+                                滞纳比例：每逾期1天收取当期应收金额的<input type="number" class="layui-input" v-model="withholdCenter.lateRatio" style="width: 60px;display: inline-block"/>
+                                %作为滞纳金
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+            <div class="float-btn-group bottom-bar">
+                <a class="layui-btn search-btn" lay-submit @click="saveOrUpdate">保存</a>
+            </div>
+        </form>
+    </div>
+    <script type="text/html" id="barTplArea">
+        <div>
+            <a class="layui-grid-btn-xs" lay-event="areaEdit">修改</a>
+            <a class="layui-grid-btn-xs" lay-event="areaDel">删除</a>
+        </div>
+    </script>
+    <script type="text/html" id="barTplKeys">
+        <div>
+            <a class="layui-grid-btn-xs" lay-event="keysEdit">修改</a>
+            <a class="layui-grid-btn-xs" lay-event="keysDel">删除</a>
+        </div>
+    </script>
+    <script type="text/html" id="barTplStaffing">
+            <a class="layui-grid-btn-xs" lay-event="staffingDel">删除</a>
+    </script>
+    <script type="text/html" id="barTplStaffingCheck">
+        <input type="checkbox" name="status" lay-filter="status" data-id="{{d.id}}" data-enableFlag="{{d.enableFlag}}" lay-skin="switch" lay-text="启用|禁用" {{d.enableFlag == 1 ? 'checked' : ''}}>
+    </script>
+    <script src="/statics/js/modules/merchant/controlCenter.js?_${.now?long}"></script>
+    </body>
+</html>

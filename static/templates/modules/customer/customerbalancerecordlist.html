@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+    <script type="text/javascript" src="/statics/common/include/head.js"></script>
+    <style>
+        .layui-table-cell {
+            padding:0 5px;
+            height:inherit;
+            overflow:visible;
+            text-overflow:inherit;
+            white-space:normal;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <div class="mvvm-table">
+        <div id="searchId">
+            <div class="list-search-title-box">
+                <form class="layui-form">
+                    <div style="display:flex;width: 100%;">
+                        <div class="layui-form-item layui-row" style="width: 100%;">
+                            <div class="list-search-form-button" style="width: 100%;">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="list-table-content-box">
+            <table class="layui-hide" id="grid" lay-filter="grid"></table>
+        </div>
+    </div>
+    <form id="downLoadXls" style="display: none" method="post" target="">
+        <input type="text" name="datas"/>
+    </form>
+</div>
+
+<!--操作-->
+<script type="text/html" id="barTpl">
+</script>
+
+<script src="../../statics/js/modules/customer/customerbalancerecordlist.js?_${.now?long}"></script>
+</body>
+</html>

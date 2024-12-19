@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>车辆租售管理平台</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+<!--    <link rel="icon" type="image/png" sizes="32x32" href="https://q2.qlogo.cn/headimg_dl?dst_uin=748943649&spec=140">-->
+    <link rel="stylesheet" type="text/css" href="./statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="./statics/common/css/global.css" media="all">
+    <link rel="stylesheet" type="text/css" href="./statics/css/larryms.css" media="all">
+    <style>
+        .u-personalInformation {
+            width: 200px;
+            box-sizing: border-box;
+            padding: 15px;
+            background: #fff;
+            color: #1a1f33;
+            position: absolute;
+            right: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 5px 1px #ccc;
+        }
+
+        .urer-info_box {
+            display: flex;
+            align-items: center;
+        }
+
+        .info-img,
+        .info-img-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .info-img-icon {
+            width: 28px;
+            height: 28px;
+            margin-right: 0;
+        }
+
+        .info-login {
+            font-size: 12px;
+            color: #afafaf;
+            text-align: left;
+        }
+
+        .u-personalInformation-li {}
+
+        .border-bottom-li {
+            border-bottom: 1px solid #f4f7fd;
+        }
+
+        .overflow-text {
+            width: 100px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="layui-layout layui-layout-admin layui-fluid larryms-layout" id="larry_layout">
+        <!-- 顶部导航 -->
+        <div class="layui-header larryms-header" id="larry_head">
+            <div class="larryms-topbar-left" id="topbarL">
+                <span class="mini-logo"><img src="./statics/images/logo_mini.png" alt=""></span>
+                <a class="layui-logo larryms-logo">车辆租售管理平台</a>
+                <span class="larryms-switch larryms-icon-fold" id="menufold"><i
+                        class="larry-icon larry-fold7"></i></span>
+                <div class="larryms-mobile-menu" id="larrymsMobileMenu"><i class="larry-icon larry-caidan1"></i></div>
+            </div>
+            <div class="larryms-extend">
+                <div class="larryms-topbar-menu larryms-hide-xs clearfix">
+                    <ul class="larryms-nav clearfix fl" id="larryms_top_menu" lay-filter='TopMenu'>
+                        <!-- 若开启顶部菜单，此处动态生成 -->
+
+                    </ul>
+                    <div class="dropdown extend-show" id="larryms_topSubMenu">
+                        <i class="submenubtn larry-icon larry-sandianshu" id="subMenuButton"></i>
+                        <ul class="dropdown-menu larryms-nav" id="dropdown">
+
+                        </ul>
+                    </div>
+                </div>
+                <!-- 右侧常用菜单 -->
+                <!--            <div class="larryms-topbar-right" id="topbarR">-->
+                <!--                <ul class="layui-nav clearfix">-->
+                <!--                    <li class="layui-nav-item" lay-unselect>-->
+                <!--                        <a id="clearCached"><i class="larry-icon larry-qingchuhuancun1"></i><cite>关闭菜单</cite></a>-->
+                <!--                    </li>-->
+                <!--                    <li class="layui-nav-item" lay-unselect>-->
+                <!--                        <a id="larryTheme"><i class="larry-icon larry-zhutishezhi-"></i><cite>主题设置</cite></a>-->
+                <!--                    </li>-->
+
+                <!--                </ul>-->
+                <!--            </div>-->
+            </div>
+        </div>
+        <!-- 内容主体 -->
+        <div class="larryms-body" id="larryms_body">
+            <!-- 左侧导航区域 -->
+            <div class="layui-side pos-a larryms-left layui-bg-black" id="larry_left">
+                <div class="layui-side-scroll">
+                    <!-- 管理员信息  -->
+                    <!--                <div class="user-info">-->
+                    <!--                    <div class="photo">-->
+                    <!--                        <img src="./statics/images/user.jpg" id="user_photo" alt="">-->
+                    <!--                    </div>-->
+                    <!--                    <p><span id="uname"></span>您好！欢迎登录</p>-->
+                    <!--                </div>-->
+                    <!-- 系统菜单 -->
+                    <div class="sys-menu-box">
+                        <ul class="larryms-nav larryms-nav-tree" id="larryms_left_menu" lay-filter="LarrySide"
+                            data-group='0'>
+                            <!-- 此次动态生成 -->
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- 右侧框架内容区域 -->
+            <div class="layui-body pos-a larryms-right" id="larry_right">
+                <div class="layui-tab larryms-tab" id="larry_tab" lay-filter="larryTab">
+                    <div class="larryms-title-box clearfix" id="larryms_title">
+                        <div class="larryms-btn-default larryms-press larryms-pull-left hide" id="goLeft"><i
+                                class="larry-icon larry-top-left-jt"></i></div>
+                        <ul class="layui-tab-title larryms-tab-title" lay-allowclose='false' id="larry_tab_title"
+                            lay-filter='larrymsTabTitle'>
+                            <li class="layui-this" id="larryms_home" lay-id="0" data-group="0" data-id="larryms-home"
+                                fresh="1" data-url="html/main1.html">
+                                <i class="larry-icon larry-shouye2" data-icon="larry-shouye2"
+                                    data-font="larry-icon"></i><cite>后台首页</cite>
+                            </li>
+                        </ul>
+                        <div class="larryms-btn-group clearfix">
+                            <div class="larryms-btn-default larryms-press larryms-pull-right hide" id="goRight"><i
+                                    class="larry-icon larry-gongyongshuangjiantouyou"></i></div>
+
+                            <div class="refresh larryms-press" id="larryms_refresh">
+                                <i class="larry-icon larry-shuaxin"></i>
+                                <cite>刷新</cite>
+
+                            </div>
+
+                            <div class="larryms-press often" lay-filter="larryOperate" id="buttonRCtrl">
+
+                                <li class="layui-nav-item larryms-nav  refresh larryms-press" lay-unselect>
+                                    <a id="clearCached"><i
+                                            class="larry-icon larry-qingchuhuancun1"></i><cite>关闭菜单</cite></a>
+                                </li>
+                                <li class="layui-nav-item larryms-nav  refresh larryms-press" style="width: 100px;"
+                                    lay-unselect>
+                                    <a id="userInfo">
+                                        <!--                                    <i class="larry-icon larry-exit"></i>-->
+                                        <!--<img class="info-img-icon" src="./statics/images/user.jpg" alt="">-->
+                                        <i class="larry-icon larry-gerenxinxi"></i><cite>个人中心</cite>
+                                        <!--<i class="layui-icon layui-icon-down" style="font-size:15px"></i>-->
+                                    </a>
+                                    <ul id="u-personalInformation" class="u-personalInformation" style="display:none">
+                                        <li class="u-personalInformation-li border-bottom-li"
+                                            style="position: relative;">
+                                            <div class="urer-info_box layui-anim-up" id="useravatar">
+                                                <div style="text-align: left;line-height: 30px;" id="usernamediv">
+                                                    <div class="overflow-text">用户：<span id="username"></span></div>
+                                                </div>
+                                            </div>
+                                            <p class="info-login" style="font-size: 12px;">上次登录时间：<br><span
+                                                    id="lastLoginTime" style="font-size: 12px;"></span></p>
+                                        </li>
+                                        <li id="personal" class="u-personalInformation-li border-bottom-li">
+                                            <!--                                    <i class="layui-icon-username"></i>  -->
+                                            个人信息
+                                        </li>
+                                        <li class="u-personalInformation-li" id="adsadasdad" onclick="logout">退出登录</li>
+                                    </ul>
+                                </li>
+
+                                <!--                            <ul class="larryms-nav">-->
+                                <!--                                <li class="larryms-nav-item">-->
+                                <!--                                    <a class="top"><i class="larry-icon larry-caozuo"></i><cite>常用操作</cite><span class="larryms-nav-more"></span></a>-->
+                                <!--                                    <dl class="larryms-nav-child layui-anim layui-anim-upbit">-->
+                                <!--                                        <dd >-->
+                                <!--                                            <li class="layui-nav-item exit" lay-unselect>-->
+                                <!--                                                <a id="logout" data-url='logout'><i class="larry-icon larry-exit"></i><cite>退出</cite></a>-->
+                                <!--                                            </li>-->
+                                <!--                                        </dd>-->
+                                <!--                                <dd >-->
+                                <!--                                <li class="layui-nav-item" lay-unselect>-->
+                                <!--                                                            <a id="clearCached"><i class="larry-icon larry-qingchuhuancun1"></i><cite>关闭菜单</cite></a>-->
+                                <!--                                                        </li>-->
+                                <!--                                </dd>-->
+                                <!--                                        <dd id="tabCtrD">-->
+                                <!--                                            <a data-ename="positionCurrent"><i class="larry-icon larry-qianjin1"></i><cite>定位当前选项卡</cite></a>-->
+                                <!--                                        </dd>-->
+                                <!--                                        <dd id="tabCtrA">-->
+                                <!--                                            <a data-ename="closeCurrent"><i class="larry-icon larry-guanbidangqianye"></i><cite>关闭当前选项卡</cite></a>-->
+                                <!--                                        </dd>-->
+                                <!--                                        <dd id="tabCtrB">-->
+                                <!--                                            <a data-ename="closeOther"><i class="larry-icon larry-guanbiqita"></i><cite>关闭其他选项卡</cite></a>-->
+                                <!--                                        </dd>-->
+                                <!--                                        <dd id="tabCtrC">-->
+                                <!--                                            <a data-ename="closeAll"><i class="larry-icon larry-close-all"></i><cite>关闭全部选项卡</cite></a>-->
+                                <!--                                        </dd>-->
+                                <!--                                        <dd>-->
+                                <!--                                            <a data-ename="refreshAdmin"><i class="larry-icon larry-kuangjia_daohang_shuaxin"></i><cite>刷新最外层框架</cite></a>-->
+                                <!--                                        </dd>-->
+                                <!--                                    </dl>-->
+                                <!--                                </li>-->
+                                <!--                            </ul>-->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- tab title end -->
+                    <div class="layui-tab-content larryms-tab-content" id="larry_tab_content">
+                        <div class="layui-tab-item layui-show">
+                            <iframe class="larry-iframe" data-id='0' name="ifr_0" id='ifr0' src="main.html"
+                                frameborder="no" border="0"></iframe>
+                        </div>
+                    </div>
+                    <!-- tab content end -->
+                </div>
+            </div>
+            <!-- 移动端支持 -->
+            <div class="larryms-mobile-shade" id="larrymsMobileShade"></div>
+        </div>
+        <!-- 底部固定区域 -->
+        <!--<div class="layui-footer larryms-footer" data-show='on' id="larry_footer">-->
+        <!--<div class="copyright inline-block pos-al">Author larry © <a href="https://www.larrycms.com/" target="_blank">larrycms.com</a></div>-->
+        <!--<p class="block">商业使用购买授权(保留对源码盗卖转售法律追诉权利)</p>-->
+        <!--<div class="larryms-info inline-block pos-ar">当前版本：<span id="larryms_version"></span><a href="https://www.larrycms.com/" target="_blank"><i class="layui-icon">&#xe67c;</i></a></div>-->
+        <!--</div>-->
+    </div>
+    <!-- 加载js文件-->
+    <script type="text/javascript" src="./statics/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="./statics/common/layui/layui.js"></script>
+    <script type="text/javascript" src="./statics/common/lib/vue.min.js"></script>
+    <script type="text/javascript" src="./statics/js/common.js"></script>
+    <script type="text/javascript">
+
+
+        layui.cache.menusUrl = baseURL + '/sys/menu/nav';//这里设置 菜单数据项接口地址 或data参数
+        layui.cache.page = 'index';
+        //说明：并非一个页面只能加载一个模块 可以这样定义：'index,common';也并非每个页面都要定义一个模块，事实上模块根据功能需要可以公用
+        layui.cache.rightMenu = false; //默认开启页面右键菜单，设置为 custom 时需要自定义右键菜单，设置为false 关闭右键菜单
+        layui.config({
+            base: './statics/common/'
+        }).extend({
+            larry: 'js/base'
+        }).use('larry');
+        adsadasdad.addEventListener('click', logout)
+        function logout() {
+            $.ajax({
+                url: baseURL + '/logout',
+                method: 'get',
+                complete: (res) => {
+                    clearAllCookie()
+                    localStorage.clear();
+                    sessionStorage.clear();
+                    if (top) {
+                        top.location.href = 'login.html';
+                    } else {
+                        window.location.href = 'login.html';
+                    }
+                }
+            })
+        }
+
+        //清除所有cookie函数
+        function clearAllCookie() {
+            var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
+            if (keys) {
+                for (var i = keys.length; i--;)
+                    document.cookie = keys[i] + '=0;expires=' + new Date(0).toUTCString()
+            }
+        }
+    </script>
+</body>
+
+</html>

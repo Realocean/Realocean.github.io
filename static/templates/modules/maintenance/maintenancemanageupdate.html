@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>编辑保养单</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <form class="layui-form">
+        <input v-model="maintenanceManage.carId" id="carId" value="" type="hidden" class="layui-input searchVal"  />
+        <input v-model="maintenanceManage.carApplication" type="hidden" class="layui-input searchVal" placeholder="" />
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                车辆基础信息
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车辆品牌/车系/车型:</label>
+                            <div class="layui-input-inline">
+
+                                <input v-model = "maintenanceManage.carBrandModelName" id="carBrandModelName" type="text" class="layui-input searchVal"  placeholder="" readonly/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车牌号:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="maintenanceManage.carPlateNo"  id = "carPlateNo" type="text"   class="layui-input searchVal"  placeholder="" readonly/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车架号:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="maintenanceManage.vinNo"  type="text" id = "vinNo"  class="layui-input searchVal"  placeholder="" readonly/>
+                            </div>
+                        </div>
+                        <!--<div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">客户名称:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="maintenanceManage.customer" id="customerName"  type="text" class="layui-input searchVal"   placeholder=""  readonly/>
+                            </div>
+                        </div>-->
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车辆状态:</label>
+                            <div class="layui-input-inline">
+                                <input  v-model="maintenanceManage.carStatusStr" id="carStatusStr" type="text"   class="layui-input searchVal"   placeholder=""  readonly/>
+                            </div>
+                        </div>
+                        <!--<div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车辆订单号:</label>
+                            <div class="layui-input-inline">
+                                <input  v-model="maintenanceManage.orderNo" type="text" id="departureNo"   class="layui-input searchVal" placeholder=""  readonly/>
+                            </div>
+                        </div>-->
+                        <div class="layui-inline layui-col-md6 layui-col-sm12 layui-col-xs6">
+                            <label class="layui-form-label">车辆所属公司:</label>
+                            <div class="layui-input-inline">
+                                <input  v-model="maintenanceManage.belongFactory" id="belongCompanyName" type="text" class="layui-input searchVal" placeholder=""  readonly/>
+                            </div>
+                        </div>
+                       <!-- <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">租赁开始时间:</label>
+                            <div class="layui-input-inline">
+                                <input  v-model="maintenanceManage.timeStartRent" type="text" id="timeStartRent" class="layui-input searchVal" placeholder="" readonly/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm12 layui-col-xs6">
+                            <label class="layui-form-label">租赁结束时间:</label>
+                            <div class="layui-input-inline">
+                                <input  v-model="maintenanceManage.timeFinishRent" type="text"  id="timeFinishRent"  class="layui-input searchVal" placeholder="" readonly/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车辆所属仓库:</label>
+                            <div class="layui-input-inline">
+                                <input  v-model="maintenanceManage.carDepotName" type="text"  class="layui-input searchVal" placeholder="" readonly/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm12 layui-col-xs6">
+                            <label class="layui-form-label">车辆用途:</label>
+                            <div class="layui-input-inline">
+                                <input  v-model="maintenanceManage.carApplication" type="hidden"    class="layui-input searchVal" placeholder="" readonly/>
+                                <input  v-model="maintenanceManage.vehicleUseStr" type="text"    class="layui-input searchVal" placeholder="" readonly/>
+                            </div>
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                保养信息
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">服务站名称:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="maintenanceManage.serviceSite"   type="text"   class="layui-input searchVal" lay-verify="commercialNoVerify"  placeholder="请输入服务站名称" />
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">当前公里数:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="maintenanceManage.currentMile"   type="text"   class="layui-input searchVal" lay-verify="currentMileVerify"  placeholder="请输入当前公里数" />
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">下次保养公里数:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="maintenanceManage.nextMile"  type="text" class="layui-input searchVal" lay-verify="nextMileVerify"   placeholder="请选择下次保养公里数" />
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">下次保养时间:</label>
+                            <div class="layui-input-inline">
+                                <input  v-model="maintenanceManage.nextMaintenanceTime" readonly  type="text" id="nextDate"  class="layui-input searchVal"    placeholder="请选择下次保养时间" />
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label">保养备注:</label>
+                            <div class="layui-input-inline">
+                                <textarea v-model="maintenanceManage.maintenanceRemark" placeholder="请输入保养备注" class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">保养时间:</label>
+                            <div class="layui-input-inline">
+                                <input  v-model="maintenanceManage.maintenanceTime" readonly  type="text" id="maintenanceDate" class="layui-input searchVal"    placeholder="请选择保养时间" />
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <label class="layui-form-label">车辆保养附件:</label>
+                                    <div class="layui-input-inline">
+                                        <div class="layui-input-inline">
+                                            <div class="layui-input-inline-upload">
+                                                <div :id="fileLstId" class="layui-input-inline-upload-show box-rect" v-for="(item,index) in byFileList">
+                                                    <div v-show="item.typeFile == 1" class="layui-input-inline-upload-button">
+                                                        <img :src="imageURL + item.url" class="view-img">
+                                                    </div>
+                                                    <div v-show="item.typeFile != 1" class="layui-input-inline-upload-button">
+                                                        {{item.nameAccessory}}
+                                                    </div>
+                                                    <div class="layui-input-inline-upload-show-delete btn-event" @click="delbyFile(item.id)">
+                                                        删除
+                                                    </div>
+                                                </div>
+                                                <div class="layui-input-inline-upload-button box-rect box-rect-event" id="clbyImages">
+                                                    <img src="../../statics/images/inline-upload@2x.png">
+                                                </div>
+                                            </div>
+                                            <div class="layui-input-inline-upload-text">
+                                                附件说明：附件最大支持30M，
+                                                支持格式：PDF、Word、Excel、JPG、PNG 、ZIP、RAR </div>
+                                        </div>
+                                        <!--<div class="layui-input-inline-upload-text">说明：车辆照片在APP车辆详情页面展示；</div>-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">保养项目:</label>
+                            <div class="layui-input-inline">
+                                <select  name="maintenanceType"   v-model="maintenanceManage.maintenanceType" lay-verify="insuranceTypeNoVerify"   lay-filter="selectMaintenanceTypeNo"  class="layui-select" >
+                                    <option value="">请选择保养项目</option>
+                                    <option v-for="item in maintenanceTypeList" :value="item.code">{{item.value}}</option>
+                                </select>
+                            </div>
+                            <div style="margin-left: 750px;margin-top: -30px;">
+                                <a class="layui-btn search-btn" @click="addTo">添加</a>
+                            </div>
+                            <div  style="margin-left: 1200px;margin-top: -30px;">
+                                <div  class="layui-input-inline" >
+                                    <label class="layui-form-label"><span>保养合计费用:￥{{maintenanceManage.maintenanceFee}}</span></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table class="layui-hide" id="insuranceTypeGrid" lay-filter="insuranceTypeGrid"></table>
+        <div class="float-btn-group">
+            <a class="layui-btn reset-btn" @click="cancel">取消</a>
+            <button class="layui-btn" id="saveReceivables" lay-submit lay-filter="saveOrUpdate">确定</button>
+        </div>
+    </form>
+</div>
+
+<script type="text/html" id="barTpl">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
+</script>
+
+<script src="../../statics/js/modules/maintenance/maintenancemanageupdate.js"></script>
+</body>
+</html>

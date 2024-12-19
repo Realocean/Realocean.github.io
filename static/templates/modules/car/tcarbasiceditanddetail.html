@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>车辆详情</title>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="Author" content="larry" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+    <script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/common.js"></script>
+    <script type="text/javascript" src="../../statics/js/upload.js"></script>
+    <script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+    <link rel="stylesheet" href="../../statics/new_css/jxcPublicAll.css" media="all">
+    <link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../statics/common/step/steps.css">
+    <link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/viewer.min.css">
+    <script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+    <script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+    <script src="../../statics/common/layui/autocomplete.js"></script>
+    <script src="../../statics/js/modules/viewer/viewer.min.js"></script>
+    <script src="../../statics/common/print-js/print.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+    <script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/searchview.js"></script>
+    <script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+    <!-- 引入组件库 -->
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/common-new.css">
+    <style>
+        body {
+            overflow-y: scroll;
+        }
+
+        .details-layui-fr-sup-title .description {
+            color: #D9001B !important;
+        }
+
+        .tableTop {
+            color: #000000
+        }
+
+        .item {
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            width: 33.33%;
+            float: left;
+        }
+
+        .button {
+            border: none;
+            color: white;
+            padding: 10px 35px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 0px 10px;
+            cursor: pointer;
+            float: right;
+        }
+
+        .layui-table-view .layui-table {
+            width: -webkit-fill-available;
+        }
+        .details-content-box{
+            border-radius:8px;
+            padding:16px 12px;
+            box-sizing: border-box;
+            margin:0 12px 0 0;
+        }
+        .statu{
+            margin:0 12px 0 0;
+        }
+        .left-before{
+            background: #FFFFFF;
+            box-shadow: 0px 2px 8px 0px rgba(17,45,47,0.12);
+            border-radius: 8px;
+            margin:0 12px 12px 0;
+        }
+        .ren-form{
+            margin-top:0px;
+        }
+        .details-content-box .left-before:before {
+            background: #FFFFFF;
+        }
+
+        .fm-daoru-title {
+            width: 6px;
+            margin-top:6px;
+            margin-right:8px;
+            height: 16px;
+            display: inline-block;
+            background: #3FACB3;
+            border-radius: 3px;
+            transform:rotate(15deg);
+        }
+        .car-title{
+            font-size: 18px;
+            font-weight: 700;
+            color: #333333;
+        }
+        .close{
+            margin-left:10px;
+            right: 30px;
+            font-size: 14px;
+            color: #1a1f33;
+            top: 20px;
+            display:inline-block;
+            float:right;
+            cursor: pointer;
+        }
+        .card {
+            padding: 20px;
+        }
+        #rrapp .layui-form-row-content .layui-inline {
+            display: flex;
+        }
+        .details-sub-tab-content{
+            line-height: initial !important;
+            border-radius: 0px 0px 8px 8px;
+            margin:12px 12px 12px 0;
+            background:#fff;
+            border-radius: 8px;
+        }
+        .ren-body{
+            background: #F6F8F8;
+        }
+        .details-sub-tab-content-box{
+            padding:12px 16px !important;
+            box-sizing: border-box !important;
+            flex: 0 0 13%;
+            flex-wrap: wrap;
+            justify-content: space-between;
+
+        }
+        .details-sub-tab-content-box>.flex{
+            background-color: #DBE2EC;
+            border-color: #DBE2EC;
+            flex: 0 0 13%;
+            margin:0px 6px 12px 0px!important;
+            text-align: left !important;
+            padding:12px 16px !important;
+            box-sizing: border-box !important;
+            border-radius: 8px;
+            /* background: #FFFFFF; */
+            border: 1px solid #D7DCDC;
+            color:#666666;
+            background:#fff;
+        }
+        .details-sub-tab-content-box>.flex:hover{
+            box-shadow: 0px 2px 8px 0px rgba(17,45,47,0.12);
+        }
+        .details-sub-tab-content-box > .flex.active-linear-gradient{
+            padding:12px 16px !important;
+            box-sizing: border-box !important;
+        }
+         /* 去除每行尾多余的边距 */
+        .details-sub-tab-content-box>.flex:nth-child(7n) {
+            margin-right: 0;
+        }
+        .details-sub-tab-content-box>.flex .title{
+            margin-bottom:10px;
+            font-size: 16px;
+            font-weight: 400;
+            color: #333333;
+            font-weight: 700;
+        }
+        .details-sub-tab-content-box > .flex.active-linear-gradient .title{
+            color: #fff !important;
+        }
+        .details-sub-tab-content-box>.flex>.list{
+            margin-bottom:6px;
+        }
+        .details-sub-tab-content-box>.flex>.list>.name{
+            font-size: 14px;
+            font-weight: 400;
+        }
+        .details-sub-tab-content-box>.flex>.list>.value{
+            font-size: 14px;
+            font-weight: 400;
+        }
+        .form-update-content-box-title{
+            font-size: 16px;
+            margin-top:12px;
+        }
+        .layui-input-inline-upload-show-delete{
+            right: 0;
+            margin: 0 auto;
+        }
+        .label_value{
+            font-size: 16px;
+            line-height:30px;
+            color: #333333;
+        }
+        .layui-input, .layui-select, .layui-textarea{
+            border:0px !important;
+        }
+        .box-rect-event{
+            display: none;
+        }
+
+        .box-rect{
+            margin-top:0px !important;
+        }
+        .box-rect>.layui-input-inline-upload-show-delete:nth-child(2n){
+            display: none  !important;
+        }
+        .box-rect>.layui-input-inline-upload-show-delete:nth-child(n){
+            width: 100% !important;
+            left: 0 !important;
+            background: #F4FEFF !important;
+            width: 28px;
+            font-size: 14px;
+            color: #3FACB3;
+        }
+
+        .details-content-box .table{
+            border-bottom:0px;
+        }
+        .icon_img{
+            /* width:20px; */
+            height:20px;
+            float:right;
+        }
+        .layui-form-label{
+            font-size: 16px;
+            font-weight: 500;
+            color: #666666;
+        }
+        .layui-input-inline-upload-text{
+            display: none;
+        }
+        div.title span{
+            font-weight: normal;
+        }
+        .list-search-sup-title, .new-layui-title {
+            padding: 20px;
+        }
+        .layui-form-row-content .layui-inline {
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body class="ren-body">
+    <div id="rrapp" v-cloak>
+
+        <div class="details-conteiner">
+            <div class="details-sub-tab-content">
+                <div class="statu">
+                    <div class="list-search-sup-title new-layui-title">
+                        <div style="display: flex;justify-content: flex-end;">
+                            <div class="details-layui-fr-sup-title" style="margin-right:30px;line-height:34px;">
+                                <span class="description" style="font-weight:600">车辆状态：</span>
+                                <span class="description" style="font-weight:600">{{tCarBasic.businessTypeStr}}</span>
+                            </div>
+                            <div class="list-search-form-button">
+                                <a class="layui-btn search-btn" @click="closeReturn">返回列表</a>
+                                <a class="layui-btn search-btn" @click="refresh">
+                                    刷新
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="details-sub-tab-content-box display-start">
+                    <div class="flex" v-for="(item, index) in detailsSupTabContentList" :key="index"
+                        :class="index === detailsSupTabContentListActiveIndex ? 'active-linear-gradient' : ''"
+                        @click="detailsSupTabContentBindtap(item,index)">
+                        <div class="title">
+                            <span>{{ item.name }}</span>
+                            <img :id="index+'_id'" :src="index === detailsSupTabContentListActiveIndex?item.active_url:item.def_url" class="icon_img" @mouseleave="noiceMouseout" @mouseenter="noiceMove('#'+index+'_id',index)" @click.self="gotoPage(item)">
+                        </div>
+                        <div class="list" v-for="(list_item,list_index) in item.list" :key="list_index">
+                            <span class="list_name"> {{ list_item.name }}</span>
+                            <span class="list_value"> {{ list_item.value }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 基础信息 -->
+            <div class="details-content-box" v-show="detailsSupTabContentListActiveIndex === 0">
+                <form class="layui-form ren-form" style="margin-bottom: 60px;">
+                    <!--行驶信息-->
+                    <div class="left-before">
+                        <div class="list-search-sup-title new-layui-title">
+                            <span class="fm-daoru-title"></span>
+                            <span class="car-title">行驶证信息</span>
+                            <div @click="bindDrivingFilter"
+                            class="close">
+                                <i class="layui-icon" :class="drivingFilter?'layui-icon-up':'layui-icon-down'"
+                                    data-cascader="icon"></i>
+                            </div>
+                        </div>
+                        <section v-show="drivingFilter">
+                            <div class="form-content-session-box">
+                                <div class="card display">
+                                    <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                        <div class="form-update-content-box display"
+                                            style="flex-direction: column;margin-left: 10px;">
+                                            <div class="layui-inline" style="text-align: center;margin-top:12px;">
+                                                <img class="layui-upload-drag"
+                                                    style=" border: 1px dashed #c0ccda; border-radius: 6px; cursor: pointer;height: 130px;width: 220px;padding: 0px;"
+                                                    alt="+添加行驶证图片" onclick="imageClick()"
+                                                    src="../../statics/images/upload@2x.png"
+                                                    id="imgDrivinglicenseFront">
+                                                <div style="width: 220px;cursor: pointer;"
+                                                    v-show="imgDrivinglicenseFront"
+                                                    class="layui-input-inline-upload-show-delete btn-event"
+                                                    @click="showImg">
+                                                    预览
+                                                </div>
+                                                <input accept="*/*" type="file" id="image2" style="display: none"
+                                                    onchange="imageChange1(this)">
+
+                                            </div>
+                                            <div class="layui-inline" style="text-align: center;">
+                                                <div class="form-update-content-box-title">上传行驶证照片自动识别信息</div>
+                                                <div class="form-update-content-box-text" style="margin-top:8px;">说明：上传行驶证自动识别行驶证注册日</div>
+                                                <div class="form-update-content-box-text">期、车牌号、车架号、发动机号；</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-row layui-form-row-content">
+                                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                            <label class="layui-form-label">
+                                                <span style="color:red;">*</span>车架号:</label>
+                                            <div class="layui-input-inline label_value">
+                                                {{tCarBasic.vinNo || '--'}}
+                                            </div>
+                                        </div>
+                                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                            <label class="layui-form-label">车牌号:</label>
+                                            <div class="layui-input-inline label_value">
+                                               {{tCarBasic.carNo || '--'}}
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                            <label class="layui-form-label">发动机号码:</label>
+                                            <div class="layui-input-inline label_value">
+                                                {{tCarBasic.engineNo || '--'}}
+                                            </div>
+                                        </div>
+                                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                            <label class="layui-form-label">所有人:</label>
+                                            <div class="layui-input-inline label_value">
+                                                {{tCarBasic.carOwner || '--'}}
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                            <label class="layui-form-label">住址:</label>
+                                            <div class="layui-input-inline label_value">
+                                                {{tCarBasic.carOwnerAddr || '--'}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <!--基础信息-->
+                    <div class="left-before">
+                        <div class="list-search-sup-title new-layui-title">
+                            <span class="fm-daoru-title"></span>
+                            <span class="car-title">车辆信息</span>
+                            <div @click="bindVehicleFilter" class="close">
+                                <i class="layui-icon" :class="vehicleFilter?'layui-icon-up':'layui-icon-down'"
+                                    data-cascader="icon"></i>
+                            </div>
+                        </div>
+                        <section v-show="vehicleFilter">
+                            <div class="form-content-session-box">
+                                <div class="card">
+                                    <div class="layui-row layui-form-row-content">
+                                        <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                            <label class="layui-form-label">
+                                                <span style="color:red;">*</span>车辆归属:</label>
+                                                    <div class="layui-input-inline label_value">
+                                                        {{tCarBasic.deptName || '--'}}
+                                                    </div>
+                                        </div>
+                                        <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                            <label class="layui-form-label"><span
+                                                style="color:red;">*</span>品牌/车系/车型:</label>
+                                                    <div class="layui-input-inline label_value">
+                                                        {{tCarBasic.brandName || '--'}}/{{tCarBasic.seriesName || '--'}}/
+                                                        {{tCarBasic.modelName || '--'}}
+                                                    </div>
+                                        </div>
+                                        <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                            <label class="layui-form-label">车辆来源:</label>
+                                            <div class="layui-input-inline label_value">
+                                                {{tCarBasic.sourceTypeStr || '--'}}
+                                            </div>
+                                        </div>
+                                        <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                            <label class="layui-form-label">仓库:</label>
+                                            <div class="layui-input-inline label_value">
+                                                {{tCarBasic.depotName || '--'}}
+                                            </div>
+                                        </div>
+                                        <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                            <label class="layui-form-label">车辆初始里程数:</label>
+                                            <div class="layui-input-inline label_value">
+                                                {{tCarBasic.initMeligile || '--'}}
+                                            </div>
+                                        </div>
+                                        <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                            <label class="layui-form-label">实时里程数:</label>
+                                            <div class="layui-input-inline label_value">
+                                                {{tCarBasic.sumOdograph || '--'}}
+                                            </div>
+                                        </div>
+                                        <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                            <label class="layui-form-label">车辆颜色:</label>
+                                            <div class="layui-input-inline label_value">
+                                                {{tCarBasic.carColorStr || '--'}}
+                                            </div>
+                                        </div>
+                                        <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                            <label class="layui-form-label">车辆入库时间:</label>
+                                            <div class="layui-input-inline label_value">
+                                                {{tCarBasic.storageTime || '--'}}
+                                            </div>
+                                        </div>
+                                        <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                            <label class="layui-form-label">供应商:</label>
+                                            <div class="layui-input-inline label_value">
+                                                {{tCarBasic.purchaseSupplierName || '--'}}
+                                            </div>
+                                        </div>
+                                        <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                            <label class="layui-form-label">动力类型:</label>
+                                            <div class="layui-input-inline label_value">
+                                                {{tCarBasic.carPower|| '--'}}
+                                            </div>
+                                        </div>
+                                        <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                            <label class="layui-form-label">车务:</label>
+                                            <div class="layui-input-inline label_value">
+                                                {{tCarBasic.vehicleUserName || '--'}}
+                                            </div>
+                                        </div>
+                                        <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                            <label class="layui-form-label">号牌种类:</label>
+                                            <div class="layui-input-inline label_value">
+                                                {{tCarBasic.hpName || '--'}}
+                                            </div>
+                                        </div>
+                                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                            <label class="layui-form-label">车辆备注:</label>
+                                            <div class="layui-input-inline label_value">
+                                                {{tCarBasic.remark||'--'}}
+                                            </div>
+                                        </div>
+                                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                            <label class="layui-form-label">随车物品:</label>
+                                            <div class="layui-input-inline label_value">
+                                                <span v-for="(item,index) in tCarBasic.itemsName" :key="index" >{{item}}<span v-if="tCarBasic.itemsName.length-1>index">、</span></span>
+                                            </div>
+                                        </div>
+                                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                            <label class="layui-form-label">
+                                                随车备注:</label>
+                                            <div class="layui-input-inline label_value">
+                                                {{tCarBasic.accessoryNote || '--'}}
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                            <label class="layui-form-label">车辆照片:</label>
+                                            <div class="layui-input-inline label_value">
+                                                <div class="layui-input-inline" id="carDetailId"></div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="table" style="margin-top: 30px;">
+                                        <table class="layui-hide" style="padding:15px 100px 0px 100px;" id="grid"
+                                            lay-filter="gridid"></table>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </form>
+            </div>
+            <!-- 车辆档案 -->
+            <div class="details-content-box" v-show="detailsSupTabContentListActiveIndex === 1">
+                <div class="details-layui-row">
+                    <div class="layui-row layui-form-row-content">
+                    </div>
+                    <div class="table">
+                        <table class="layui-hide" id="test8" lay-filter="test8"></table>
+                    </div>
+                </div>
+            </div>
+              <!-- 车辆订单记录 -->
+              <div class="details-content-box" v-show="detailsSupTabContentListActiveIndex === 2">
+                <div class="details-layui-row">
+                    <div class="table">
+                        <table class="layui-hide" id="test7"></table>
+                    </div>
+                </div>
+            </div>
+            <!-- 财务记录 -->
+            <div class="details-content-box details-tab-content" v-show="detailsSupTabContentListActiveIndex === 3">
+                <div class="details-layui-row details-tab-content-box">
+                    <div class="layui-tab">
+                        <ul class="layui-tab-title">
+                            <li :class="0==index?'layui-this':''" @click="financeTabContentBindtap(index, item)"
+                                v-for="(item, index) in financeTabContentList" :key="index">{{ item }}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="details-content-box" v-show="financeTabContentListActiveValue === '应收'">
+                        <div class="details-layui-row">
+                            <div class="table">
+                                <table class="layui-hide" id="ysTab"></table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="details-content-box" v-show="financeTabContentListActiveValue === '应付'">
+                        <div class="details-layui-row">
+                            <div class="table">
+                                <table class="layui-hide" id="yfTab"></table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="details-content-box" v-show="financeTabContentListActiveValue === '应退'">
+                        <div class="details-layui-row">
+                            <div class="table">
+                                <table class="layui-hide" id="ytTab"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <!-- 车辆过户信息 -->
+             <div class="details-content-box" v-show="detailsSupTabContentListActiveIndex === 4">
+                <div class="details-layui-row">
+                    <div class="table">
+                        <table class="layui-hide" id="test12" lay-filter="test12"></table>
+                    </div>
+                </div>
+            </div>
+             <!-- 车辆换牌记录 -->
+             <div class="details-content-box" v-show="detailsSupTabContentListActiveIndex === 5">
+                <div class="details-layui-row">
+                    <div class="table">
+                        <table class="layui-hide" id="test13"></table>
+                    </div>
+                </div>
+            </div>
+             <!-- 车辆处置信息 -->
+             <div class="details-content-box" v-show="detailsSupTabContentListActiveIndex === 6">
+                <form class="layui-form">
+                    <div class="details-layui-row">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">处置原因:</label>
+                                <div class="layui-input-inline">
+                                    <input :value="carDisposal.disposalReasonShow || '--'" type="text"
+                                        class="layui-input searchVal" style="border: none;" disabled />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">处置时间:</label>
+                                <div class="layui-input-inline">
+                                    <input id="disposalTime" v-model="carDisposal.disposalTime" type="text"
+                                        class="layui-input searchVal" disabled />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <label class="layui-form-label">备注:</label>
+                                <div class="layui-input-inline">
+<!--                                    <textarea :value="carDisposal.remark || '&#45;&#45;'" placeholder="备注说明"-->
+<!--                                        class="layui-textarea" disabled style="border: none;"></textarea>-->
+                                    <span >{{carDisposal.remark || '--'}}</span>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <label class="layui-form-label">附件:</label>
+                                <div class="layui-input-inline">
+                                    <div class="layui-input-inline-upload">
+                                        <div class="layui-input-inline-upload-show box-rect"
+                                            v-for="(item,index) in deliveryFileLst">
+                                            <div v-show="item.typeFile == 1" class="layui-input-inline-upload-button">
+                                                <img :src="imageURL + item.url" class="view-img" style="cursor:pointer;"
+                                                    @click="imageDetail(item.url)">
+                                            </div>
+                                            <div v-show="item.typeFile != 1" class="layui-input-inline-upload-button">
+                                                {{item.nameAccessory}}
+                                            </div>
+                                            <div v-show="item.typeFile != 1" style="width: 100%"
+                                                class="layui-input-inline-upload-show-delete btn-event"
+                                                @click="downDoc(item.nameFile, item.url)">
+                                                下载
+                                            </div>
+                                            <div v-show="item.typeFile == 1" style="width: 100%"
+                                                class="layui-input-inline-upload-show-delete btn-event"
+                                                @click="showDoc(item.nameAccessory, item.url)">
+                                                预览
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-input-inline-upload-text">
+                                        附件说明：附件最大支持30M,支持格式：PDF、Word、Excel、JPG、PNG 、ZIP、RAR
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+             <!-- 年检信息 -->
+             <div class="details-content-box" v-show="detailsSupTabContentListActiveIndex === 7">
+                <div class="details-layui-row">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="list-search-sup-title new-layui-title item">
+                            <div class="details-layui-fr-sup-title">
+                                <span class="tableTop">年检总次数：</span>
+                                <span class="tableTop">{{carCountDto.vehicleCount}}</span>
+                            </div>
+                        </div>
+                        <div class="list-search-sup-title new-layui-title item">
+                            <div class="details-layui-fr-sup-title">
+                                <span class="tableTop">{{ carCountDto.vehicleSpareDays == '--' ? '年检剩余天数：' : carCountDto.vehicleSpareDays>=0 ? '年检剩余天数：' : '年检逾期天数：' }} </span>
+                                <span class="tableTop">{{ carCountDto.vehicleSpareDays == '--' ? carCountDto.vehicleSpareDays : carCountDto.vehicleSpareDays>=0 ? carCountDto.vehicleSpareDays : (0-carCountDto.vehicleSpareDays) }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table">
+                        <table class="layui-hide" id="test3"></table>
+                    </div>
+                </div>
+            </div>
+              <!-- 保养信息 -->
+              <div class="details-content-box" v-show="detailsSupTabContentListActiveIndex === 8">
+                <div class="details-layui-row">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="list-search-sup-title new-layui-title item">
+                            <div class="details-layui-fr-sup-title">
+                                <span class="tableTop">保养总次数：</span>
+                                <span class="tableTop">{{carCountDto.maintenanceCount}}</span>
+                            </div>
+                        </div>
+                        <div class="list-search-sup-title new-layui-title item">
+                            <div class="details-layui-fr-sup-title">
+                                <span class="tableTop">{{carCountDto.maintenanceSpareDays == '--' ? '保养剩余天数：' : carCountDto.maintenanceSpareDays>=0 ? '保养剩余天数：' : '保养逾期天数：'}} </span>
+                                <span class="tableTop">{{ carCountDto.maintenanceSpareDays == '--' ? carCountDto.maintenanceSpareDays : carCountDto.maintenanceSpareDays>=0 ? carCountDto.maintenanceSpareDays : (0-carCountDto.maintenanceSpareDays) }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table">
+                        <table class="layui-hide" id="test4"></table>
+                    </div>
+                </div>
+            </div>
+              <!-- 保险信息 -->
+              <div class="details-content-box" v-show="detailsSupTabContentListActiveIndex === 9">
+                <div class="details-layui-row">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="list-search-sup-title new-layui-title item" style="width: 16.17%">
+                            <div class="details-layui-fr-sup-title">
+                                <span class="tableTop">商业险购买总次数：</span>
+                                <span class="tableTop">{{carCountDto.insuranceCountSy}}</span>
+                            </div>
+                        </div>
+                        <div class="list-search-sup-title new-layui-title item" style="width: 16.17%">
+                            <div class="details-layui-fr-sup-title">
+                                <span class="tableTop">交强险购买总次数：</span>
+                                <span class="tableTop">{{carCountDto.insuranceCountQx}}</span>
+                            </div>
+                        </div>
+                        <div class="list-search-sup-title new-layui-title item" style="width: 16.17%">
+                            <div class="details-layui-fr-sup-title">
+                                <span class="tableTop">承运险购买总次数：</span>
+                                <span class="tableTop">{{carCountDto.insuranceCountCy}}</span>
+                            </div>
+                        </div>
+                        <div class="list-search-sup-title new-layui-title item" style="width: 16.17%">
+                            <div class="details-layui-fr-sup-title">
+                                <span class="tableTop">{{ carCountDto.spareDaysSy == '--' ? '商业险剩余天数：' : carCountDto.spareDaysSy>=0 ? '商业险剩余天数：' : '商业险逾期天数：' }}</span>
+                                <span class="tableTop">{{carCountDto.spareDaysSy == '--' ? carCountDto.spareDaysSy : carCountDto.spareDaysSy>=0 ? carCountDto.spareDaysSy : (0-carCountDto.spareDaysSy)}}</span>
+                            </div>
+                        </div>
+                        <div class="list-search-sup-title new-layui-title item" style="width: 16.17%">
+                            <div class="details-layui-fr-sup-title">
+                                <span class="tableTop">{{ carCountDto.spareDaysQx == '--' ? '交强险剩余天数：' : carCountDto.spareDaysQx>=0 ? '交强险剩余天数：' : '交强险逾期天数：' }}</span>
+                                <span class="tableTop">{{carCountDto.spareDaysQx == '--' ? carCountDto.spareDaysQx : carCountDto.spareDaysQx>=0 ? carCountDto.spareDaysQx : (0-carCountDto.spareDaysQx)}}</span>
+                            </div>
+                        </div>
+                        <div class="list-search-sup-title new-layui-title item" style="width: 16.17%">
+                            <div class="details-layui-fr-sup-title">
+                                <span class="tableTop">{{ carCountDto.spareDaysCy == '--' ? '承运险剩余天数：' : carCountDto.spareDaysCy>=0 ? '承运险剩余天数：' : '承运险逾期天数：' }}</span>
+                                <span class="tableTop">{{carCountDto.spareDaysCy == '--' ? carCountDto.spareDaysCy : carCountDto.spareDaysCy>=0 ? carCountDto.spareDaysCy : (0-carCountDto.spareDaysCy)}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table">
+                        <table class="layui-hide" id="test2"></table>
+                    </div>
+                </div>
+            </div>
+            <!-- 违章信息 -->
+            <div class="details-content-box" v-show="detailsSupTabContentListActiveIndex === 10">
+                <div class="details-layui-row">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="list-search-sup-title new-layui-title item" style="width: 24.33%">
+                            <div class="details-layui-fr-sup-title">
+                                <span class="tableTop">违章总次数：</span>
+                                <span class="tableTop">{{carCountDto.violationsTotalNumber}}</span>
+                            </div>
+                        </div>
+                        <div class="list-search-sup-title new-layui-title item" style="width: 24.33%">
+                            <div class="details-layui-fr-sup-title">
+                                <span class="tableTop">已处理违章数：</span>
+                                <span class="tableTop">{{carCountDto.violationsTotalNumber - carCountDto.unProcessedTimes}}</span>
+                            </div>
+                        </div>
+                        <div class="list-search-sup-title new-layui-title item" style="width: 24.33%">
+                            <div class="details-layui-fr-sup-title">
+                                <span class="tableTop">未处理违章数：</span>
+                                <span class="tableTop">{{carCountDto.unProcessedTimes}}</span>
+                            </div>
+                        </div>
+                        <div class="list-search-sup-title new-layui-title item" style="width: 24.33%">
+                            <div class="details-layui-fr-sup-title">
+                                <span class="tableTop">违章罚款总金额：</span>
+                                <span class="tableTop">{{carCountDto.fineAmount}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table">
+                        <table class="layui-hide" id="test1"></table>
+                    </div>
+                </div>
+            </div>
+            <!-- 出险信息 -->
+            <div class="details-content-box" v-show="detailsSupTabContentListActiveIndex === 11">
+                <div class="details-layui-row">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="list-search-sup-title new-layui-title item">
+                            <div class="details-layui-fr-sup-title">
+                                <span class="tableTop">出险总次数：</span>
+                                <span class="tableTop">{{carCountDto.outInsuranceCount}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table">
+                        <table class="layui-hide" id="test5"></table>
+                    </div>
+                </div>
+            </div>
+            <!-- 维修信息信息 -->
+            <div class="details-content-box" v-show="detailsSupTabContentListActiveIndex === 12">
+
+                <div class="details-layui-row">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="list-search-sup-title new-layui-title item">
+                            <div class="details-layui-fr-sup-title">
+                                <span class="tableTop">维修总次数：</span>
+                                <span class="tableTop">{{carCountDto.repairCount}}</span>
+                            </div>
+                        </div>
+                        <div class="list-search-sup-title new-layui-title item">
+                            <div class="details-layui-fr-sup-title">
+                                <span class="tableTop">维修总费用：</span>
+                                <span class="tableTop">{{carCountDto.repairTotalFee}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table">
+                        <table class="layui-hide" id="test6"></table>
+                    </div>
+                </div>
+            </div>
+            <!-- 车辆移库记录 -->
+            <div class="details-content-box" v-show="detailsSupTabContentListActiveIndex === 13">
+                <div class="details-layui-row">
+                    <div class="table">
+                        <table class="layui-hide" id="test10"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/html" id="selectRepaymentMethods">
+    <select name="refundType" lay-filter="repaymentMethods">
+        <option value="">请选择还款方式</option>
+        <option value=1>金融公司</option>
+        <option value=2>平台</option>
+    </select>
+</script>
+
+    <script type="text/html" id="selectIsCreateOrder">
+    <select name="isCreateOrder" lay-filter="isCreateOrder">
+        <option value=1>否</option>
+        <option value=2>是</option>
+    </select>
+</script>
+
+    <script type="text/html" id="barPlanTpl">
+<!--    <#if shiro.hasPermission("car:tcarbasic:planedit")>-->
+    <!--    <a id="updateplan" class="layui-grid-btn-xs" lay-event="editPlan" v-m-perm="['car:tcarbasic:planedit']">编辑采购方案</a>-->
+    <!--    </#if>-->
+    <!--    <#if !shiro.hasPermission("car:tcarbasic:planedit")>-->
+    <!--    <a id="noupdateplan" class="layui-grid-btn-xs" style="color:red;" v-m-perm="['car:tcarbasic:planedit']">无权限编辑采购方案</a>-->
+    <!--    </#if>-->
+    <!--    <#if shiro.hasPermission("car:tcarbasic:plandetail")>-->
+    <a id="viewplan" class="layui-grid-btn-xs" lay-event="detailPlan" v-m-perm="['car:tcarbasic:plandetail']">查看方案</a>
+    <!--    </#if>-->
+    </script>
+
+    <script type="text/html" id="barTpl">
+    <a class="layui-grid-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-grid-btn-xs" lay-event="del">删除</a>
+    <a class="layui-grid-btn-xs" lay-event="detail">查看</a>
+</script>
+
+    <script src="../../statics/js/modules/car/tcarbasiceditanddetail.js"></script>
+</body>
+
+</html>

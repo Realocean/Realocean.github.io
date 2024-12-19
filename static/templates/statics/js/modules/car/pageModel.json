@@ -1,0 +1,78 @@
+{
+	"data": {
+		"carInfo": {
+			"carNo": "陕A88888",
+			"carFullName": "品牌/车系/车型",
+			"vinNo": "21123333",
+			"carStatusStr": "备发车",
+			"carStatus": 1,
+			"currentMileage": 111
+		},
+		"wiredDeviceInfo": [{
+        "carId": "26268",
+        "carPlateNo": "川AAE7918",
+				"deviceNo": "868120302951667",
+				"deviceStatusStr": "静止",
+				"deviceStatus": 1,
+				"simCardNo": "87",
+				"latestReportedLocation": "重庆 重庆市 渝北区",
+				"latestReportedTime": "1973-02-28 13:41:32",
+				"deviceTypeStr": "有线设备",
+				"deviceType": 1,
+        "deviceManufacturerNumber":"3",
+        "simCard":"100"
+			},
+			{
+				"deviceNo": "DEV86",
+				"deviceStatusStr": "静止",
+				"deviceStatus": 1,
+				"simCardNo": "87",
+				"latestReportedLocation": "重庆 重庆市 渝北区",
+				"latestReportedTime": "1973-02-28 13:41:32",
+				"deviceTypeStr": "有线设备",
+				"deviceType": 1,
+        "deviceManufacturerNumber":"2"
+			}
+		],
+		"wirelessDeviceInfo": [{
+				"deviceNo": "DEV76",
+				"deviceStatusStr": "静止",
+				"deviceStatus": 1,
+				"simCardNo": "91",
+				"latestReportedLocation": "湖南省 怀化市 芷江侗族自治县",
+				"latestReportedTime": "2012-10-05 21:40:09",
+				"deviceTypeStr": "无线设备",
+				"deviceType": 1,
+        "deviceManufacturerNumber":"2"
+			},
+			{
+				"deviceNo": "DEV76",
+				"deviceStatusStr": "静止",
+				"deviceStatus": 1,
+				"simCardNo": "91",
+				"latestReportedLocation": "湖南省 怀化市 芷江侗族自治县",
+				"latestReportedTime": "2012-10-05 21:40:09",
+				"deviceTypeStr": "无线设备",
+				"deviceType": 1,
+        "deviceManufacturerNumber":"2"
+			}
+		],
+		"orderInfo": {
+			"customerName": "张三",
+			"customerType": "个人",
+			"customerTel": "15321123333",
+			"contacts": "张师傅",
+			"contactAddress": "西安市碑林区长安路街道",
+			"orderCarCode": "ORDERNO2123123",
+			"seller": "行知公司",
+			"rentTypeStr": "订单类型",
+			"orderStatus": "订单状态",
+			"timeStartRent": "2023-5-15 13:56:01",
+			"timeFinishRent": "2023-5-15 13:56:04",
+			"timeDelivery": "2023-5-15 13:56:13",
+			"deliveryOperationName": "李师傅"
+		}
+	},
+	"msg": "success",
+	"code": 0
+}

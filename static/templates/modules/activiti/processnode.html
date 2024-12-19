@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>流程环节表</title>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <blockquote class="layui-elem-quote quoteBox">
+        <form class="layui-form">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">环节名称:</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input searchVal" v-model="q.nodeName" placeholder="请输入环节名称" />
+                    </div>
+                </div>
+                <a class="layui-btn search_btn" @click="query">查询</a>
+                <#if shiro.hasPermission("mark:processnode:save")>
+                <a class="layui-btn layui-btn-normal" @click="add">新增</a>
+                </#if>
+<!--                <#if shiro.hasPermission("mark:processnode:delete")>-->
+<!--                <a class="layui-btn layui-btn-danger layui-btn-normal delBatch">批量删除</a>-->
+<!--                </#if>-->
+<!--                <#if shiro.hasPermission("mark:processnode:export")>-->
+<!--                <a class="layui-btn layui-btn-danger layui-btn-normal" @click="exports">导出</a>-->
+<!--                </#if>-->
+            </div>
+        </form>
+    </blockquote>
+    <table class="layui-hide" id="grid" lay-filter="grid"></table>
+
+    <!-- 发起申请表单：区别有抄送人 -->
+    <form v-show="showFirstForm" class="layui-form ren-form" id="editFirstForm">
+        <div class="layui-form-item">
+            <div class="layui-col-xs10">
+                <label class="layui-form-label">环节名称<span style="color:red">*</span></label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="processNode.nodeName" autocomplete="off" placeholder="环节名称" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-col-xs10">
+                <label class="layui-form-label">环节排序<span style="color:red">*</span></label>
+                <div class="layui-input-block">
+                    <input type="text" readonly lay-verify="required" v-model="processNode.nodeOrder" autocomplete="off" placeholder="环节排序" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-col-xs10">
+                <label class="layui-form-label">抄送人</label>
+                <div class="layui-input-block">
+                    <input type="text" style="cursor:pointer;" @click="selectCopyUser" v-model="processNode.nodeCopyName" autocomplete="off" placeholder="环节抄送人名称" class="layui-input" readonly>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-col-xs10">
+                <label class="layui-form-label">环节描述</label>
+                <div class="layui-input-block">
+                    <textarea name="" v-model="processNode.nodeDesc"  placeholder="请输入环节描述" class="layui-textarea"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="saveOrUpdate">确定</button>
+                <a class="layui-btn layui-btn-normal" @click="cancel">取消</a>
+            </div>
+        </div>
+    </form>
+
+    <!-- 表单 -->
+    <form v-show="showForm" class="layui-form ren-form" id="editForm">
+        <div class="layui-form-item">
+            <div class="layui-col-xs10">
+                <label class="layui-form-label">环节名称<span style="color:red">*</span></label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="required" v-model="processNode.nodeName" autocomplete="off" placeholder="环节名称" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-col-xs10">
+                <label class="layui-form-label">环节排序<span style="color:red">*</span></label>
+                <div class="layui-input-block">
+                    <input type="text" readonly lay-verify="required" v-model="processNode.nodeOrder" autocomplete="off" placeholder="环节排序" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label">环节申请人id</label>-->
+<!--            <div class="layui-input-block">-->
+<!--                <input type="text" lay-verify="required" v-model="processNode.nodeApplyId" autocomplete="off" placeholder="环节申请人id" class="layui-input">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label">环节申请人名称</label>-->
+<!--            <div class="layui-input-block">-->
+<!--                <input type="text" lay-verify="required" v-model="processNode.nodeApplyName" autocomplete="off" placeholder="环节申请人名称" class="layui-input">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label">环节审批人id</label>-->
+<!--            <div class="layui-input-block">-->
+<!--                <input type="text" lay-verify="required" v-model="processNode.nodeApproveId" autocomplete="off" placeholder="环节审批人id" class="layui-input">-->
+<!--            </div>-->
+<!--        </div>-->
+        <div class="layui-form-item">
+            <div class="layui-col-xs10">
+                <label class="layui-form-label">审批人<span style="color:red">*</span></label>
+                <div class="layui-input-block">
+                    <input id="approveId" type="text" lay-verify="required" @click="selectType" style="cursor:pointer;" v-model="processNode.nodeApproveName" autocomplete="off" placeholder="环节审批人名称" class="layui-input" readonly>
+                </div>
+            </div>
+        </div>
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label">环节抄送人id</label>-->
+<!--            <div class="layui-input-block">-->
+<!--                <input type="text" lay-verify="required" v-model="processNode.nodeCopyId" autocomplete="off" placeholder="环节抄送人id" class="layui-input">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="layui-form-item">-->
+<!--            <div class="layui-col-xs10">-->
+<!--                <label class="layui-form-label">抄送人</label>-->
+<!--                <div class="layui-input-block">-->
+<!--                    <input type="text" style="cursor:pointer;" @click="selectCopyUser" v-model="processNode.nodeCopyName" autocomplete="off" placeholder="环节抄送人名称" class="layui-input" readonly>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+        <div class="layui-form-item">
+            <div class="layui-col-xs10">
+                <label class="layui-form-label">环节描述</label>
+                <div class="layui-input-block">
+                    <textarea name="" v-model="processNode.nodeDesc"  placeholder="请输入环节描述" class="layui-textarea"></textarea>
+                </div>
+            </div>
+        </div>
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label">流程编码</label>-->
+<!--            <div class="layui-input-block">-->
+<!--                <input type="text" lay-verify="required" v-model="processNode.processKey" autocomplete="off" placeholder="流程编码" class="layui-input">-->
+<!--            </div>-->
+<!--        </div>-->
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="saveOrUpdate">确定</button>
+                <a class="layui-btn layui-btn-normal" @click="cancel">取消</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!--操作-->
+<script type="text/html" id="barTpl">
+<!--    <#if shiro.hasPermission("mark:processnode:update")>-->
+    {{#  if(d.nodeOrder != 1){ }}
+    <a class="layui-btn layui-btn-xs" lay-event="edit" v-m-perm="['mark:processnode:update']">修改</a>
+    {{#  } else{ }}
+    <a class="layui-btn layui-btn-xs" lay-event="editFirst" v-m-perm="['mark:processnode:update']">修改</a>
+    {{#  } }}
+<!--    </#if>-->
+<!--    <#if shiro.hasPermission("mark:processnode:delete")>-->
+    {{#  if(d.nodeOrder != 1 && (d.nodeContent == null || d.nodeContent == '')){ }}
+    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del" v-m-perm="['mark:processnode:delete']">删除</a>
+    {{#  } }}
+<!--    </#if>-->
+</script>
+
+<script src="../../statics/js/modules/activiti/processnode.js?_${.now?long}"></script>
+</body>
+</html>

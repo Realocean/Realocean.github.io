@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>订单车辆表</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <!-- 新增表单 -->
+    <form class="layui-form ren-form" style="margin-bottom: 60px;">
+
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                订单车辆表基本信息
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>车辆订单编号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_code" v-model="orderCar.code" autocomplete="off"
+                                       placeholder="车辆订单编号" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>订单id</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_orderId" v-model="orderCar.orderId"
+                                       autocomplete="off" placeholder="订单id" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>车辆id</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_carId" v-model="orderCar.carId"
+                                       autocomplete="off" placeholder="车辆id" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>车牌号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_carNo" v-model="orderCar.carNo"
+                                       autocomplete="off" placeholder="车牌号" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>车架号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_vinNo" v-model="orderCar.vinNo"
+                                       autocomplete="off" placeholder="车架号" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>品牌id</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_brandId" v-model="orderCar.brandId"
+                                       autocomplete="off" placeholder="品牌id" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>所属品牌名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_brandName" v-model="orderCar.brandName"
+                                       autocomplete="off" placeholder="所属品牌名称" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>车系id</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_seriesId" v-model="orderCar.seriesId"
+                                       autocomplete="off" placeholder="车系id" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>所属车系名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_seriesName" v-model="orderCar.seriesName"
+                                       autocomplete="off" placeholder="所属车系名称" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>型号id</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_modelId" v-model="orderCar.modelId"
+                                       autocomplete="off" placeholder="型号id" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>所属车型名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_modelName" v-model="orderCar.modelName"
+                                       autocomplete="off" placeholder="所属车型名称" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>所属部门id</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_deptId" v-model="orderCar.deptId"
+                                       autocomplete="off" placeholder="所属部门id" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>所属部门名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_deptName" v-model="orderCar.deptName"
+                                       autocomplete="off" placeholder="所属部门名称" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>所属仓库id</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_depotId" v-model="orderCar.depotId"
+                                       autocomplete="off" placeholder="所属仓库id" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>所属仓库名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_depotName" v-model="orderCar.depotName"
+                                       autocomplete="off" placeholder="所属仓库名称" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>所属城市id</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_cityId" v-model="orderCar.cityId"
+                                       autocomplete="off" placeholder="所属城市id" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>所属城市名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_cityName" v-model="orderCar.cityName"
+                                       autocomplete="off" placeholder="所属城市名称" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>里程数</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_mileage" v-model="orderCar.mileage"
+                                       autocomplete="off" placeholder="里程数" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>电量</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_electricQuantity"
+                                       v-model="orderCar.electricQuantity" autocomplete="off" placeholder="电量"
+                                       class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>随车物品</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_accessoryItems"
+                                       v-model="orderCar.accessoryItems" autocomplete="off" placeholder="随车物品"
+                                       class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>车辆备注</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_carDesc" v-model="orderCar.carDesc"
+                                       autocomplete="off" placeholder="车辆备注" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>租赁类型：1、长租 2、以租代购 3、展示车 4、试驾车</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_rentType" v-model="orderCar.rentType"
+                                       autocomplete="off" placeholder="租赁类型：1、长租 2、以租代购 3、展示车 4、试驾车"
+                                       class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>付款方式：1、月付 2、两月付 3、季付 4、年付
+                                5、一次性结清</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_paymentMethod" v-model="orderCar.paymentMethod"
+                                       autocomplete="off" placeholder="付款方式：1、月付 2、两月付 3、季付 4、年付 5、一次性结清"
+                                       class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>车辆已购保险</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_insuranceItems"
+                                       v-model="orderCar.insuranceItems" autocomplete="off" placeholder="车辆已购保险"
+                                       class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>付款日</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_paymentDay" v-model="orderCar.paymentDay"
+                                       autocomplete="off" placeholder="付款日" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>渠道商id</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_channelId" v-model="orderCar.channelId"
+                                       autocomplete="off" placeholder="渠道商id" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>渠道商名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_channelName" v-model="orderCar.channelName"
+                                       autocomplete="off" placeholder="渠道商名称" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>租赁开始时间</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_timeStartRent" v-model="orderCar.timeStartRent"
+                                       autocomplete="off" placeholder="租赁开始时间" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>租赁结束时间</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_timeFinishRent"
+                                       v-model="orderCar.timeFinishRent" autocomplete="off" placeholder="租赁结束时间"
+                                       class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>租期</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_tenancy" v-model="orderCar.tenancy"
+                                       autocomplete="off" placeholder="租期" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>车辆订单备注</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_orderDesc" v-model="orderCar.orderDesc"
+                                       autocomplete="off" placeholder="车辆订单备注" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>交车工作人员id</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_deliveryOperationId"
+                                       v-model="orderCar.deliveryOperationId" autocomplete="off" placeholder="交车工作人员id"
+                                       class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>交车工作人员姓名</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_deliveryOperationName"
+                                       v-model="orderCar.deliveryOperationName" autocomplete="off"
+                                       placeholder="交车工作人员姓名" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>交车里程数</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_deliveryMileage"
+                                       v-model="orderCar.deliveryMileage" autocomplete="off" placeholder="交车里程数"
+                                       class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>下次保养里程数</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_mileageNextMaintenance"
+                                       v-model="orderCar.mileageNextMaintenance" autocomplete="off"
+                                       placeholder="下次保养里程数" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>下次保养里程数</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_mileageNextDate"
+                                       v-model="orderCar.mileageNextDate" autocomplete="off" placeholder="下次保养里程数"
+                                       class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>交车备注</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_deliveryDesc" v-model="orderCar.deliveryDesc"
+                                       autocomplete="off" placeholder="交车备注" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>交车时间</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_timeDelivery" v-model="orderCar.timeDelivery"
+                                       autocomplete="off" placeholder="交车时间" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>还车时间</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_timeReturn" v-model="orderCar.timeReturn"
+                                       autocomplete="off" placeholder="还车时间" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>被交换的订单id</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_swappedOrderCarId"
+                                       v-model="orderCar.swappedOrderCarId" autocomplete="off" placeholder="被交换的订单id"
+                                       class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>交换的订单id</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_swopOrderCarId"
+                                       v-model="orderCar.swopOrderCarId" autocomplete="off" placeholder="交换的订单id"
+                                       class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>状态：0、待交车 1、用车中 2、换车中
+                                3、换车中-待交车 4、已换车-待交车 5、已换车 6、退车中 7、已退车</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_status" v-model="orderCar.status"
+                                       autocomplete="off"
+                                       placeholder="状态：0、待交车 1、用车中 2、换车中 3、换车中-待交车 4、已换车-待交车 5、已换车 6、退车中 7、已退车"
+                                       class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>创建时间</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_timeCreate" v-model="orderCar.timeCreate"
+                                       autocomplete="off" placeholder="创建时间" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>更新时间</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_timeUpdate" v-model="orderCar.timeUpdate"
+                                       autocomplete="off" placeholder="更新时间" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>删除状态（0未删除，1已删除）</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_delect" v-model="orderCar.delect"
+                                       autocomplete="off" placeholder="删除状态（0未删除，1已删除）" class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="float-btn-group">
+            <a class="layui-btn reset-btn" id="closePage">取消</a>
+            <a class="layui-btn search-btn" lay-submit lay-filter="save" id="save">保存</a>
+        </div>
+    </form>
+
+
+</div>
+
+
+<script src="../../statics/js/modules/order/ordercaredit.js?_${.now?long}"></script>
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>车辆品牌表</title>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="Author" content="larry"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+    <script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+    <script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/common.js"></script>
+    <script type="text/javascript" src="../../statics/js/upload.js"></script>
+    <script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+    <link rel="stylesheet" href="../../statics/new_css/jxcPublicAll.css" media="all">
+    <link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../statics/common/step/steps.css">
+    <link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/viewer.min.css">
+    <script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+    <script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+    <script src="../../statics/common/layui/autocomplete.js"></script>
+    <script src="../../statics/js/modules/viewer/viewer.min.js"></script>
+    <script src="../../statics/common/print-js/print.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+    <script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/searchview.js"></script>
+    <script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+    <!-- 引入组件库 -->
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/new-edit.css">
+    <style>
+        ul.layui-tab-title > li {
+            font-weight: bold;
+        }
+        .layui-layer-page .layui-layer-content {
+            margin-top: 20px;
+        }
+        .layui-table-view .layui-table {
+            width: -webkit-fill-available!important;
+        }
+    </style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <div class="mvvm-table">
+        <div class="list-search-title-box">
+            <form class="layui-form" style="box-shadow: 0 0 20px #eee;padding-right: 15px;">
+                <section class="jxc-section" style="display: flex;align-items: flex-start;white-space: nowrap;">
+                    <div class="card layui-row" style="flex: 1">
+                        <div class="layui-form-item">
+                            <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                <label class="layui-form-label">品牌名称</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input searchVal" id="brandName"
+                                           v-model="q.brandName" placeholder="请输入品牌名称"/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                <div style="display: flex;align-items: center;">
+                                    <a class="layui-btn search-btn" @click="query">查询</a>
+                                    <a class="layui-btn reset-btn" @click="reset">重置</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+            </form>
+        </div>
+        <div class="list-search-title-box">
+            <form class="layui-form">
+                <div style="display:flex;width: 100%;">
+                    <div class="layui-form-item layui-row" style="width: 100%;">
+                        <div class="list-search-form-button" style="width: 100%;">
+                            <a class="layui-btn btn-primary" @click="addBrand">增加品牌</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!--页面表格栅格布局 -->
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md7" id="vehicleBrandDiv">
+                <div class="grid-demo grid-demo-bg1">
+                    <div class="layui-tab layui-tab-card" id="vehicleBrand" lay-filter="vehicleBrand">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this" lay-id="-1">
+                                全部</span>
+                            </li>
+                            <li lay-id="1">启用</span></li>
+                            <li lay-id="0">停用</span></li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <table class="layui-hide" id="grid" lay-filter="grid"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md5">
+                <div class="grid-demo">
+                    <div class="layui-tab layui-tab-card">
+                        <ul class="layui-tab-title">
+                            <li style="background-color: #fff;position: static;">
+                                <span id="brandNameData"></span>
+                                <input type="hidden" id="brandIdData" value="">
+                            </li>
+                            <li style="background-color: #e6eefd;position: static;float: right;">
+                                <a id="addBrand"
+                                    class="layui-btn btn-primary"
+                                    style="margin:3px 0 0 100px;position:relative"
+                                    @click="addCarSeries">增加车系</a>
+                            </li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <table class="layui-hide" id="grid2" lay-filter="grid2"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--新增品牌form表单 -->
+    <form class="layui-form" v-show="editForm" id="editForm">
+        <div class="layui-form-item">
+            <div class="layui-inline layui-col-md8 layui-col-sm8 layui-col-xs8">
+                <label class="layui-form-label"><span style="color:red">*</span>品牌名称</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-verify="brandName" v-model="tCarBrand.brandName" autocomplete="off"
+                           placeholder="请输入品牌名称" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline layui-col-md8 layui-col-sm8 layui-col-xs8">
+                <label class="layui-form-label">品牌图标</label>
+                <div class="layui-input-block">
+                    <div class="layui-input-inline-upload">
+                        <div :id="fileLstId" class="layui-input-inline-upload-show box-rect"
+                             v-for="(item,index) in fileLst">
+                            <div v-show="item.typeFile == 1" class="layui-input-inline-upload-button">
+                                <img :src="imageURL + item.url" class="view-img">
+                            </div>
+                            <div v-show="item.typeFile != 1" class="layui-input-inline-upload-button">
+                                {{item.nameAccessory}}
+                            </div>
+                            <div class="layui-input-inline-upload-show-delete btn-event" style="width: 49%;"
+                                 @click="delFile(item.id)">
+                                删除
+                            </div>
+                            <div v-show="item.typeFile != 1" style="width: 49%;left: 51%"
+                                 class="layui-input-inline-upload-show-delete btn-event"
+                                 @click="downDoc(item.nameFile, item.url)">
+                                下载
+                            </div>
+                            <div v-show="item.typeFile == 1" style="width: 49%;left: 51%"
+                                 class="layui-input-inline-upload-show-delete btn-event"
+                                 @click="showDoc(item.nameAccessory, item.url)">
+                                预览
+                            </div>
+                        </div>
+                        <div class="layui-input-inline-upload-button box-rect box-rect-event" id="addFile">
+                            <img src="../../statics/images/inline-upload@2x.png">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="win-btn-group">
+            <a class="layui-btn reset-btn" @click="cancel">取消</a>
+            <a class="layui-btn search-btn" lay-submit lay-filter="saveOrUpdate">保存</a>
+        </div>
+    </form>
+
+    <!--新增车系form表单 -->
+    <form class="layui-form" v-show="carSeriesEditForm" id="carSeriesEditForm">
+        <div class="layui-form-item">
+            <div class="layui-inline layui-col-md10 layui-col-sm10 layui-col-xs10">
+                <label class="layui-form-label" style="width: 100px"><span style="color:red">*</span>车系名称</label>
+                <div class="layui-input-block" style="margin-left: 30px">
+                    <input type="text" lay-verify="seriesNameVerify" v-model="tCarSeries.seriesName" autocomplete="off"
+                           placeholder="请输入车系名称" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="win-btn-group">
+            <a class="layui-btn reset-btn" @click="cancelTCarSeries">取消</a>
+            <a class="layui-btn search-btn" lay-submit lay-filter="saveOrUpdateTCarSeries">保存</a>
+        </div>
+    </form>
+</div>
+
+<!--操作-->
+<script type="text/html" id="barTpl">
+    <!---等于0停用--->
+    {{#if(d.disabled === 0){}}
+
+    <!--    <#if shiro.hasPermission("car:tcarbrand:update")>-->
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="edit" v-m-perm="['car:tcarbrand:update']"
+       more-btn-index="{{d.LAY_INDEX-1}}">编辑</a>
+    <!--    </#if>-->
+    <!--	<#if shiro.hasPermission("car:tcarbrand:startUsing")>-->
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="startUsing" v-m-perm="['car:tcarbrand:startUsing']"
+       more-btn-index="{{d.LAY_INDEX-1}}">启用</a>
+    <!--    </#if>-->
+    <!---等于1启用--->
+    {{#}else if(d.disabled ===1){}}
+    <!--	<#if shiro.hasPermission("car:tcarbrand:update")>-->
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="edit" v-m-perm="['car:tcarbrand:update']"
+       more-btn-index="{{d.LAY_INDEX-1}}">编辑</a>
+    <!--    </#if>-->
+    <!--    <#if shiro.hasPermission("car:tcarbrand:disable")>-->
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="disable" v-m-perm="['car:tcarbrand:disable']"
+       more-btn-index="{{d.LAY_INDEX-1}}">停用</a>
+    <!--    </#if>-->
+    {{#}}}
+</script>
+<script type="text/html" id="barTpl2">
+    {{#if(d.disabled === 0){}}
+    <!--    <#if shiro.hasPermission("car:tcarseries:tcarseriesEdit")>-->
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="tcarseriesEdit"
+       v-m-perm="['car:tcarseries:tcarseriesEdit']" more-btn-index="{{d.LAY_INDEX-1}}">编辑</a>
+    <!--    </#if>-->
+    <!--    <#if shiro.hasPermission("car:tcarseries:tcarseriesStartUsing")>-->
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="tcarseriesStartUsing"
+       v-m-perm="['car:tcarseries:tcarseriesStartUsing']" more-btn-index="{{d.LAY_INDEX-1}}">启用</a>
+    <!--    </#if> -->
+    {{#}else if(d.disabled ===1){}}
+    <!--    <#if shiro.hasPermission("car:tcarseries:tcarseriesEdit")>-->
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="tcarseriesEdit"
+       v-m-perm="['car:tcarseries:tcarseriesEdit']" more-btn-index="{{d.LAY_INDEX-1}}">编辑</a>
+    <!--    </#if>-->
+    <!--	<#if shiro.hasPermission("car:tcarseries:tcarseriesDisable")>-->
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="tcarseriesDisable"
+       v-m-perm="['car:tcarseries:tcarseriesDisable']" more-btn-index="{{d.LAY_INDEX-1}}">停用</a>
+    <!--    </#if>-->
+    {{#}}}
+</script>
+<script src="../../statics/js/modules/car/tcarbrand.js"></script>
+</body>
+</html>

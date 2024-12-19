@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>风控工单表</title>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="Author" content="larry" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+    <script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/common.js"></script>
+    <script type="text/javascript" src="../../statics/js/upload.js"></script>
+    <script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+    <link rel="stylesheet" href="../../statics/new_css/jxcPublicAll.css" media="all">
+    <link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../statics/common/step/steps.css">
+    <link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/viewer.min.css">
+    <script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+    <script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+    <script src="../../statics/common/layui/autocomplete.js"></script>
+    <script src="../../statics/js/modules/viewer/viewer.min.js"></script>
+    <script src="../../statics/common/print-js/print.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+    <script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/searchview.js"></script>
+    <script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+    <!-- 引入组件库 -->
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+
+</head>
+<style>
+    .layui-form-label {
+        width: 120px !important;
+    }
+
+    .layui-input,
+    .layui-select,
+    .layui-textarea {
+        height: 40px !important;
+    }
+
+    .layui-form-label-txt {
+        font-size: 16px;
+        height: 40px;
+        line-height: 40px;
+        padding: 0 15px !important;
+        color: #000;
+    }
+
+    .layui-input,
+    .layui-select,
+    .layui-textarea {
+        border-radius: 4px;
+    }
+
+
+    .details-layui-row .layui-form-row-content .layui-inline .layui-input-inline input {
+        border: 1px solid #ccc;
+    }
+
+    .layui-input-inline {
+        display: flex;
+        align-items: center;
+    }
+
+    #typeSelect {
+        line-height: 30px !important;
+        height: 30px !important;
+        width: 300px !important;
+    }
+</style>
+
+<body class="ren-body">
+    <div id="rrapp" v-cloak>
+        <div class="mvvm-table">
+            <div class="list-search-title-box">
+                <form class="layui-form" style="box-shadow: 0 0 20px #eee;padding-right: 15px;">
+                    <section class="jxc-section" style="display: flex;align-items: flex-start;white-space: nowrap;">
+                        <div class="card layui-row" style="flex: 1">
+                            <div class="layui-form-item ">
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label layui-form-label-txt">车牌号/车架号</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal" v-model="q.carPlateNoVinNo"
+                                            placeholder="请输入车牌号/车架号" />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label layui-form-label-txt">车辆归属</label>
+                                    <div class="layui-input-inline">
+                                        <input v-model="q.deptName" type="text" style="cursor:pointer;"
+                                            @click="deptTree" readonly="readonly" class="layui-input searchVal"
+                                            placeholder="请选择车辆归属" />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label layui-form-label-txt">品牌/车系/车型</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" id="carBrandSeriesModel" class="layui-input"
+                                            placeholder="请选择品牌/车系/车型" readonly="readonly" />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label layui-form-label-txt"> </label>
+                                    <div class="df-color" style="display: flex;align-items: center;">
+                                        <a class="layui-btn search-btn" @click="query">查询</a>
+                                        <a class="layui-btn reset-btn" @click="reset">重置</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </form>
+            </div>
+            <div class="list-search-title-box ground-search-btn">
+                <form class="layui-form">
+                    <div style="display:flex;width: 100%;">
+                        <div class="layui-form-item layui-row" style="width: 100%;">
+                            <div class="list-search-form-button" style="width: 100%;">
+                                <a class="layui-btn btn-primary" @click="add"
+                                    v-m-perm="['carrepairorder:carrepairorder:save']">工单设置</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="layui-tab-item layui-show">
+                <table class="layui-hide" id="grid" lay-filter="grid"></table>
+            </div>
+        </div>
+        <!-- 工单设置 -->
+        <form class="layui-form ren-form" v-show="workOrderSetting" id="workOrderSetting">
+            <div class="details-layui-row">
+                <div class="layui-row layui-form-row-content">
+                    <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-lg12">
+                        <label class="layui-form-label layui-form-label-txt"
+                            style="color:#000;font-weight: 500;">工单关联模块：</label>
+                        <div class="layui-input-inline">
+                            <div id="typeSelect"></div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm6 layui-col-xs12 layui-col-lg12">
+                            <label class="layui-form-label layui-form-label-txt"
+                                style="color:#000;font-weight: 500;">工单生成条件：</label>
+                            <div class="layui-input-inline">
+                                <span>当风控提醒</span>
+                                <input type="number" class="layui-input searchVal" v-model="settingInfo.vinNo"
+                                    style="width:80px;margin-left:10px;margin-right: 10px;" />
+                                <span>天后，自动生成工单</span>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-lg12">
+                            <label class="layui-form-label layui-form-label-txt"
+                                style="color:#000;font-weight: 500;">罚款设置：</label>
+                            <div class="layui-input-inline">
+                                <span>当工单跟进超</span>
+                                <input type="number" class="layui-input searchVal"
+                                    v-model="settingInfo.carBrandModelName"
+                                    style="width:80px;margin-left:10px;margin-right: 10px;" />
+                                <span>次，可允许想客户罚款</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex;align-items: center;justify-content: center;width: 100%;height: 100px;">
+                        <a class="layui-btn reset-btn" lay-submit lay-filter="cancellation">取消</a>
+                        <a class="layui-btn search-btn" lay-submit lay-filter="saveOrUpdate">确定</a>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+        <!-- 工单跟进 -->
+        <form class="layui-form ren-form" v-show="workOrderFollow" id="workOrderFollow">
+            <div class="details-layui-row">
+                <div class="layui-row layui-form-row-content">
+                    <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-lg12">
+                        <label class="layui-form-label layui-form-label-txt"
+                            style="color:#000;font-weight: 500;">跟进方式：</label>
+                        <div class="layui-input-inline">
+                            <select lay-search="" v-model="followInfo.followType" class="layui-select"
+                                lay-filter="followType">
+                                <option value='1'>短信</option>
+                                <option value='2'>微信</option>
+                                <option value='3'>电话</option>
+                                <option value='4'>邮件</option>
+                                <option value='5'>面谈</option>
+                                <option value='6'>QQ</option>
+                                <option value='7'>其他</option>
+                            </select>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm6 layui-col-xs12 layui-col-lg12">
+                            <label class="layui-form-label layui-form-label-txt"
+                                style="color:#000;font-weight: 500;">跟进内容：</label>
+                            <div class="layui-input-inline" style="width:37%">
+                                <textarea v-model="followInfo.value" placeholder="请输入跟进内容"
+                                    class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12 layui-col-lg12">
+                            <label class="layui-form-label layui-form-label-txt"
+                                style="color:#000;font-weight: 500;">标记工单已完结：</label>
+                            <div class="layui-input-inline">
+                                <input type='checkbox' id='contractSwitch12' value='0' v-model="followInfo.statue"
+                                    name='switchTest12' lay-skin='switch' lay-filter='switchTest12' title='是|否'>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex;align-items: center;justify-content: center;width: 100%;height: 100px;">
+                        <a class="layui-btn reset-btn" lay-submit lay-filter="cancellation1">取消</a>
+                        <a class="layui-btn search-btn" lay-submit lay-filter="saveOrUpdate1">确定</a>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+    <!--操作-->
+    <script type="text/html" id="barTpl">
+<div style="min-width: 150px;">
+        {{#if(d.openFlow != 1){}}
+            <a class="layui-grid-btn-xs option-btn-margin" lay-event="edit" v-m-perm="['carrepairorder:carrepairorder:edit']" more-btn-index="{{d.LAY_INDEX-1}}">跟进</a>
+        {{#}}}
+    <a class="layui-grid-btn-xs option-btn-margin" lay-event="feedbackCheck" v-m-perm="['carrepairorder:carrepairorder:info']" more-btn-index="{{d.LAY_INDEX-1}}">查看</a>
+</div>
+</script>
+
+    <script src="../../statics/js/modules/rskWorkOrder/workorde.js"></script>
+</body>
+
+</html>

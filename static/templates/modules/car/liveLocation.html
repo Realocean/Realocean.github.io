@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+    <title>Title</title>
+    <style>
+        body, html, #liveLocation, #map {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            font-family: "微软雅黑";
+        }
+
+        #container {
+            width: 100%;
+            height: 100vh;
+        }
+
+        .refreshCountdown {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: #fff;
+            border-radius: 4px;
+            box-sizing: border-box;
+            padding: 5px 20px;
+        }
+
+        .vehicleTravelling {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            background: #fff;
+            width: 100%;
+        }
+
+        .carInfo {
+            position: relative;
+        }
+
+        .arrow {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateY(-50%);
+            border-right: 13px solid transparent;
+            border-left: 13px solid transparent;
+            cursor: pointer;
+        }
+
+        .arrow-bottom {
+            top: -310px;
+            border-top: 13px solid rgb(204, 51, 51);
+        }
+
+        .arrow-top {
+            top: -10px;
+            border-bottom: 13px solid rgb(204, 51, 51);
+        }
+
+        .el-pagination.is-background .el-pager li:not(.disabled).active {
+            background-color: #3FACB3;
+        }
+
+        /* 进入*/
+        .carInfo-enter-active, .carInfo-leave-active {
+            transition: all .3s;
+        }
+
+        .carInfo-enter, .carInfo-leave-to {
+            transform: translateY(302px);
+        }
+    </style>
+</head>
+<body>
+<div id="liveLocation">
+    <v-map ref="map" :map-point="mapPoint" :config="config"></v-map>
+    <div class="refreshCountdown">
+        <i class="el-icon-time"></i>
+        <span style="color: #c33">{{refreshNumber}}秒后刷新</span>
+    </div>
+
+
+    <div class="carInfo">
+        <div class="arrow" @click="onArrow" :class="isCarInfo?'arrow-bottom':'arrow-top'"></div>
+        <transition name="carInfo">
+            <div class="vehicleTravelling" v-show="isCarInfo">
+                <el-table
+                        :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+                        height="250"
+                        border
+                        style="width: 100%">
+                    <el-table-column type="index" label="序号" width="50">
+                        <template slot-scope="scope">
+                            <!--  <span>{{scope.$index+1}} </span>-->
+                            <span>{{(currentPage - 1) * pageSize + scope.$index + 1}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="lat" label="速度" width="100"></el-table-column>
+                    <el-table-column prop="lng" label="总里程"></el-table-column>
+                    <el-table-column prop="address" label="油量"></el-table-column>
+                    <el-table-column prop="address" label="状态信息"></el-table-column>
+                    <el-table-column prop="address" label="定位时间"></el-table-column>
+                    <el-table-column prop="address" label="接收时间"></el-table-column>
+                    <el-table-column prop="address" label="精确定位"></el-table-column>
+                    <el-table-column prop="address" label="位置"></el-table-column>
+                </el-table>
+                <div style="text-align: right;margin: 10px 0">
+                    <el-pagination
+                            background
+                            :page-size="pageSize"
+                            layout="sizes,jumper,prev, next"
+                            :page-sizes="[10, 50, 100, 200]"
+                            :total="tableTotal"
+                            @current-change="currentChange"
+                            @size-change="sizeChange">
+                    </el-pagination>
+                </div>
+            </div>
+        </transition>
+    </div>
+
+
+</div>
+</body>
+<script src="https://api.map.baidu.com/api?v=2.0&ak=5xg2kqlDtrMlhuMjuhVA5tYZe4OQ68dY"></script>
+<script src="../../statics/common/components/Map.js"></script>
+<script>
+    let config = {
+        city: '', // 设置城市
+        point: {
+            longitude: '120.4207801005104',
+            latitude: '36.10339957700999',
+        },
+        zoom: 14, // 地图级别
+    }
+    let liveLocation = new Vue({
+        el: '#liveLocation',
+        data() {
+            return {
+                config: config,
+                //车辆定位数据源
+                mapPoint: '1',
+                currentCarInfo: {},
+                PointArr: [],
+                map: null,
+                marker: null,
+                refreshNumber: 10,
+                i: 0,
+                interval: null, // 定时器
+                tableData: [],
+                currentPage: 1,
+                pageSize: 10,
+                isCarInfo: false,
+            }
+        },
+        computed: {
+            tableTotal() {
+                if (this.tableData.length > 0) {
+                    return this.tableData.length
+                }
+                return 0
+            }
+        },
+        created() {
+            this.getCarInfo()
+        },
+        mounted() {
+            this.initMap();
+        },
+
+        methods: {
+            onArrow() {
+                this.isCarInfo = !this.isCarInfo
+            },
+
+            // 10秒后重新获取接口
+            refreshCountdown() {
+                this.interval = setInterval(() => {
+                    this.refreshNumber--;
+                    if (this.refreshNumber < 1) {
+                        this.refreshNumber = 10;
+                        this.setPosition2()
+                    }
+                }, 1000)
+            },
+
+            getCarInfo() {
+                let currentCar = localStorage.getItem('clickData');
+                if (currentCar) {
+                    this.currentCarInfo = JSON.parse(currentCar);
+                }
+            },
+
+            // 初始化地图
+            initMap() {
+                this.$refs.map.init((map) => {
+                    console.log('初始化完成')
+                    this.map = map;
+                    this.initialPosition()
+                    this.refreshCountdown()
+                });
+            },
+
+            // 标记小车所在初始位置
+            initialPosition() {
+                console.log('添加标记点')
+                //  var PointArr = [
+                // {lat: 36.10339957700999, lng: 120.4207801005104}];
+                let obj = {
+                    "longitude": "120.4207801005104",
+                    "latitude": "36.10339957700999",
+                    "carId": "266",
+                    "carPlateNo": "陕A4456",
+                    "deviceId": "15",
+                    "deviceManufacturerNumber": "2",
+                    "deviceNo": "rrrrghhggg",
+                    "deviceStatus": 2,
+                    "deviceStatusShow": "报警",
+                    "deviceSubStatus": 2,
+                    "direct": null,
+                    "icon": "http://139.9.238.105/image-server/carLocation/OffLine_90.png",
+                    "isEquipment": true
+                };
+                this.currentCarInfo = obj;
+                if (this.currentCarInfo) {
+                    this.setMarker(this.currentCarInfo)
+                }
+            },
+
+            // 设置小车
+            setMarker(pointData) {
+                if (!pointData) return;
+                let {latitude, longitude, plateNO, carPlateNo, icon} = pointData;
+                // 创建小车
+                let MyCar = new BMap.Icon(icon, new BMap.Size(52, 26))
+                // let MyCar = new BMap.Icon(new BMap.Size(52, 26))
+                // 创建marker标注,使用小车图片
+                let point = new BMap.Point(longitude, latitude)
+                let marker = new BMap.Marker(point, {
+                    icon: MyCar
+                });
+                this.marker = marker;
+                // let marker = new BMap.Marker(point);
+                this.map.addOverlay(marker);
+                //
+                this.setPosition2()
+                typeof callback === 'function' && callback(marker);
+            },
+
+            // 划线
+            polyline(pointArr) {
+                if (pointArr.length > 2) {
+                    var polyline = new BMap.Polyline(
+                        [
+                            new BMap.Point(pointArr[pointArr.length - 1].lng, pointArr[pointArr.length - 1].lat),
+                            new BMap.Point(pointArr[pointArr.length - 2].lng, pointArr[pointArr.length - 2].lat)
+                        ],
+                        {
+                            strokeColor: "red",
+                            strokeWeight: 7,
+                            strokeOpacity: 1
+                        });
+                    this.map.addOverlay(polyline);
+                }
+            },
+
+            setPosition2() {
+                let data = [
+                    {lat: 36.10339957700999, lng: 120.4207801005104},
+                    {lat: 36.10349055332635, lng: 120.42113539348455},
+                    {lat: 36.10370795896673, lng: 120.42162977768736},
+                    {lat: 36.10411490190429, lng: 120.42166901055167},
+                    {lat: 36.104232027406695, lng: 120.42185015059275},
+                    {lat: 36.10425620255758, lng: 120.42202022562539},
+                    {lat: 36.104265908631284, lng: 120.42208225102176},
+                    {lat: 36.104399968669526, lng: 120.42187425183421},
+                    {lat: 36.10452708476511, lng: 120.42076268466177},
+                    {lat: 36.10480132817409, lng: 120.4196557913201},
+                    {lat: 36.10560773716036, lng: 120.418951386886},
+                    {lat: 36.10621159088823, lng: 120.41900182905378},
+                    {lat: 36.1064641068988, lng: 120.41992809616544},
+                    {lat: 36.10679444086644, lng: 120.42102125032955},
+                    {lat: 36.107010189089046, lng: 120.42182982905027},
+                    {lat: 36.107014665948654, lng: 120.42193587265254},
+                    {lng: 120.42201589513277, lat: 36.10700627324672},
+                    {lng: 120.42201589513277, lat: 36.10700627324672},
+                    {lng: 120.42236704579075, lat: 36.10708566579729},
+                    {lng: 120.42269817692573, lat: 36.107201270041955},
+                    {lng: 120.42239277578172, lat: 36.10812797579566},
+                    {lng: 120.42175457671763, lat: 36.10947659586882},
+                    {lng: 120.42144906678747, lat: 36.11028554037044},
+                    {lng: 120.4213722360578, lat: 36.110547069787465},
+                    {lng: 120.4213722360578, lat: 36.110547069787465},
+                    {lng: 120.4213722360578, lat: 36.110547069787465},
+                    {lng: 120.4213722360578, lat: 36.110547069787465},
+                    {lng: 120.4213722360578, lat: 36.110547069787465},
+                    {lng: 120.4213722360578, lat: 36.110547069787465},
+                    {lng: 120.4213722360578, lat: 36.110547069787465},
+                    {lng: 120.4213722360578, lat: 36.110547069787465},
+                    {lng: 120.4213722360578, lat: 36.110547069787465},
+                    {lng: 120.42134433787885, lat: 36.110691285540966},
+                    {lng: 120.42234193234574, lat: 36.110931417305515},
+                    {lng: 120.42374305054953, lat: 36.11109804633305},
+                    {lng: 120.42478859440246, lat: 36.111102173671576},
+                    {lng: 120.42606467439863, lat: 36.11129314178323},
+                    {lng: 120.4274220550685, lat: 36.11148065963647},
+                    {lng: 120.42831965719076, lat: 36.111638311669736},
+                    {lng: 120.42839951065358, lat: 36.11164240198062},
+                    {lng: 120.42839951065358, lat: 36.11164240198062},
+                    {lng: 120.42839951065358, lat: 36.11164240198062},
+                    {lng: 120.42839951065358, lat: 36.11164240198062},
+                    {lng: 120.42839951065358, lat: 36.11164240198062},
+                    {lng: 120.42839951065358, lat: 36.11164240198062},
+                    {lng: 120.42839951065358, lat: 36.11164240198062},
+                    {lng: 120.42839951065358, lat: 36.11164240198062},
+                    {lng: 120.42869196887202, lat: 36.1116737914188},
+                    {lng: 120.43031048017785, lat: 36.11190642360766},
+                    {lng: 120.43239173942534, lat: 36.11229570404404},
+                    {lng: 120.43368467575368, lat: 36.11281195352835},
+                    {lng: 120.43371757862009, lat: 36.11284016439977},
+                    {lng: 120.43379230066179, lat: 36.11284161798212},
+                    {lng: 120.43441423254144, lat: 36.113205746094536},
+                    {lng: 120.43549342023326, lat: 36.11391074053337},
+                    {lng: 120.43637497341942, lat: 36.11441797319607},
+                    {lng: 120.4365024200745, lat: 36.11445405475196},
+                    {lng: 120.43670459776231, lat: 36.11458083085174},
+                    {lng: 120.43745246924915, lat: 36.11507070008782},
+                    {lng: 120.43821097991501, lat: 36.115416050767585},
+                    {lng: 120.43821097991501, lat: 36.115416050767585},
+                    {lng: 120.43821097991501, lat: 36.115416050767585},
+                    {lng: 120.43821097991501, lat: 36.115416050767585},
+                    {lng: 120.43821097991501, lat: 36.115416050767585},
+                    {lng: 120.43823585473245, lat: 36.11541929557907},
+                    {lng: 120.43823585473245, lat: 36.11541929557907},
+                    {lng: 120.43823585473245, lat: 36.11541929557907},
+                    {lng: 120.43823585473245, lat: 36.11541929557907},
+                    {lng: 120.43823585473245, lat: 36.11541929557907},
+                    {lng: 120.43823585473245, lat: 36.11541929557907},
+                    {lng: 120.43823585473245, lat: 36.11541929557907},
+                    {lng: 120.43859812511984, lat: 36.115583971494395},
+                    {lng: 120.43901701857004, lat: 36.115714318017346},
+                    {lng: 120.43928467292172, lat: 36.11582517772885},
+                    {lng: 120.43959708522435, lat: 36.115963587312805},
+                    {lng: 120.43986466921422, lat: 36.116047547858166},
+                    {lng: 120.44007952157578, lat: 36.11611896447754},
+                    {lng: 120.440167025596, lat: 36.11612294605039},
+                    {lng: 120.440167025596, lat: 36.11612294605039},
+                    {lng: 120.44024360205321, lat: 36.116138815526504},
+                    {lng: 120.44024360205321, lat: 36.116138815526504},
+                    {lng: 120.44024360205321, lat: 36.116138815526504},
+                    {lng: 120.44026150723737, lat: 36.11614702160796},
+                    {lng: 120.44027344364953, lat: 36.11615215895656},
+                    {lng: 120.44027344364953, lat: 36.11615215895656},
+                    {lng: 120.44028836484941, lat: 36.1161593311561},
+                    {lng: 120.44034209724579, lat: 36.116201960713745},
+                    {lng: 120.44048233691922, lat: 36.116254585044935},
+                    {lng: 120.44048233691922, lat: 36.116254585044935},
+                    {lng: 120.4405738257871, lat: 36.116276646228826},
+                    {lng: 120.44073595695149, lat: 36.11635856195875},
+                    {lng: 120.44115463412841, lat: 36.11652357056175},
+                    {lng: 120.44118546544034, lat: 36.11653994619434},
+                    {lng: 120.44118546544034, lat: 36.11653994619434},
+                    {lng: 120.44121529948468, lat: 36.1165533090833}
+                ];
+                var i = this.i++;
+                let _self = this;
+                let pointArr = this.PointArr;
+                if (data[i]) {
+                    let {lat, lng} = data[i];
+                    let point = new BMap.Point(lng, lat);
+                    pointArr.push(point);
+                    console.log('调用划线方法', data[i]);
+                    console.log('pointArr*******', pointArr);
+                    _self.marker.setPosition(point);//setPosition:设置标注的地理坐标
+                    _self.map.panTo(point) //将地图的中心点更改为给定的点
+                    _self.polyline(pointArr); // 划线
+                    this.tableData.push({
+                        lat, lng
+                    })
+                    console.log('pointArr[pointArr.length-1]--------i', i);
+                    if (i == data.length) {
+                        console.log('清除定时器')
+                        clearInterval(_self.interval)
+                    }
+                } else {
+                    clearInterval(_self.interval)
+                }
+            },
+
+            currentChange(val) {
+                this.currentPage = val;
+            },
+
+            sizeChange(val) {
+                this.pageSize = val
+            },
+
+            setPosition(marker) {
+                let data = [
+                    {lat: 36.10339957700999, lng: 120.4207801005104},
+                    {lat: 36.10349055332635, lng: 120.42113539348455},
+                    {lat: 36.10370795896673, lng: 120.42162977768736},
+                    {lat: 36.10411490190429, lng: 120.42166901055167},
+                    {lat: 36.104232027406695, lng: 120.42185015059275},
+                    {lat: 36.10425620255758, lng: 120.42202022562539},
+                    {lat: 36.104265908631284, lng: 120.42208225102176},
+                    {lat: 36.104399968669526, lng: 120.42187425183421},
+                    {lat: 36.10452708476511, lng: 120.42076268466177},
+                    {lat: 36.10480132817409, lng: 120.4196557913201},
+                    {lat: 36.10560773716036, lng: 120.418951386886},
+                    {lat: 36.10621159088823, lng: 120.41900182905378},
+                    {lat: 36.1064641068988, lng: 120.41992809616544},
+                    {lat: 36.10679444086644, lng: 120.42102125032955},
+                    {lat: 36.107010189089046, lng: 120.42182982905027},
+                    {lat: 36.107014665948654, lng: 120.42193587265254},
+                    {lng: 120.42201589513277, lat: 36.10700627324672},
+                    {lng: 120.42201589513277, lat: 36.10700627324672},
+                    {lng: 120.42236704579075, lat: 36.10708566579729},
+                    {lng: 120.42269817692573, lat: 36.107201270041955},
+                    {lng: 120.42239277578172, lat: 36.10812797579566},
+                    {lng: 120.42175457671763, lat: 36.10947659586882},
+                    {lng: 120.42144906678747, lat: 36.11028554037044},
+                    {lng: 120.4213722360578, lat: 36.110547069787465},
+                    {lng: 120.4213722360578, lat: 36.110547069787465},
+                    {lng: 120.4213722360578, lat: 36.110547069787465},
+                    {lng: 120.4213722360578, lat: 36.110547069787465},
+                    {lng: 120.4213722360578, lat: 36.110547069787465},
+                    {lng: 120.4213722360578, lat: 36.110547069787465},
+                    {lng: 120.4213722360578, lat: 36.110547069787465},
+                    {lng: 120.4213722360578, lat: 36.110547069787465},
+                    {lng: 120.4213722360578, lat: 36.110547069787465},
+                    {lng: 120.42134433787885, lat: 36.110691285540966},
+                    {lng: 120.42234193234574, lat: 36.110931417305515},
+                    {lng: 120.42374305054953, lat: 36.11109804633305},
+                    {lng: 120.42478859440246, lat: 36.111102173671576},
+                    {lng: 120.42606467439863, lat: 36.11129314178323},
+                    {lng: 120.4274220550685, lat: 36.11148065963647},
+                    {lng: 120.42831965719076, lat: 36.111638311669736},
+                    {lng: 120.42839951065358, lat: 36.11164240198062},
+                    {lng: 120.42839951065358, lat: 36.11164240198062},
+                    {lng: 120.42839951065358, lat: 36.11164240198062},
+                    {lng: 120.42839951065358, lat: 36.11164240198062},
+                    {lng: 120.42839951065358, lat: 36.11164240198062},
+                    {lng: 120.42839951065358, lat: 36.11164240198062},
+                    {lng: 120.42839951065358, lat: 36.11164240198062},
+                    {lng: 120.42839951065358, lat: 36.11164240198062},
+                    {lng: 120.42869196887202, lat: 36.1116737914188},
+                    {lng: 120.43031048017785, lat: 36.11190642360766},
+                    {lng: 120.43239173942534, lat: 36.11229570404404},
+                    {lng: 120.43368467575368, lat: 36.11281195352835},
+                    {lng: 120.43371757862009, lat: 36.11284016439977},
+                    {lng: 120.43379230066179, lat: 36.11284161798212},
+                    {lng: 120.43441423254144, lat: 36.113205746094536},
+                    {lng: 120.43549342023326, lat: 36.11391074053337},
+                    {lng: 120.43637497341942, lat: 36.11441797319607},
+                    {lng: 120.4365024200745, lat: 36.11445405475196},
+                    {lng: 120.43670459776231, lat: 36.11458083085174},
+                    {lng: 120.43745246924915, lat: 36.11507070008782},
+                    {lng: 120.43821097991501, lat: 36.115416050767585},
+                    {lng: 120.43821097991501, lat: 36.115416050767585},
+                    {lng: 120.43821097991501, lat: 36.115416050767585},
+                    {lng: 120.43821097991501, lat: 36.115416050767585},
+                    {lng: 120.43821097991501, lat: 36.115416050767585},
+                    {lng: 120.43823585473245, lat: 36.11541929557907},
+                    {lng: 120.43823585473245, lat: 36.11541929557907},
+                    {lng: 120.43823585473245, lat: 36.11541929557907},
+                    {lng: 120.43823585473245, lat: 36.11541929557907},
+                    {lng: 120.43823585473245, lat: 36.11541929557907},
+                    {lng: 120.43823585473245, lat: 36.11541929557907},
+                    {lng: 120.43823585473245, lat: 36.11541929557907},
+                    {lng: 120.43859812511984, lat: 36.115583971494395},
+                    {lng: 120.43901701857004, lat: 36.115714318017346},
+                    {lng: 120.43928467292172, lat: 36.11582517772885},
+                    {lng: 120.43959708522435, lat: 36.115963587312805},
+                    {lng: 120.43986466921422, lat: 36.116047547858166},
+                    {lng: 120.44007952157578, lat: 36.11611896447754},
+                    {lng: 120.440167025596, lat: 36.11612294605039},
+                    {lng: 120.440167025596, lat: 36.11612294605039},
+                    {lng: 120.44024360205321, lat: 36.116138815526504},
+                    {lng: 120.44024360205321, lat: 36.116138815526504},
+                    {lng: 120.44024360205321, lat: 36.116138815526504},
+                    {lng: 120.44026150723737, lat: 36.11614702160796},
+                    {lng: 120.44027344364953, lat: 36.11615215895656},
+                    {lng: 120.44027344364953, lat: 36.11615215895656},
+                    {lng: 120.44028836484941, lat: 36.1161593311561},
+                    {lng: 120.44034209724579, lat: 36.116201960713745},
+                    {lng: 120.44048233691922, lat: 36.116254585044935},
+                    {lng: 120.44048233691922, lat: 36.116254585044935},
+                    {lng: 120.4405738257871, lat: 36.116276646228826},
+                    {lng: 120.44073595695149, lat: 36.11635856195875},
+                    {lng: 120.44115463412841, lat: 36.11652357056175},
+                    {lng: 120.44118546544034, lat: 36.11653994619434},
+                    {lng: 120.44118546544034, lat: 36.11653994619434},
+                    {lng: 120.44121529948468, lat: 36.1165533090833}
+                ];
+                var i = 0;
+                let _self = this;
+                let pointArr = this.PointArr;
+                var interval = setInterval(function () {
+                    let {lat, lng} = data[i];
+                    if (data[i]) {
+                        let point = new BMap.Point(lng, lat);
+                        pointArr.push(point);
+                        console.log('调用划线方法', data[i]);
+                        i = i + 1;
+                        console.log('pointArr*******', pointArr);
+                        marker.setPosition(point);//setPosition:设置标注的地理坐标
+                        _self.map.panTo(point) //将地图的中心点更改为给定的点
+                        _self.polyline(pointArr); // 划线
+                        console.log('pointArr[pointArr.length-1]--------i', i);
+                        if (i == data.length) {
+                            console.log('清除定时器')
+                            clearInterval(interval)
+                        }
+                    } else {
+                        clearInterval(interval);
+                    }
+                }, 1000);
+            }
+        }
+    })
+
+    window.onunload = function () {
+        console.log('liveLocation - 清除定时器',)
+        clearInterval(liveLocation.interval)
+    }
+</script>
+</html>

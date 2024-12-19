@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>流程节点设置</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <div class="approval-container">
+        <div class="approval-process">
+            <div class="initiate-node node-box">
+                <div class="title">{{applyNodeInfo.nodeName}}</div>
+                <div class="content">
+                    发起人
+                    <span>{{applyNodeInfo.nodeApplyName}}</span>
+                    <div class="right-arrow" @click="applyContentBindtap(applyNodeInfo.id)">
+                        <img src="../../statics/images/reght-arrow.png" alt="">
+                    </div>
+                </div>
+                <div class="step-content">
+                    <div class="line"></div>
+                    <div class="add-button" @click="addApprovalContentBindtap()" v-show="!isDetail">+</div>
+                    <div class="line-bottom">
+                        <img src="../../statics/images/step-bottom.png" alt="">
+                    </div>
+                    <div
+                            class="add-approval-content"
+                            v-if="addApprovalContentShow" v-show="!isDetail">
+                        <div @click="addApprovalNodesBindtap(null,applyNodeInfo.id)">
+                            <span class="img"></span>
+                            审批节点
+                        </div>
+                        <div @click="addTranslationsNodesBindtap(null,applyNodeInfo.id)" v-show="copyNodeShow">
+                            <span class="img"></span>
+                            抄送节点
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div
+                    class="node-box"
+                    v-for="(item, index) in addApprovalContentDataList"
+                    :key="item.index"
+                    :class="item.nodeType==3 ? 'translations-node' : 'approval-node'">
+                <div class="title">{{ item.nodeName }}<i class="layui-icon" v-show="!isDetail" @click="nodeDel(item.id)" style="font-size: 24px;float:right;margin-right:10px;cursor: pointer;">&#x1007;</i></div>
+<!--                <div class="nodeDel" @click="nodeDel(item.id)"></div>-->
+                <div class="content">
+                    {{ item.nodeType==3 ? '抄送人：' : '审批人：' }}
+                    <span v-show="(item.nodeType == 3 || item.nodeType == 2)&&item.nodeFlag == 1">{{ item.nodeApproveName }}</span>
+                    <span v-show="(item.nodeType == 3 || item.nodeType == 2)&&item.nodeFlag == 2">{{ item.nodeRoleName }}</span>
+                    <span v-show="(item.nodeType == 3 || item.nodeType == 2)&&item.nodeFlag == 3">申请人</span>
+                    <div v-if="item.nodeType === 3" class="right-arrow" @click="addTranslationsNodesBindtap(item.id,null)">
+                        <img src="../../statics/images/reght-arrow.png" alt="">
+                    </div>
+
+                    <div v-else class="right-arrow" @click="addApprovalNodesBindtap(item.id,null)">
+                        <img src="../../statics/images/reght-arrow.png" alt="">
+                    </div>
+                    <form class="layui-form ren-form" style="float:right;">
+                        <input class="switch-node-status" type="checkbox" :value="item.id" name="zzz" v-model="item.nodeStatus" lay-filter="switchNodeStatus" lay-skin="switch" lay-text="启用|禁用">
+                    </form>
+                </div>
+                <div class="step-content">
+                    <div class="line"></div>
+                    <div class="add-button" @click="addApprovalContentList(index)" v-show="!isDetail">+</div>
+                    <div class="line-bottom">
+                        <img src="../../statics/images/step-bottom.png" alt="">
+                    </div>
+                    <div
+                            class="add-approval-content"
+                            v-if="addApprovalContentShowList[index]" v-show="!isDetail">
+                        <div @click="addApprovalNodesBindtap(null,item.id)">
+                            <span class="img"></span>
+                            审批节点
+                        </div>
+                        <div @click="addTranslationsNodesBindtap(null,item.id)" v-show="copyNodeShow">
+                            <span class="img"></span>
+                            抄送节点
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="end-approval">
+                <div>流程结束</div>
+            </div>
+        </div>
+    </div>
+    <form v-show="approvalFrom" class="layui-form ren-form" id="approvalFrom"  style="margin-bottom: 60px;">
+        <div class="initiate-content">
+            <div class="sys-node-header"  v-if="nodeIndex === 0">
+                <div>
+                    <span class="lable-name">发起环节名称：</span>
+                    <input type="text" lay-verify="applyNameVerify" v-model="node.nodeName" placeholder="请输入名称"/>
+                </div>
+<!--                <div class="">-->
+<!--                    <span class="lable-name-status">节点状态：</span>-->
+<!--                    <input-->
+<!--                            type="checkbox"-->
+<!--                            placeholder="请输入名称"-->
+<!--                            name="open"-->
+<!--                            lay-skin="switch"-->
+<!--                            v-model="node.nodeStatus"-->
+<!--                            lay-filter="switchTest"-->
+<!--                            lay-text="启用|禁用" />-->
+<!--                </div>-->
+            </div>
+            <div class="sys-node-select" style="display: none;">
+                <div>申请人设置</div>
+                <div class="select-radio">
+                    <input type="radio" v-model="node.applyUser" name="applyUser" value="4" lay-filter="applyUserFilter" lay-skin="primary" title="工作区可填">
+                    <input type="radio" v-model="node.applyUser" name="applyUser" value="1" lay-filter="applyUserFilter"lay-skin="primary" title="指定成员可填">
+                </div>
+            </div>
+            <div class="display"  style="display: none;">
+                <div class="">
+                    <div class="tree-content display">
+                        <div class="left-tree">
+                            <div class="tree-title">成员/角色</div>
+                            <div v-show="userTree == 1" id="leftTreeUser" class="demo-tree-more"></div>
+                        </div>
+                        <div class="right-tree">
+                            <div class="tree-title">已选择成员/角色</div>
+                            <div id="rightTree">
+                                <div
+                                        v-for="item in rightTree"
+                                        :key="item.index">
+                                    <div class="checked-tree-item">
+                                        {{ item.title }}
+                                        <!-- <div class="remove-tree-item" @click="removeBindtap(item)"></div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="initiate-content">
+            <div class="sys-node-header" v-if="nodeIndex === 1">
+                <div>
+                    <span class="lable-name">审批环节名称：</span>
+                    <input type="text" lay-verify="nodeNameVerify" v-model="node.nodeName" placeholder="请输入名称"/>
+                </div>
+                <div class="">
+                    <span class="lable-name-status">节点状态：</span>
+                    <input
+                            type="checkbox"
+                            placeholder="请输入名称"
+                            name="open"
+                            lay-skin="switch"
+                            v-model="node.nodeStatus"
+                            lay-filter="switchTest"
+                            lay-text="启用|禁用" />
+                </div>
+                <div>
+                    <span class="lable-name">审批驳回节点：</span>
+                    <div class="layui-input-inline">
+                        <select v-if="nodeIndex === 1" v-model="node.recallNodeId" lay-filter="recallNodeIdFilter" lay-verify="recallIdVerify">
+                            <option value="">请选择审批驳回节点</option>
+                            <option v-for="(item,i) in nodeList" :value="item.id" :title="item.nodeName">{{item.nodeName}}</option>
+                        </select>
+                        <input type="text" v-model="node.recallNodeName" hidden>
+                    </div>
+                </div>
+                <!-- <span class="fr">删除</span> -->
+            </div>
+            <div class="sys-node-select" v-if="nodeIndex === 1">
+                <div>审批人设置</div>
+                <div class="select-radio">
+                    <input type="radio" v-model="node.approveUser" name="approveUser" value="1" lay-filter="approveUserFilter" lay-skin="primary" title="指定成员">
+                    <input type="radio" v-model="node.approveUser" name="approveUser" value="2" lay-filter="approveUserFilter"lay-skin="primary" title="角色">
+                    <input type="radio" v-model="node.approveUser" name="approveUser" value="3" lay-filter="approveUserFilter" lay-skin="primary" title="申请人">
+                </div>
+            </div>
+            <div class="display" v-show="nodeIndex === 1">
+                <div class="">
+                    <div class="tree-content display">
+                        <div class="left-tree">
+                            <div class="tree-title">成员/角色</div>
+                            <div v-show="userTree == 1" id="approveLeftTreeUser" class="demo-tree-more"></div>
+                            <div v-show="userTree == 2" id="approveLeftTreeRole" class="demo-tree-more"></div>
+                        </div>
+                        <div class="right-tree">
+                            <div class="tree-title">已选择成员/角色</div>
+                            <div id="applyRightTree">
+                                <div
+                                        v-for="item in rightTree"
+                                        :key="item.index">
+                                    <div class="checked-tree-item">
+                                        {{ item.title }}
+                                        <!-- <div class="remove-tree-item" @click="removeBindtap(item)"></div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="initiate-content">
+            <div class="sys-node-header" v-if="nodeIndex === 2">
+                <div>
+                    <span class="lable-name">抄送环节名称：</span>
+                    <input type="text" v-model="node.nodeName" lay-verify="copyNodeVerify" placeholder="请输入名称"/>
+                </div>
+                <div class="">
+                    <span class="lable-name-status">节点状态：</span>
+                    <input
+                            type="checkbox"
+                            placeholder="请输入名称"
+                            name="open"
+                            v-model="node.nodeStatus"
+                            lay-skin="switch"
+                            lay-filter="switchTest"
+                            lay-text="启用|禁用" />
+                </div>
+                <!-- <span class="fr">删除</span> -->
+            </div>
+            <div class="sys-node-select" v-if="nodeIndex === 2">
+                <div>抄送人设置</div>
+                <div class="select-radio">
+                    <input type="radio" v-model="node.copyUser" name="copyUser" value="1" lay-filter="copyUserFilter" lay-skin="primary" title="指定成员">
+                    <input type="radio" v-model="node.copyUser" name="copyUser" value="2" lay-filter="copyUserFilter"lay-skin="primary" title="角色">
+                </div>
+            </div>
+            <div class="display" v-show="nodeIndex === 2">
+                <div class="">
+                    <div class="tree-content display">
+                        <div class="left-tree">
+                            <div class="tree-title">成员/角色</div>
+                            <div v-show="userTree == 1" id="copyLeftTreeUser" class="demo-tree-more"></div>
+                            <div v-show="userTree == 2" id="copyLeftTreeRole" class="demo-tree-more"></div>
+                        </div>
+                        <div class="right-tree">
+                            <div class="tree-title">已选择成员/角色</div>
+                            <div id="copyApplyRightTree">
+                                <div
+                                        v-for="item in rightTree"
+                                        :key="item.index">
+                                    <div class="checked-tree-item">
+                                        {{ item.title }}
+                                        <!-- <div class="remove-tree-item" @click="removeBindtap(item)"></div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="authority-content">
+            <div class="display">
+                <div
+                        class="flex authority-header-child"
+                        v-for="(item, index) in authorityHeader"
+                        :key="item.index"
+                        :class="index === authorityHeaderActiveIndex ? 'authority-header-child-active' : ''"
+                        @click="authorityHeaderBindtap(index)">
+                    {{ item }}
+                </div>
+            </div>
+            <div class="field-setting">
+                <div class="" v-show="authorityHeaderActiveIndex === 0">
+<!--                    <div class="radio-box">-->
+<!--                        <span>全局配置：</span>-->
+<!--                        <input type="radio" name="globalName" value="1" /> 仅可见-->
+<!--                        <input type="radio" name="globalName" value="2" /> 可编辑-->
+<!--                    </div>-->
+                    <div v-for="(item, index) in fieldData" >
+                        <div class="radio-box">
+                            <span>{{item.moduleName}}：</span>
+                            <input type="radio" :name="item.moduleInfo" v-model="item.moduleConfig" :lay-filter="item.moduleInfo"  value=1 /> 仅可见
+                            <input type="radio" :name="item.moduleInfo" v-model="item.moduleConfig" :lay-filter="item.moduleInfo" value=2 /> 可编辑
+                            <input type="radio" :name="item.moduleInfo" v-model="item.moduleConfig" :lay-filter="item.moduleInfo" value=3 /> 隐藏
+                        </div>
+                        <div class="display field-header">
+                            <div class="name">字段名称</div>
+                            <div class="edit">可编辑</div>
+                            <div class="visible">仅可见</div>
+                            <div class="hide">隐藏</div>
+                            <div class="required">是否必填项</div>
+                            <div class="applyWatch">是否发起人可见</div>
+                        </div>
+                        <div class="display field-session" v-for="(itemChild, indexChild) in item.fields" :key="itemChild.indexChild">
+                            <div class="name">{{ itemChild.fieldName }}</div>
+                            <div class="edit">
+                            <span class="node-block" v-if="itemChild.editStatus" @click="editChildBindtap1(index,indexChild)">
+                                <span v-if="itemChild.edit"><i class="layui-icon" style="font-size: 30px; color: #1E9FFF;">&#xe605;</i></span>
+                                <span v-else>可编辑</span>
+                            </span>
+                                <span v-else>预设字段不可编辑</span>
+                            </div>
+                            <div class="visible">
+                            <span class="node-block" v-if="itemChild.editStatus" @click="editChildBindtap2(index,indexChild)">
+                                <span v-if="itemChild.visible"><i class="layui-icon" style="font-size: 30px; color: #1E9FFF;">&#xe605;</i></span>
+                                <span v-else>仅可见</span>
+                            </span>
+                                <span class="node-block" v-else>预设字段不可编辑</span>
+                            </div>
+                            <div class="hide">
+                            <span class="node-block" v-if="itemChild.editStatus" @click="editChildBindtap3(index,indexChild)">
+                                <span v-if="itemChild.hide"><i class="layui-icon" style="font-size: 30px; color: #1E9FFF;">&#xe605;</i></span>
+                                <span v-else>隐藏</span>
+                            </span>
+                                <span v-else>预设字段不可编辑</span>
+                            </div>
+                            <div class="required">
+                            <span class="node-block" v-if="itemChild.editStatus" @click="editChildBindtap4(index,indexChild)">
+                                <span v-if="itemChild.required"><i class="layui-icon" style="font-size: 30px; color: #1E9FFF;">&#xe605;</i></span>
+                                <span v-else>是否必填项</span>
+                            </span>
+                                <span v-else>预设字段不可编辑</span>
+                            </div>
+                            <div class="applyWatch">
+                            <span class="node-block" @click="editChildBindtap5(index,indexChild)">
+                                <span v-if="itemChild.applyWatch"><i class="layui-icon" style="font-size: 30px; color: #1E9FFF;">&#xe605;</i></span>
+                                <span v-else>否</span>
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div id="othersetting" class="" v-show="authorityHeaderActiveIndex === 1"></div>
+            </div>
+        </div>
+        <div class="float-btn-group bottom-bar" v-show="!isDetail">
+            <a class="layui-btn reset-btn" @click="cancel">取消</a>
+            <a class="layui-btn search-btn" lay-submit lay-filter="save">保存</a>
+        </div>
+    </form>
+
+</div>
+
+<script src="../../statics/js/modules/activiti/processnodeadd.js?_${.now?long}"></script>
+</body>
+</html>

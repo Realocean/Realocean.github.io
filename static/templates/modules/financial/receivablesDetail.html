@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>应收单详情</title>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="Author" content="larry"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+    <script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+    <script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/common.js"></script>
+    <script type="text/javascript" src="../../statics/js/upload.js"></script>
+    <script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+    <link rel="stylesheet" href="../../statics/new_css/jxcPublicAll.css" media="all">
+    <link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../statics/common/step/steps.css">
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/viewer.min.css">
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+    <script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+    <script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+    <script src="../../statics/common/layui/autocomplete.js"></script>
+    <script src="../../statics/js/modules/viewer/viewer.min.js"></script>
+    <script src="../../statics/common/print-js/print.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+    <script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/searchview.js"></script>
+    <script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+    <!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+    <!-- 引入组件库 -->
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/common-new.css">
+
+
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <!--查看 -->
+    <div class="details-tab-content">
+        <div class="details-tab-content-box display">
+
+            <div class="layui-tab">
+                <ul class="layui-tab-title">
+                    <li :class="0==index?'layui-this':''" @click="detailsTabContentBindtap(index)"
+                        v-for="(item, index) in detailsSupTabContentList" :key="index">{{ item }}
+                    </li>
+                </ul>
+            </div>
+
+            <!--            <div-->
+            <!--                    class="flex"-->
+            <!--                    v-for="(item, index) in detailsTabContentList"-->
+            <!--                    :key="index"-->
+            <!--                    :class="index === detailsTabContentListActiveIndex ? 'active1A51FF' : ''"-->
+            <!--                    @click="detailsTabContentBindtap(index)">-->
+            <!--                {{ item }}-->
+            <!--                <div>-->
+            <!--                    <div :class="index === detailsTabContentListActiveIndex ? 'details-tab-content-box-absolute-bottom' : ''"></div>-->
+            <!--                </div>-->
+            <!--            </div>-->
+        </div>
+    </div>
+    <form class="layui-form">
+        <div class="details-conteiner">
+            <!-- 应收账款详情 -->
+            <div
+                    class="details-content-box"
+                    v-show="detailsSupTabContentListActiveValue === '应收详情'">
+
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        应收账款详情
+
+                        <div class="fr display ">
+                            <div class="details-layui-fr-sup-title">
+                                <span>状态：</span>
+                                <span class="description">{{statusStr}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form class="layui-form">
+                    <div class="details-layui-row">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">合同编号：</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="receivables.contractNo || '--' "
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">车辆订单号：</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="receivables.businessNo"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">应收单号：</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="receivables.receivablesNo"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">租赁类型：</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="rentTypeStr"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">付款方名称：</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="receivables.customerName"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">售卖方：</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="receivables.leaseName"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">车牌号：</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="receivables.carPlateNo"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">车架号：</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="receivables.vin"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">品牌/车系：</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="brandNameAndseriesNameStr"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">车型：</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="receivables.modelName"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">付款方式：</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="paymentMethodStr"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">收款类型：</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="collectionTypeStr"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">账单期数：</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="stageStr"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">应收日期：</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="receivables.receivableDate"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">逾期天数：</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="receivableOverdueDays(receivables.status,receivables.hzType,receivables.overdueDate,receivables.actualDate)||receivables.overdueDays"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12"
+                                 v-show="receivables.status == 1">
+                                <label class="layui-form-label">附件:</label>
+                                <div class="layui-input-inline">
+                                    <div class="layui-input-inline-upload">
+                                        <div class="layui-input-inline-upload-show box-rect"
+                                             v-for="(item,index) in deliveryFileLst">
+                                            <div v-show="item.typeFile == 1" class="layui-input-inline-upload-button">
+                                                <img :src="imageURL + item.url" class="view-img"
+                                                     style="cursor:pointer;">
+                                            </div>
+                                            <div v-show="item.typeFile != 1" class="layui-input-inline-upload-button">
+                                                {{item.nameAccessory}}
+                                            </div>
+                                            <div v-show="item.typeFile != 1" style="width: 100%"
+                                                 class="layui-input-inline-upload-show-delete btn-event"
+                                                 @click="downDoc(item.nameFile, item.url)">
+                                                下载
+                                            </div>
+                                            <div v-show="item.typeFile == 1" style="width: 100%"
+                                                 class="layui-input-inline-upload-show-delete btn-event"
+                                                 @click="showDoc(item.nameAccessory, item.url)">
+                                                预览
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-input-inline-upload-text">
+                                        附件说明：附件最大支持30M,支持格式：PDF、Word、Excel、JPG、PNG 、ZIP、RAR
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+
+                <div class="left-before margintop30"
+                     v-show="detailsSupTabContentListActiveValue === '应收详情'&&(receivables.collectionType!=4&&receivables.collectionType!=5&&receivables.collectionType!=6)">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        {{colleTypeStr}}
+                    </div>
+                </div>
+
+                <form class="layui-form"
+                      v-show="detailsSupTabContentListActiveValue === '应收详情'&&(receivables.collectionType!=4&&receivables.collectionType!=5&&receivables.collectionType!=6)">
+                    <div class="details-layui-row">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">
+                                    {{collectionTypeStr}}
+                                </label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="(receivables.receivableAmount-receivables.lateFeeAmount).toFixed(2)"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">滞纳金：
+                                    <!--                            <div v-if="receivables.collectionType == 1">-->
+                                    <!--                                应收保证金：-->
+                                    <!--                            </div>-->
+                                    <!--                            <div v-else-if="receivables.collectionType == 2">-->
+                                    <!--                                应收租金：-->
+                                    <!--                            </div>-->
+                                    <!--                            <div v-else-if="receivables.collectionType == 3">-->
+                                    <!--                                应收首付款：-->
+                                    <!--                            </div>-->
+                                    <!--                            <div v-else-if="receivables.collectionType == 7">-->
+                                    <!--                                应收整备费：-->
+                                    <!--                            </div>-->
+                                    <!--                            <div v-else-if="receivables.collectionType == 8">-->
+                                    <!--                                应收尾款：-->
+                                    <!--                            </div>-->
+                                    <!--                            <div v-else-if="receivables.collectionType == 9">-->
+                                    <!--                                应收定金：-->
+                                    <!--                            </div>-->
+                                    <!--                            <div v-else-if="receivables.collectionType == 10 || receivables.collectionType == 0">-->
+                                    <!--                                应收其他费用：-->
+                                    <!--                            </div>-->
+                                    <!--                            <div v-else-if="receivables.collectionType == 11">-->
+                                    <!--                                应收车辆总单价：-->
+                                    <!--                            </div>-->
+                                    <!--                            <div v-else-if="receivables.collectionType == 12">-->
+                                    <!--                                应收挂靠费：-->
+                                    <!--                            </div>-->
+
+
+                                </label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="receivables.lateFeeAmount == null?0:receivables.lateFeeAmount"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">已收金额：
+                                    <!--                            <div v-if="receivables.collectionType == 1">-->
+                                    <!--                                保证金已收金额：-->
+                                    <!--                            </div>-->
+                                    <!--                            <div v-else-if="receivables.collectionType == 2">-->
+                                    <!--                                租金已收金额：-->
+                                    <!--                            </div>-->
+                                    <!--                            <div v-else-if="receivables.collectionType == 3">-->
+                                    <!--                                首付款已收金额：-->
+                                    <!--                            </div>-->
+                                    <!--                            <div v-else-if="receivables.collectionType == 7">-->
+                                    <!--                                整备费已收金额：-->
+                                    <!--                            </div>-->
+                                    <!--                            <div v-else-if="receivables.collectionType == 8">-->
+                                    <!--                                尾款已收金额：-->
+                                    <!--                            </div>-->
+                                    <!--                            <div v-else-if="receivables.collectionType == 9">-->
+                                    <!--                                定金已收金额：-->
+                                    <!--                            </div>-->
+                                    <!--                            <div v-else-if="receivables.collectionType == 10 || receivables.collectionType == 0">-->
+                                    <!--                                其他费用已收金额：-->
+                                    <!--                            </div>-->
+                                    <!--                            <div v-else-if="receivables.collectionType == 11">-->
+                                    <!--                                车辆总单价已收金额：-->
+                                    <!--                            </div>-->
+                                    <!--                            <div v-else-if="receivables.collectionType == 12">-->
+                                    <!--                                挂靠费已收金额：-->
+                                    <!--                            </div>-->
+
+                                </label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="receivables.receivedAmount"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">待收总金额：
+                                    <!--                            <div v-if="receivables.collectionType == 1">-->
+                                    <!--                                保证金待收金额：-->
+                                    <!--                            </div>-->
+                                    <!--                            <div v-else-if="receivables.collectionType == 2">-->
+                                    <!--                                租金待收金额：-->
+                                    <!--                            </div>-->
+                                    <!--                            <div v-else-if="receivables.collectionType == 3">-->
+                                    <!--                                首付款待收金额：-->
+                                    <!--                            </div>-->
+                                    <!--                            <div v-else-if="receivables.collectionType == 7">-->
+                                    <!--                                整备费待收金额：-->
+                                    <!--                            </div>-->
+                                    <!--                            <div v-else-if="receivables.collectionType == 8">-->
+                                    <!--                                尾款待收金额：-->
+                                    <!--                            </div>-->
+                                    <!--                            <div v-else-if="receivables.collectionType == 9">-->
+                                    <!--                                定金待收金额：-->
+                                    <!--                            </div>-->
+                                    <!--                            <div v-else-if="receivables.collectionType == 10 || receivables.collectionType == 0">-->
+                                    <!--                                其他费用待收金额：-->
+                                    <!--                            </div>-->
+                                    <!--                            <div v-else-if="receivables.collectionType == 11">-->
+                                    <!--                                车辆总单价待收金额：-->
+                                    <!--                            </div>-->
+                                    <!--                            <div v-else-if="receivables.collectionType == 12">-->
+                                    <!--                                挂靠费待收金额：-->
+                                    <!--                            </div>-->
+
+                                </label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="receivables.uncollectedAmount"
+                                            disabled/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="left-before margintop30"
+                     v-show="detailsSupTabContentListActiveValue === '应收详情'&&(receivables.collectionType==4||receivables.collectionType==5||receivables.collectionType==6)">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        {{colleTypeStr}}
+                    </div>
+                </div>
+
+                <form class="layui-form"
+                      v-show="detailsSupTabContentListActiveValue === '应收详情'&&(receivables.collectionType==4||receivables.collectionType==5||receivables.collectionType==6)">
+                    <div class="details-layui-row">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">应收结算金额：</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="receivables.receivableAmount"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">结算金额已收金额：</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="receivables.receivedAmount"
+                                            disabled/>
+                                </div>
+                            </div>
+
+
+
+                            <div v-for="f in receivables.feeItemList" class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <template>
+
+                                    <label class="layui-form-label">{{f.feeItemName}}：</label>
+                                    <div class="layui-input-inline" v-if="f.valueType==1">
+                                        <input
+                                                type="text"
+                                                class="layui-input searchVal" v-model="f.feeItemAmount"
+                                                disabled/>
+                                    </div>
+                                    <div class="layui-input-inline" v-else-if="f.valueType==2">
+                                        <input
+                                                type="text"
+                                                class="layui-input searchVal" v-model="f.feeItemValue"
+                                                disabled/>
+                                    </div>
+                                </template>
+                            </div>
+                            <!--<div v-if="receivables.collectionType==6">
+
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">可退车辆保证金：</label>
+                                    <div class="layui-input-inline">
+                                        <input
+                                                type="text"
+                                                class="layui-input searchVal"
+                                                v-model="receivables.spareCarReturn.margin || '0' "
+                                                disabled/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">租金欠款金额：</label>
+                                    <div class="layui-input-inline">
+                                        <input
+                                                type="text"
+                                                class="layui-input searchVal"
+                                                v-model="receivables.spareCarReturn.rentPay || '0' "
+                                                disabled/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">违章分数：</label>
+                                    <div class="layui-input-inline">
+                                        <input
+                                                type="text"
+                                                class="layui-input searchVal"
+                                                v-model="receivables.spareCarReturn.illegalScore || '&#45;&#45;' "
+                                                disabled/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">违章费用：</label>
+                                    <div class="layui-input-inline">
+                                        <input
+                                                type="text"
+                                                class="layui-input searchVal"
+                                                v-model="receivables.spareCarReturn.illegalFee || '0' "
+                                                disabled/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">出险次数：</label>
+                                    <div class="layui-input-inline">
+                                        <input
+                                                type="text"
+                                                class="layui-input searchVal"
+                                                v-model="receivables.spareCarReturn.outInsurance || '&#45;&#45;' "
+                                                disabled/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">出险费用：</label>
+                                    <div class="layui-input-inline">
+                                        <input
+                                                type="text"
+                                                class="layui-input searchVal"
+                                                v-model="receivables.spareCarReturn.outFee || '0' "
+                                                disabled/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">车辆定损实际金额：</label>
+                                    <div class="layui-input-inline">
+                                        <input
+                                                type="text"
+                                                class="layui-input searchVal"
+                                                v-model="receivables.spareCarReturn.actualFee || '0' "
+                                                disabled/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">车辆可抵扣金额：</label>
+                                    <div class="layui-input-inline">
+                                        <input
+                                                type="text"
+                                                class="layui-input searchVal"
+                                                v-model="receivables.spareCarReturn.discountFee || '0' "
+                                                disabled/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">车辆其他欠款金额：</label>
+                                    <div class="layui-input-inline">
+                                        <input
+                                                type="text"
+                                                class="layui-input searchVal"
+                                                v-model="receivables.spareCarReturn.otherFee || '0' "
+                                                disabled/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">车辆违约金额：</label>
+                                    <div class="layui-input-inline">
+                                        <input
+                                                type="text"
+                                                class="layui-input searchVal"
+                                                v-model="receivables.spareCarReturn.defaultFee || '0' "
+                                                disabled/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label">车辆违约金额：</label>
+                                    <div class="layui-input-inline">
+                                        <input
+                                                type="text"
+                                                class="layui-input searchVal"
+                                                v-model="receivables.spareCarReturn.defaultFee || '0' "
+                                                disabled/>
+                                    </div>
+                                </div>
+
+
+                            </div>-->
+                            <!--<div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">
+                                    待收金额：
+                                </label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="receivables.uncollectedAmount"
+                                            disabled/>
+                                </div>
+                            </div>-->
+
+
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+
+            <!-- 已实收账款 -->
+            <div class="details-content-box"
+                 v-show="detailsSupTabContentListActiveValue === '实收详情'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        已实收账款
+                    </div>
+                </div>
+
+                <div class="details-layui-row">
+                    <div class="table">
+                        <table id="grid"></table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 追帐详情 -->
+            <div class="details-content-box"
+                 v-show="detailsSupTabContentListActiveValue === '追帐详情'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        追帐详情
+                    </div>
+                </div>
+
+                <div class="details-layui-row">
+                    <div class="table">
+                        <table id="chasingGrid"></table>
+                    </div>
+                </div>
+            </div>
+            <!-- 坏帐详情 -->
+            <div class="details-content-box"
+                 v-show="detailsSupTabContentListActiveValue === '坏账详情'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        坏账详情
+                    </div>
+                </div>
+
+                <div class="details-layui-row">
+                    <div class="table">
+                        <table id="hzGrid"></table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 作废详情 -->
+            <div class="details-content-box"
+                 v-show="detailsSupTabContentListActiveValue === '作废详情'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        作废详情
+                    </div>
+                </div>
+
+                <div class="details-layui-row">
+                    <div class="table">
+                        <table id="zfGrid"></table>
+                    </div>
+                </div>
+            </div>
+            <!-- 操作记录 -->
+            <div class="details-content-box"
+                 v-show="detailsSupTabContentListActiveValue === '操作记录'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        操作记录
+                    </div>
+                </div>
+                <div class="details-layui-row">
+                    <div class="table">
+                        <table class="layui-hide" id="yslogid"></table>
+                    </div>
+                </div>
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        账单修改记录
+                    </div>
+                </div>
+                <div class="details-layui-row">
+                    <div class="table">
+                        <table class="layui-hide" id="modifyLog"></table>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </form>
+
+</div>
+
+<script src="../../statics/js/modules/financial/receivablesDetail.js?_${.now?long}"></script>
+</body>
+</html>

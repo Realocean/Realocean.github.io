@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../statics/newImages/logo/logo@2x.png">
+    <title>跟进线索首页</title>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/global.css" media="all">-->
+
+<!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/fonts/larry-icon.css" media="all">-->
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+<!-- 放开后表格无法拖动   <link rel="stylesheet" type="text/css" href="../../statics/new_css/larryms.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/new_css/normalize.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <!-- Import style -->
+    <link rel="stylesheet" href="../../statics/js/element-plus/index.css" />
+    <!-- 页面样式 -->
+    <link rel="stylesheet" href="../../statics/new_css/mf-layout.css" />
+
+</head>
+<style>
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    .title .el-input {
+        width: 220px;
+        margin: 0 10px 0 20px;
+    }
+
+    .state-wrap{
+        margin-top: 15px;
+        justify-content: space-between;
+    }
+
+    .state-item{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        width: 140px;
+        /*height: 80px;*/
+        aspect-ratio: 1/0.59;
+        padding-left: 20px;
+        background-size: 100% 100%;
+        margin-right: 10px;
+        border-radius: 6px;
+        box-sizing: border-box;
+    }
+
+    .state-name{
+        font-size: 14px;
+        color: #333;
+    }
+
+    .state-count{
+        font-size: 18px;
+        margin-top: 2px;
+    }
+
+    .child .el-input{
+        width: 150px !important;
+    }
+
+    .child .el-date-editor--date{
+        width: 150px !important;
+        margin-left: 15px;
+    }
+
+    .stock-wrap{
+        /*height: 450px;*/
+        margin-top: 15px;
+        display: flex;
+        flex-direction: column;
+        background-size: 100% 100%;
+        aspect-ratio: 1/0.625;
+
+    }
+
+    .bg-light-blue{
+        background: #F5FBFB;
+        border-radius: 8px;
+    }
+
+    .stock-title{
+        display: flex;
+        aspect-ratio: 1/0.07;
+    }
+
+    .stock-title-wrap{
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .stock-title-wrap img{
+        width: 20px;
+        height: 20px;
+    }
+
+    .stock-title-wrap span{
+        font-size: 16px;
+        margin-left: 5px;
+    }
+
+    .stock-chart{
+        margin: 15px;
+        background: #F8FFFF;
+        flex: 1;
+        border-radius: 8px;
+        display: flex;
+    }
+
+    .salesman-wrap{
+        aspect-ratio: 1/0.85;
+        border-radius: 8px;
+        overflow-y: scroll;
+        margin-top: 15px;
+    }
+
+    .salesman-item{
+        height: 80px;
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+
+    }
+
+    .salesman-name{
+        color: #666;
+        margin-left: 28px;
+        flex: 1;
+    }
+
+    .salesman-avatar{
+        width: 47px;
+        height: 47px;
+        border-radius: 25px;
+        margin-left: 40px;
+    }
+
+    #stock_0{
+        width: 28vw;
+        height: 60vh;
+    }
+
+    #stock_1{
+        width: 28vw;
+        height: 60vh;
+    }
+
+    #stock_2{
+        width: 28vw;
+        height: 60vh;
+    }
+
+    #stock_3{
+        width: 95vw;
+        height: 62vh;
+    }
+
+    #stock_4{
+        width: 47vw;
+        height: 72vh;
+    }
+
+    #stock_5{
+        width: 47vw;
+        height: 72vh;
+    }
+
+    .bg-blue{
+        background: rgba(245, 251, 251, 1);
+        border-radius: 8px;
+    }
+
+    .part3{
+        aspect-ratio: 1/1;
+    }
+
+    .d-flex{
+        display: flex;
+    }
+
+    .part-center{
+        aspect-ratio: 1/0.33;
+        margin: 15px 10px 0 0;
+    }
+
+    .part2{
+        aspect-ratio: 1/0.7;
+    }
+
+</style>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <div class="card-wrap flex column" style="padding: 20px 10px 20px 20px">
+        <div class="flex title" style="align-self: flex-end">
+
+
+            <el-select v-model="q.store0" placeholder="全部" filterable  :clearable="1==userType" @change="change0">
+                <el-option
+                        v-for="(item, index) in storeLists"
+                        :key="index"
+                        :label="item.name"
+                        :value="item.deptId">
+                </el-option>
+            </el-select>
+
+
+            <el-date-picker
+                    v-model="q.date0"
+                    type="date"
+                    @change="change0_"
+                    value-format="YYYY-MM-DD"
+                    placeholder="请选择"/>
+        </div>
+
+        <div style="height: 1px;background: rgba(206, 234, 235, 1);margin: 15px 10px 15px 0"></div>
+
+        <div class="d-flex" style="margin-right: 10px">
+            <div class="flex column bg-blue part3">
+                <div class="add-title-wrap" style="margin: 20px 0 0 30px;white-space: nowrap">进度统计</div>
+
+                    <div id="stock_0"></div>
+
+            </div>
+
+            <div style="width: 15px"></div>
+
+            <div class="flex column bg-blue part3">
+                <div class="add-title-wrap" style="margin: 20px 0 0 30px;white-space: nowrap">意向等级</div>
+
+                    <div id="stock_1">
+                    </div>
+            </div>
+
+            <div style="width: 15px"></div>
+
+            <div class="flex column bg-blue part3">
+                <div class="add-title-wrap" style="margin: 20px 0 0 30px;white-space: nowrap">意向车型</div>
+
+                <div id="stock_2">
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="flex column bg-blue part-center">
+
+            <div class="d-flex align-center space-between" style="margin: 10px 0 0 30px;white-space: nowrap">
+                <div class="add-title-wrap">跟进线索统计</div>
+
+                <div class="flex" style="justify-content: flex-end">
+
+                    <el-select v-model="q.store1" placeholder="全部" size="default"  :clearable="1==userType" @change="change1">
+                        <el-option
+                                v-for="(item, index) in storeLists"
+                                :key="index"
+                                :label="item.name"
+                                :value="item.deptId">
+                        </el-option>
+                    </el-select>
+
+                    <el-date-picker
+                            style="margin: 0 10px"
+                            v-model="q.date1"
+                            type="date"
+                            @change="change1_"
+                            size="default"
+                            placeholder="请选择"/>
+                </div>
+            </div>
+
+            <div id="stock_3">
+            </div>
+
+        </div>
+
+        <div class="flex" style="margin: 15px 10px 0 0">
+            <div class="bg-blue flex column part2">
+                <div class="d-flex align-center space-between" style="margin: 10px 0 0 30px;white-space: nowrap">
+                    <div class="add-title-wrap">响应分析</div>
+
+                    <div class="flex" style="justify-content: flex-end">
+
+                        <el-select v-model="q.store2" placeholder="全部" size="default"  :clearable="1==userType" @change="change2">
+                            <el-option
+                                    v-for="(item, index) in storeLists"
+                                    :key="index"
+                                    :label="item.name"
+                                    :value="item.deptId">
+                            </el-option>
+                        </el-select>
+
+                        <el-date-picker
+                                style="margin: 0 10px"
+                                v-model="q.date2"
+                                type="date"
+                                @change="change2_"
+                                size="default"
+                                placeholder="请选择"/>
+                    </div>
+                </div>
+
+                <div id="stock_4">
+                </div>
+
+            </div>
+            <div style="width: 15px"></div>
+            <div class="bg-blue flex column part2">
+                <div class="d-flex align-center space-between" style="margin: 10px 0 0 30px;white-space: nowrap">
+                    <div class="add-title-wrap">转化分析</div>
+
+                </div>
+
+                <div id="stock_5">
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+
+</div>
+
+<!-- Import Vue 3 -->
+<script src="../../statics/js/vue3/vue.global.js"></script>
+<!-- Import component library -->
+<script src="../../statics/js/element-plus/index.full.js"></script>
+<script src="../../statics/js/element-plus/icons-vue.js"></script>
+<script src="../../statics/plugins/jquery.min.js"></script>
+<script src="../../statics/common/layui/layui.js"></script>
+<script src="../../statics/js/common.js"></script>
+<script src="../../statics/js/element-plus/locale-cn.js"></script>
+<!--<script type="text/javascript" src="../../statics/common/plus/echarts.min.js"></script>-->
+<script type="text/javascript" src="../../statics/common/plus/echarts5.4.3.js"></script>
+<script>
+    // 基于准备好的dom，初始化echarts实例
+    // console.log('echarts', echarts)
+    // var myChart = echarts.init(document.getElementById('main'));
+    //
+    // // 指定图表的配置项和数据
+    // var option = {
+    //     title: {
+    //         text: 'ECharts 入门示例'
+    //     },
+    //     tooltip: {},
+    //     legend: {
+    //         data: ['销量']
+    //     },
+    //     xAxis: {
+    //         data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
+    //     },
+    //     yAxis: {},
+    //     series: [
+    //         {
+    //             name: '销量',
+    //             type: 'bar',
+    //             data: [5, 20, 36, 10, 10, 20]
+    //         }
+    //     ]
+    // };
+    //
+    // // 使用刚指定的配置项和数据显示图表。
+    // myChart.setOption(option);
+</script>
+<script src="../../statics/js/modules/cluesSale/dict.js"></script>
+<script src="../../statics/js/modules/cluesSale/mainanalyse.js?_${.now?long}"></script>
+</body>
+
+</html>

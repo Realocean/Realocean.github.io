@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+    <head>
+        <meta charset="utf-8">
+        <title>租户系统参数管理</title>
+        <script type="text/javascript" src="/statics/common/include/head.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../../statics/css/new-edit.css">
+        <style>
+            .laytable-cell-1-0-0{
+          width:40px !important;
+        }
+        </style>
+    </head>
+    <body class="ren-body">
+        <div class="mvvm-table">
+            <div id="rrapp" v-cloak>
+                <!--搜索条件-->
+                <div class="list-search-title-box">
+                    <form class="layui-form" style="box-shadow: 0 0 20px #eee;padding-right: 15px;">
+                        <section class="jxc-section" style="display: flex;align-items: flex-start;white-space: nowrap;">
+                            <div class="card layui-row" style="flex: 1">
+                                <div class="layui-form-item ">
+                                    <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs12"
+                                         style="margin-bottom: 5px !important">
+                                        <div class="layui-input-inline">
+                                            <input type="text" class="layui-input searchVal" v-model="q.paramKey"
+                                                   @keyup.enter="query" placeholder="请输入参数名"/>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="display: flex;align-items: center;">
+                                <a class="layui-btn search-btn" @click="query">查询</a>
+                            </div>
+                        </section>
+                    </form>
+                </div>
+                <!--搜索区按钮-->
+                <div class="list-search-title-box">
+                    <form class="layui-form">
+                        <div style="display:flex;width: 100%;">
+                            <div class="layui-form-item layui-row" style="width: 100%;">
+                                <div class="list-search-form-button" style="width: 100%;">
+                                    <a class="layui-btn btn-primary" @click="add">新增</a>
+                                    <a class="layui-btn btn-warning layui-btn-normal" @click="delBatch">批量删除</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <table class="layui-hide" id="grid" lay-filter="grid"></table>
+                <!-- 表单 -->
+                <form v-show="showForm" class="layui-form ren-form" id="editForm">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">参数名</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="required" v-model="config.paramKey" maxlength="50"
+                                   placeholder="参数名" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">参数值</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="required" v-model="config.paramValue" maxlength=“2000”
+                                   placeholder="参数值" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">备注</label>
+                        <div class="layui-input-block">
+                            <input type="text" lay-verify="required" v-model="config.remark"  maxlength=“500” placeholder="备注"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit lay-filter="saveOrUpdate">确定</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!--操作-->
+            <script type="text/html" id="barTpl">
+                {{# if (d.paramKey !== 'order_alipay_daikou_sign' && d.paramKey !=='yueBaoIdentifyLimit') { }}
+                <a class="layui-grid-btn-xs option-btn-margin" lay-event="edit">修改</a>
+                {{# } }}
+                <a class="layui-grid-btn-xs option-btn-margin" lay-event="del">删除</a>
+            </script>
+
+        </div>
+    </body>
+    <script src="/statics/js/modules/sys/sysConfig.js"></script>
+</html>

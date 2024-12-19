@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>车辆移库页面</title>
+	<link rel="stylesheet" type="text/css" href="../../statics/css/public/flowChart.css">
+	<link rel="stylesheet" type="text/css" href="../../statics/css/public/header.css">
+	<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+	<script type="text/javascript" src="../../statics/js/bpmchart.js"></script>
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+	<form class="layui-form ren-form" style="padding-bottom: 60px;">
+		<div class="form-content-box">
+			<div class="list-search-sup-title new-layui-title border-bottom-dashed" style="height: 52px">
+				车辆信息
+				<span style="float: right;">
+                        <span v-show="isShowContent()" style="float: right;"><span style="color: #FFC000;font-size: 18px;margin-right: 10px">{{getAuditStatusStr()}}</span><span>移库状态：</span><span style="color: #1951FF">{{getOrderStatusStr()}}</span></span>
+                        <br v-show="isShowContent()" />
+                        <span v-show="isShowContent()" style="float: left;"><span style="color: #FFC000;font-size: 18px;">{{getAuditMarkType()}}：{{getAuditMarkStr()}}</span></span>
+                    </span>
+			</div>
+			<div class="form-content-session-box">
+				<div class="card">
+					<div class="layui-row layui-form-row-content">
+						<div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+							<label class="layui-form-label">车牌号:</label>
+							<div class="layui-input-inline">
+								<input type="text"
+									   class="layui-input"
+									   :value="inOutRecordsInfor.carPlate || '-'"
+									   placeholder="车牌号" style="border:0px;" disabled>
+							</div>
+						</div>
+						<div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+							<label class="layui-form-label">车架号:</label>
+							<div class="layui-input-inline">
+								<input type="text"
+									   class="layui-input"
+									   :value="inOutRecordsInfor.vin || '-'"
+									   placeholder="车架号" style="border:0px;" disabled>
+							</div>
+						</div>
+						<div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+							<label class="layui-form-label">品牌/车系/车型:</label>
+							<div class="layui-input-inline">
+								<input type="text"
+									   class="layui-input"
+									   :value="inOutRecordsInfor.carBrandSeriesModelName || '-'"
+									   placeholder="品牌/车系/车型" style="border:0px;" disabled>
+							</div>
+						</div>
+						<div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+							<label class="layui-form-label">仓库名称:</label>
+							<div class="layui-input-inline">
+								<input type="text"
+									   class="layui-input"
+									   :value="inOutRecordsInfor.depotName || '-'"
+									   placeholder="仓库名称" style="border:0px;" disabled>
+							</div>
+						</div>
+						<div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+							<label class="layui-form-label">入库时间:</label>
+							<div class="layui-input-inline">
+								<input type="text"
+									   class="layui-input"
+									   :value="inOutRecordsInfor.storageTime || '-'"
+									   placeholder="入库时间" style="border:0px;" disabled>
+							</div>
+						</div>
+						<div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+							<label class="layui-form-label">车辆归属:</label>
+							<div class="layui-input-inline">
+								<input type="text"
+									   class="layui-input"
+									   :value="inOutRecordsInfor.deptName || '-'"
+									   placeholder="车辆归属" style="border:0px;" disabled>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-content-box">
+			<div class="list-search-sup-title new-layui-title border-bottom-dashed">
+				车辆移库-基础信息
+			</div>
+			<div class="form-content-session-box">
+				<div class="card">
+					<div class="layui-row layui-form-row-content">
+						<div id="typeDiv" class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-if="nodeFields.moveHouse_carMove_transferReason" v-show="nodeFields.moveHouse_carMove_transferReason.show">
+							<label class="layui-form-label" v-show="nodeFields.moveHouse_carMove_transferReason.edit">
+								<span style="color:red">{{nodeFields.moveHouse_carMove_transferReason.required?'*':''}}</span>移库原因:
+							</label>
+							<label class="layui-form-label" v-show="!nodeFields.moveHouse_carMove_transferReason.edit">移库原因:</label>
+							<div class="layui-input-inline" v-show="nodeFields.moveHouse_carMove_transferReason.edit">
+								<select name="transferReason" v-model="inOutRecords.transferReason" lay-filter="transferReasonSerch" lay-verify="transferReasonVerify" lay-search>
+									<option value>请选择移库原因</option>
+									<option v-for ="(item,index) in transferReasonList" :value="item.code">{{item.value}}</option>
+								</select>
+							</div>
+							<div class="layui-input-inline" v-show="!nodeFields.moveHouse_carMove_transferReason.edit">
+								<input type="text" :value="inOutRecords.transferReasonStr || '--' " style="border:0px;" disabled
+									   class="layui-input input-readonly">
+							</div>
+						</div>
+						<div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs12" v-if="nodeFields.moveHouse_carMove_warehouse" v-show="nodeFields.moveHouse_carMove_warehouse.show">
+							<label class="layui-form-label" v-show="nodeFields.moveHouse_carMove_warehouse.edit">
+								<span style="color:red">{{nodeFields.moveHouse_carMove_warehouse.required?'*':''}}</span>目的仓库:
+							</label>
+							<label class="layui-form-label" v-show="!nodeFields.moveHouse_carMove_warehouse.edit">目的仓库:</label>
+							<div class="layui-input-inline">
+								<input type="text" class="layui-input searchVal" v-model="inOutRecords.warehouseName" :lay-verify="nodeFields.moveHouse_carMove_warehouse.required" v-show="nodeFields.moveHouse_carMove_warehouse.edit"
+									   @click="chooseWarehouse"   placeholder="请选择目的仓库" style="cursor:pointer;" readonly="readonly"/>
+								<input type="text" style="border:0px;" :value="inOutRecords.warehouseName || '--' " disabled
+									   v-show="!nodeFields.moveHouse_carMove_warehouse.edit" class="layui-input input-readonly">
+							</div>
+						</div>
+						<div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-if="nodeFields.moveHouse_carMove_transferTime" v-show="nodeFields.moveHouse_carMove_transferTime.show">
+							<label class="layui-form-label" v-show="nodeFields.moveHouse_carMove_transferTime.edit">
+								<span style="color:red">{{nodeFields.moveHouse_carMove_transferTime.required?'*':''}}</span>移库时间:
+							</label>
+							<label class="layui-form-label" v-show="!nodeFields.moveHouse_carMove_transferTime.edit">移库时间:</label>
+							<div class="layui-input-inline">
+								<input type="text" v-show="nodeFields.moveHouse_carMove_transferTime.edit"
+									   :lay-verify="nodeFields.moveHouse_carMove_transferTime.required"
+									   class="layui-input"
+									   id="transferTime"
+									   v-model="inOutRecords.transferTime"
+									   readonly="readonly"
+									   placeholder="请选择移库时间">
+								<input type="text" style="border:0px;" :value="inOutRecords.transferTime || '--' " disabled style="border:0px;"
+									   v-show="!nodeFields.moveHouse_carMove_transferTime.edit" class="layui-input input-readonly">
+							</div>
+						</div>
+						<div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs12" v-if="nodeFields.moveHouse_carMove_transferPersonnel"  v-show="nodeFields.moveHouse_carMove_transferPersonnel.show">
+							<label class="layui-form-label" v-show="nodeFields.moveHouse_carMove_transferPersonnel.edit">
+								<span style="color:red">{{nodeFields.moveHouse_carMove_transferPersonnel.required?'*':''}}</span>移库人员:
+							</label>
+							<label class="layui-form-label" v-show="!nodeFields.moveHouse_carMove_transferPersonnel.edit">移库人员:</label>
+							<div class="layui-input-inline">
+								<input type="text" class="layui-input searchVal" v-model="inOutRecords.transferPersonnel" :lay-verify="nodeFields.moveHouse_carMove_transferPersonnel.required" v-show="nodeFields.moveHouse_carMove_transferPersonnel.edit"
+									     placeholder="请输入移库人员" style="cursor:pointer;"/>
+								<input type="text" style="border:0px;" :value="inOutRecords.transferPersonnel || '--' " disabled
+									   v-show="!nodeFields.moveHouse_carMove_transferPersonnel.edit" class="layui-input input-readonly">
+							</div>
+						</div>
+						<div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs12" v-if="nodeFields.moveHouse_carMove_transferDept"  v-show="nodeFields.moveHouse_carMove_transferDept.show">
+							<label class="layui-form-label" v-show="nodeFields.moveHouse_carMove_transferDept.edit">
+								<span style="color:red">{{nodeFields.moveHouse_carMove_transferDept.required?'*':''}}</span>目的车辆归属:
+							</label>
+							<label class="layui-form-label" v-show="!nodeFields.moveHouse_carMove_transferDept.edit">目的车辆归属:</label>
+							<div class="layui-input-inline">
+								<input type="text" class="layui-input searchVal" v-model="inOutRecords.transferDeptName" :lay-verify="nodeFields.moveHouse_carMove_transferDept.required" v-show="nodeFields.moveHouse_carMove_transferDept.edit"
+									   @click="deptTree"  placeholder="请选择目的车辆归属" style="cursor:pointer;" readonly="readonly"/>
+								<input type="text" style="border:0px;" :value="inOutRecords.transferDeptName || '--' " disabled
+									   v-show="!nodeFields.moveHouse_carMove_transferDept.edit" class="layui-input input-readonly">
+							</div>
+						</div>
+						<div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-if="nodeFields.moveHouse_carMove_remarks" v-show="nodeFields.moveHouse_carMove_remarks.show">
+							<label class="layui-form-label" v-show="nodeFields.moveHouse_carMove_remarks.edit">
+								<span style="color:red">{{nodeFields.moveHouse_carMove_remarks.required?'*':''}}</span>备注:
+							</label>
+							<label class="layui-form-label" v-show="!nodeFields.moveHouse_carMove_remarks.edit">备注:</label>
+							<div class="layui-input-inline">
+								<textarea :lay-verify="nodeFields.moveHouse_carMove_remarks.required" v-show="nodeFields.moveHouse_carMove_remarks.edit" name="desc" v-model="inOutRecords.remarks" placeholder="请输入备注" class="layui-textarea"></textarea>
+								<textarea :value="inOutRecords.remarks || '--' " style="border:0px" disabled
+										  v-show="!nodeFields.moveHouse_carMove_remarks.edit" class="layui-input input-readonly"></textarea>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-content-box" v-if="viewTag!='apply'">
+			<div class="list-search-sup-title new-layui-title border-bottom-dashed">
+				车辆移库流程
+			</div>
+			<div class="car-details-info car-padding">
+				<div class="car-flowChart" id="bpmChart"></div>
+			</div>
+		</div>
+		<div class="form-content-box" >
+			<div class="form-content-session-box">
+				<div class="float-btn-group bottom-bar" v-if="viewTag=='apply' || viewTag=='edit'">
+					<a class="layui-btn reset-btn" @click="cancel">取消</a>
+					<a class="layui-btn search-btn" lay-submit lay-filter="submitEditData">保存</a>
+				</div>
+				<div class="float-btn-group bottom-bar" v-if="viewTag=='applyDetail'">
+					<a class="layui-btn reset-btn" @click="cancel">返回</a>
+					<a class="layui-btn search-btn" v-if="instanceStatus == 1" @click="recall">撤回</a>
+					<a class="layui-btn search-btn" v-if="instanceStatus == 2 || instanceStatus == 5" @click="applydel">删除</a>
+					<a class="layui-btn search-btn" v-if="instanceStatus == 6 && nodeType == 1" @click="reedit">重新编辑</a>
+				</div>
+				<div class="float-btn-group bottom-bar" v-if="viewTag=='approve'">
+					<a class="layui-btn reset-btn" @click="cancel">返回</a>
+					<a class="layui-btn search-btn" v-if="approveType != 3" @click="approve">审核通过</a>
+					<a class="layui-btn search-btn" v-if="approveType != 3" @click="reject">审核驳回</a>
+					<a class="layui-btn search-btn" v-if="approveType != 3" @click="refuse">审核拒绝</a>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<form class="layui-form ren-form" v-show="boxShow" id="boxShow">
+		<div class="details-conteiner">
+			<div class="details-content-box">
+				<div class="form-content-session-box" :style="boxInputShow?'':'text-align: center;'">
+					<PRE>{{boxMark}}</PRE>
+					<br/>
+					<div class="card" v-show="boxInputShow">
+						<textarea style="min-width: 400px;min-height: 90px;max-width: 400px;max-height: 120px" type="text" v-model="boxTxt" autocomplete="off" :placeholder="boxHolder" class="layui-input"></textarea>
+					</div>
+				</div>
+			</div>
+			<div class="details-content-box">
+				<div class="form-content-session-box">
+					<label class="layui-form-label">审批附件:</label>
+					<div class="layui-input-inline">
+						<div class="layui-input-inline-upload">
+							<div :id="fileLstId2" class="layui-input-inline-upload-show box-rect" v-for="(item,index) in fileLst2">
+								<div v-show="item.typeFile == 1" class="layui-input-inline-upload-button">
+									<img :src="imageURL + item.url" class="view-img">
+								</div>
+								<div v-show="item.typeFile != 1" class="layui-input-inline-upload-button">
+									{{item.nameAccessory}}
+								</div>
+								<div class="layui-input-inline-upload-show-delete btn-event" @click="delFile2(item.id)">
+									删除
+								</div>
+							</div>
+							<div class="layui-input-inline-upload-button box-rect box-rect-event" id="addFile2">
+								<img src="../../statics/images/inline-upload@2x.png">
+							</div>
+						</div>
+						<div class="layui-input-inline-upload-text" style="padding-bottom: 10px">附件说明：附件最大支持50M，
+							<br/>
+							支持格式：PDF、Word、Excel、JPG、PNG、ZIP、RAR
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</form>
+</div>
+<script src="../../statics/js/modules/car/carmove.js"></script>
+<link rel="stylesheet" href="../../statics/css/submit-approval.css">
+</body>
+</html>

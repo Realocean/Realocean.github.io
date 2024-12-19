@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+	<title>车辆监控</title>
+	<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+	<style type="text/css">
+		body, html, #vehiclePosition, #realTimeTracking, #trackPlaybackDto {
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+			margin: 0;
+			font-family: "微软雅黑";
+		}
+
+		.layui-tab-content {
+			box-sizing: border-box;
+			height: calc(100vh - 50px);
+			padding: 0;
+		}
+
+		.layui-tab-item {
+			height: 100%;
+			width: 100%;
+			position: relative;
+		}
+
+		.new-seacher-content {
+			overflow: hidden;
+			background: #fff;
+			padding: 10px 16px;
+			position: absolute;
+			top: 10px;
+			left: 30px;
+			z-index: 10;
+			box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2)
+		}
+		.new-seacher-content2 {
+			overflow: hidden;
+			background: #fff;
+			padding: 10px 16px;
+			position: absolute;
+			top: 10px;
+			z-index: 10;
+			text-align: center;
+			box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2)
+		}
+		.new-seacher-content2.s1 {
+			background: #577278;
+			background: -moz-linear-gradient(left, #577278 0%, #577278 100%);
+			background: -webkit-linear-gradient(left, #577278 0%, #577278 100%);
+			background: linear-gradient(to right, #577278 0%, #577278 100%);
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#577278', endColorstr='#577278',GradientType=1 );
+		}
+		.new-seacher-content2.s2 {
+			background: #577278;
+			background: -moz-linear-gradient(left, #577278 0%, #577278 100%);
+			background: -webkit-linear-gradient(left, #577278 0%, #577278 100%);
+			background: linear-gradient(to right, #577278 0%, #577278 100%);
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#577278', endColorstr='#577278',GradientType=1 );
+		}
+		.new-seacher-content2.s3 {
+			background: #577278;
+			background: -moz-linear-gradient(left, #577278 0%, #577278 100%);
+			background: -webkit-linear-gradient(left, #577278 0%, #577278 100%);
+			background: linear-gradient(to right, #577278 0%, #577278 100%);
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#577278', endColorstr='#577278',GradientType=1 );
+		}
+		.new-seacher-content2.s4 {
+			background: #577278;
+			background: -moz-linear-gradient(left, #577278 0%, #577278 100%);
+			background: -webkit-linear-gradient(left, #577278 0%, #577278 100%);
+			background: linear-gradient(to right, #577278 0%, #577278 100%);
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#577278', endColorstr='#577278',GradientType=1 );
+		}
+
+		.new-seacher-content2 input,
+		.new-seacher-content2 .carMonitorSearchButton {
+			border: none;
+			outline: none;
+			background: none;
+			float: left;
+			line-height: 30px;
+			height: 32px;
+			box-sizing: border-box;
+			border: solid 1px #dedede;
+			padding-left: 14px;
+			border-radius: 4px;
+			font-size: 14px;
+			width: 100%;
+		}
+		.new-seacher-content input,
+		.new-seacher-content .carMonitorSearchButton,
+		.new-seacher-content select {
+			border: none;
+			outline: none;
+			background: none;
+			float: left;
+			line-height: 30px;
+			height: 32px;
+			box-sizing: border-box;
+			border: solid 1px #dedede;
+			padding-left: 14px;
+			border-radius: 4px;
+			font-size: 14px;
+		}
+
+		.new-seacher-content select.type1 {
+			width: 100px;
+		}
+
+		.new-seacher-content select.type2 {
+			width: 100px;
+			margin-left: 12px;
+		}
+
+		.new-seacher-content input {
+			width: 120px;
+			margin-left: 12px;
+		}
+
+		.new-seacher-content .carMonitorSearchButton {
+			width: 72px;
+			text-align: center;
+			margin-left: 16px;
+			padding: 0;
+			border-radius: 6px;
+			background: #3FACB3;
+			color: #fff;
+			cursor: pointer;
+		}
+
+		.baidu-map-button {
+			z-index: 10;
+			width: 130px;
+			height: 65px;
+			border-radius: 6px;
+			overflow: hidden;
+			box-sizing: border-box;
+			padding-top: 8px;
+			border-color: transparent;
+			margin-bottom: 10px; /*将来要删除*/
+			cursor: pointer;
+		}
+
+		.btnAll {
+			top: 5px;
+			right: 15px;
+			z-index: 10;
+			position: absolute;
+			transition: all .5s;
+		}
+
+		.baidu-map-button.bg1 {
+			background: linear-gradient(45deg, #577278, #577278);
+		}
+
+		.baidu-map-button.bg2 {
+			background: linear-gradient(45deg, #577278, #577278);
+		}
+
+		.baidu-map-button.bg3 {
+			background: linear-gradient(45deg, #577278, #577278);
+		}
+
+		.baidu-map-button.active {
+			border: solid 2px #20B2AA;
+		}
+
+		.baidu-map-button .title {
+			text-align: center;
+			font-size: 16px;
+			color: #fff;
+			margin-bottom: 0px;
+		}
+
+		.baidu-map-button .number {
+			text-align: center;
+			font-size: 26px;
+			color: #fff;
+		}
+
+		.car-info {
+			position: absolute;
+			height: 100% !important;
+			right: -24%;
+			top: 0;
+			z-index: 100;
+			background: rgb(27, 33, 45);
+			transition: all .5s;
+			width: 24%;
+		}
+
+		.car-info.showcarinfo {
+			right: 0;
+		}
+
+		.btnAll.showcarinfo {
+			right: 300px;
+		}
+
+		.head-infro {
+			overflow: hidden;
+			box-sizing: border-box;
+			padding: 0 18px;
+			background: linear-gradient(90deg, #20B2AA, #20B2AA);
+		}
+
+		.head-infro .left, .head-infro .right {
+			color: #fff;
+			line-height: 25px;
+		}
+
+		.head-infro .left {
+			float: left;
+			font-size: 16px;
+		}
+
+		.head-infro .right {
+			float: right;
+			font-size: 12px;
+		}
+
+		.echart-content {
+			border-bottom: solid 1px #252E3B;
+		}
+
+		.text-infro-content{
+			height:35px;
+			padding-top:2px;
+		}
+
+		.text-infro-content .title {
+			margin: 0;
+			font-size: 14px;
+			font-weight: normal;
+			line-height: 34px;
+			color: #999;
+			box-sizing: border-box;
+			padding-left: 10px;
+			float:left;
+			width:40%;
+		}
+
+		.text-infro-content .details {
+			font-size: 14px;
+			color: #fff;
+			text-align: center;
+			line-height: 34px;
+			height: 34px;
+			background: #222A36;
+			float:right;
+			width:60%;
+		}
+
+	</style>
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5xg2kqlDtrMlhuMjuhVA5tYZe4OQ68dY"></script>
+</head>
+<body>
+<div class="layui-tab layui-tab-card" lay-filter="filter1">
+	<ul class="layui-tab-title" style="box-sizing: border-box">
+		<li class="layui-this">车辆位置监控</li>
+		<li>轨迹回放</li>
+	</ul>
+	<div class="layui-tab-content">
+		<!--车辆位置监控 -->
+		<div class="layui-tab-item layui-show" id="v-app">
+			<div id="car-map" style="height: 100%"></div>
+			<div class="new-seacher-content">
+				<form>
+					<input id="inputCarPlateNo" class="" name="carPlateNo" v-model="carInfo.carNo" placeholder="请输入车牌号">
+					<input type="button" class="carMonitorSearchButton" id="carMonitorSearch" @click="queryCarInfo" value="搜索"/>
+				</form>
+			</div>
+			<div class="btnAll" :class="{'showcarinfo':carShow}">
+				<div class="baidu-map-button bg1" @click="qbClick">
+					<div class="title">全部车辆</div>
+					<div class="number" id="kxCarNum">({{carSum.qbSum}})</div>
+				</div>
+				<div class="baidu-map-button bg2" @click="kxClick">
+					<div class="title">在线</div>
+					<div class="number" id="ddzCarNum">({{carSum.kxSum}})</div>
+				</div>
+				<div class="baidu-map-button bg3" @click="ydClick">
+					<div class="title">离线</div>
+					<div class="number" id="dingdzCarNum">({{carSum.ydSum}})</div>
+				</div>
+			</div>
+			<div class="car-info" :class="{'showcarinfo':carShow}">
+				<div class="head-infro">
+					<div class="left">基本信息</div>
+				</div>
+				<div class="text-infro-content">
+					<div class="title">车牌号:</div>
+					<div class="details">{{carDetailVo.carNo}}</div>
+				</div>
+				<div class="text-infro-content">
+					<div class="title">车型:</div>
+					<div class="details">{{carDetailVo.modelName}}</div>
+				</div>
+				<div class="text-infro-content">
+					<div class="title">设备编号:</div>
+					<div class="details">{{carDetailVo.deviceNo}}</div>
+				</div>
+				<div class="text-infro-content">
+					<div class="title">车辆状态:</div>
+					<div class="details">{{carDetailVo.businessType}}</div>
+				</div>
+				<div class="text-infro-content">
+					<div class="title">GPS状态:</div>
+					<div class="details">{{carDetailVo.deviceStatus}}</div>
+				</div>
+				<div class="text-infro-content">
+					<div class="title">行驶里程数:</div>
+					<div class="details">{{carDetailVo.sumOdograph}}</div>
+				</div>
+				<div class="text-infro-content">
+					<div class="title">最后通信时间:</div>
+					<div class="details">{{carDetailVo.timeReported}}</div>
+				</div>
+				<div class="text-infro-content" >
+					<div class="title">最后定位位置:</div>
+					<div class="details" style="line-height: normal">{{carDetailVo.addrDetail}}</div>
+				</div>
+
+				<div id="orderInfo">
+					<div class="head-infro">
+						<div class="left">租赁信息</div>
+					</div>
+					<div class="text-infro-content">
+						<div class="title">客户名称:</div>
+						<div class="details">{{carDetailVo.memberName}}</div>
+					</div>
+					<div class="text-infro-content">
+						<div class="title">联系电话:</div>
+						<div class="details">{{carDetailVo.mobilePhone}}</div>
+					</div>
+					<div class="text-infro-content">
+						<div class="title">租期:</div>
+						<div class="details">{{carDetailVo.orderStartDate}}至{{carDetailVo.orderFinishDate}}</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		<!--轨迹回放 -->
+			<div class="layui-tab-item" id="v-app3" v-cloak>
+			<div id="trackPlaybackDto-map" style="height: 100%"></div>
+			<div class="new-seacher-content">
+				<form>
+					<input v-model="carTraHistory.carNo" id="carNo" placeholder="请输入车牌号">
+					<input type="button" class="carMonitorSearchButton" @click="carTrackSearch" value="搜索"/>
+				</form>
+			</div>
+			<div class="new-seacher-content" style="left: 70%;">
+				<form>
+					<div class="layui-inline" @click="play" style="cursor: pointer;">
+						<img src="../../statics/images/car/play.png" style="height:26px;">
+					</div>
+					<div class="layui-inline" style="margin-left: 10px;cursor: pointer;" @click="pause">
+						<img src="../../statics/images/car/pause.png" style="height:26px;">
+					</div>
+					<div class="layui-inline" style="margin-left: 10px;cursor: pointer;" @click="reload" >
+						<img src="../../statics/images/car/reload.png" style="height:26px;">
+					</div>
+				</form>
+			</div>
+			<div class="new-seacher-content2 s1" style="right:30px;top:50px;width: 150px">
+				<h5 style="line-height: 32px;cursor: pointer;" @click="oneHourReplay">前一个小时回放</h5>
+			</div>
+			<div class="new-seacher-content2 s2" style="right:30px;top:120px;width: 150px">
+				<h5 style="line-height: 32px;cursor: pointer;" @click="todayReplay">今天回放</h5>
+			</div>
+			<div class="new-seacher-content2 s3" style="right:30px;top:190px;width: 150px">
+				<h5 style="line-height: 32px;cursor: pointer;" @click="yesReplay">昨天回放</h5>
+			</div>
+			<div class="new-seacher-content2 s4" style="right:30px;top:260px;width: 150px">
+				<form>
+					<input type="text" name="startTime" readonly="readonly" v-model="carTraHistory.startTime"    id="startTime" placeholder="开始时间" autocomplete="off" style="margin-bottom: 10px;background: #FFF;">
+					<input type="text" name="endTime" readonly="readonly" v-model="carTraHistory.endTime"     id="endTime" placeholder="结束时间" autocomplete="off" style="margin-bottom: 10px;background: #FFF;">
+					<input style="width: 100%;background: #3FACB3;color: #FFF;border: 0;cursor: pointer;" type="button" class="carMonitorSearchButton" value="自定义时间段"/>
+				</form>
+			</div>
+			<div class='echart-content' id='carTrackSpeedCharts'><div></div><h1></h1></div>
+		</div>
+	</div>
+</div>
+
+</body>
+<script type="text/javascript" src="../../statics/common/LuShu/LuShu_min.js"></script>
+<script type="text/javascript" src="../../statics/common/plus/echarts.min.js"></script>
+<script type="text/javascript">
+	var carTrackMap;
+	var globalLuShu;
+	var carMark;
+	var carTrackPoints;
+	var carInitMap;
+	$(function () {
+		layui.use('laydate', function(){
+			var laydate = layui.laydate;
+			var nowTime = new Date().valueOf();
+			var max = null;
+			var start=laydate.render({
+				elem: '#startTime',
+				type :'datetime',
+				done: function(value, date){
+					endMax = end.config.max;
+					end.config.min = date;
+					end.config.min.month = date.month -1;
+				}
+			});
+			var end=laydate.render({
+				elem: '#endTime',
+				type :'datetime',
+				done: function(value, date){
+					if($.trim(value) == ''){
+						var curDate = new Date();
+						date = {'date': curDate.getDate(), 'month': curDate.getMonth()+1, 'year': curDate.getFullYear()};
+					}
+					start.config.max = date;
+					start.config.max.month = date.month -1;
+				}
+			});
+		});
+	});
+
+	function getZoom(maxLng, minLng, maxLat, minLat, map){
+		var zoom = [ "50", "100", "200", "500", "1000", "2000",
+			"5000", "10000", "20000", "25000", "50000",
+			"100000", "200000", "500000", "1000000", "2000000" ]// 级别18到3。
+		var pointA = new BMap.Point(maxLng, maxLat); // 创建点坐标A
+		var pointB = new BMap.Point(minLng, minLat); // 创建点坐标B
+		var distance = map.getDistance(pointA, pointB).toFixed(1); // 获取两点距离,保留小数点后两位
+		for (var i = 0, zoomLen = zoom.length; i < zoomLen; i++) {
+			if (zoom[i] - distance > 0) {
+				return 18 - i + 4;// 之所以会多3，是因为地图范围常常是比例尺距离的10倍以上。所以级别会增加3。
+			}
+		};
+	}
+
+	function setZoom(points,map){
+		var obj = new Object();
+		if (points.length > 0) {
+			var maxLng = points[0].lng;
+			var minLng = points[0].lng;
+			var maxLat = points[0].lat;
+			var minLat = points[0].lat;
+			var res;
+			for (var i = points.length - 1; i >= 0; i--) {
+				res = points[i];
+				if(res.lng==null||res.lat==null){
+
+				}else{
+					if (res.lng > maxLng)
+						maxLng = res.lng;
+					if (res.lng < minLng)
+						minLng = res.lng;
+					if (res.lat > maxLat)
+						maxLat = res.lat;
+					if (res.lat < minLat)
+						minLat = res.lat;
+				}
+			}
+			;
+			var cenLng = (parseFloat(maxLng) + parseFloat(minLng)) / 2;
+			var cenLat = (parseFloat(maxLat) + parseFloat(minLat)) / 2;
+			var zoom =getZoom(maxLng, minLng, maxLat,
+					minLat, map);
+			obj.cenLng = cenLng;
+			obj.cenLat = cenLat;
+			obj.zoom = zoom;
+			return obj;
+		} else {
+			obj.cenLng = "103.388611";
+			obj.cenLat = "35.563611";
+			obj.zoom = "5";
+			// 没有坐标，显示全中国
+			return obj;
+		}
+	}
+
+	function getCarInfo(carId){
+        $("#orderInfo").hide();
+		$.ajax({
+			type: "GET",
+			url: baseURL + "car/gps/getCarDetail?carId=" + carId,
+			data: null,
+			success: function (result) {
+				vm.carDetailVo = result.carDetailVo;
+				console.log(vm.carDetailVo)
+				if(vm.carDetailVo.memberName!=null && vm.carDetailVo.memberName!=""){
+                    $("#orderInfo").show();
+                }
+			}
+		});
+	}
+
+	function getMapOneMore(pointsArray,type){
+		//清除覆盖物
+		carInitMap.clearOverlays();
+		//重新计算中心点，pointsArray为空，设置为西安
+		if(pointsArray.length==0){
+			carInitMap.centerAndZoom(new BMap.Point(108.95378,34.267581),11);
+			layer.msg("车辆没有坐标信息", {icon: 5});
+		}else{
+			var zoom = setZoom(pointsArray, carInitMap);
+			//重新设置中心点
+			carInitMap.centerAndZoom(new BMap.Point(zoom.cenLng, zoom.cenLat),11);
+			carInitMap.addEventListener("click", function (e) {
+				if (!e.overlay) { // 如果点的不是覆盖物(标注是覆盖物)
+					vm.carShow = false;
+				}
+			});
+			//定义覆盖物图片
+			var myIcon;
+			if(type==0){
+				//全部车辆
+				myIcon = new BMap.Icon(baseURL + '/statics/images/car/car_green.png', new BMap.Size(26, 52));
+			}
+			if(type==1){
+				//空闲车辆
+				myIcon = new BMap.Icon(baseURL + '/statics/images/car/car_blue.png', new BMap.Size(26, 52));
+			}
+			if(type==2){
+				//用车中
+				myIcon = new BMap.Icon(baseURL + '/statics/images/car/car_yellow.png', new BMap.Size(26, 52));
+			}
+			if(type==4){
+				//已预订
+				myIcon = new BMap.Icon(baseURL + '/statics/images/car/car_yellow.png', new BMap.Size(26, 52));
+			}
+			for(var i=0;i<pointsArray.length;i++){
+				var pointEv = pointsArray[i];
+				if(pointEv.lng!=null&&pointEv.lat!=null){
+					var point = new BMap.Point(pointEv.lng, pointEv.lat);
+					var marker = new BMap.Marker(point, {icon: myIcon});
+					var label = new window.BMap.Label(pointEv.carId, { offset: new window.BMap.Size(20, -10) });
+					label.setStyle(  {display:"none"});
+					marker.setLabel(label);
+					marker.addEventListener("click", showCarInfo);
+					// 标记点击事件
+					function showCarInfo(e) {
+						vm.carShow = true;
+						//查询需要展示车辆详细信息
+						getCarInfo(e.target.getLabel().content);
+					}
+					carInitMap.addOverlay(marker);
+				}
+			}
+		}
+	}
+
+	function getMapInit(pointsArray){
+		// 车辆位置监控
+		var map = new BMap.Map("car-map");//创建Map实例
+		carInitMap = map;
+		if(pointsArray.length==0){
+			map.centerAndZoom(new BMap.Point(108.95378,34.267581),11);
+			layer.msg("车辆没有坐标信息", {icon: 5});
+		}else{
+			var zoom = setZoom(pointsArray, map);
+			map.centerAndZoom(new BMap.Point(zoom.cenLng, zoom.cenLat),11);
+		}
+		//添加地图类型控件
+		map.addControl(new BMap.MapTypeControl({
+			anchor: BMAP_ANCHOR_BOTTOM_LEFT,
+			offset: new BMap.Size(15, 80),
+			mapTypes: [
+				BMAP_NORMAL_MAP,
+				BMAP_HYBRID_MAP
+			]
+		}));
+		map.setCurrentCity("西安");         //设置地图显示的城市 此项是必须设置的
+		map.enableScrollWheelZoom(true);   //开启鼠标滚轮缩放
+		map.clearOverlays();               //清除覆盖物
+		// 地图单击事件
+		map.addEventListener("click", function (e) {
+			if (!e.overlay) { // 如果点的不是覆盖物(标注是覆盖物)
+				vm.carShow = false;
+			}
+		});
+		//定义覆盖物图片
+		var myIcon = new BMap.Icon(baseURL + '/statics/images/car_green.png', new BMap.Size(52, 26));
+		for(var i=0;i<pointsArray.length;i++){
+			var pointEv = pointsArray[i];
+			if(pointEv.lng!=null&&pointEv.lat!=null){
+						var point = new BMap.Point(pointEv.lng, pointEv.lat);
+						var marker = new BMap.Marker(point, {icon: myIcon});
+						var label = new window.BMap.Label(pointEv.carId, { offset: new window.BMap.Size(20, -10) });
+						label.setStyle(  {display:"none"});
+						marker.setLabel(label);
+						marker.addEventListener("click", showCarInfo);
+						// 标记点击事件
+						function showCarInfo(e) {
+							// 这里应该有服务器请求，先做假响应
+//							var p = e.target.getPosition();  //获取marker的位置
+							vm.carShow = true;
+							//查询需要展示车辆详细信息
+							getCarInfo(e.target.getLabel().content);
+						}
+						map.addOverlay(marker);
+					}
+		}
+	}
+
+	/**
+	 * 初始化全部车辆，空闲车辆，已预订车辆，用车中
+	 */
+	function initCarSum(){
+		$.ajax({
+			type: "GET",
+			url: baseURL + "car/gps/initCarSum",
+			data: null,
+			success: function (result) {
+				for(var i=0;i<result.carSum.length;i++){
+					if(result.carSum[i].type==0){
+						vm.carSum.qbSum = result.carSum[i].num;
+					}
+					if(result.carSum[i].type==1){
+						vm.carSum.kxSum = result.carSum[i].num;
+					}
+					if(result.carSum[i].type==2){
+						vm.carSum.ydSum = result.carSum[i].num;
+					}
+				}
+			}
+		});
+	}
+
+	var vmApp3 = new Vue({
+		el:'#v-app3',
+		data:{
+			carTraHistory:{
+				carNo:null,
+				startTime:null,
+				endTime:null
+			}
+		},
+		updated: function(){
+			layui.form.render();
+		},
+		methods: {
+			play:function(){
+				if(globalLuShu){
+					carTrackMap.removeOverlay(carMark);
+					globalLuShu.start();
+				}
+			},
+			pause:function(){
+				if(globalLuShu){
+					globalLuShu.pause();
+				}
+			},
+			reload:function(){
+				if(globalLuShu){
+					globalLuShu.stop();
+					carTrackMap.clearOverlays();
+					this.mapInit(carTrackPoints,false);
+				}
+			},
+			oneHourReplay:function(){
+				carTrackMap.clearOverlays();
+				this.reload();
+				var carNo = $('#carNo').val();
+				if(carNo==null||carNo==''){
+					layer.msg("请输入车牌号", {icon: 5});
+					return false;
+				}
+				var nowTime = new Date().getTime();
+				var startTime = nowTime-1000*60*60;
+				var endTime = nowTime;
+				this.getHistoryLine(carNo,startTime,endTime);
+			},
+			todayReplay:function(){
+				carTrackMap.clearOverlays();
+				this.reload();
+				var carNo = $('#carNo').val();
+				if(carNo==null||carNo==''){
+					layer.msg("请输入车牌号", {icon: 5});
+					return false;
+				}
+				var startTime = this.getZeroTime('today');
+				var endTime = new Date().getTime();
+				this.getHistoryLine(carNo,startTime,endTime);
+			},
+			getZeroTime:function(str){
+				var date;
+				if(str=='today'){
+					date = new Date();
+				}
+				if(str=='yestoday'){
+					date = new Date();
+					date.setDate(date.getDate() - 1);
+				}
+				date.setHours(0);
+				date.setMinutes(0);
+				date.setSeconds(0);
+				date.setMilliseconds(0);
+				return date.getTime();
+			},
+			yesReplay:function(){
+				carTrackMap.clearOverlays();
+				this.reload();
+				var carNo = $('#carNo').val();
+				if(carNo==null||carNo==''){
+					layer.msg("请输入车牌号", {icon: 5});
+					return false;
+				}
+				var startTime = this.getZeroTime('yestoday');
+				var endTime = startTime+1000*60*60*24-1;
+				this.getHistoryLine(carNo,startTime,endTime);
+			},
+			getHistoryLine:function(carNo,startTime,endTime){
+				$.ajax({
+					type: "GET",
+					url: baseURL+"car/gps/traList?carNo="+carNo+"&startTime="+startTime+"&endTime="+endTime,
+					data: null,
+					success: function(result){
+						if (result.code == 1) {// 0为成功
+							var total = result.data.length// 本次检索总结果条数
+							if(total>0){
+								var queryPoints = result.data;
+								var bpoints = new Array();
+								for(var i=queryPoints.length-1;i>=0;i--){
+									var point = new Object();//lng,lat
+									point.lng = queryPoints[i].longitude;
+									point.lat = queryPoints[i].latitude;
+									point.time = queryPoints[i].loc_time;//时间
+									point.speed = queryPoints[i].speed;//速度
+									point.direction = queryPoints[i].direction;//航向角
+									point.carStatus = queryPoints[i].height;//车辆打火状态;
+									bpoints.push(point);
+								}
+								carTrackPoints = bpoints;
+								vmApp3.mapInit(bpoints,true);
+							}else{
+								layer.msg("没有数据", {icon: 5});
+							}
+						} else {
+							layer.msg(result.msg, {icon: 5});
+						}
+					}
+				});
+			},
+			carTrackSearch:function(){
+				carTrackMap.clearOverlays();
+				var carNo = $('#carNo').val();
+				var startTime = new Date($('#startTime').val()).getTime();
+				var endTime = new Date($('#endTime').val()).getTime();
+				if(carNo==null||carNo==''){
+					layer.msg("请输入车牌号", {icon: 5});
+					return false;
+				}
+				if(isNaN(startTime)){
+					layer.msg("请输入开始时间", {icon: 5});
+					return false;
+				}
+				if(isNaN(endTime)){
+					layer.msg("请输入结束时间", {icon: 5});
+					return false;
+				}
+				this.getHistoryLine(carNo,startTime,endTime);
+			},
+			setZoom:function(points,map){
+				var obj = new Object();
+				if (points.length > 0) {
+					var maxLng = points[0].lng;
+					var minLng = points[0].lng;
+					var maxLat = points[0].lat;
+					var minLat = points[0].lat;
+					var res;
+					for (var i = points.length - 1; i >= 0; i--) {
+						res = points[i];
+						if (res.lng > maxLng)
+							maxLng = res.lng;
+						if (res.lng < minLng)
+							minLng = res.lng;
+						if (res.lat > maxLat)
+							maxLat = res.lat;
+						if (res.lat < minLat)
+							minLat = res.lat;
+					}
+					;
+					var cenLng = (parseFloat(maxLng) + parseFloat(minLng)) / 2;
+					var cenLat = (parseFloat(maxLat) + parseFloat(minLat)) / 2;
+					var zoom =this.getZoom(maxLng, minLng, maxLat,
+							minLat, map);
+					obj.cenLng = cenLng;
+					obj.cenLat = cenLat;
+					obj.zoom = zoom;
+					return obj;
+				} else {
+					obj.cenLng = "103.388611";
+					obj.cenLat = "35.563611";
+					obj.zoom = "5";
+					// 没有坐标，显示全中国
+					return obj;
+				}
+			},
+			getZoom : function(maxLng, minLng, maxLat, minLat, map) {
+				var zoom = [ "50", "100", "200", "500", "1000", "2000",
+					"5000", "10000", "20000", "25000", "50000",
+					"100000", "200000", "500000", "1000000", "2000000" ]// 级别18到3。
+				var pointA = new BMap.Point(maxLng, maxLat); // 创建点坐标A
+				var pointB = new BMap.Point(minLng, minLat); // 创建点坐标B
+				var distance = map.getDistance(pointA, pointB).toFixed(1); // 获取两点距离,保留小数点后两位
+				for (var i = 0, zoomLen = zoom.length; i < zoomLen; i++) {
+					if (zoom[i] - distance > 0) {
+						return 18 - i + 4;// 之所以会多3，是因为地图范围常常是比例尺距离的10倍以上。所以级别会增加3。
+					}
+				};
+			},
+			mapInit:function(points,flag){
+				// 初始化地图,选取第一个点为起始点
+				var map = carTrackMap;
+				map.clearOverlays();
+				if(polyline){
+					map.removeOverlay(polyline);
+				}
+				if(startIcon){
+					map.removeOverlay(startIcon);
+				}
+				if(endIcon){
+					map.removeOverlay(endIcon);
+				}
+				var zoom = this.setZoom(points, map);
+				map.centerAndZoom(new BMap.Point(zoom.cenLng, zoom.cenLat),zoom.zoom);// 设置中心点坐标和地图级别
+				map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+				var opts = {type: BMAP_NAVIGATION_CONTROL_ZOOM,offset: new BMap.Size(30, 90)};
+				map.addControl(new BMap.NavigationControl(opts));
+				var centerPoint = new BMap.Point(
+						(points[0].lng + points[points.length - 1].lng) / 2,
+						(points[0].lat + points[points.length - 1].lat) / 2);
+				map.panTo(centerPoint);
+				var polylinePointsArray = new Array();
+				var landmarkPois = new Array();
+
+				var pointInfo=null;
+				for (var i=0; i < points.length; i++) {
+					var x = points[i].lng;
+					var y = points[i].lat;
+					polylinePointsArray.push(new BMap.Point(x,y));
+					var courseAngle = points[i].direction;
+					var status = "未知";
+					if(points[i].carStatus==1){
+						status = "已启动";
+					}else if(points[i].carStatus==2){
+						status = "已熄火";
+					}
+					//轨迹上每个点信息展示对象
+					pointInfo = {lng:points[i].lng,lat:points[i].lat,speed:points[i].speed,pauseTime:1};
+					landmarkPois.push(pointInfo);
+				}
+				var car = new BMap.Marker(points[0], {
+					icon : new BMap.Icon(baseURL+ '/statics/images/car/car_gj.png', new BMap.Size(52, 26), {
+						imageOffset : new BMap.Size(0, 0)
+					})
+				});
+				var lushuIcon = new BMap.Icon(baseURL+ '/statics/images/car/car_gj.png', new BMap.Size(52, 26), { anchor: new BMap.Size(30, 20) });
+				carMark=car;
+				//小车移动
+				var lushu = new BMapLib.LuShu(map, points, {
+//					defaultContent: "",
+					speed: 60,//路书速度
+					autoView: true, //是否开启自动视野调整，如果开启那么路书在运动过程中会根据视野自动调整
+					icon: lushuIcon,
+					enableRotation: true, //是否设置marker随着道路的走向进行旋转
+					landmarkPois:landmarkPois//显示的特殊点，似乎是必选参数，可以留空，据说要和距原线路10米内才会暂停，这里就用原线的点
+				});
+				globalLuShu = lushu;
+				//起点设置
+				var startIcon = new BMap.Marker(points[0], {
+					icon : new BMap.Icon(baseURL+ '/statics/images/car/carstart.png',
+							new BMap.Size(48,48), {imageOffset : new BMap.Size(0, 0)}
+					)
+				});
+				startIcon.setZIndex(999);
+				map.addOverlay(startIcon);
+				//终点设置
+				var endIcon = new BMap.Marker(points[points.length-1], {
+					icon : new BMap.Icon(baseURL+ '/statics/images/car/carend.png',
+							new BMap.Size(48,48), {imageOffset : new BMap.Size(0, 0)}
+					)
+				});
+				endIcon.setZIndex(999);
+				map.addOverlay(endIcon);
+
+				var symbol = new BMap.Symbol(BMap_Symbol_SHAPE_BACKWARD_CLOSED_ARROW, {
+					scale: 0.6,//图标缩放大小
+					rotation: 0,
+					strokeOpacity:1,
+					strokeColor:'#fff',//设置矢量图标的线填充颜色
+					strokeWeight: '1.5',//设置线宽
+				});
+				var iconSequence = new BMap.IconSequence(
+						symbol,
+						'100%', //offset为符号相对于线起点的位置，取值可以是百分比也可以是像素位置，默认为"100%"
+						'3%' //repeat为符号在线上重复显示的距离，可以是百分比也可以是距离值，同时设置repeat与offset时，以repeat为准
+				);
+				var polyline = new BMap.Polyline(polylinePointsArray, {
+					enableEditing: false,//是否启用线编辑，默认为false
+					enableClicking: false,//是否响应点击事件，默认为true
+					icons:[iconSequence],
+					strokeWeight:'5',//折线的宽度，以像素为单位
+					strokeOpacity: 0.9,//折线的透明度，取值范围0 - 1
+					strokeColor:"#4e4ae0" //折线颜色
+				});
+				map.addOverlay(polyline);
+			}
+		}
+	});
+
+	var vm = new Vue({
+		el: '#v-app',
+		data: {
+			carShow: false,
+			carSum:{
+				qbSum:0,
+				kxSum:0,
+				ydSum:0,
+				ycSum:0
+			},
+			carInfo:{
+				carNo:null
+			},
+			carDetailVo:{
+				carNo:"--",
+				modelName:"--",
+				businessType:"--",
+				deviceStatus:"--",
+				sumOdograph:"--",
+				timeReported:"--",
+				addrDetail:"--",
+				memberName:"--",
+				mobilePhone:"--",
+				orderStartDate:"--",
+				orderFinishDate:"--",
+				longtimeRentOut:"--",
+                deviceNo:"--"
+			},
+            orderInfo:false
+		},
+		computed: function () {
+		},
+		created: function () {
+		},
+		mounted: function () {
+			initCarSum();
+			this.getData(null,null,1);
+		},
+		updated: function () {
+		},
+		methods: {
+			queryCarInfo:function(){
+				if(vm.carInfo.carNo==null){
+					layer.msg("请输入车牌号码", {icon: 5});
+					return;
+				}
+				this.getData(vm.carInfo.carNo,0,0);
+			},
+			qbClick:function(){
+				this.getData(null,0,0);
+			},
+			kxClick:function(){
+				this.getData(null,1,0);
+			},
+			ydClick:function(){
+				this.getData(null,2,0);
+			},
+			getData:function(carNo,type,flag){
+				$.ajax({
+					type: "GET",
+					url: baseURL + "car/gps/getList?carNo=" + carNo + "&type=" + type ,
+					data: null,
+					success: function (result) {
+						var pointsArray = new Array();
+						for(var i=0;i<result.list.length;i++){
+							var point = new Object();
+							if(result.list[i].lon != null && result.list[i].lat != null){
+								point.lng = result.list[i].lon;
+								point.lat = result.list[i].lat;
+								point.carId = result.list[i].carId;
+								pointsArray.push(point);
+							}
+						}
+						//初始化地图
+						if(flag==0){
+							getMapOneMore(pointsArray,type);
+						}else{
+							getMapInit(pointsArray);
+						}
+					}
+				});
+			}
+		}
+	});
+
+	//轨迹回放
+	var map3 = new BMap.Map("trackPlaybackDto-map");    // 创建Map实例
+	carTrackMap = map3;
+	map3.centerAndZoom(new BMap.Point(108.95378,34.267581), 13);  // 初始化地图,设置中心点坐标和地图级别
+	//添加地图类型控件
+	map3.addControl(new BMap.MapTypeControl({
+		anchor: BMAP_ANCHOR_BOTTOM_LEFT,
+		offset: new BMap.Size(15, 80),
+		mapTypes: [
+			BMAP_NORMAL_MAP,
+			BMAP_HYBRID_MAP
+		]
+	}));
+	map3.setCurrentCity("西安");          // 设置地图显示的城市 此项是必须设置的
+	map3.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+
+</script>
+</html>

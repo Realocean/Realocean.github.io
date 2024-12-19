@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../statics/newImages/logo/logo@2x.png">
+    <title>新增线索</title>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/global.css" media="all">-->
+
+    <!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/fonts/larry-icon.css" media="all">-->
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+    <!-- 放开后表格无法拖动   <link rel="stylesheet" type="text/css" href="../../statics/new_css/larryms.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/new_css/normalize.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <!-- Import style -->
+    <link rel="stylesheet" href="../../statics/js/element-plus/index.css"/>
+    <!-- 页面样式 -->
+    <link rel="stylesheet" href="../../statics/new_css/mf-layout.css"/>
+
+</head>
+<style scoped>
+    .el-input {
+        width: 300px;
+    }
+
+    .wrap-content {
+        background: linear-gradient(#E1F3F4, white);
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .sub-info {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 20px 40px;
+    }
+
+    .el-textarea__inner {
+        width: 600px;
+    }
+
+</style>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <div class="wrap-content">
+        <el-form ref="form" :rules="1==form.paymentType?rules2:rules" :model="form" label-width="120px">
+            <div class="sub-info">
+                <div class="add-title-wrap">{{sysUserInfo.deptName||'--'}}---车辆出库</div>
+<!--                <div class="add-title-wrap">郑州店-&#45;&#45;车辆出库</div>-->
+                <el-row :gutter="5">
+                    <el-col :span="12">
+                        <el-form-item label="车辆VIN:" prop="vinNo">
+                            <span>{{form.vinNo}}</span>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="品牌/车系/车型:">
+                            <span>{{form.brandName}}/{{form.seriesName}}/{{form.modelName}}</span>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+
+                <el-row :gutter="5">
+                    <el-col :span="12">
+                        <el-form-item label="销售顾问:">
+                            <el-select v-model="form.salesId" placeholder="请选择销售顾问" filterable clearable @change="changesales">
+                                <el-option
+                                        v-for="(item, index) in salerList"
+                                        :key="index"
+                                        :label="item.username"
+                                        :value="item.userId">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="客户姓名:" prop="cluesId">
+                            <el-select v-model="form.cluesId" placeholder="请选择客户" filterable clearable @change="changeCustomer">
+                                <el-option
+                                        v-for="(item, index) in customerList"
+                                        :key="index"
+                                        :label="item.customerName"
+                                        :value="item.cluesId">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+
+                <el-row :gutter="5">
+                    <el-col :span="12">
+                        <el-form-item label="客户手机:" prop="phone">
+                            <el-input v-model="form.phone" placeholder="选择客户后自动带出" readonly/>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="线索来源:">
+                            <span>{{form.cluesSourceValue||'选择客户后自动带出'}}</span>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+
+                <el-row :gutter="5">
+                    <el-col :span="12">
+                        <el-form-item label="客户地址:" prop="customerAddress">
+                            <span>{{form.customerAddress||'选择客户后自动带出'}}</span>
+
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="购车用途:" prop="buyCarPurpose">
+                            <el-input v-model="form.buyCarPurpose" placeholder="请输入购车用途" />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+
+                <el-row :gutter="5">
+                    <el-col :span="12">
+                        <el-form-item label="销售金额(万元):" prop="salesAmount">
+                            <el-input
+                                    oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)} value = value.replace(new RegExp(`^\\D*(\\d{9}(?:\\.\\d{0,2})?).*$`, 'g'), '$1')"
+                                    v-model="form.salesAmount" placeholder="请输入销售金额"/>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="付款类型:" prop="paymentType">
+                            <el-select v-model="form.paymentType" placeholder="请选择付款类型" clearable>
+                                <el-option
+                                        v-for="(item, index) in payTypes" :key="index"
+                                        :label="item.value" :value="item.code"/>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+
+            </div>
+
+            <div class="sub-info" style="margin-top: 20px">
+                <div class="add-title-wrap">金融需求</div>
+                <el-row :gutter="5">
+                    <el-col :span="12">
+                        <el-form-item label="金融公司:" prop="financeCompany">
+                            <el-select v-model="form.financeCompany" placeholder="请选择金融公司" clearable>
+                                <el-option
+                                        v-for="(item, index) in financialCompanys" :key="index"
+                                        :label="item.value" :value="item.code"/>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="金融状态:" prop="financeStatus">
+                            <el-select v-model="form.financeStatus" placeholder="请选择金融状态" clearable>
+                                <el-option
+                                        v-for="(item, index) in financialStatus" :key="index"
+                                        :label="item.value" :value="item.code"/>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+
+                </el-row>
+
+                <el-row :gutter="5">
+                    <el-col :span="12">
+                        <el-form-item label="首付款(万元):" prop="downPayment">
+                            <el-input
+                                    oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)} value = value.replace(new RegExp(`^\\D*(\\d{9}(?:\\.\\d{0,2})?).*$`, 'g'), '$1')"
+                                    v-model="form.downPayment" placeholder="请输入首付款"/>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="贷款额度(万元):" prop="loanAmount">
+                            <el-input
+                                    oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)} value = value.replace(new RegExp(`^\\D*(\\d{9}(?:\\.\\d{0,2})?).*$`, 'g'), '$1')"
+                                    v-model="form.loanAmount" placeholder="请输入贷款额度"/>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+
+                <el-row :gutter="5">
+                    <el-col :span="12">
+                        <el-form-item label="贷款期限:" prop="loanTerm">
+                            <el-select v-model="form.loanTerm" placeholder="请选择贷款期限" clearable>
+                                <el-option
+                                        v-for="(item, index) in loanTerms" :key="index"
+                                        :label="item.value" :value="item.code"/>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="是否代办上牌:" prop="agencyRegistration">
+                            <el-select v-model="form.agencyRegistration" placeholder="请选择金融状态" clearable>
+                                <el-option label="是" value="1"></el-option>
+                                <el-option label="否" value="2"></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+
+                <el-row :gutter="5">
+                    <el-col :span="24">
+                        <el-form-item label="销售合同:" prop="contractUrl">
+                            <el-upload
+
+                                    action="#"
+                                    :limit="1"
+                                    :auto-upload="false"
+                                    :on-change="handleUploadCertificateChange"
+                                    :on-remove="handleRemove"
+                            >
+                                <el-button type="primary">点击上传订单合同</el-button>
+                                <template #tip>
+                                    <div class="el-upload__tip">
+                                        jpg/png 文件小于500KB.
+                                    </div>
+                                </template>
+                            </el-upload>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+
+                <el-row :gutter="5">
+                    <el-col :span="24">
+                        <el-form-item label="备注:" prop="remark">
+                            <el-input type="textarea" :rows="2" v-model="form.remark" placeholder="请输入备注信息"/>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </div>
+        </el-form>
+        <div class="dialog-footer">
+            <el-button type="primary" @click="submitForm">保 存</el-button>
+            <el-button @click="cancel">取 消</el-button>
+        </div>
+    </div>
+</div>
+
+<!-- Import Vue 3 -->
+<script src="../../statics/js/vue3/vue.global.js"></script>
+<!-- Import component library -->
+<script src="../../statics/js/element-plus/index.full.js"></script>
+<script src="../../statics/js/element-plus/icons-vue.js"></script>
+<script src="../../statics/plugins/jquery.min.js"></script>
+<script src="../../statics/common/layui/layui.js"></script>
+<script src="../../statics/js/common.js"></script>
+<script src="../../statics/js/element-plus/locale-cn.js"></script>
+<script>
+
+</script>
+<script src="../../statics/js/modules/stockManager/outcar.js?_${.now?long}"></script>
+</body>
+
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>账户管理</title>
+        <script type="text/javascript" src="/statics/common/include/head.js"></script>
+    </head>
+    <body class="ren-body">
+        <div id="rrapp" v-cloak>
+            <!--搜索条件-->
+            <div class="list-search-title-box">
+                <form class="layui-form" style="padding-right: 15px;">
+                    <section class="jxc-section" style="display: flex;align-items: flex-start;white-space: nowrap;margin-top: 15px">
+                        <div class="card layui-row" style="flex: 1">
+                            <div class="layui-form-item ">
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12"
+                                     style="margin-bottom: 5px !important">
+                                    <label class="layui-form-label">账号:</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" v-model="q.account" placeholder="请输入账号" class="layui-input searchVal"/>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12"
+                                     style="margin-bottom: 5px !important">
+                                    <label class="layui-form-label">所属平台:</label>
+                                    <div class="layui-input-inline">
+                                        <select name="platform" id="platform" v-model="q.platform" class="layui-select" lay-filter="q.platform">
+                                            <option value="">全部</option>
+                                            <option v-for="item in platformDict" :value="item.key">{{item.label}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12"
+                                     style="margin-bottom: 5px !important">
+                                    <label class="layui-form-label">状态:</label>
+                                    <div class="layui-input-inline">
+                                        <select name="enableFlag" id="enableFlag" v-model="q.enableFlag" class="layui-select" lay-filter="q.enableFlag">
+                                            <option value="">全部</option>
+                                            <option v-for="(value,key) in enableFlagDict" :value="key">{{value}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12"
+                                     style="margin-bottom: 5px !important">
+                                    <label class="layui-form-label">所属公司:</label>
+                                    <div class="layui-input-inline">
+                                        <select name="warningFlag" lay-filter="q.deptId" v-model="q.deptId">
+                                            <option value="">请选择</option>
+                                            <option v-for="(item,index) in purchasesupplierList" :value="item.purchaseSupplierId">{{item.supplierName}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex;align-items: center;">
+                            <a class="layui-btn search-btn" @click="query">查询</a>
+                            <a class="layui-btn reset-btn" @click="reset">重置</a>
+                        </div>
+                    </section>
+                </form>
+            </div>
+            <!--搜索区按钮-->
+            <div class="list-search-title-box">
+                <form class="layui-form">
+                    <div style="display:flex;margin-left: 20px;">
+                        <div class="layui-form-item layui-row">
+                            <div class="list-search-form-button">
+                                <a class="layui-btn search-btn" @click="add">新增</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <table class="layui-hide" id="grid" lay-filter="grid"></table>
+            <!-- 新增修改表单 -->
+            <form v-show="showForm" class="layui-form ren-form" id="editForm">
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span style="color:red;">*</span>账号:</label>
+                    <div class="layui-input-block">
+                        <input type="text" lay-verify="required" v-model="accountObj.account" maxlength="50"
+                               placeholder="请输入账号" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span style="color:red;">*</span>密码:</label>
+                    <div class="layui-input-block">
+                        <input type="password" lay-verify="required" v-model="accountObj.password" maxlength="50"
+                               placeholder="请输入密码" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span style="color:red;">*</span>所属平台:</label>
+                    <div class="layui-input-block">
+                        <select name="platform" v-model="accountObj.platform" class="layui-select" lay-filter="accountObj.platform">
+                            <option value="">全部</option>
+                            <option v-for="item in platformDict" :value="item.key">{{item.label}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label purchaseSupplier">
+                        账号所属公司:
+                    </label>
+                    <div class="layui-input-block">
+                        <select name="warningFlag" lay-filter="workOrderAccountDeptList" v-model="accountObj.purchaseSupplierId">
+                            <option value="">请选择</option>
+                            <option v-for="(item,index) in purchasesupplierList" :value="item.purchaseSupplierId">{{item.supplierName}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item" v-show="accountObj.platform == 1">
+                    <label class="layui-form-label"><span style="color:red;">*</span>地区:</label>
+                    <div class="layui-input-block">
+                        <select name="platform" v-model="accountObj.addrCode" class="layui-select" lay-filter="accountObj.addrCode">
+                            <option v-for="item in addrDict" :value="item.addrCode">{{item.addrName}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="saveOrUpdate" @click="saveOrUpdate">确定</button>
+                    </div>
+                </div>
+            </form>
+            <!-- 关联所属公司表单 -->
+            <form v-show="affiliatesEditForm" class="layui-form ren-form" id="affiliatesEditForm">
+                <div class="layui-form-item">
+                    <label class="layui-form-label purchaseSupplier">账号所属公司:</label>
+                    <div class="layui-input-block">
+                        <select name="warningFlag" lay-filter="workOrderAccountDeptList" v-model="accountObj.purchaseSupplierId">
+                            <option value="">全部</option>
+                            <option v-for="(item,index) in purchasesupplierList" :value="item.purchaseSupplierId">{{item.supplierName}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit @click="saveOrUpdate">确定</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!--操作-->
+        <script type="text/html" id="barTpl">
+            {{#if(d.enableFlag==0){}}
+            <a class="layui-grid-btn-xs" lay-event="enable" more-btn-index="{{d.LAY_INDEX-1}}">启用</a>
+            <a class="layui-grid-btn-xs" lay-event="edit" more-btn-index="{{d.LAY_INDEX-1}}">编辑</a>
+            <a class="layui-grid-btn-xs" lay-event="delete" more-btn-index="{{d.LAY_INDEX-1}}">删除</a>
+            {{#}else{}}
+            <a class="layui-grid-btn-xs" lay-event="disable" more-btn-index="{{d.LAY_INDEX-1}}">禁用</a>
+            {{#}}}
+<!--            <a class="layui-btn layui-btn-xs" lay-event="affiliates" more-btn-index="{{d.LAY_INDEX-1}}">关联公司</a>-->
+        </script>
+    </body>
+    <script src="/statics/js/modules/car/workOrderAccountList.js?_${.now?long}"></script>
+</html>

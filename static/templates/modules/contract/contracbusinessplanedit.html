@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>企业合同车型方案</title>
+<#include "/header.html">
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <!-- 新增表单 -->
+    <form class="layui-form ren-form" style="margin-bottom: 60px;">
+
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                企业合同车型方案基本信息
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                                                                                                                                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>企业合同id</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_contractId" v-model="contracbusinessPlan.contractId" autocomplete="off" placeholder="企业合同id" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>企业合同编号</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_contractNo" v-model="contracbusinessPlan.contractNo" autocomplete="off" placeholder="企业合同编号" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span></label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_brandId" v-model="contracbusinessPlan.brandId" autocomplete="off" placeholder="" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>所属品牌名称</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_brandName" v-model="contracbusinessPlan.brandName" autocomplete="off" placeholder="所属品牌名称" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span></label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_seriesId" v-model="contracbusinessPlan.seriesId" autocomplete="off" placeholder="" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>所属车系名称</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_seriesName" v-model="contracbusinessPlan.seriesName" autocomplete="off" placeholder="所属车系名称" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span></label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_modelId" v-model="contracbusinessPlan.modelId" autocomplete="off" placeholder="" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>所属车型名称</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_modelName" v-model="contracbusinessPlan.modelName" autocomplete="off" placeholder="所属车型名称" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>租赁类型：1、经租 2、以租代购 3、展示车 4、试驾车 5、融租 6、直购 7、挂靠</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_rentType" v-model="contracbusinessPlan.rentType" autocomplete="off" placeholder="租赁类型：1、经租 2、以租代购 3、展示车 4、试驾车 5、融租 6、直购 7、挂靠" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>租期</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_tenancy" v-model="contracbusinessPlan.tenancy" autocomplete="off" placeholder="租期" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>首付款</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_downPayment" v-model="contracbusinessPlan.downPayment" autocomplete="off" placeholder="首付款" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>尾款</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_balancePayment" v-model="contracbusinessPlan.balancePayment" autocomplete="off" placeholder="尾款" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>保证金</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_cashDeposit" v-model="contracbusinessPlan.cashDeposit" autocomplete="off" placeholder="保证金" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>整备费/元/台</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_servicingFee" v-model="contracbusinessPlan.servicingFee" autocomplete="off" placeholder="整备费/元/台" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>车辆总单价</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_totalPrice" v-model="contracbusinessPlan.totalPrice" autocomplete="off" placeholder="车辆总单价" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>月租金/挂靠费</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_monthlyRent" v-model="contracbusinessPlan.monthlyRent" autocomplete="off" placeholder="月租金/挂靠费" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>服务费</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_coverCharge" v-model="contracbusinessPlan.coverCharge" autocomplete="off" placeholder="服务费" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>免费用车天数（第一位：0否，1是；第二位：0租期后，1租期前）</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_hasFreeDays" v-model="contracbusinessPlan.hasFreeDays" autocomplete="off" placeholder="是否需要增加免费用车天数（第一位：0否，1是；第二位：0租期后，1租期前）" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>免费天数</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_freeDays" v-model="contracbusinessPlan.freeDays" autocomplete="off" placeholder="免费天数" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>本期租金生成方式（1、当月生成2、次月生成4、自定义首期租金）</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_rentGenerationMethod" v-model="contracbusinessPlan.rentGenerationMethod" autocomplete="off" placeholder="本期租金生成方式（1、当月生成2、次月生成4、自定义首期租金）" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>首期租金</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_firstRent" v-model="contracbusinessPlan.firstRent" autocomplete="off" placeholder="首期租金" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>签约数量</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_countSigned" v-model="contracbusinessPlan.countSigned" autocomplete="off" placeholder="签约数量" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>已交车数</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_countDelivered" v-model="contracbusinessPlan.countDelivered" autocomplete="off" placeholder="已交车数" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>未交车数</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_countUndelivered" v-model="contracbusinessPlan.countUndelivered" autocomplete="off" placeholder="未交车数" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>状态：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_status" v-model="contracbusinessPlan.status" autocomplete="off" placeholder="状态：" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>备注</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_remark" v-model="contracbusinessPlan.remark" autocomplete="off" placeholder="备注" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>创建时间</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_timeCreate" v-model="contracbusinessPlan.timeCreate" autocomplete="off" placeholder="创建时间" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>更新时间</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_timeUpdate" v-model="contracbusinessPlan.timeUpdate" autocomplete="off" placeholder="更新时间" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>删除状态（0未删除，1已删除）</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_delect" v-model="contracbusinessPlan.delect" autocomplete="off" placeholder="删除状态（0未删除，1已删除）" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>租户id</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_tenantId" v-model="contracbusinessPlan.tenantId" autocomplete="off" placeholder="租户id" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                        </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="float-btn-group bottom-bar">
+            <a class="layui-btn reset-btn" id="closePage">取消</a>
+            <a class="layui-btn search-btn" lay-submit lay-filter="save" id="save">保存</a>
+        </div>
+    </form>
+
+
+</div>
+
+
+<script src="${request.contextPath}/statics/js/modules/contract/contracbusinessplanedit.js?_${.now?long}"></script>
+</body>
+</html>

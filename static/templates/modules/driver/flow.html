@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>司机流水统计报表</title>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="Author" content="larry" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+    <script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+    <script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/common.js"></script>
+    <script type="text/javascript" src="../../statics/js/upload.js"></script>
+    <script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+    <link rel="stylesheet" href="../../statics/new_css/jxcPublicAll.css" media="all">
+    <link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../statics/common/step/steps.css">
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/viewer.min.css">
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+    <script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+    <script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+    <script src="../../statics/common/layui/autocomplete.js"></script>
+    <script src="../../statics/js/modules/viewer/viewer.min.js"></script>
+    <script src="../../statics/common/print-js/print.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+    <script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/searchview.js"></script>
+    <script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+    <!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+    <!-- 引入组件库 -->
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/common-tabs.css">
+
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    /*.list-header-card .active {*/
+    /*    background: #3FACB3;*/
+    /*}*/
+
+    /*.list-header-card .active {*/
+    /*    height: 70px !important;*/
+
+    /*}*/
+
+    /*.flex {*/
+    /*    height: 70px !important;*/
+    /*    border: 1px solid #BED7DE;*/
+    /*}*/
+
+    /*.list-header-card-text {*/
+    /*    font-size: 12px;*/
+    /*    margin: 0 0 6px 0;*/
+    /*    color: #333;*/
+    /*}*/
+
+    /*.list-header-card-number {*/
+    /*    font-size: 18px;*/
+    /*    font-weight: 400;*/
+    /*    color: #333;*/
+    /*    margin: 0;*/
+    /*}*/
+
+    /*.active .list-header-card-text,*/
+    /*.active .list-header-card-number {*/
+    /*    color: #fff;*/
+    /*}*/
+
+    /*.list-header-content-box,*/
+    /*.list-search-title-box {*/
+    /*    padding: 0;*/
+    /*}*/
+
+    .layui-form-label {
+        min-width: 110px !important;
+    }
+     .list-header-card > div{
+        margin-right: 16px;
+    }
+
+    .layui-tab-title{
+        left: 10px;
+    }
+    .layui-tab-content{
+        padding-top: 0;
+    }
+
+</style>
+
+
+</head>
+
+<body class="ren-body">
+    <div id="rrapp" v-cloak>
+
+        <div class="list-header-content-box" v-show="tabIndex===0">
+            <div class="list-header-card display">
+
+
+                <div :id=`field${index}`
+                     v-for="(item, index) in tableConditionlist" :key="index"
+                     class="flex" :class="item.select ? 'active' : ''" @click="changeStatus(index)"
+                    style="cursor:pointer;">
+                    <div class="list-header-card-title">{{item.label}}</div>
+                    <div class="list-header-card-count">{{item.number}}</div>
+                </div>
+
+
+<!--                <div id="field1" class="flex" :class="q.tableType === 1 ? 'active' : ''" @click="changeStatus(1)"-->
+<!--                    style="cursor:pointer;">-->
+<!--                    <div class="list-header-card-title">流水未达标</div>-->
+<!--                    <div class="list-header-card-count">{{count1}}</div>-->
+<!--                </div>-->
+<!--                <div id="field2" class="flex" :class="q.tableType === 2 ? 'active' : ''" @click="changeStatus(2)"-->
+<!--                    style="cursor:pointer;">-->
+<!--                    <div class="list-header-card-title">无流水</div>-->
+<!--                    <div class="list-header-card-count">{{count2}}</div>-->
+<!--                </div>-->
+<!--                <div id="field3" class="flex" :class="q.tableType === 3 ? 'active' : ''" @click="changeStatus(3)"-->
+<!--                    style="cursor:pointer;">-->
+<!--                    <div class="list-header-card-title">近2天无流水</div>-->
+<!--                    <div class="list-header-card-count">{{count3}}</div>-->
+<!--                </div>-->
+<!--                <div id="field4" class="flex" :class="q.tableType === 4 ? 'active' : ''" @click="changeStatus(4)"-->
+<!--                    style="cursor:pointer;">-->
+<!--                    <div class="list-header-card-title">近3天无流水</div>-->
+<!--                    <div class="list-header-card-count">{{count4}}</div>-->
+<!--                </div>-->
+<!--                <div id="field5" class="flex" :class="q.tableType === 4 ? 'active' : ''" @click="changeStatus(4)"-->
+<!--                    style="cursor:pointer;">-->
+<!--                    <div class="list-header-card-title">近5天无流水</div>-->
+<!--                    <div class="list-header-card-count">{{count4}}</div>-->
+<!--                </div>-->
+<!--                <div id="field0" class="flex" :class="q.tableType === 0 ? 'active' : ''" @click="changeStatus(0)"-->
+<!--                    style="cursor:pointer;">-->
+<!--                    <div class="list-header-card-title">全部数据</div>-->
+<!--                    <div class="list-header-card-count">{{count0}}</div>-->
+<!--                </div>-->
+
+
+            </div>
+        </div>
+        <div class="mvvm-table">
+            <div class="list-search-title-box">
+                <form class="layui-form" style="box-shadow: 0 0 20px #eee;padding-right: 15px;">
+                    <section class="jxc-section" style="display: flex;align-items: flex-start;white-space: nowrap;">
+                        <div class="card layui-row" style="flex: 1">
+                            <div class="layui-form-item ">
+
+                                <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">司机姓名</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal" v-model="q.driverName"
+                                               placeholder="请输入司机姓名" />
+                                    </div>
+
+<!--                                    <div class="layui-input-inline">-->
+<!--                                        <select lay-filter="driverName" v-model="q.driverName">-->
+<!--                                            <option value="">请选择司机名称</option>-->
+<!--                                            <option v-for="(item, index) in driverList" :key="index" :value="item">{{item}}</option>-->
+<!--                                        </select>-->
+<!--                                    </div>-->
+                                </div>
+
+                                <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">联系电话</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal" v-model="q.contactNumber"
+                                            placeholder="请输入电话" />
+                                    </div>
+                                </div>
+
+                                <section v-show="isFilter">
+
+                                    <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs12">
+                                        <label class="layui-form-label">车牌号</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" class="layui-input searchVal" v-model="q.carNo"
+                                                   placeholder="请输入" />
+                                        </div>
+                                    </div>
+
+                                    <div v-show="tabIndex===0" class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs12">
+                                        <label class="layui-form-label">品牌/车系/车型:</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" id="carBrandSeriesModel" class="layui-input"
+                                                   placeholder="请选择" readonly="readonly" />
+                                        </div>
+                                    </div>
+
+                                    <div v-show="tabIndex===1" class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs12">
+                                        <label class="layui-form-label">平台</label>
+                                        <div class="layui-input-inline">
+                                            <select lay-filter="platformName" v-model="q.platformName">
+                                                <option value="">请选择平台</option>
+                                                <option v-for="(item, index) in platformList" :key="index" :value="item">{{item}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs12">
+                                        <label class="layui-form-label">结算时间</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" class="layui-input" id="settlementDate"
+                                                   v-model="q.settlementDate" readonly placeholder="选择结算日期范围"
+                                                   autocomplete="off">
+                                        </div>
+                                    </div>
+
+                                    <div v-show="false" class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs12">
+                                        <label class="layui-form-label">入职日期</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" class="layui-input" id="joinTime"
+                                                   v-model="q.joinTime" readonly placeholder="合同入职日期范围"
+                                                   autocomplete="off">
+                                        </div>
+                                    </div>
+
+                                    <div v-show="tabIndex===1" class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs12">
+                                        <label class="layui-form-label">导入时间</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" class="layui-input" id="importTime"
+                                                   v-model="q.importTime" readonly placeholder="导入日期范围"
+                                                   autocomplete="off">
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs12">
+                                        <label class="layui-form-label">业务负责人</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" class="layui-input searchVal" v-model="q.businessLeader"
+                                                   placeholder="请输入业务负责人" />
+                                        </div>
+<!--                                        <div class="layui-input-inline">-->
+<!--                                            <select lay-filter="driverName" v-model="q.businessLeader">-->
+<!--                                                <option value="">请选择司机的对应司管</option>-->
+<!--                                                <option v-for="(item, index) in businessLeaderList" :key="index" :value="item">{{item}}</option>-->
+<!--                                            </select>-->
+<!--                                        </div>-->
+                                    </div>
+
+                                </section>
+                                <div :class="isFilter?'layui-col-md-offset8 layui-col-md4':'layui-col-md4'"
+                                    class="layui-inline layui-col-sm12 layui-col-xs12 flex-end">
+                                    <label class="layui-form-label"> </label>
+                                    <div class="df-color" style="display: flex;align-items: center;">
+                                        <a class="layui-btn search-btn" @click="query" id="query">查询</a>
+                                        <a class="layui-btn reset-btn" @click="reset">重置</a>
+                                        <!--查询重置按钮-->
+                                        <div @click="bindFilter" style="margin-left: 10px;cursor: pointer;user-select: none;">
+                                            <span>高级筛选</span>
+                                            <img src="../../../statics/images/gjsx2x.png" style="width:14px">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                  
+                    </section>
+                </form>
+            </div>
+            <div class="list-search-title-box">
+                <form class="layui-form">
+                    <div style="display:flex;width: 100%;">
+                        <div class="layui-form-item layui-row" style="width: 100%;">
+                            <div class="list-search-form-button" style="width: 100%;">
+                                <a v-m-perm="['report:driverflow:add']" v-if="tabIndex===1" class="layui-btn btn-primary" id="add" @click="add">新增流水</a>
+                                <a v-m-perm="['report:driverflow:import']" v-if="tabIndex===1" class="layui-btn btn-info" id="importData" @click="importData">导入流水明细</a>
+                                <a v-m-perm="['report:driverflow:export']" class="layui-btn btn-warning" @click="exports">导出</a>
+                                <a v-m-perm="['report:driverflow:update']" v-if="tabIndex===1" class="layui-btn btn-success" id="updateData" @click="updateData">修改数据</a>
+                                <a v-m-perm="['report:driverflow:delet']" v-if="tabIndex===1" class="layui-btn btn-danger" id="deleteData" @click="deleteData">批量删除</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="layui-tab">
+                <ul class="layui-tab-title">
+                    <li class="layui-this" id="tab0">司机流水报表统计</li>
+                    <li id="tab1">流水导入明细</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <table class="layui-hide" id="grid" lay-filter="grid"></table>
+
+                        <div v-show="showtable">
+                            <table class="layui-hide" id="grid3" lay-filter="grid3"></table>
+                        </div>
+
+                    </div>
+                    <div class="layui-tab-item">
+                        <table class="layui-hide" id="grid2" lay-filter="grid2"></table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+
+    </div>
+
+    <!--操作-->
+<!--    <script type="text/html" id="barTpl">-->
+<!--        <div style="min-width: 100px;">-->
+<!--    <a class="layui-grid-btn-xs" lay-event="detail" v-m-perm="['financial:receivables:update']" more-btn-index="{{d.LAY_INDEX-1}}">详情</a>-->
+<!--    {{#if(d.orderStatus == 0){}}-->
+<!--    {{#if(d.status == 1 || d.status == 3 || d.status == 9){}}-->
+<!--    <a class="layui-grid-btn-xs" lay-event="collectionsk" v-m-perm="['financial:receivables:update']" more-btn-index="{{d.LAY_INDEX-1}}">收款</a>-->
+<!--    {{# }}}-->
+<!--    {{# }}}-->
+
+<!--    {{#if(d.orderStatus == 0){}}-->
+<!--    {{#if(d.status == 1 || d.status == 2){}}-->
+<!--    <a class="layui-grid-btn-xs" lay-event="receivabledit" v-m-perm="['financial:receivables:update']" more-btn-index="{{d.LAY_INDEX-1}}">编辑</a>-->
+<!--    {{# }}}-->
+<!--    {{# }}}-->
+
+<!--    {{#if(d.repaymentMethod == 3 && (d.status == 1 || d.status == 8 || d.status == 9) && d.orderStatus==0){}}-->
+<!--    <a class="layui-grid-btn-xs" lay-event="applyWithHold" v-m-perm="['financial:receivables:update']" more-btn-index="{{d.LAY_INDEX-1}}">发起代扣</a>-->
+<!--    {{# }}}-->
+
+<!--    {{#if(d.status == 3 && d.orderStatus==0){}}-->
+<!--    <a class="layui-grid-btn-xs" lay-event="delChasingBz" v-m-perm="['financial:receivables:update']" more-btn-index="{{d.LAY_INDEX-1}}">备注</a>-->
+<!--    {{# }}}-->
+<!--    {{#if(d.status == 4 && d.orderStatus==0){}}-->
+<!--    <a class="layui-grid-btn-xs" lay-event="delBadBz" v-m-perm="['financial:receivables:update']" more-btn-index="{{d.LAY_INDEX-1}}">备注</a>-->
+<!--    {{# }}}-->
+<!--        </div>-->
+<!--</script>-->
+
+    <script type="text/html" id="checkbd0">
+        <input type="checkbox" name="siam_one" title="" lay-filter='siam_one' lay-skin="primary" data-contractId = "{{ d.receivablesNo }}" data-id = "{{ d.receivablesId }}">
+    {{#  if(d.status ==2 || d.status ==4 || d.status ==5){ }}
+    <input type="checkbox" name="siam_one" title="" lay-filter='siam_one' lay-skin="primary" data-contractId = "{{ d.receivablesNo }}" data-id = "{{ d.receivablesId }}" disabled>
+    {{#  } }}
+    {{#  if(d.status ==1 || d.status ==3){ }}
+    {{#if(d.orderStatus == 0){}}
+    <input type="checkbox" name="siam_one" title="" lay-filter='siam_one' lay-skin="primary" data-contractId = "{{ d.receivablesNo }}" data-id = "{{ d.receivablesId }}" {{ d.LAY_CHECKED == 1 ? 'checked' : '' }}>
+    {{#} else { }}
+    <input type="checkbox" name="siam_one" title="" lay-filter='siam_one' lay-skin="primary" data-contractId = "{{ d.receivablesNo }}" data-id = "{{ d.receivablesId }}" disabled>
+    {{# }}}
+    {{#  } }}
+</script>
+
+    <script type="text/html" id="checkbd">
+        <input type="checkbox" name="siam_one" title="" lay-filter='siam_one' lay-skin="primary" data-contractId = "{{ d.receivablesNo }}" data-id = "{{ d.receivablesId }}">
+</script>
+
+    <script src="../../statics/js/modules/driver/flow.js?_${.now?long}"></script>
+</body>
+
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>车辆违章工单</title>
+        <script type="text/javascript" src="/statics/common/include/head.js"></script>
+
+        <style>
+            .layui-form-item{
+                padding: 20px;
+            }
+
+            .layui-form-label{
+                text-align: left;
+            }
+
+        </style>
+    </head>
+    <body class="ren-body">
+        <div id="rrapp" v-cloak>
+            <!--搜索条件-->
+            <div class="list-search-title-box">
+                <form class="layui-form" style="box-shadow: 0 0 20px #eee;padding-right: 15px;">
+                    <section class="jxc-section" style="display: flex;align-items: flex-start;white-space: nowrap;">
+                        <div class="card layui-row" style="flex: 1">
+                            <div class="layui-form-item ">
+                                <div class="layui-inline layui-col-md7 layui-col-sm17 layui-col-xs7"
+                                     style="margin-bottom: 5px !important">
+                                    <label class="layui-form-label">账户余额：</label>
+                                    <div class="layui-input-inline">
+                                        <label class="layui-form-label" style="font-weight:bold;font-size: 20px;margin-left: -15px">{{balance}}元</label>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12"
+                                     style="margin-bottom: 5px !important">
+                                    <label class="layui-form-label">开始时间：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal" readonly
+                                               id="startCommitTime"
+                                               placeholder="请选择日期"
+                                               v-model="q.startCommitTime"/>
+                                    </div>
+                                    <label class="layui-form-label">结束时间：</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal" readonly
+                                               id="endCommitTime"
+                                               placeholder="请选择日期"
+                                               v-model="q.endCommitTime"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex;align-items: center;margin-top:52px">
+                            <a class="layui-btn search-btn" @click="query">查询</a>
+                            <a class="layui-btn reset-btn" type="reset" @click="reset">重置</a>
+                        </div>
+                    </section>
+                </form>
+            </div>
+            <!--搜索区按钮-->
+            <div class="layui-tab layui-tab-brief" lay-filter="workOrderTab">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">工单/消费记录</li>
+                    <li>充值记录</li>
+                </ul>
+                <div class="layui-tab-content" style="height: 100px;">
+                    <div class="layui-tab-item layui-show">
+                        <table class="layui-hide" id="grid" lay-filter="grid"></table>
+                    </div>
+                    <div class="layui-tab-item">
+                        <table class="layui-hide" id="rechargeGrid" lay-filter="rechargeGrid"></table>
+                    </div>
+                </div>
+            </div>
+            <!-- 违章查询提交 -->
+            <form v-show="showForm" class="layui-form ren-form" id="editForm">
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span style="color:red;">*</span>查询平台:</label>
+                    <div class="layui-input-block">
+                        <input type="radio" lay-filter="platform" name="platform"
+                               v-for="item in platformDict" :value="item.key"
+                               v-model="commitWorkOrder.platform"
+                               lay-skin="primary" :title="item.label"/>
+                    </div>
+                </div>
+                <!--只有12123才有全部/部分选择-->
+                <div class="layui-form-item" v-show="commitWorkOrder.platform=='1'">
+                    <label class="layui-form-label"><span style="color:red;">*</span>查询车辆:</label>
+                    <div class="layui-input-block">
+                        <input type="radio" lay-filter="queryMode" name="queryMode"
+                               v-for="(value,key) in queryModeDictMap" :value="key"
+                               v-model="commitWorkOrder.queryMode"
+                               lay-skin="primary" :title="value"/>
+                    </div>
+                </div>
+                <!--部分查询 && 查询平台==12123-->
+                <div class="layui-form-item" v-show="commitWorkOrder.queryMode=='1' && commitWorkOrder.platform=='1'">
+                    <label class="layui-form-label"><span style="color:red;">*</span>所属公司:</label>
+                    <div class="layui-input-block">
+                        <div id="purchaseSupplierId2"></div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit @click="commitWorkOrderEvent">确定</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!--操作-->
+        <script type="text/html" id="barTpl">
+            <a class="layui-grid-btn-xs" lay-event="detail">查看</a>
+        </script>
+    </body>
+    <script src="/statics/js/modules/car/workOrderList.js?_${.now?long}"></script>
+</html>

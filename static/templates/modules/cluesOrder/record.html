@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../statics/newImages/logo/logo@2x.png">
+    <title>订单详情</title>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/global.css" media="all">-->
+
+    <!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/fonts/larry-icon.css" media="all">-->
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+    <!-- 放开后表格无法拖动   <link rel="stylesheet" type="text/css" href="../../statics/new_css/larryms.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/new_css/normalize.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <!-- Import style -->
+    <link rel="stylesheet" href="../../statics/js/element-plus/index.css" />
+    <!-- 页面样式 -->
+    <link rel="stylesheet" href="../../statics/new_css/mf-layout.css" />
+
+</head>
+<style>
+    .el-input {
+        width: 300px;
+    }
+
+    .detail-content{
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .el-textarea__inner{
+        width: 600px;
+    }
+
+</style>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <div class="list-header-content-box">
+
+        <div style="margin: 20px 50px 0 50px">
+
+            <div class="add-title-wrap">线索生成</div>
+
+            <el-descriptions title="">
+                <el-descriptions-item label="线索录入时间:">{{carOrderRecordInfo.cluesCreateTime}}</el-descriptions-item>
+                <el-descriptions-item label="线索来源:">{{getCluesSourceValue(carOrderRecordInfo.cluesSource)}}</el-descriptions-item>
+                <el-descriptions-item label="录入人:">{{carOrderRecordInfo.operatorName}}</el-descriptions-item>
+            </el-descriptions>
+
+            <div class="add-title-wrap">线索跟进</div>
+
+            <el-descriptions title="">
+                <el-descriptions-item label="领取时间:">{{carOrderRecordInfo?.orderCluesFollowVo?.receiveTime}}</el-descriptions-item>
+                <el-descriptions-item label="领取人:" :span="2">{{carOrderRecordInfo?.orderCluesFollowVo?.receive}}</el-descriptions-item>
+            </el-descriptions>
+
+
+            <block v-for="(item, index) in carOrderRecordInfo?.orderCluesFollowVo?.crmCluesDealEntityList" :key="index">
+                <el-card shadow="always"  style="margin-top: 20px">
+                <div style="font-weight: 500">第{{index+1}}次跟进记录</div>
+                <el-descriptions  border style="margin-top: 10px" column="2">
+                    <el-descriptions-item label="跟进人:">
+                        <el-tag size="small">{{item.dealProcessor}}</el-tag>
+                    </el-descriptions-item>
+                    <el-descriptions-item label="跟进方式:">{{item.followType ==1?'电话':'微信'}}</el-descriptions-item>
+                    <el-descriptions-item label="联系账号:">{{item.contactAccount}}</el-descriptions-item>
+                    <el-descriptions-item label="意向车型:">{{item.brandName}}/{{item.seriesName}}/{{item.modelName}}</el-descriptions-item>
+                    <el-descriptions-item label="是否到店:">{{1==item.toStoreStatus?'是':2==item.toStoreStatus?'否':'--'}}</el-descriptions-item>
+                    <el-descriptions-item label="到店日期:">{{item.toStoreDate||'--'}}</el-descriptions-item>
+<!--                    <el-descriptions-item label="意向度:">-->
+<!--                        {{getIntentionLevelValue(item.intentionLevel)}}-->
+<!--                    </el-descriptions-item>-->
+<!--                    <el-descriptions-item label="审批状态:">{{item.approvalStatus == 1?'已通过':'未通过'}}</el-descriptions-item>-->
+<!--                    <el-descriptions-item label="是否需要上牌:">{{item.registrationStatus==1?'是':'否'}}</el-descriptions-item>-->
+<!--                    <el-descriptions-item label="跟进记录:" :span="3">{{item.dealRecord}}</el-descriptions-item>-->
+<!--                    <el-descriptions-item label="下一步措施:">{{getNextMeasureValue(item.nextMeasure)}}</el-descriptions-item>-->
+                </el-descriptions>
+                <div style="margin-top: 10px">金融需求</div>
+                <el-descriptions  border style="margin-top: 10px" column="2">
+                    <el-descriptions-item label="审批状态:">{{item.approvalStatus == 1?'已通过':'未通过'}}</el-descriptions-item>
+                    <el-descriptions-item label="是否需要上牌:">{{item.registrationStatus==1?'是':'否'}}</el-descriptions-item>
+                    <el-descriptions-item label="跟进记录:" :span="3">{{item.dealRecord}}</el-descriptions-item>
+                    <el-descriptions-item label="下一步措施:" >{{getNextMeasureValue(item.nextMeasure)}}</el-descriptions-item>
+                    <el-descriptions-item label="下一次跟进日期:" >{{item.nextDealDate||'--'}}</el-descriptions-item>
+                </el-descriptions>
+                </el-card>
+            </block>
+
+
+
+            <div class="add-title-wrap">订单生成</div>
+
+            <el-descriptions title="">
+                <el-descriptions-item label="成交日期:">{{carOrderRecordInfo.transactionDate}}</el-descriptions-item>
+                <el-descriptions-item label="成交金额:">{{carOrderRecordInfo.transactionAmount}}</el-descriptions-item>
+            </el-descriptions>
+
+
+<!--            <div class="dialog-footer">-->
+<!--                <el-button type="primary" @click="submitForm">同 意</el-button>-->
+<!--                <el-button @click="cancel">拒 绝</el-button>-->
+<!--            </div>-->
+
+        </div>
+    </div>
+</div>
+
+<!-- Import Vue 3 -->
+<script src="../../statics/js/vue3/vue.global.js"></script>
+<!-- Import component library -->
+<script src="../../statics/js/element-plus/index.full.js"></script>
+<script src="../../statics/js/element-plus/icons-vue.js"></script>
+<script src="../../statics/plugins/jquery.min.js"></script>
+<script src="../../statics/common/layui/layui.js"></script>
+<script src="../../statics/js/common.js"></script>
+<script src="../../statics/js/element-plus/locale-cn.js"></script>
+<script>
+
+</script>
+<script src="../../statics/js/modules/cluesOrder/record.js?_${.now?long}"></script>
+</body>
+
+</html>

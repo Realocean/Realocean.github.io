@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<#include "/header.html">
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <!-- 新增表单 -->
+    <form class="layui-form ren-form" style="margin-bottom: 60px;">
+
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                基本信息
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                                                                                                                                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>应收单id</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_receivableId" v-model="receivableRecheck.receivableId" autocomplete="off" placeholder="应收单id" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>应收单号</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_receivableNo" v-model="receivableRecheck.receivableNo" autocomplete="off" placeholder="应收单号" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>备注</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_remark" v-model="receivableRecheck.remark" autocomplete="off" placeholder="备注" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>提交人id</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_operationId" v-model="receivableRecheck.operationId" autocomplete="off" placeholder="提交人id" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>提交人姓名</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_operationName" v-model="receivableRecheck.operationName" autocomplete="off" placeholder="提交人姓名" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>创建时间</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_timeCreate" v-model="receivableRecheck.timeCreate" autocomplete="off" placeholder="创建时间" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>更新时间</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_timeUpdate" v-model="receivableRecheck.timeUpdate" autocomplete="off" placeholder="更新时间" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>删除状态（0未删除，1已删除）</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_delect" v-model="receivableRecheck.delect" autocomplete="off" placeholder="删除状态（0未删除，1已删除）" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                    <label class="layui-form-label"><span style="color:red">*</span>租户id</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" lay-verify="validate_tenantId" v-model="receivableRecheck.tenantId" autocomplete="off" placeholder="租户id" class="layui-input searchVal">
+                                    </div>
+                                </div>
+                                                                        </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="float-btn-group bottom-bar">
+            <a class="layui-btn reset-btn" id="closePage">取消</a>
+            <a class="layui-btn search-btn" lay-submit lay-filter="save" id="save">保存</a>
+        </div>
+    </form>
+
+
+</div>
+
+
+<script src="${request.contextPath}/statics/js/modules/financial/receivablerecheckedit.js?_${.now?long}"></script>
+</body>
+</html>

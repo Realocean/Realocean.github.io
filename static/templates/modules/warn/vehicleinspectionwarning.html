@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>车辆年检预警</title>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="Author" content="larry" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+    <script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+    <script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/common.js"></script>
+    <script type="text/javascript" src="../../statics/js/upload.js"></script>
+    <script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+    <link rel="stylesheet" href="../../statics/new_css/jxcPublicAll.css"  media="all">
+    <link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../statics/common/step/steps.css">
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/viewer.min.css">
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+    <script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+    <script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+    <script src="../../statics/common/layui/autocomplete.js"></script>
+    <script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+    <script src="../../statics/common/print-js/print.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+    <script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/searchview.js"></script>
+    <script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+
+    <!-- 引入组件库 -->
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+    <style>
+        .laytable-cell-1-0-0{
+            width:40px !important;
+        }
+    </style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <div class="list-header-content-box">
+        <div class="list-header-card">
+            <div id="field5" class="flex no_active"  @click="changeStatus(5)">
+                <div class="list-header-card-text">
+                    <span class="title">全部</span>
+                </div>
+                <div class="list-header-card-number">{{total.field5}}</div>
+            </div>
+            <div id="field1" class="flex no_active"  @click="changeStatus(1)">
+                <div class="list-header-card-text">
+                    <span class="title">超过{{dateConfig1}}天未年检</span>
+                </div>
+                <div class="list-header-card-number">{{total.field1}}</div>
+            </div>
+            <div id="field2" class="flex no_active"  @click="changeStatus(2)">
+                <div class="list-header-card-text">
+                    <span class="title">超过{{dateConfig2}}天未年检</span>
+                </div>
+                <div class="list-header-card-number">{{total.field2}}</div>
+            </div>
+            <div id="field3" class="flex no_active"  @click="changeStatus(3)">
+                <div class="list-header-card-text">
+                    <span class="title">{{dateConfig3}}天以内待年检</span>
+                </div>
+                <div class="list-header-card-number">{{total.field3}}</div>
+            </div>
+            <div id="field4" class="flex no_active"  @click="changeStatus(4)">
+                <div class="list-header-card-text">
+                    <span class="title">未年检</span>
+                </div>
+                <div class="list-header-card-number">{{total.field4}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="mvvm-table">
+        <div class="list-search-title-box">
+            <form class="layui-form" style="box-shadow: 0 0 20px #eee;padding-right: 15px;">
+                <section class="jxc-section" style="display: flex;align-items: flex-start;white-space: nowrap;">
+                    <div class="card layui-row" style="flex: 1">
+                        <div class="layui-form-item">
+                            <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                <label class="layui-form-label">车牌号/车架号</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input searchVal"
+                                           v-model="q.carPlateNo"
+                                           placeholder="请输入车牌号/车架号"/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                <label class="layui-form-label">车辆归属</label>
+                                <div class="layui-input-inline">
+                                    <input v-model="q.deptName" type="text"   style="cursor:pointer;"   @click="deptTree" readonly="readonly"
+                                           class="layui-input searchVal"
+                                           placeholder="请选择车辆归属" />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                <label class="layui-form-label">品牌/车系/车型</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" id="carBrandSeriesModel" class="layui-input"
+                                           placeholder="请选择品牌/车系/车型" readonly="readonly"/>
+                                </div>
+                            </div>
+
+                            <section v-show="isFilter">
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">车辆状态</label>
+                                    <div class="layui-input-inline">
+                                        <!-- 车辆状态(当前状态 1整备中，2备发车，3 预定中  4.用车中 5.已过户)-->
+                                        <select v-model="q.carStatus" class="layui-select" lay-filter="carStatusSelect">
+                                            <option value="">请选择车辆状态</option>
+                                            <option value="1">整备中</option>
+                                            <option value="2">备发车</option>
+                                            <option value="3">预定中</option>
+                                            <option value="4">用车中</option>
+                                            <!-- <option value="5">已过户</option>
+                                                <option value="6">已处置</option>
+                                                <option value="7">已出售</option>-->
+                                        </select>
+                                    </div>
+                                </div>
+                                <!--<div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">订单编号</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal"
+                                            v-model="q.carOrderNo"
+                                            placeholder="请输入订单编号"/>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">客户名称</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal"
+                                            v-model="q.customerName"
+                                            placeholder="请输入客户名称"/>
+                                    </div>
+                                </div>-->
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">车辆所属仓库</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal" v-model="q.depotName"
+                                               @click="chooseWarehouse"   placeholder="请选择车辆所属仓库"/>
+                                        <input type="hidden" class="layui-input searchVal" v-model="q.depotId" />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">车辆所有人</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input searchVal" v-model="q.carOwner"
+                                               placeholder="请输入车辆所有人"/>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">年检逾期</label>
+                                    <div class="layui-input-inline">
+                                        <select v-model="q.inspectionOverdueType" class="layui-select" lay-filter="inspectionOverdueType">
+                                            <option value="">请选择逾期天数</option>
+                                            <option value="1">15天内逾期</option>
+                                            <option value="2">30天内逾期</option>
+                                            <option value="3">90天以上逾期</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md3 layui-col-sm6 layui-col-xs12">
+                                    <label class="layui-form-label">待年检时间</label>
+                                    <div class="layui-input-inline">
+                                        <select v-model="q.waitingInspectionType" class="layui-select" lay-filter="waitingInspectionType">
+                                            <option value="">请选择待年检时间</option>
+                                            <option value="1">15天内待年检</option>
+                                            <option value="2">30天内待年检</option>
+                                            <option value="3">90天内待年检</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class=" flex-box layui-inline layui-col-md9 layui-col-sm12 layui-col-xs12">
+                                    <label class="layui-form-label">年检到期时间</label>
+                                    <div class="list-search-sup-title new-layui-title">
+                                        <div class="task-content-box-tab">
+                                            <div class="display task-content-box-tab layui-col-md8 layui-col-sm8 layui-col-xs12" type="nextInspectionTimeType">
+                                                <div value="0"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">昨天</div>
+                                                <div value="1"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">今日</div>
+                                                <div value="2"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">上周</div>
+                                                <div value="3"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">本周</div>
+                                                <div value="4"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">上月</div>
+                                                <div value="5"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">本月</div>
+                                                <div value="6"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">本季</div>
+                                                <div value="7"  class="layui-col-md2 layui-col-sm2 layui-col-xs2">本年</div>
+                                            </div>
+                                            <div class="layui-col-md4 layui-col-sm4 layui-col-xs12">
+                                                <input type="text" class="layui-input"
+                                                       id="nextInspectionTimeDate" v-model="q.nextInspectionTimeStr" readonly
+                                                       placeholder="选择日期范围" style="width: 300px;" autocomplete="off">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <div class="layui-inline  layui-col-md3 layui-col-sm12 layui-col-xs12 flex-end">
+                                <label class="layui-form-label"> </label>
+                                <div class="df-color" style="display: flex;align-items: center;">
+                                    <a class="layui-btn search-btn" @click="query">查询</a>
+                                    <a class="layui-btn reset-btn" @click="reset">重置</a>
+                                    <div @click="bindFilter" style="margin-left: 10px;cursor: pointer;user-select: none;">
+                                        <span>高级筛选</span>
+                                        <i class="icon layui-icon-extend layui-extend-shaixuan"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </form>
+        </div>
+        <div class="list-search-title-box ground-search-btn">
+            <form class="layui-form">
+                <div style="display:flex;width: 100%;">
+                    <div class="layui-form-item layui-row" style="width: 100%;">
+                        <div class="list-search-form-button" style="width: 100%;">
+                            <a class="layui-btn btn-info" @click="batchNotice" >批量通知</a>
+                            <a class="layui-btn btn-warning" @click="exports">导出</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <table class="layui-hide" id="grid" lay-filter="grid"></table>
+    </div>
+    <!-- 表单 -->
+    <!--<form v-show="showForm" class="layui-form ren-form" id="editForm">
+        <div class="form-content-box" v-show="carNoAndVinNoDiv">
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">选择车牌号:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="inspectionManage.carNo"  lay-verify="carNoVerify" id="carNo"   @click="selectCarNo" type="text" class="layui-input searchVal"  placeholder="请选择车牌号" readonly/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车架号:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="inspectionManage.vinNo" lay-verify="vinNoVerify" id="vinNo" @click="selectVinNo"  type="text" class="layui-input searchVal"  placeholder="请选择车架号" readonly/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                基础信息
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="carNoDiv">
+                            <label class="layui-form-label">车辆号:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="选择车牌号自动获取"
+                                        v-model="inspectionManage.carNo"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车辆品牌/车型:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="选择车牌号自动获取"
+                                        v-model="inspectionManage.brandAndCarModel"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车架号:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="选择车牌号自动获取"
+                                        v-model="inspectionManage.vinNo"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">客户名称:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="选择车牌号自动获取"
+                                        v-model="inspectionManage.carOrderDto.customerName"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车辆状态:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="选择车牌号自动获取"
+                                        v-model="inspectionManage.vehicleStatusShow"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车辆订单号:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="选择车牌号自动获取"
+                                        v-model="inspectionManage.carOrderDto.orderCarCode"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车辆所属公司:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="选择车牌号自动获取"
+                                        v-model="inspectionManage.company"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">租赁开始时间:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="选择车牌号自动获取"
+                                        v-model="inspectionManage.carOrderDto.timeStartRent"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">租赁结束时间:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="选择车牌号自动获取"
+                                        v-model="inspectionManage.carOrderDto.timeFinishRent"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车辆用途:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="选择车牌号自动获取"
+                                        v-model="inspectionManage.carPurposeShow"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车辆所属仓库:</label>
+                            <div class="layui-input-inline">
+                                <input type="hidden"  v-model="inspectionManage.depotId">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="inspectionManage.depotName"
+                                        disabled/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                年检
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">本次年检时间:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" id="thisTimeInspectionTime" v-model="inspectionManage.thisTimeInspectionTime" placeholder="选择本次年检时间" >
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">下次年检时间:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input" id="nextInspectionTime" v-model="inspectionManage.nextInspectionTime" placeholder="选择下次年检时间" >
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">年审年份:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        id="inspectionYear"
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        placeholder="根据本次年检的年份自动获取"
+                                        v-model="inspectionManage.inspectionYear"
+                                        disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">年检费用:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="inspectionManage.inspectionAmount"
+                                        placeholder="填写年检费用" />
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">年审代理人:</label>
+                            <div class="layui-input-inline">
+                                <input
+                                        type="text"
+                                        class="layui-input searchVal"
+                                        v-model="inspectionManage.inspectionAgent"
+                                        placeholder="请输入年审代理人" />
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label">附件:</label>
+                            <div class="layui-input-inline">
+                                <div class="layui-input-inline-upload">
+                                    <div :id="deliveryFileLstId" class="layui-input-inline-upload-show box-rect"
+                                         v-for="(item,index) in deliveryFileLst">
+                                        <div v-show="item.typeFile == 1" class="layui-input-inline-upload-button">
+                                            <img :src="imageURL + item.url" class="view-img">
+                                        </div>
+                                        <div v-show="item.typeFile != 1" class="layui-input-inline-upload-button">
+                                            {{item.nameAccessory}}
+                                        </div>
+                                        <div class="layui-input-inline-upload-show-delete btn-event"
+                                             @click="delDeliveryFile(item.id)">
+                                            删除
+                                        </div>
+                                    </div>
+                                    <div class="layui-input-inline-upload-button box-rect box-rect-event"
+                                         id="addDeliveryFile">
+                                        <img src="../../statics/images/inline-upload@2x.png">
+                                    </div>
+                                </div>
+                                <div class="layui-input-inline-upload-text" style="padding-bottom: 10px">附件说明：附件最大支持50M，
+                                    <br/>
+                                    支持格式：PDF、Word、Excel、JPG、PNG 、ZIP、RAR
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label">备注:</label>
+                            <div class="layui-input-inline">
+                                <textarea name="desc" v-model="inspectionManage.desc" placeholder="请输入备注说明" class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                        <div class="float-btn-group">
+                            <a class="layui-btn reset-btn" @click="cancel">取消</a>
+                            <a class="layui-btn search-btn" lay-submit lay-filter="submitEditData">保存</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>-->
+</div>
+
+<script type="text/html" id="barTpl">
+    <div style="min-width:100px;">
+        <mperm v-m-perm="['vehicleInspectionwarning:vehicleInspectionwarning:info']" class="option-btn-margin">
+            <a class="layui-grid-btn-xs" lay-event="detail" more-btn-index="{{d.LAY_INDEX-1}}">查看</a>
+        </mperm>
+        <mperm v-m-perm="['vehicleInspectionwarning:vehicleInspectionwarning:continue']" class="option-btn-margin">
+            {{#if(d.inspectionStatus != 1){}}
+            <a class="layui-grid-btn-xs" lay-event="continue" more-btn-index="{{d.LAY_INDEX-1}}">续检</a>
+            {{#}}}
+        </mperm>
+        <mperm v-m-perm="['vehicleInspectionwarning:vehicleInspectionwarning:notice']" class="option-btn-margin">
+            <a class="layui-grid-btn-xs" lay-event="notice" more-btn-index="{{d.LAY_INDEX-1}}">通知</a>
+        </mperm>
+    </div>
+</script>
+<script type="text/html" id="checkbd">
+    <div>
+        <input type="checkbox" name="siam_one" title="" lay-filter='siam_one' lay-skin="primary" data-contractId = "{{ d.carId }}" data-id = "{{ d.carId}}" {{ d.LAY_CHECKED == 1 ? 'checked' : '' }}>
+    </div>
+
+</script>
+<script src="../../statics/js/modules/warn/vehicleinspectionwarning.js"></script>
+</body>
+</html>

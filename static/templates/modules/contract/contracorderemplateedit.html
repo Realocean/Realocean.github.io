@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>订单合同列表（无模板）</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common-new.css">
+    <!-- 引入element-ui -->
+    <script src="../../statics/js/element-ui/index.min.js"></script>
+<!--    <script src="${request.contextPath}/statics/js/element-ui/index.min.js"></script>-->
+
+    <style>
+        .layui-form-row-content .layui-inline .layui-input-inline{
+            /*padding: 5px 0;*/
+            margin-top: -6px;
+        }
+        .layui-input {
+            height: 40px !important;
+        }
+        .layui-input, .layui-select, .layui-textarea{
+            line-height: 1.3 !important;
+            border-width: 1px !important;
+            border-style: solid !important;
+            background-color: #fff !important;
+            border-radius: 2px !important;
+            border-color: #e6e6e6 !important;
+        }
+        .layui-input:hover, .layui-textarea:hover {
+            border-color: #D2D2D2 !important;
+        }
+    </style>
+
+
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <!-- 查看表单 -->
+    <form class="layui-form ren-form" style="margin-bottom: 60px;">
+        <div class="details-tab-content">
+            <div class="details-tab-content-box display">
+
+                <div class="layui-tab">
+                    <ul class="layui-tab-title">
+                        <li :class="0==index?'layui-this':''" @click="detailsTabContentBindtap(index)"
+                            v-for="(item, index) in detailsSupTabContentList" :key="index">{{ item }}
+                        </li>
+                    </ul>
+                </div>
+
+<!--                <div class="flex" v-for="(item, index) in detailsTabContentList" :key="index"-->
+<!--                     :class="index === detailsTabContentListActiveIndex ? 'active1A51FF' : ''"-->
+<!--                     @click="detailsTabContentBindtap(index)">-->
+<!--                    {{ item }}-->
+<!--                    <div>-->
+<!--                        <div :class="index === detailsTabContentListActiveIndex ? 'details-tab-content-box-absolute-bottom' : ''"></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+            </div>
+        </div>
+        <div class="details-conteiner">
+<!--            <div class="details-sub-tab-content" v-if="detailsTabContentListActiveIndex === 0">-->
+<!--                <div class="details-sub-tab-content-box display">-->
+<!--                    <div class="flex" v-for="(item, index) in detailsSupTabContentList" :key="index"-->
+<!--                         :class="index === detailsSupTabContentListActiveIndex ? 'active-linear-gradient' : ''"-->
+<!--                         @click="detailsSupTabContentBindtap(index, item)">-->
+<!--                        {{ item }}-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+            <div class="details-content-box" v-show="detailsSupTabContentListActiveValue === '合同信息'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        <span>合同信息</span>
+
+
+                        <a @click="printDoc1" class="layui-btn layui-btn-normal" style="float: right;margin-right: 5px">打印</a>
+                        <span style="float: right;margin-right: 5px">合同状态：{{statusStr}}</span>
+                    </div>
+                </div>
+                <div class="card">
+
+
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+
+                            <label class="layui-form-label">合同生效日期</label>
+                            <div class="layui-input-inline">
+                                <input type="text"  id="timeStart" readonly
+                                       v-model="contracorderNotemplate.timeStart" autocomplete="off" placeholder="请选择合同生效日期"
+                                       class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">合同终止日期</label>
+                            <div class="layui-input-inline">
+                                <input type="text"  id="timeFinish" readonly
+                                       v-model="contracorderNotemplate.timeFinish" autocomplete="off" placeholder="请选择合同终止日期"
+                                       class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">合同编号</label>
+                            <div class="layui-input-inline">
+                                <input type="text"  v-model="contracorderNotemplate.code"
+                                       autocomplete="off" placeholder="请输入合同编号" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">合同签订日期</label>
+                            <div class="layui-input-inline">
+                                <input type="text"  id="timeSigned" readonly
+                                       v-model="contracorderNotemplate.timeSigned" autocomplete="off" placeholder="请选择合同签订日期"
+                                       class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" style="margin-bottom: 20px">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label">合同备注</label>
+                            <div class="layui-input-inline">
+                                <input type="text"  v-model="contracorderNotemplate.desc"
+                                       autocomplete="off" placeholder="合同备注说明" class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+<!-- 组件未开发完，目前只能简单预览-->
+<!--                <image-common :disabled="true" :up-type="2" info="选择附件" :limit="1"-->
+<!--                              v-model="contracorderNotemplate.urlPdf"></image-common>-->
+
+
+                <div class="details-layui-row" v-if="contracorderNotemplate.contractType == 2 && contractContentUrl != null && contractContentUrl != ''">
+                    <!--<iframe v-if="!contracorderNotemplate.body" id="docIframe1" :src="fileURL + contracorderNotemplate.urlHtm" scrolling="yes" frameborder="0" style="width:100%;height:500px;overflow:visible;background:#fff;"></iframe>
+                    <iframe v-if="contracorderNotemplate.body" id="docIframe" scrolling="yes"
+                            frameborder="0" :srcdoc="contracorderNotemplate.body"
+                            style="width:100%;height:500px;overflow:visible;background:#fff;"></iframe>-->
+                    <iframe id="docIframe1" :src="fileURL + contractContentUrl" scrolling="yes" frameborder="0" style="width:100%;height:500px;overflow:visible;background:#fff;"></iframe>
+                </div>
+            </div>
+            <div class="details-content-box" v-show="detailsSupTabContentListActiveValue === '车辆订单信息'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        车辆订单信息
+                    </div>
+                </div>
+                <div class="details-layui-row">
+                    <div class="table">
+                        <table class="layui-hide" id="orderCarLst" lay-filter="orderCarLst"></table>
+                    </div>
+                </div>
+            </div>
+            <div class="details-content-box" v-show="detailsSupTabContentListActiveValue === '补充合同记录'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        <span>补充合同记录</span>
+                        <a @click="uploadSupplement" class="layui-btn layui-btn-normal" style="float: right;margin-right: 5px">上传补充合同</a>
+                    </div>
+                </div>
+                <div class="details-layui-row">
+                    <div class="table">
+                        <table class="layui-hide" id="supplementLst" lay-filter="supplementLst"></table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="details-content-box"
+                 v-show="detailsSupTabContentListActiveValue === '操作记录'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        合同操作记录
+                    </div>
+                </div>
+
+                <div class="details-layui-row">
+                    <div class="table">
+                        <table class="layui-hide" id="operationlog" lay-filter="operationlog"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="float-btn-group bottom-bar">
+        <a class="layui-btn reset-btn" id="closePage">取消</a>
+        <a class="layui-btn search-btn" lay-submit lay-filter="save" id="save">保存</a>
+    </div>
+</div>
+
+<div id="printBox">
+</div>
+
+
+<script type="text/html" id="barSupplementLstTpl">
+    {{#if(d.typeFile == 1){}}
+    <a class="layui-grid-btn-xs" lay-event="viewDoc">查看</a>
+    {{#}}}
+    {{#if(d.typeFile != 1){}}
+    <a class="layui-grid-btn-xs" lay-event="downDoc">下载</a>
+    {{#}}}
+    <a class="layui-grid-btn-xs" lay-event="printDoc">打印</a>
+</script>
+<script type="text/html" id="barTpl">
+    <a class="layui-grid-btn-xs" lay-event="unbind">解绑合同关系</a>
+</script>
+<script type="text/html" id="skipOrder">
+    <a class="layui-grid-btn-xs" lay-event="skipOrderView">{{d.orderCarCode}}</a>
+</script>
+<script src="../../statics/common/components/ImageCommon.js"></script>
+<script src="../../statics/js/modules/contract/contracorderemplateedit.js?_${.now?long}"></script>
+</body>
+</html>

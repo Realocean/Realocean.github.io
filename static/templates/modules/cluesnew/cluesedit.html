@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>线索表</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/new-edit.css">
+
+
+
+
+
+
+    <style>
+           .layui-input, .layui-select, .layui-textarea{
+            height: 40px !important;
+            }
+            .layui-form-label-txt{
+                font-size: 16px;
+                height: 40px;
+                line-height: 40px;
+                padding:0 15px !important;
+            }
+            .layui-input-value{
+                height: 40px !important;
+                line-height: 40px !important;
+                width:100%;
+                border-radius: 4px;
+                border: 1px solid rgb(230, 230, 230);
+                padding-left: 10px;
+            }
+            .layui-input, .layui-select, .layui-textarea{
+                border-radius: 4px;
+            }
+            .layui-form-row-content .layui-inline .layui-input-inline-change{
+                width:50%;
+                
+            }
+        .multiple-cell {
+            display: table-cell;
+            padding-right: 8px;
+        }
+
+        .multiple-table {
+            margin-bottom: 9px;
+            display: table;
+            margin-left: 78px;
+        }
+    </style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <!-- 新增表单 -->
+    <form class="layui-form ren-form" style="margin-bottom: 60px;">
+
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                <span class="fm-daoru-title">线索基本信息</span>
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label layui-form-label-txt"><span style="color:red">*</span>线索客户类型</label>
+                            <div class="layui-input-inline layui-input-inline-change">
+                                <input type="radio" lay-filter="customerType" v-model="clues.customerType"
+                                       name="contractType" value=1 lay-skin="primary" title="个人">
+                                <input type="radio" lay-filter="customerType" v-model="clues.customerType"
+                                       name="contractType" value=2 lay-skin="primary" title="企业">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label layui-form-label-txt"><span style="color:red">*</span>客户名称</label>
+                            <div class="layui-input-inline layui-input-inline-change">
+                                <input type="text" lay-verify="validate_customerName" v-model="clues.customerName"
+                                       oninput="maxLength(this, 50)"
+                                       autocomplete="off" placeholder="请输入客户名称" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label layui-form-label-txt"><span style="color:red">*</span>线索来源</label>
+                            <div class="layui-input-inline layui-input-inline-change" >
+                                <select name="cluesSource" lay-filter="cluesSource" lay-verify="validate_cluesSource"v-model="clues.cluesSource">
+                                    <option value="">请选择线索来源</option>
+                                    <option value=1>电话营销</option>
+                                    <option value=2>主动来电</option>
+                                    <option value=3>客户介绍</option>
+                                    <option value=4>自己挖掘</option>
+                                    <option value=5>网络搜索</option>
+                                    <option value=6>其他途径</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label layui-form-label-txt"><span style="color:red">*</span>联系电话</label>
+                            <div class="layui-input-inline layui-input-inline-change">
+                                <input type="text" lay-verify="validate_phone" v-model="clues.phone" autocomplete="off"
+                                       oninput="numInteger(this)" maxlength="20"
+                                       placeholder="请输入联系电话" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label layui-form-label-txt"><span style="color:red">*</span>线索状态</label>
+                            <div class="layui-input-inline layui-input-inline-change">
+                                <select name="cluesState" lay-filter="cluesState" lay-verify="validate_cluesState"v-model="clues.cluesState">
+                                    <option value="">请选择线索状态</option>
+                                    <option value=1>初步接触</option>
+                                    <option value=2>潜在客户</option>
+                                    <option value=3>持续跟进</option>
+                                    <option value=4>忠诚客户</option>
+                                    <option value=5>无效客户</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label layui-form-label-txt"><span style="color:red">*</span>意向情况</label>
+                            <div class="layui-input-inline layui-input-inline-change">
+                                <select name="intentionStatus" lay-filter="intentionStatus" lay-verify="validate_intentionStatus"v-model="clues.intentionStatus">
+                                    <option value="">请选择意向情况</option>
+                                    <option value=1>无意向</option>
+                                    <option value=2>低意向</option>
+                                    <option value=3>中意向</option>
+                                    <option value=4>高意向</option>
+                                    <option value=5>已成单</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label layui-form-label-txt"><span style="color:red">*</span>指派跟进人</label>
+                            <div class="layui-input-block" style="margin-left: 90px;">
+                                <div class="multiple-table">
+                                    <div class="multiple-cell">
+                                        <input type="radio" lay-filter="followType"
+                                               v-model="clues.followType" name="followType" value="1"
+                                               lay-skin="primary" title="分配给自己">
+                                    </div>
+                                </div>
+                                <div class="multiple-table">
+                                    <div class="multiple-cell">
+                                        <input type="radio" lay-filter="followType"
+                                               v-model="clues.followType" name="followType" value="2"
+                                               lay-skin="primary" title="分配其他人">
+                                    </div>
+                                    <div class="multiple-cell" v-show="clues.followType == 2">
+                                        <div class="layui-input-inline ">
+                                            <input type="text" v-model="clues.followDeptName"
+                                                   @click="deptTree" readonly="readonly" placeholder="请选择组织机构"
+                                                   lay-verify="validate_followDeptName" class="layui-input">
+                                        </div>
+
+                                    </div>
+                                    <div class="multiple-cell" v-show="clues.followType == 2">
+                                        <div class="layui-input-inline ">
+                                            <select name="followId" v-model="clues.followId" lay-filter="followId" lay-verify="validate_followId">
+                                                <option value="">请选择用户</option>
+                                                <option v-for="r in handoveruserlist" :value="r.userId">{{r.username}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="!hetong">
+                            <div style="color:#3FACB3;cursor: pointer;" class="layui-col-md11 layui-col-md-offset11" @click="expandChange(1)">
+                                <span>展开</span>
+                                <img src="../../statics/images/packup.png" alt="">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="hetong">
+                            <div style="color:#3FACB3;cursor: pointer;" class="layui-col-md11 layui-col-md-offset11" @click="retractChange(1)">
+                                <span>收起</span>
+                                <img src="../../statics/images/launch.png" alt="">
+                            </div>
+                        </div >
+                        <div v-show="hetong">
+                            <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs6"  v-show="clues.customerType == 2">
+                                <label class="layui-form-label layui-form-label-txt">联系人</label>
+                                <div class="layui-input-inline layui-input-inline-change">
+                                    <input type="text" v-model="clues.contact"
+                                           oninput="maxLength(this, 50)"
+                                           autocomplete="off" placeholder="请输入联系人" class="layui-input searchVal">
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label layui-form-label-txt">职业</label>
+                                <div class="layui-input-inline layui-input-inline-change">
+                                    <input type="text" v-model="clues.occupation"
+                                           oninput="maxLength(this, 50)"
+                                           autocomplete="off" placeholder="请输入职业" class="layui-input searchVal">
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label layui-form-label-txt">电子邮箱</label>
+                                <div class="layui-input-inline layui-input-inline-change">
+                                    <input type="text" v-model="clues.mailBox"
+                                           autocomplete="off" placeholder="请输入电子邮箱" class="layui-input searchVal">
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label layui-form-label-txt">微信号:</label>
+                                <div class="layui-input-inline layui-input-inline-change">
+                                    <input type="text" v-model="clues.wechatNumber"
+                                           oninput="maxLength(this, 50)"
+                                           autocomplete="off" placeholder="请输入微信号" class="layui-input searchVal">
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label layui-form-label-txt">QQ号码</label>
+                                <div class="layui-input-inline layui-input-inline-change">
+                                    <input type="text" v-model="clues.qqNumber"
+                                           oninput="maxLength(this, 50)"
+                                           autocomplete="off" placeholder="请输入QQ号码" class="layui-input searchVal">
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label layui-form-label-txt">租车用途</label>
+                                <div class="layui-input-inline layui-input-inline-change">
+                                    <input type="text" v-model="clues.rentCarPurpose"
+                                           oninput="maxLength(this, 50)"
+                                           autocomplete="off" placeholder="请输入租车用途" class="layui-input searchVal">
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label layui-form-label-txt">常住地</label>
+                                <div class="layui-input-inline layui-input-inline-change">
+                                    <input type="text" v-model="clues.usualResidence"
+                                           oninput="maxLength(this, 50)"
+                                           autocomplete="off" placeholder="请输入常住地" class="layui-input searchVal">
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs4">
+                                        <label class="layui-form-label layui-form-label-txt">线索描述</label>
+                                <div class="layui-input-inline layui-input-inline-change">
+                                    <input type="text" v-model="clues.cluesDescribe"
+                                            oninput="maxLength(this, 200)"
+                                            autocomplete="off" placeholder="请输入线索描述" class="layui-input searchVal">
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+            </div>
+            <!-- <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                跟进人
+            </div> -->
+            <!-- <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label layui-form-label-txt"><span style="color:red">*</span>录入人</label>
+                            <div class="layui-input-inline layui-input-inline-change">
+                                <input type="text" readonly v-model="clues.operatorName"
+                                       style="border: 0; background-color: transparent"
+                                       autocomplete="off" placeholder="当前录入人名称" class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                      
+                    </div>
+                </div>
+            </div> -->
+        </div>
+
+        <div class="float-btn-group bottom-bar">
+            <a class="layui-btn reset-btn" id="closePage">取消</a>
+            <a class="layui-btn search-btn" lay-submit lay-filter="save" id="save">保存</a>
+        </div>
+    </form>
+
+
+</div>
+
+<div id="deptLayer" style="display: none;padding:10px;">
+    <ul id="deptTree" class="ztree"></ul>
+</div>
+
+<script src="../../statics/js/modules/cluesnew/cluesedit.js?_${.now?long}"></script>
+</body>
+</html>

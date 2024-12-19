@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>企业合同车型方案</title>
+<#include "/header.html">
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <!-- 查看表单 -->
+    <form class="layui-form ren-form" style="margin-bottom: 60px;">
+        <div class="details-tab-content">
+            <div class="details-tab-content-box display">
+                <div class="flex" v-for="(item, index) in detailsTabContentList" :key="index" :class="index === detailsTabContentListActiveIndex ? 'active1A51FF' : ''" @click="detailsTabContentBindtap(index)">
+                    {{ item }}
+                    <div>
+                        <div :class="index === detailsTabContentListActiveIndex ? 'details-tab-content-box-absolute-bottom' : ''"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="details-conteiner">
+            <div class="details-sub-tab-content" v-show="detailsTabContentListActiveIndex === 0">
+                <div class="details-sub-tab-content-box display">
+                    <div class="flex" v-for="(item, index) in detailsSupTabContentList" :key="index"
+                         :class="index === detailsSupTabContentListActiveIndex ? 'active-linear-gradient' : ''"
+                         @click="detailsSupTabContentBindtap(index, item)">
+                        {{ item }}
+                    </div>
+                </div>
+            </div>
+                            <div class="details-content-box" v-show="detailsSupTabContentListActiveValue === '企业合同车型方案' || detailsSupTabContentListActiveValue === '基本信息' || detailsSupTabContentListActiveValue === '企业合同车型方案'">
+                        <div class="left-before">
+                            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                                企业合同车型方案
+                            </div>
+                        </div>
+                                                    <div class="details-layui-row">
+                                <div class="layui-row layui-form-row-content">
+                                                                                                                                                                                                    <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">企业合同id:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.contractId" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">企业合同编号:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.contractNo" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.brandId" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">所属品牌名称:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.brandName" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.seriesId" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">所属车系名称:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.seriesName" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.modelId" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">所属车型名称:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.modelName" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">租赁类型：1、经租 2、以租代购 3、展示车 4、试驾车 5、融租 6、直购 7、挂靠:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.rentType" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">租期:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.tenancy" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">首付款:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.downPayment" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">尾款:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.balancePayment" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">保证金:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.cashDeposit" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">整备费/元/台:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.servicingFee" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">车辆总单价:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.totalPrice" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">月租金/挂靠费:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.monthlyRent" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">服务费:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.coverCharge" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">免费用车天数（第一位：0否，1是；第二位：0租期后，1租期前）:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.hasFreeDays" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">免费天数:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.freeDays" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">本期租金生成方式（1、当月生成2、次月生成4、自定义首期租金）:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.rentGenerationMethod" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">首期租金:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.firstRent" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">签约数量:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.countSigned" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">已交车数:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.countDelivered" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">未交车数:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.countUndelivered" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">状态：:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.status" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">备注:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.remark" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">创建时间:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.timeCreate" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">更新时间:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.timeUpdate" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">删除状态（0未删除，1已删除）:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.delect" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">租户id:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="contracbusinessPlan.tenantId" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                            </div>
+                            </div>
+                        
+                                        </div>
+                            <div class="details-content-box" v-show="detailsSupTabContentListActiveValue === '企业合同车型方案' || detailsSupTabContentListActiveValue === '基本信息' || detailsSupTabContentListActiveValue === '操作记录'">
+                        <div class="left-before">
+                            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                                操作记录
+                            </div>
+                        </div>
+                        
+                                                    <div class="details-layui-row">
+                                <div class="table">
+                                    <table class="layui-hide" id="operationlog" lay-filter="operationlog"></table>
+                                </div>
+                            </div>
+                                        </div>
+                    </div>
+    </form>
+
+    <div class="float-btn-group bottom-bar">
+        <a class="layui-btn reset-btn" id="closePage">关闭</a>
+    </div>
+</div>
+
+
+<script src="${request.contextPath}/statics/js/modules/contract/contracbusinessplanview.js?_${.now?long}"></script>
+</body>
+</html>

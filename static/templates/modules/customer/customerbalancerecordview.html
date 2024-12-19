@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<#include "/header.html">
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <!-- 查看表单 -->
+    <form class="layui-form ren-form" style="margin-bottom: 60px;">
+        <div class="details-tab-content">
+            <div class="details-tab-content-box display">
+                <div class="flex" v-for="(item, index) in detailsTabContentList" :key="index" :class="index === detailsTabContentListActiveIndex ? 'active1A51FF' : ''" @click="detailsTabContentBindtap(index)">
+                    {{ item }}
+                    <div>
+                        <div :class="index === detailsTabContentListActiveIndex ? 'details-tab-content-box-absolute-bottom' : ''"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="details-conteiner">
+            <div class="details-sub-tab-content" v-show="detailsTabContentListActiveIndex === 0">
+                <div class="details-sub-tab-content-box display">
+                    <div class="flex" v-for="(item, index) in detailsSupTabContentList" :key="index"
+                         :class="index === detailsSupTabContentListActiveIndex ? 'active-linear-gradient' : ''"
+                         @click="detailsSupTabContentBindtap(index, item)">
+                        {{ item }}
+                    </div>
+                </div>
+            </div>
+                            <div class="details-content-box" v-show="detailsSupTabContentListActiveValue === '' || detailsSupTabContentListActiveValue === '基本信息' || detailsSupTabContentListActiveValue === ''">
+                        <div class="left-before">
+                            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                                
+                            </div>
+                        </div>
+                                                    <div class="details-layui-row">
+                                <div class="layui-row layui-form-row-content">
+                                                                                                                                                                                                    <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">订单id:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="customerBalanceRecord.orderId" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">客户id:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="customerBalanceRecord.customerId" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">记录金额:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="customerBalanceRecord.amount" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">记录前金额:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="customerBalanceRecord.amountBefore" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">记录后金额:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="customerBalanceRecord.amountAfter" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">金额类型：1、保证金 2、流水:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="customerBalanceRecord.amountType" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">记录类型：1、增加 2、抵扣:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="customerBalanceRecord.recordType" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">备注:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="customerBalanceRecord.remark" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">提交人id:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="customerBalanceRecord.operationId" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">提交人姓名:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="customerBalanceRecord.operationName" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">创建时间:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="customerBalanceRecord.timeCreate" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">更新时间:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="customerBalanceRecord.timeUpdate" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">删除状态（0未删除，1已删除）:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="customerBalanceRecord.delect" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                                                                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                                <label class="layui-form-label">租户id:</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" class="layui-input searchVal" :value="customerBalanceRecord.tenantId" disabled/>
+                                                </div>
+                                            </div>
+                                                                                                            </div>
+                            </div>
+                        
+                                        </div>
+                            <div class="details-content-box" v-show="detailsSupTabContentListActiveValue === '' || detailsSupTabContentListActiveValue === '基本信息' || detailsSupTabContentListActiveValue === '操作记录'">
+                        <div class="left-before">
+                            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                                操作记录
+                            </div>
+                        </div>
+                        
+                                                    <div class="details-layui-row">
+                                <div class="table">
+                                    <table class="layui-hide" id="operationlog" lay-filter="operationlog"></table>
+                                </div>
+                            </div>
+                                        </div>
+                    </div>
+    </form>
+
+    <div class="float-btn-group bottom-bar">
+        <a class="layui-btn reset-btn" id="closePage">关闭</a>
+    </div>
+</div>
+
+
+<script src="${request.contextPath}/statics/js/modules/customer/customerbalancerecordview.js?_${.now?long}"></script>
+</body>
+</html>

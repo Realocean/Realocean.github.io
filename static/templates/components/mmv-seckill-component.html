@@ -1,0 +1,518 @@
+<link rel="stylesheet" type="text/css" href="${request.contextPath}/statics/css/mmv-ui/index.css">
+<!-- 用法 -->
+<!-- <div id="rrapp" v-cloak> -->
+<!-- <mmv-seckill-component :seckildata="seckildata"></mmv-seckill-component> -->
+<!-- </div> -->
+
+<!-- 轮播模板 -->
+<script type="text/x-template" id="mmv-swiper">
+      <div class="carousel-container" id="mmv-swiper_namespace" :style="{ height: height }" @mouseenter.stop="handleMouseEnter" @mouseleave.stop="handleMouseLeave">
+          <div v-if="handleDisplay">
+              <button class="carousel-arrow carousel-arrow-left" @click.stop="throttledArrowClick(controlDisabled[0].label)" :disabled="controlDisabled[0].disabled">
+                  <i class="arrow-left"></i>
+              </button>
+              <button class="carousel-arrow carousel-arrow-right" @click.stop="throttledArrowClick(controlDisabled[1].label)" :disabled="controlDisabled[1].disabled">
+                  <i class="arrow-right"></i>
+              </button>
+          </div>
+          <div ref="list" class="carousel-list" @touchstart="moveStart" @touchmove="moving" @touchend="moveEnd">
+              <slot class="carousel-pane"></slot>
+          </div>
+          <!-- <ul class="carousel-indicator" v-if="isIndicator" ref="indicator">
+              <li v-for="(item, index) in carouselLength" :key="index" @click="setCurrentItem(index)" :class="[index == currentIndex - 1 ? 'is-active-item' : '','carousel-indicator-item']"></li>
+          </ul> -->
+      </div>
+    </script>
+<!-- 秒杀活动模板 -->
+<script type="text/x-template" id="mmv-seckill-component">
+      <div class="seckill-component" id="mmv-seckill-component_namespace">
+          <div class="app-header-banner">
+              <mmv-swiper class="card_introduce" ref="swiper">
+                  <div v-for="(item, index) in detailImgFilter(seckildata.detailsImage,'detailsImage')" :key="index">
+                      <el-image :src="item" fit="contain" class="card_introduce"></el-image>
+                  </div>
+              </mmv-swiper>
+              <div class="app-header-card">
+                  <p class="app-header-card-title">
+                      {{ seckildata.seckillName | appData('seckillName') }}
+                  </p>
+                  <div class="app-header-card-price">
+                      <div class="seckill">
+                          <el-image :src="card_seckill" fit="cover" class="card_seckill"></el-image>
+                          <p class="card_text">秒杀价</p>
+                      </div>
+                      <div>
+                          <span class="red weight">￥{{ seckildata.nowPrice | appData('nowPrice') }}</span><span class="oringe">￥{{ seckildata.costPrice | appData('costPrice') }}</span>
+                          <span class="red">
+                              仅剩{{ seckildata.rushBuyNumber | appData('rushBuyNumber	') }}份</span>
+                      </div>
+                  </div>
+                  <div class="app-header-card-time">
+                      <el-image :src="card_time_img" fit="cover" class="card_time_img"></el-image>
+                      <p class="card_time_text">
+                          活动时间：{{ seckildata.timeStart | appData_endTime('timeStart') }}
+                          至
+                          {{ seckildata.timeEnd | appData_endTime('timeEnd') }}
+                      </p>
+                  </div>
+                  <el-image :src="card_right" fit="cover" class="card_right"></el-image>
+                  <div class="last-title">
+                      <p class="last-name">距报名结束仅剩</p>
+                      <div class="last-time">
+                          <span>1天</span>
+                          <span class="last-time-item">09</span>
+                          <span>:</span>
+                          <span class="last-time-item">04</span>
+                          <span>:</span>
+                          <span class="last-time-item">59</span>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="app-content">
+              <div class="app-content-store">
+                  <div class="app-content-title app-content-store-title" style="margin-top: 30px">
+                      活动门店
+                      <div class="app-content-line"></div>
+                  </div>
+                  <div v-for="(item, index) in seckildata.activityUnit" :key="index" classs="store-item">
+                      <p class="app-content-store-name">
+                          {{ item.applicableUnit }}
+                      </p>
+                      <p class="app-content-store-address">
+                          {{ item.unitAddress }}
+                      </p>
+                      <el-row type="flex" class="row-bg" justify="space-between">
+                          <el-col :span="6" class="commodity-list">
+                              <p class="commodity-list-item-1">1.15km</p>
+                              <p class="commodity-list-item-2">距离</p>
+                          </el-col>
+                          <el-col :span="6">
+                              <p class="commodity-list-item-1">{{ item.serviceConsultant }}</p>
+                              <p class="commodity-list-item-2">服务顾问</p>
+                          </el-col>
+                          <el-col :span="6" class="vertical-center">
+                              <el-image :src="phone" fit="cover" class="vertical-center-item-1"></el-image>
+                              <el-image :src="address" fit="cover" class="vertical-center-item-2"></el-image>
+                          </el-col>
+                      </el-row>
+                  </div>
+              </div>
+              <div class="app-content-project">
+                  <div class="app-content-title app-content-store-title">
+                      商品/服务项目
+                      <div class="app-content-line"></div>
+                  </div>
+                  <div v-for="(item, index) in seckildata.activitySeckillList" :key="index">
+                      <p>
+                          <span class="project-name">{{ item.goodsServerName }}</span><span class="project-number">
+                              数量：{{ item.goodsServerNumber }}</span>
+                      </p>
+                      <p>
+                          <span class="project-capacity">规格容量：{{ item.goodsServerDescribe }}</span><span class="project-price">市场价：{{ item.goodsServerPrice }}</span>
+                      </p>
+                  </div>
+    
+                  <div class="price-total" v-if="seckildata.activitySeckillList&&seckildata.activitySeckillList.length">
+                      总价值：￥{{ seckildata.activitySeckillList | total_price }}
+                  </div>
+              </div>
+              <div class="app-content-introduce">
+                  <div class="app-content-title app-content-store-title">
+                      活动介绍
+                      <div class="app-content-line"></div>
+                  </div>
+                  <div v-if="seckildata.content" v-html="seckildata.content" class="content"></div>
+                  <div v-else>
+                      <el-image :src="card_introduce" fit="cover" class="card_introduce"></el-image>
+                  </div>
+              </div>
+          </div>
+          <div class="app-footer" style="display: flex;">
+              <div class="app-footer-btn btn-share">分享好友</div>
+              <div class="app-footer-btn btn-buy">立即抢购</div>
+          </div>
+      </div>
+    </script>
+<!-- 加载js文件-->
+<!-- 引入element-ui -->
+<script src="${request.contextPath}/statics/js/element-ui/index.min.js"></script>
+<script>
+    $(function () {
+        function MmvFilterUrl(url) {
+            return importURL + url;
+        }
+        // 轮播组件
+        Vue.component('mmv-swiper', {
+            template: '#mmv-swiper',
+            props: {
+                interval: {
+                    type: Number,
+                    default: 2000, //轮播间隔时间
+                },
+                transitionTime: {
+                    type: Number,
+                    default: 1000, //轮播过度时间
+                },
+                isIndicator: {
+                    type: Boolean,
+                    default: true, //是否显示指示灯
+                },
+                height: String, //轮播图高度
+                isHandle: {
+                    type: Boolean,
+                    default: false, //是否显示左边点击按钮,默认点击图片并且图片大于1张时显示
+                },
+                isAutoplay: {
+                    type: Boolean,
+                    default: true, //是否开启自动轮播
+                },
+            },
+            data() {
+                return {
+                    currentIndex: 1, //当前索引
+                    carouselLength: 0, //实际轮播图个数
+                    timer: null, //定时器
+                    handle: false, //是否显示左右点击按钮
+                    //设置点击状态
+                    controlDisabled: [
+                        { label: "leftBtn", disabled: false },
+                        { label: "rightBtn", disabled: false },
+                        { label: "child", disabled: false },
+                    ],
+                    isMoving: false,
+                    start: { x: 0 },
+                    time: 0, //滑动时触摸结束回弹时间。
+                    imgList: null, //轮播图片的父元素
+                    width: window.innerWidth, //移动距离
+                };
+            },
+            computed: {
+                handleDisplay() {
+                    return this.isHandle && this.handle && this.carouselLength > 1;
+                },
+            },
+            mounted() {
+                //启动轮播图
+                this.prepare();
+            },
+            methods: {
+                moveStart(e) {
+                    e.stopPropagation();
+                    this.start.x = e.changedTouches[0].pageX;
+                },
+                moving(e) {
+                    e.stopPropagation();
+                    this.pauseTimer();
+                    var distanceX = e.changedTouches[0].pageX - this.start.x;
+                    this.imgList.style.transform =
+                        "translate3d(" +
+                        (-this.currentIndex * this.width + distanceX) +
+                        "px,0,0)";
+                    this.imgList.style.transition = "transform 0s";
+                    this.isMoving = true;
+                },
+                moveEnd(e) {
+                    if (this.isMoving) {
+                        e.stopPropagation();
+                        this.time = 300;
+                        var distanceX = e.changedTouches[0].pageX - this.start.x;
+                        if (distanceX < 0) {
+                            this.currentIndex++;
+                            if (this.currentIndex == this.carouselLength + 1) {
+                                this.criticality(1, undefined, 300);
+                            } else {
+                                this.play(300);
+                            }
+                        } else {
+                            this.currentIndex--;
+                            if (this.currentIndex == 0) {
+                                this.criticality(this.carouselLength, undefined, 300);
+                            } else {
+                                this.play(300);
+                            }
+                        }
+                        this.isMoving = false;
+                        this.autoPlay();
+                    }
+                },
+                prepare() {
+                    this.imgList = this.$refs.list;
+                    var children = this.imgList.children;
+                    this.carouselLength = children.length;
+                    if (this.carouselLength > 1) {
+                        this.width = this.imgList.clientWidth;
+                        //首尾各添加一张图片，以便无缝轮播
+                        var firstDom =
+                            this.imgList.firstElementChild &&
+                            this.imgList.firstElementChild.cloneNode(true);
+                        var lastDom =
+                            this.imgList.lastElementChild &&
+                            this.imgList.lastElementChild.cloneNode(true);
+                        if (this.imgList.firstElementChild) {
+                            this.imgList.appendChild(firstDom);
+                            this.imgList.insertBefore(
+                                lastDom,
+                                this.imgList.firstElementChild
+                            );
+                            this.imgList.style.transform =
+                                "translate3d(" + -this.width + "px,0,0)";
+                        }
+                        if (this.isAutoplay) {
+                            this.autoPlay();
+                        }
+                    }
+                },
+                //停止定时器
+                pauseTimer() {
+                    if (this.timer) {
+                        clearTimeout(this.timer);
+                        this.timer = null;
+                    }
+                },
+                handleMouseEnter() {
+                    if (this.isHandle) {
+                        this.handle = true;
+                        this.pauseTimer();
+                    }
+                },
+                handleMouseLeave() {
+                    if (this.isHandle || this.handle) {
+                        this.handle = false;
+                        this.autoPlay();
+                    }
+                },
+                throttledArrowClick(dir) {
+                    if (dir == "leftBtn") {
+                        this.currentIndex--;
+                    } else {
+                        this.currentIndex++;
+                    }
+                    if (this.currentIndex == 0) {
+                        this.criticality(this.carouselLength, this.controlDisabled[0]);
+                    } else if (this.currentIndex == this.carouselLength + 1) {
+                        this.criticality(1, this.controlDisabled[1]);
+                    } else {
+                        this.play();
+                    }
+                },
+                //轮播处理逻辑
+                play(transitionTime) {
+                    this.imgList.style.transform =
+                        "translate3d(" + -this.currentIndex * this.width + "px,0,0)";
+                    if (transitionTime) {
+                        this.imgList.style.transition =
+                            "transform " + transitionTime + "ms";
+                    } else {
+                        this.imgList.style.transition =
+                            "transform " + this.transitionTime + "ms";
+                    }
+                },
+                setCurrentItem(index) {
+                    //点击指示灯时停止轮播。
+                    this.pauseTimer();
+                    if (this.controlDisabled[2].disabled) {
+                        return;
+                    }
+                    //点击第一张时
+                    if (index == 0 && this.currentIndex == this.carouselLength) {
+                        this.currentIndex++;
+                        this.criticality(1, this.controlDisabled[2]);
+                    } else if (
+                        index == this.carouselLength - 1 &&
+                        this.currentIndex == 1
+                    ) {
+                        this.currentIndex--;
+                        this.criticality(this.carouselLength, this.controlDisabled[2]);
+                    } else {
+                        this.currentIndex = index + 1;
+                        this.play();
+                    }
+                },
+                criticality(boundary, item, transitionTime) {
+                    this.play(transitionTime);
+                    this.currentIndex = boundary;
+                    setTimeout(
+                        () => {
+                            this.imgList.style.transform =
+                                "translate3d(" + -this.width * boundary + "px,0,0)";
+                            this.imgList.style.transition = "transform 0ms";
+                        },
+                        transitionTime ? transitionTime : this.transitionTime
+                    );
+                    //点击临界值时将点击状态暂停掉以便偷梁换柱
+                    if (item) {
+                        var after = new Date().getTime() + 1000 + 100;
+                        if (new Date().getTime() <= after) {
+                            item.disabled = true;
+                            setTimeout(() => {
+                                item.disabled = false;
+                            }, after - new Date().getTime());
+                        }
+                    }
+                },
+                autoPlay() {
+                    this.timer = setInterval(() => {
+                        this.currentIndex++;
+                        if (this.currentIndex == this.carouselLength + 1) {
+                            clearInterval(this.timer);
+                            this.criticality(1);
+                            this.autoPlay();
+                        } else {
+                            this.play();
+                        }
+                    }, this.interval);
+                },
+            },
+            beforeDestroy() {
+                this.pauseTimer();
+            },
+        })
+
+
+        var bannerimg = '${request.contextPath}/statics/images/mmv-ui/img/banner.png'
+        var navimg = '${request.contextPath}/statics/images/mmv-ui/img/nav.png'
+        var card_introduce = '${request.contextPath}/statics/images/mmv-ui/img/card_introduce.png'
+        var card_right = '${request.contextPath}/statics/images/mmv-ui/img/card_right.png'
+        var card_seckill = '${request.contextPath}/statics/images/mmv-ui/img/ms.png'
+        var card_time_img = '${request.contextPath}/statics/images/mmv-ui/img/time.png'
+        var phone = '${request.contextPath}/statics/images/mmv-ui/img/phone.png'
+        var address = '${request.contextPath}/statics/images/mmv-ui/img/address.png'
+
+        let defaultData = {
+            seckillName: "一键加油 | 立减20元 ",
+            nowPrice: "500",
+            costPrice: "5000",
+            rushBuyNumber: "100",
+            timeStart: "2020-12-20",
+            timeEnd: "2021-12-20",
+            inventoryNum: null,
+            fictitiousNum: null,
+            activityStore: 0,
+            coverImage: bannerimg,
+            detailImg: "",
+            content: null,
+        };
+        // 秒杀活动组件
+        Vue.component("mmv-seckill-component", {
+            template: "#mmv-seckill-component",
+            filters: {
+                appData(val, key) {
+                    if (val && val != "") {
+                        return val;
+                    } else {
+                        return defaultData[key];
+                    }
+                },
+                appData_endTime(val, key) {
+                    if (val && val != "") {
+                        let date = new Date(val);
+                        let year = date.getFullYear(); // 获取当前年份(2位)
+                        let month = date.getMonth() + 1; // 获取当前月份(0-11,0代表1月)
+                        let day = date.getDate(); // 获取当前日(1-31)
+                        //修改月份格式
+                        if (month >= 1 && month <= 9) {
+                            month = "0" + month;
+                        }
+
+                        //修改日期格式
+                        if (day >= 0 && day <= 9) {
+                            day = "0" + day;
+                        }
+                        return year + "-" + month + "-" + day;
+                    } else {
+                        var date = new Date();
+                        var year = date.getFullYear(); //年 ,从 Date 对象以四位数字返回年份
+                        var month = date.getMonth() + 1; //月 ,从 Date 对象返回月份 (0 ~ 11) ,date.getMonth()比实际月份少 1 个月
+                        var day = date.getDate(); //日 ,从 Date 对象返回一个月中的某一天 (1 ~ 31)
+                        return year + ":" + month + ":" + day;
+                    }
+                },
+                total_price(val) {
+                    let total = 0;
+                    val.map((item) => {
+                        total += item.goodsServerPrice * item.goodsServerNumber;
+                    });
+                    return total;
+                },
+            },
+            props: {
+                seckildata: {
+                    type: Object,
+                    default() {
+                        return {
+                            activitySeckillList: [],
+                            detailsImage: "",
+                            seckillName: 0,
+                            nowPrice: 0,
+                            costPrice: 0,
+                            rushBuyNumber: 0,
+                            timeStart: 0,
+                            timeEnd: 0,
+                        };
+                    },
+                },
+                goodslist: {
+                    type: Array,
+                    default() {
+                        return [];
+                    },
+                },
+            },
+            data() {
+                return {
+                    nav: navimg,
+                    card_introduce: card_introduce,
+                    card_right: card_right,
+                    card_seckill: card_seckill,
+                    card_time_img: card_time_img,
+                    phone: phone,
+                    address: address,
+                };
+            },
+            watch: {
+                "seckildata.detailsImage": {
+                    immediate: true,
+                    deep: true,
+                    handler(val) {
+                        this.$nextTick(() => {
+                            console.log(val);
+                            if (val) {
+                                let arr = val.split(",");
+                                if (arr.length > 1) {
+                                    this.$refs.swiper.prepare();
+                                } else {
+                                    this.$refs.swiper.pauseTimer();
+                                }
+                            }
+                        });
+                    },
+                },
+            },
+            mounted() {
+                console.log('秒杀组件渲染成功！')
+            },
+            methods: {
+                coverImgFilter(val, key) {
+                    if (val && val != "") {
+                        return MmvFilterUrl(val);
+                    } else {
+                        return defaultData[key];
+                    }
+                },
+                detailImgFilter(val, key) {
+                    if (val && val != "") {
+                        let arr = [];
+                        let arrary = val.split(",");
+                        arrary.map((item) => {
+                            arr.push(MmvFilterUrl(item));
+                        });
+                        return arr;
+                    } else {
+                        return [bannerimg];
+                    }
+                },
+            },
+        });
+    })
+</script>

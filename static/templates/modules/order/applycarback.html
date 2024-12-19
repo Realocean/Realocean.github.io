@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>经租退车页面</title>
+    <link rel="stylesheet" type="text/css" href="../../statics/css/public/flowChart.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/public/header.css">
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+    <script type="text/javascript" src="../../statics/js/bpmchart.js"></script>
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+    <style>
+        .aTitle{
+            font-weight: bold;
+            font-size: 18px;
+            margin-left: 15px;
+        }
+    </style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <form class="layui-form ren-form" style="padding-bottom: 60px;">
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed" style="height: 52px">
+                经租退车信息
+                <span style="float: right;">
+                        <span v-show="isShowContent()" style="float: right;"><span style="color: #FFC000;font-size: 18px;margin-right: 10px">{{getAuditStatusStr()}}</span><span>退换车状态：</span><span style="color: #1951FF">{{getOrderStatusStr()}}</span></span>
+                        <br v-show="isShowContent()" />
+                        <span v-show="isShowContent()" style="float: left;"><span style="color: #FFC000;font-size: 18px;">{{getAuditMarkType()}}：{{getAuditMarkStr()}}</span></span>
+                    </span>
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">订单类型:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       :value="getRentTypeStr(applyForDTO.rentType)"
+                                       placeholder="订单类型" style="border:0px;" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">订单号:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="applyForDTO.orderCarCode || '-'"
+                                       placeholder="订单编号" style="border:0px;" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">客户名称:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="applyForDTO.customerName || '-'"
+                                       placeholder="客户名称" style="border:0px;" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">联系电话:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="applyForDTO.customerTel || '-'"
+                                       placeholder="联系电话" style="border:0px;" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">联系人:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="applyForDTO.contactPerson || '-'"
+                                       placeholder="联系人" style="border:0px;" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">出租方:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="applyForDTO.lessorName || '-'"
+                                       placeholder="出租方" style="border:0px;" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">租赁开始时间:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="applyForDTO.timeStartRent || '-'"
+                                       placeholder="租赁开始时间" style="border:0px;" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">租赁结束时间:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="applyForDTO.timeFinishRent || '-'"
+                                       placeholder="租赁结束时间" style="border:0px;" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车架号:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="applyForDTO.vinNo || '-'"
+                                       placeholder="车架号" style="border:0px;" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车牌号:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="applyForDTO.carNo || '-'"
+                                       placeholder="车牌号" style="border:0px;" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车辆品牌/车系/车型:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="applyForDTO.carBrandModel || '-'"
+                                       placeholder="车辆品牌/车系/车型" style="border:0px;" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车辆归属:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="applyForDTO.deptName || '-'"
+                                       placeholder="车辆归属" style="border:0px;" disabled>
+                            </div>
+                        </div>
+
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">提车时间:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="applyForDTO.timeDeliveryShow || '-'"
+                                       placeholder="提车时间" style="border:0px;" >
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">发动机号:</label>
+                            <div class="layui-input-inline">
+                                <input type="text"
+                                       class="layui-input"
+                                       v-model="applyForDTO.engineNo || '-'"
+                                       placeholder="发动机号" style="border:0px;" >
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                退车信息
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="nodeFields.applyCarBack_carBack_carBackTime.show">
+                            <label class="layui-form-label" v-show="nodeFields.applyCarBack_carBack_carBackTime.edit">
+                                <span style="color:red">{{nodeFields.applyCarBack_carBack_carBackTime.required?'*':''}}</span>退车时间:
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.applyCarBack_carBack_carBackTime.edit">退车时间:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" v-show="nodeFields.applyCarBack_carBack_carBackTime.edit"
+                                       :lay-verify="nodeFields.applyCarBack_carBack_carBackTime.required"
+                                       class="layui-input"
+                                       id="date"
+                                       v-model="applyForDTO.timeApply"
+                                       readonly="readonly"
+                                       placeholder="请选择时间">
+                                <input type="text" style="border:0px;" :value="applyForDTO.timeApply || '--' " disabled style="border:0px;"
+                                       v-show="!nodeFields.applyCarBack_carBack_carBackTime.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+                        <div id="typeDiv" class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="nodeFields.applyCarBack_carBack_carType.show">
+                            <label class="layui-form-label" v-show="nodeFields.applyCarBack_carBack_carType.edit">
+                                <span style="color:red">{{nodeFields.applyCarBack_carBack_carType.required?'*':''}}</span>退车类别:
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.applyCarBack_carBack_carType.edit">退车类别:</label>
+                            <div class="layui-input-inline" v-show="nodeFields.applyCarBack_carBack_carType.edit">
+                                <select id="type" name="type" lay-filter="type" v-model="applyForDTO.returnType" :lay-verify="nodeFields.applyCarBack_carBack_carType.required">
+                                    <option value="">请选择退车类别</option>
+                                    <option value=1>租赁到期</option>
+                                    <option value=2>违约退车</option>
+                                    <option value=3>强制收车</option>
+                                    <option value=4>其他</option>
+                                </select>
+                            </div>
+                            <div class="layui-input-inline" v-show="!nodeFields.applyCarBack_carBack_carType.edit">
+                                <input type="text" :value="applyForDTO.returnTypeStr || '--' " style="border:0px;" disabled
+                                       class="layui-input input-readonly">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="nodeFields.applyCarBack_carBack_alterationDesc.show">
+                            <label class="layui-form-label" v-show="nodeFields.applyCarBack_carBack_alterationDesc.edit">
+                                <span style="color:red">{{nodeFields.applyCarBack_carBack_alterationDesc.required?'*':''}}</span>退车原因:
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.applyCarBack_carBack_alterationDesc.edit">退车原因:</label>
+                            <div class="layui-input-inline">
+                                <textarea :lay-verify="nodeFields.applyCarBack_carBack_alterationDesc.required" v-show="nodeFields.applyCarBack_carBack_alterationDesc.edit"
+                                          name="desc" v-model="applyForDTO.alterationDesc" placeholder="请输入原因......" class="layui-textarea"></textarea>
+                                <textarea :value="applyForDTO.alterationDesc || '--' " style="border:0px" disabled
+                                          v-show="!nodeFields.applyCarBack_carBack_alterationDesc.edit" class="layui-textarea input-readonly"></textarea>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6"  v-show="nodeFields.applyCarBack_carBack_alterationMileage.show">
+                            <label class="layui-form-label" v-show="nodeFields.applyCarBack_carBack_alterationMileage.edit">
+                                <span style="color:red">{{nodeFields.applyCarBack_carBack_alterationMileage.required?'*':''}}</span>退车里程数/km:
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.applyCarBack_carBack_alterationMileage.edit">退车里程数/km:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" v-show="nodeFields.applyCarBack_carBack_alterationMileage.edit"
+                                       class="layui-input"
+                                       v-model="applyForDTO.alterationMileage"
+                                       oninput="sumOdographInput(this)"
+                                       :lay-verify="nodeFields.applyCarBack_carBack_alterationMileage.required"
+                                       @keyup="inputAlterationMileage"
+                                       placeholder="请输入里程数/km">
+                                <input type="text" style="border:0px;" :value="applyForDTO.alterationMileage || '--' " disabled
+                                       v-show="!nodeFields.applyCarBack_carBack_alterationMileage.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs12"  v-show="nodeFields.applyCarBack_carBack_depot.show">
+                            <label class="layui-form-label" v-show="nodeFields.applyCarBack_carBack_depot.edit">
+                                <span style="color:red">{{nodeFields.applyCarBack_carBack_depot.required?'*':''}}</span>退回仓库:
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.applyCarBack_carBack_depot.edit">退回仓库:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" v-model="applyForDTO.depotName" :lay-verify="nodeFields.applyCarBack_carBack_depot.required" v-show="nodeFields.applyCarBack_carBack_depot.edit"
+                                       @click="chooseWarehouse"   placeholder="请选择退回仓库" style="cursor:pointer;" readonly="readonly"/>
+                                <input type="text" style="border:0px;" :value="applyForDTO.depotName || '--' " disabled
+                                       v-show="!nodeFields.applyCarBack_carBack_depot.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6" v-show="nodeFields.applyCarBack_carBack_refundTime.show">
+                            <label class="layui-form-label" v-show="nodeFields.applyCarBack_carBack_refundTime.edit">
+                                <span style="color:red">{{nodeFields.applyCarBack_carBack_refundTime.required?'*':''}}</span>退款/收款时间:
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.applyCarBack_carBack_refundTime.edit">退款/收款时间:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" v-show="nodeFields.applyCarBack_carBack_refundTime.edit"
+                                       :lay-verify="nodeFields.applyCarBack_carBack_refundTime.required"
+                                       class="layui-input"
+                                       id="dateRefund"
+                                       v-model="applyForDTO.refundTime"
+                                       readonly="readonly"
+                                       placeholder="请选择时间">
+                                <input type="text" style="border:0px;" :value="applyForDTO.refundTime || '--' " disabled style="border:0px;"
+                                       v-show="!nodeFields.applyCarBack_carBack_refundTime.edit" class="layui-input input-readonly">
+                            </div>
+                        </div>
+                        <div class="layui-row layui-form-row-content" v-show="nodeFields.applyCarBack_carBack_shipType.show">
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <label class="layui-form-label" v-show="nodeFields.applyCarBack_carBack_shipType.edit">
+                                    <span style="color:red">{{nodeFields.applyCarBack_carBack_shipType.required?'*':''}}</span>修改车辆状态:
+                                </label>
+                                <label class="layui-form-label" v-show="!nodeFields.applyCarBack_carBack_shipType.edit">修改车辆状态:</label>
+                                <div class="layui-input-inline">
+                                    <input type="radio" lay-filter="shipType" :lay-verify="nodeFields.applyCarBack_carBack_shipType.required" v-model="applyForDTO.shipType"
+                                           name="shipType" value="1" lay-skin="primary" title="整备中" :disabled="!nodeFields.applyCarBack_carBack_shipType.edit">
+                                    <input type="radio" lay-filter="shipType" :lay-verify="nodeFields.applyCarBack_carBack_shipType.required" v-model="applyForDTO.shipType"
+                                           name="shipType" value="2" lay-skin="primary" title="备发车" :disabled="!nodeFields.applyCarBack_carBack_shipType.edit">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                退车结算信息
+                <div class="fr display ">
+                    <div v-show="applyForDTO.repayType == 0" class="details-layui-fr-sup-title">
+                        <span class="xz-header-title__text" style="color: red;">需要客户补缴金额/元：</span>
+                        <span class="description">{{settleAmount}}</span>
+                    </div>
+                    <div v-show="applyForDTO.repayType == 1" class="details-layui-fr-sup-title">
+                        <span class="xz-header-title__text" style="color: red;">需要退还客户金额/元：</span>
+                        <span class="description">{{settleAmount}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-content-session-box">
+                <div class="card" id="serviceConfig" style="padding-top: 30px;"></div>
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12"  v-show="nodeFields.applyCarBack_carBack_uploadAttach.show">
+                            <label class="layui-form-label" v-show="nodeFields.applyCarBack_carBack_uploadAttach.edit">
+                                <span style="color:red">{{nodeFields.applyCarBack_carBack_uploadAttach.required?'*':''}}</span>退车结算附件:
+                            </label>
+                            <label class="layui-form-label" v-show="!nodeFields.applyCarBack_carBack_uploadAttach.edit">退车结算附件:</label>
+                            <div class="layui-input-inline">
+                                <div class="layui-input-inline-upload" v-show="nodeFields.applyCarBack_carBack_uploadAttach.edit">
+                                    <div :id="deliveryFileLstId" class="layui-input-inline-upload-show box-rect"
+                                         v-for="(item,index) in deliveryFileLst">
+                                        <div v-show="item.typeFile == 1" class="layui-input-inline-upload-button">
+                                            <img :src="imageURL + item.url" class="view-img">
+                                        </div>
+                                        <div v-show="item.typeFile != 1" class="layui-input-inline-upload-button">
+                                            {{item.nameAccessory}}
+                                        </div>
+                                        <div class="layui-input-inline-upload-show-delete btn-event"
+                                             :style="nodeFields.applyCarBack_carBack_uploadAttach.edit ? 'width: 49%' : 'width: 100%'"
+                                             @click="delDeliveryFile(item.id)">
+                                            删除
+                                        </div>
+                                        <div v-show="item.typeFile != 1"
+                                             :style="nodeFields.applyCarBack_carBack_uploadAttach.edit ? 'width: 49%;left: 51%' : 'width: 100%'"
+                                             class="layui-input-inline-upload-show-delete btn-event" @click="downDoc(item.nameFile, item.url)">
+                                            下载
+                                        </div>
+                                        <div v-show="item.typeFile == 1"
+                                             :style="nodeFields.applyCarBack_carBack_uploadAttach.edit ? 'width: 49%;left: 51%' : 'width: 100%'"
+                                             class="layui-input-inline-upload-show-delete btn-event" @click="showDoc(item.nameAccessory, item.url)">
+                                            预览
+                                        </div>
+                                    </div>
+                                    <div class="layui-input-inline-upload-button box-rect box-rect-event"
+                                         id="addDeliveryFile" v-show="nodeFields.applyCarBack_carBack_uploadAttach.edit">
+                                        <img src="../../statics/images/inline-upload@2x.png">
+                                    </div>
+                                </div>
+                                <div class="layui-input-inline-upload" v-show="!nodeFields.applyCarBack_carBack_uploadAttach.edit">
+                                    <div :id="deliveryFileLstId" class="layui-input-inline-upload-show box-rect"
+                                         v-for="(item,index) in deliveryFileLst">
+                                        <div v-show="item.typeFile == 1" class="layui-input-inline-upload-button">
+                                            <img :src="imageURL + item.url" class="view-img">
+                                        </div>
+                                        <div v-show="item.typeFile != 1" class="layui-input-inline-upload-button">
+                                            {{item.nameAccessory}}
+                                        </div>
+                                        <div v-show="item.typeFile != 1"
+                                             :style="nodeFields.applyCarBack_carBack_uploadAttach.edit ? 'width: 49%;left: 51%' : 'width: 100%'"
+                                             class="layui-input-inline-upload-show-delete btn-event" @click="downDoc(item.nameFile, item.url)">
+                                            下载
+                                        </div>
+                                        <div v-show="item.typeFile == 1"
+                                             :style="nodeFields.applyCarBack_carBack_uploadAttach.edit ? 'width: 49%;left: 51%' : 'width: 100%'"
+                                             class="layui-input-inline-upload-show-delete btn-event" @click="showDoc(item.nameAccessory, item.url)">
+                                            预览
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-input-inline-upload-text" style="padding-bottom: 10px">附件说明：附件最大支持50M，
+                                    <br/>
+                                    支持格式：PDF、Word、Excel、JPG、PNG 、ZIP、RAR 、MP4
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-content-box" v-if="viewTag!='apply'">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                经租退车流程
+            </div>
+            <div class="car-details-info car-padding">
+                    <div class="car-flowChart" id="bpmChart"></div>
+            </div>
+        </div>
+        <div class="form-content-box" >
+            <div class="form-content-session-box">
+                <div class="float-btn-group bottom-bar" v-if="viewTag=='apply' || viewTag=='edit' || viewTag=='reedit'">
+                    <a class="layui-btn reset-btn" @click="cancel">取消</a>
+                    <a class="layui-btn search-btn" lay-submit lay-filter="submitEditData">保存</a>
+                </div>
+                <div class="float-btn-group bottom-bar" v-if="viewTag=='applyDetail'">
+                    <a class="layui-btn reset-btn" @click="cancel">返回</a>
+                    <a class="layui-btn search-btn" v-if="instanceStatus == 1" @click="recall">撤回</a>
+                    <a class="layui-btn search-btn" v-if="instanceStatus == 2 || instanceStatus == 5" @click="applydel">删除</a>
+                    <a class="layui-btn search-btn" v-if="instanceStatus == 6 && nodeType == 1" @click="reeditAgain">重新编辑</a>
+                </div>
+                <div class="float-btn-group bottom-bar" v-if="viewTag=='approve'">
+                    <a class="layui-btn reset-btn" @click="cancel">返回</a>
+                    <a class="layui-btn search-btn" v-if="approveType != 3" lay-submit lay-filter="approve">审核通过</a>
+                    <a class="layui-btn search-btn" v-if="approveType != 3" @click="reject">审核驳回</a>
+                    <a class="layui-btn search-btn" v-if="approveType != 3" @click="refuse">审核拒绝</a>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <form class="layui-form ren-form" v-show="boxShow" id="boxShow">
+        <div class="details-conteiner">
+            <div class="details-content-box">
+                <div class="form-content-session-box" :style="boxInputShow?'':'text-align: center;'">
+                    <PRE>{{boxMark}}</PRE>
+                    <br/>
+                    <div class="card" v-show="boxInputShow">
+                        <textarea style="min-width: 400px;min-height: 90px;max-width: 400px;max-height: 120px" type="text" v-model="boxTxt" autocomplete="off" :placeholder="boxHolder" class="layui-input"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="details-content-box">
+                <div class="form-content-session-box">
+                    <label class="layui-form-label">审批附件:</label>
+                    <div class="layui-input-inline">
+                        <div class="layui-input-inline-upload">
+                            <div :id="fileLstId2" class="layui-input-inline-upload-show box-rect" v-for="(item,index) in fileLst2">
+                                <div v-show="item.typeFile == 1" class="layui-input-inline-upload-button">
+                                    <img :src="imageURL + item.url" class="view-img">
+                                </div>
+                                <div v-show="item.typeFile != 1" class="layui-input-inline-upload-button">
+                                    {{item.nameAccessory}}
+                                </div>
+                                <div class="layui-input-inline-upload-show-delete btn-event" @click="delFile2(item.id)">
+                                    删除
+                                </div>
+                            </div>
+                            <div class="layui-input-inline-upload-button box-rect box-rect-event" id="addFile2">
+                                <img src="../../statics/images/inline-upload@2x.png">
+                            </div>
+                        </div>
+                        <div class="layui-input-inline-upload-text" style="padding-bottom: 10px">附件说明：附件最大支持50M，
+                            <br/>
+                            支持格式：PDF、Word、Excel、JPG、PNG、ZIP、RAR
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="../../statics/js/modules/order/applycarback.js"></script>
+<link rel="stylesheet" href="../../statics/css/submit-approval.css">
+</body>
+</html>

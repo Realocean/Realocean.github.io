@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../statics/newImages/logo/logo@2x.png">
+    <title>新增线索</title>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/global.css" media="all">-->
+
+    <!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/fonts/larry-icon.css" media="all">-->
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+    <!-- 放开后表格无法拖动   <link rel="stylesheet" type="text/css" href="../../statics/new_css/larryms.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/new_css/normalize.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <!-- Import style -->
+    <link rel="stylesheet" href="../../statics/js/element-plus/index.css" />
+    <!-- 页面样式 -->
+    <link rel="stylesheet" href="../../statics/new_css/mf-layout.css" />
+
+</head>
+<style>
+    .el-input {
+        width: 300px;
+    }
+
+    .detail-content{
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+</style>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <div class="list-header-content-box">
+
+        <div style="margin: 20px 70px 0 70px">
+            <el-form ref="form" :rules="rules" :model="form" label-width="120px">
+                <el-row :gutter="5">
+                    <el-col :span="12">
+                        <el-form-item label="品牌/车系/车型" prop="modelId">
+                            <el-cascader
+                                    v-model="modeldata"
+                                    :key="modelKey"
+                                    ref="model"
+                                    :options="brandList"
+                                    @change="handleBrandChange"
+                                    placeholder="请选择品牌/车系/车型"/>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="车辆级别" prop="productType">
+                            <el-select
+                                    v-model="form.productType" placeholder="请选择车辆级别" >
+                                <el-option
+                                        v-for="(item, index) in carType" :key="index"
+                                        :label="item.value" :value="item.code"/>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+
+                </el-row>
+
+                <el-row :gutter="5">
+                    <el-col :span="12">
+                        <el-form-item label="电池品牌" prop="batteryBrand">
+                            <el-select
+                                    v-model="form.batteryBrand" placeholder="请选择电池品牌" >
+                                <el-option
+                                        v-for="(item, index) in batteryBrandList" :key="index"
+                                        :label="item.value" :value="item.code"/>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="电池度数" prop="batteryDegree">
+                            <el-select
+                                    v-model="form.batteryDegree" placeholder="请选择电池度数" >
+                                <el-option
+                                        v-for="(item, index) in batteryNumList" :key="index"
+                                        :label="item.value" :value="item.code"/>
+                            </el-select>
+                        </el-form-item>
+
+                    </el-col>
+
+                </el-row>
+
+                <el-row :gutter="5">
+                    <el-col :span="12">
+                        <el-form-item label="生产日期" prop="productionTime">
+                            <el-date-picker
+                                    v-model="form.productionTime"
+                                    type="date"
+                                    placeholder="选择生产日期"
+                                    format="YYYY-MM-DD"
+                                    value-format="YYYY-MM-DD"
+                            />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="采购数量" prop="purchaseNum">
+                            <el-input-number @change="inputChange" style="width: auto" v-model="form.purchaseNum" :min="1"></el-input-number>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+
+                <el-row :gutter="5">
+                    <el-col :span="12">
+                        <el-form-item label="采购单价(万元)" prop="purchasePrice">
+
+<!--                            <el-input-->
+<!--                                    oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"-->
+<!--                                    v-model.trim="form.purchasePrice" placeholder="请输入支付金额"></el-input>-->
+                            <el-input
+                                    @change="inputChange"
+                                    oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)} value = value.replace(new RegExp(`^\\D*(\\d{9}(?:\\.\\d{0,2})?).*$`, 'g'), '$1')"
+                                    v-model.trim="form.purchasePrice" placeholder="请输入支付金额"></el-input>
+
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="采购总价(万元)" prop="purchaseTotalPrice">
+
+<!--                            <el-input-->
+<!--                                    oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"-->
+<!--                                    v-model.trim="form.purchaseTotalPrice" placeholder="请输入采购总价"></el-input>-->
+
+                            <el-input
+                                    readonly
+                                    oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)} value = value.replace(new RegExp(`^\\D*(\\d{9}(?:\\.\\d{0,2})?).*$`, 'g'), '$1')"
+                                    v-model.trim="form.purchaseTotalPrice" placeholder="请输入采购总价"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="5">
+                    <el-col :span="12">
+                        <el-form-item label="采购日期" prop="purchaseTime">
+                            <el-date-picker
+                                    v-model="form.purchaseTime"
+                                    type="date"
+                                    placeholder="选择采购日期"
+                                    format="YYYY-MM-DD"
+                                    value-format="YYYY-MM-DD"
+                            >
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="采购订单编号" prop="orderNo">
+                            <el-input v-model="form.orderNo" placeholder="请输入采购订单编号" />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="5">
+                    <el-col :span="12">
+                        <el-form-item label="支付方式" prop="payType">
+                            <el-input v-model="form.payType" placeholder="请输入支付方式" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="支付金额(万元)" prop="amountPaid">
+<!--                            <el-input-->
+<!--                                    oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"-->
+<!--                                    v-model.trim="form.amountPaid" placeholder="请输入支付金额"></el-input>-->
+
+                            <el-input
+                                    oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)} value = value.replace(new RegExp(`^\\D*(\\d{9}(?:\\.\\d{0,2})?).*$`, 'g'), '$1')"
+                                    v-model.trim="form.amountPaid" placeholder="请输入支付金额"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="5">
+                    <el-col :span="12">
+                        <el-form-item label="厂家" prop="manufacturer">
+                            <el-input v-model="form.manufacturer" placeholder="请输入厂家" />
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="经销商" prop="dealer">
+                            <el-input v-model="form.dealer" placeholder="请输入经销商" />
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+
+            <div class="dialog-footer">
+                <el-button type="primary" @click="submitForm">保 存</el-button>
+                <el-button @click="cancel">取 消</el-button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Import Vue 3 -->
+<script src="../../statics/js/vue3/vue.global.js"></script>
+<!-- Import component library -->
+<script src="../../statics/js/element-plus/index.full.js"></script>
+<script src="../../statics/js/element-plus/icons-vue.js"></script>
+<script src="../../statics/plugins/jquery.min.js"></script>
+<script src="../../statics/common/layui/layui.js"></script>
+<script src="../../statics/js/common.js"></script>
+<script src="../../statics/js/element-plus/locale-cn.js"></script>
+<script>
+
+</script>
+<script src="../../statics/js/modules/purchaseManager/add.js?_${.now?long}"></script>
+</body>
+
+</html>

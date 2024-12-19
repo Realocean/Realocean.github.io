@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>新建供应商</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/new-edit.css">
+
+
+
+
+
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <form class="layui-form">
+
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                <span class="fm-daoru-title">基础信息</span>
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red;">*</span>供应商名称:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="supplierName" maxlength="200" v-model="purchaseSupplier.supplierName" autocomplete="off" placeholder="供应商名称" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">所在省:</label>
+                            <div class="layui-input-inline">
+                                <select name="provinceId" id="provinceId"  lay-verify="provinceIdAdd" v-model="purchaseSupplier.provinceId" class="layui-select" lay-filter="provinceId">
+                                    <option value="">请选择省</option>
+                                    <option v-for="r in provinceId" :value="r.code">{{r.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">所在市:</label>
+                            <div class="layui-input-inline">
+                                <select id="cityId" name="tSysInsuranceCompany.cityId" lay-verify="cityIdAdd" v-model="purchaseSupplier.cityId" class="layui-select" lay-filter="cityId">
+                                    <option value="">请选择市</option>
+                                    <option v-for="r in cityId" :value="r.code">{{r.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">所在地区:</label>
+                            <div class="layui-input-inline">
+                                <select id="areaId" name="areaId"  lay-verify="areaIdAdd" v-model="purchaseSupplier.areaId"   class="layui-select" lay-filter="areaId">
+                                    <option value="">请选择县/区</option>
+                                    <option v-for="r in areaId" :value="r.code">{{r.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">详细地址:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="addrDetail" v-model="purchaseSupplier.addrDetail" autocomplete="off" placeholder="详细地址" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">跟进人:</label>
+                            <div class="layui-input-inline">
+                                <select v-model="purchaseSupplier.followusrId"  lay-filter="followusrId"  lay-verify="followusrId">
+                                    <option value="">请选择</option>
+                                    <option v-for="item in salesmanLst" :value="item.userId">{{item.username}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                <span class="fm-daoru-title">联系人信息</span>
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red;">*</span>联系人:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="contacts" maxlength="200" v-model="purchaseSupplier.contacts" autocomplete="off" placeholder="请输入联系人姓名" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red;">*</span>联系电话:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="phone" v-model="purchaseSupplier.phone" autocomplete="off" placeholder="请输入联系人电话/手机号" class="layui-input">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                <span class="fm-daoru-title">财务信息</span>
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">开户名称:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="" maxlength="200" v-model="purchaseSupplier.accountName" autocomplete="off" placeholder="请输入开户名称" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">开户银行:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="" v-model="purchaseSupplier.accountBank" autocomplete="off" placeholder="请输入开户银行" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">银行账号:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="" v-model="purchaseSupplier.bankNo" autocomplete="off" placeholder="请输入银行账号" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                <span class="fm-daoru-title">其他信息</span>
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">备注:</label>
+                            <div class="layui-input-inline">
+                                <textarea style="min-width: 520px;min-height: 90px;max-width: 520px;max-height: 120px" type="text" lay-verify="" v-model="purchaseSupplier.memo" autocomplete="off" placeholder="请添加备注说明" class="layui-input"></textarea>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="layui-row layui-form-row-content">
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <label class="layui-form-label">附件:</label>
+                                    <div class="layui-input-inline">
+                                        <div class="layui-input-inline">
+                                            <div class="layui-input-inline-upload">
+                                                <div :id="fileLstId" class="layui-input-inline-upload-show box-rect" v-for="(item,index) in fileMaps">
+                                                    <div v-show="item.typeFile == 1" class="layui-input-inline-upload-button">
+                                                        <img :src="imageURL + item.url" class="view-img">
+                                                    </div>
+                                                    <div v-show="item.typeFile != 1" class="layui-input-inline-upload-button">
+                                                        {{item.nameAccessory}}
+                                                    </div>
+                                                    <div class="layui-input-inline-upload-show-delete btn-event" @click="delFjFile(item.id)">
+                                                        删除
+                                                    </div>
+                                                </div>
+                                                <div class="layui-input-inline-upload-button box-rect box-rect-event" id="fjfileTxt">
+                                                    <img src="../../statics/images/inline-upload@2x.png">
+                                                </div>
+                                            </div>
+                                            <div class="layui-input-inline-upload-text">
+                                                附件说明：附件最大支持30M，
+                                                支持格式：PDF、Word、Excel、JPG、PNG 、ZIP、RAR </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">状态:</label>
+                            <div class="layui-input-inline">
+                                <input type="radio" name="enalbe" lay-verify="enalbe" lay-filter="enalbe" value="1" title="正常" v-model="purchaseSupplier.enalbe">
+                                <input type="radio" name="enalbe" lay-verify="enalbe" lay-filter="enalbe" value="0" title="禁用" v-model="purchaseSupplier.enalbe">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="float-btn-group">
+            <a class="layui-btn reset-btn" @click="cancel">取消</a>
+            <button class="layui-btn layui-btn-radius" id="saveReceivables" lay-submit lay-filter="saveOrUpdate">确定</button>
+        </div>
+    </form>
+</div>
+
+
+
+<script src="../../statics/js/modules/purchase/purchasesupplieredit.js"></script>
+</body>
+</html>

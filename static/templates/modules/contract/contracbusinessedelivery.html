@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>企业合同</title>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="Author" content="larry" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+    <script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/common.js"></script>
+    <script type="text/javascript" src="../../statics/js/upload.js"></script>
+    <script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+    <link rel="stylesheet" href="../../statics/new_css/jxcPublicAll.css"  media="all">
+    <link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../statics/common/step/steps.css">
+    <link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/viewer.min.css">
+    <script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+    <script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+    <script src="../../statics/common/layui/autocomplete.js"></script>
+    <script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+    <script src="../../statics/common/print-js/print.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+    <script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/searchview.js"></script>
+    <script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+    <script src="../../statics/common/xlsx/dist/xlsx.core.min.js"></script>
+    <script src="../../statics/common/layui_exts/excel.js"></script>
+    <script src="../../statics/js/xlsread.js"></script>
+    <!-- 引入组件库 -->
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+
+    <style>
+        .layui-form-radioed{
+            width: auto !important;
+        }
+    </style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <!-- 新增表单 -->
+    <form class="layui-form ren-form" style="margin-bottom: 60px;">
+
+        <div class="details-content-box">
+            <div class="left-before">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    基础信息
+                </div>
+            </div>
+            <div class="details-layui-row">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">合同编号:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" :value="isEmpty(contracbusiness.contractNo)"
+                                       disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">合同名称:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" :value="isEmpty(contracbusiness.contractName)"
+                                       disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">订单类型:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" :value="getRentTypeStr(contracbusiness.rentType)"
+                                       disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">所属销售:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" :value="isEmpty(contracbusiness.salePersonName)"
+                                       disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">出租方:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" :value="isEmpty(contracbusiness.lessorName)"
+                                       disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">承租方:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" :value="isEmpty(contracbusiness.leaseeName)"
+                                       disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">合同开始时间:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" :value="isEmpty(contracbusiness.timeStart)"
+                                       disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">合同签约时间:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" :value="isEmpty(contracbusiness.timeSigned)"
+                                       disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">合同状态:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" :value="isEmpty(contracbusiness.statusStr)"
+                                       disabled/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label">备注:</label>
+                            <div class="layui-input-inline">
+                                <input type="text" class="layui-input searchVal" :value="isEmpty(contracbusiness.remark)"
+                                       disabled/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" style="margin-top: 20px;">
+                    <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                        <label class="layui-form-label" >合同附件:</label>
+                        <div class="layui-input-inline" id="contractFileLst"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="details-content-box">
+            <div class="left-before">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    车型信息
+                </div>
+            </div>
+            <div class="details-layui-row">
+                <div class="card">
+                    <div class="table">
+                        <table class="layui-hide" id="planTable" lay-filter="planTable"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="details-content-box">
+            <div class="left-before">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    发车信息
+                </div>
+            </div>
+            <div id="importDoc">
+                <a class="layui-btn layui-btn-normal" style="margin: 15px 15px 15px 0;" id="addCar">新增</a>
+                <a class="layui-btn layui-btn-checked" style="margin: 15px 15px 15px 0;" id="downExl">下载导入模板</a>
+            </div>
+            <div class="details-layui-row">
+                <div class="card">
+                    <div class="table">
+                        <table class="layui-hide" id="carTable" lay-filter="carTable"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-content-box">
+            <div class="left-before">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    订单信息
+                </div>
+            </div>
+            <div class="form-content-session-box">
+                <div class="card" v-if="contracbusiness.rentType < 5 || contracbusiness.rentType == 7">
+                    <div class="layui-row layui-form-row-content">
+                        <!--<div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label"><span style="color:red">*</span>付款方式</label>
+                            <div class="layui-input-inline">
+                                <input type="radio" lay-filter="paymentMethod" v-model="delivery.paymentMethod"
+                                       name="paymentMethod" value="7" lay-skin="primary" title="日付">
+                                <input type="radio" lay-filter="paymentMethod" v-model="delivery.paymentMethod"
+                                       name="paymentMethod" value="8" lay-skin="primary" title="周付">
+                                <input type="radio" lay-filter="paymentMethod" v-model="delivery.paymentMethod"
+                                       name="paymentMethod" value="1" lay-skin="primary" title="月付">
+                                <input type="radio" lay-filter="paymentMethod" v-model="delivery.paymentMethod"
+                                       name="paymentMethod" value="2" lay-skin="primary" title="两月付">
+                                <input type="radio" lay-filter="paymentMethod" v-model="delivery.paymentMethod"
+                                       name="paymentMethod" value="3" lay-skin="primary" title="季付">
+                                <input type="radio" lay-filter="paymentMethod" v-model="delivery.paymentMethod"
+                                       name="paymentMethod" value="6" lay-skin="primary" title="半年付">
+                                <input type="radio" lay-filter="paymentMethod" v-model="delivery.paymentMethod"
+                                       name="paymentMethod" value="4" lay-skin="primary" title="年付">
+                                <input type="radio" lay-filter="paymentMethod" v-model="delivery.paymentMethod"
+                                       name="paymentMethod" value="5" lay-skin="primary" title="一次性结清">
+                            </div>
+                        </div>-->
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label"><span style="color:red">*</span>账单周期</label>
+                            <div class="layui-input-inline">
+                                <input type="radio" lay-filter="billType" v-model="delivery.billType"
+                                       name="billType" value="1" lay-skin="primary" title="自然月计算">
+                                <input type="radio" lay-filter="billType" v-model="delivery.billType"
+                                       name="billType" value="2" lay-skin="primary" title="自然月计算（具体时间可以配置）">
+                                <input type="radio" lay-filter="billType" v-model="delivery.billType"
+                                       name="billType" value="3" lay-skin="primary" title="固定30日">
+                                <input type="radio" lay-filter="billType" v-model="delivery.billType"
+                                       name="billType" value="4" lay-skin="primary" title="满月计算">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" v-if="contracbusiness.rentType == 6">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>还款时间</label>
+                            <div class="layui-input-inline">
+                                <input type="text" v-model="delivery.timeRepayment" id="timeRepayment"
+                                       autocomplete="off" placeholder="请选择还款时间" readonly
+                                       lay-verify="validate_timeRepayment"
+                                       class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label">备注</label>
+                            <div class="layui-input-inline">
+                                <input type="text" v-model="delivery.orderDesc"
+                                       autocomplete="off" placeholder="如果需要备注，请记录备注信息" class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-content-box">
+            <div class="left-before">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    交车信息
+                </div>
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>交车时间</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_timeDelivery"
+                                       v-model="delivery.timeDelivery"
+                                       readonly id="timeDelivery"
+                                       autocomplete="off" placeholder="请选择交车时间" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>交车工作人员</label>
+                            <div class="layui-input-inline">
+                                <select lay-search="" lay-verify="validate_deliveryOperationId" name="deliveryOperation"
+                                        lay-filter="deliveryOperation" v-model="delivery.deliveryOperationId">
+                                    <option value="">请选择交车工作人员</option>
+                                    <option v-for="(item,index) in usrLst" :value="item.userId">{{item.username}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label">备注</label>
+                            <div class="layui-input-inline">
+                                <input type="text" v-model="delivery.deliveryDesc"
+                                       autocomplete="off" placeholder="如果需要备注，请记录备注信息" class="layui-input searchVal">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="float-btn-group bottom-bar">
+            <a class="layui-btn reset-btn" id="closePage">取消</a>
+            <a class="layui-btn search-btn" lay-submit lay-filter="save" id="submit">提交</a>
+        </div>
+    </form>
+
+
+</div>
+
+<script type="text/html" id="barTpl">
+    <a class="layui-grid-btn-xs" lay-event="del">删除</a>
+</script>
+<script src="../../statics/js/modules/contract/contracbusinessedelivery.js?_${.now?long}"></script>
+</body>
+</html>

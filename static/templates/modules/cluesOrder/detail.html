@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../statics/newImages/logo/logo@2x.png">
+    <title>新增线索</title>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/global.css" media="all">-->
+
+    <!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/fonts/larry-icon.css" media="all">-->
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+    <!-- 放开后表格无法拖动   <link rel="stylesheet" type="text/css" href="../../statics/new_css/larryms.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/new_css/normalize.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <!-- Import style -->
+    <link rel="stylesheet" href="../../statics/js/element-plus/index.css" />
+    <!-- 页面样式 -->
+    <link rel="stylesheet" href="../../statics/new_css/mf-layout.css" />
+
+</head>
+<style scoped>
+    .el-input {
+        width: 300px;
+    }
+
+    .wrap-content {
+        background: linear-gradient(#E1F3F4, white);
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .sub-info {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 20px 40px;
+    }
+
+    .el-textarea__inner{
+        width: 600px;
+    }
+
+</style>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <div class="wrap-content">
+        <div class="sub-info">
+<!--            <div class="add-title-wrap">{{outCarOrder.salesDeptName}}&#45;&#45;车辆出库</div>-->
+            <el-descriptions title="">
+                <el-descriptions-item label="车辆VIN:">{{outCarOrder.vinNo}}</el-descriptions-item>
+                <el-descriptions-item label="品牌/车系/车型:">{{outCarOrder.brandName}}/{{outCarOrder.seriesName}}/{{outCarOrder.modelName}}</el-descriptions-item>
+                <el-descriptions-item label="销售顾问:">{{outCarOrder.salesName}}</el-descriptions-item>
+                <el-descriptions-item label="客户姓名:">{{outCarOrder.customerName}}</el-descriptions-item>
+                <el-descriptions-item label="客户手机:">{{outCarOrder.phone}}</el-descriptions-item>
+                <el-descriptions-item label="线索来源:">{{getCluesSourceValue(outCarOrder.cluesSource)}}</el-descriptions-item>
+                <el-descriptions-item label="客户地址:">{{outCarOrder.customerAddress||'--'}}</el-descriptions-item>
+                <el-descriptions-item label="购车用途:">{{outCarOrder.buyCarPurpose||'--'}}</el-descriptions-item>
+                <el-descriptions-item label="销售金额:">{{outCarOrder.salesAmount}}</el-descriptions-item>
+                <el-descriptions-item label="付款类型:">{{getDicValuePayType(outCarOrder.paymentType)}}</el-descriptions-item>
+            </el-descriptions>
+        </div>
+        <div class="sub-info" style="margin-top: 20px">
+            <div class="add-title-wrap">金融需求</div>
+            <el-descriptions title="">
+                <el-descriptions-item label="金融公司:">{{getDicValueFinancialCompany(outCarOrder.financeCompany)}}</el-descriptions-item>
+                <el-descriptions-item label="金融状态:">{{getDicValueFinancialStatus(outCarOrder.financeStatus)}}</el-descriptions-item>
+                <el-descriptions-item label="首付款:">{{outCarOrder.downPayment}}</el-descriptions-item>
+                <el-descriptions-item label="贷款额度:">{{outCarOrder.loanAmount}}</el-descriptions-item>
+                <el-descriptions-item label="货款期限:">{{getDicValueLoanTerm(outCarOrder.loanTerm)}}</el-descriptions-item>
+                <el-descriptions-item label="是否代办上牌:">{{outCarOrder.agencyRegistration==1?'是':'否'}}</el-descriptions-item>
+                <el-descriptions-item label="销售合同:" :span="3" >
+                    <el-image
+                            v-if="fileType==1"
+                            style="width: 178px; height: 178px"
+                            :src="fileUrl"
+                            :zoom-rate="1.2"
+                            :max-scale="7"
+                            :min-scale="0.2"
+                            :preview-src-list="[fileUrl]"
+                            :initial-index="0"
+                            fit="cover"
+                    ></el-image>
+                    <span v-else-if="fileType==2" style="color: #3facb3;cursor: pointer" @click="viewFile">销售合同</span>
+                    <span v-else>--</span>
+
+                </el-descriptions-item>
+<!--                <el-descriptions-item label="备注:" :span="3">{{outCarOrder.remark}}</el-descriptions-item>-->
+            </el-descriptions>
+        </div>
+<!--        <div class="dialog-footer">-->
+<!--            <el-button type="primary" @click="cancel">知道了</el-button>-->
+<!--                        <el-button @click="cancel">拒 绝</el-button>-->
+<!--        </div>-->
+    </div>
+</div>
+
+<!-- Import Vue 3 -->
+<script src="../../statics/js/vue3/vue.global.js"></script>
+<!-- Import component library -->
+<script src="../../statics/js/element-plus/index.full.js"></script>
+<script src="../../statics/js/element-plus/icons-vue.js"></script>
+<script src="../../statics/plugins/jquery.min.js"></script>
+<script src="../../statics/common/layui/layui.js"></script>
+<script src="../../statics/js/common.js"></script>
+<script src="../../statics/js/element-plus/locale-cn.js"></script>
+<script>
+
+</script>
+<script src="../../statics/js/modules/cluesOrder/detail.js?_${.now?long}"></script>
+</body>
+
+</html>

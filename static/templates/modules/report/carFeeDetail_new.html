@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../statics/newImages/logo/logo@2x.png">
+    <title>新增线索</title>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/global.css" media="all">-->
+
+    <!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/fonts/larry-icon.css" media="all">-->
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+    <!-- 放开后表格无法拖动   <link rel="stylesheet" type="text/css" href="../../statics/new_css/larryms.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/new_css/normalize.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <!-- Import style -->
+    <link rel="stylesheet" href="../../statics/js/element-plus/index.css"/>
+    <!-- 页面样式 -->
+    <link rel="stylesheet" href="../../statics/new_css/mf-layout.css"/>
+
+</head>
+<style>
+    .el-input {
+        width: 300px;
+    }
+
+    .wrap-content {
+        background: linear-gradient(#E1F3F4, white);
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .sub-info {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 10px 35px;
+    }
+
+    .el-textarea__inner {
+        width: 600px;
+    }
+
+    .add-title-wrap {
+        justify-content: space-between;
+    }
+
+    .text-detail {
+        color: #3facb3;
+        margin-left: 10px;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    .el-descriptions__header {
+        justify-content: flex-start;
+    }
+
+    .cell-item{
+        display: inline-flex;
+        align-items: center;
+    }
+
+</style>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <div class="wrap-content">
+
+        <div class="sub-info">
+            <div class="add-title-wrap">车辆信息</div>
+            <el-descriptions title="">
+                <el-descriptions-item label="车牌号:">{{carDetail.carNo || '--'}}</el-descriptions-item>
+                <el-descriptions-item label="车辆归属:">{{carDetail.deptName || '--'}}</el-descriptions-item>
+                <el-descriptions-item label="车辆所在仓库:">{{carDetail.depotName || '--'}}
+                </el-descriptions-item>
+                <el-descriptions-item label="车架号:">{{carDetail.vinNo || '--'}}</el-descriptions-item>
+                <el-descriptions-item label="品牌/车系/车型:">{{carDetail.carBrandName || '--'}}</el-descriptions-item>
+                <el-descriptions-item label="车辆折旧率:">{{carDetail.carDepreciate == null ? 0 : carDetail.carDepreciate}}%
+                </el-descriptions-item>
+            </el-descriptions>
+        </div>
+
+        <div class="sub-info" style="margin-top: 15px">
+            <div class="add-title-wrap">车辆收入
+                <span>总计：{{carDetail.incomeTotal || '--'}}元</span>
+            </div>
+            <div style="display: flex;">
+                <div style="flex: 1">
+                    <el-descriptions title="租赁收入" :column="1">
+                        <template #extra>
+                            <span class="text-detail" @click="jumpIncomePage">查看账单详情</span>
+                        </template>
+                        <el-descriptions-item
+                                v-for="(item, index) in carDetail.leaseList"
+                                :label="`${item.name}:`">
+                            (应收){{item.money}}元 (实收){{item.amount}}元
+                        </el-descriptions-item>
+                    </el-descriptions>
+                </div>
+                <div style="flex: 1">
+                    <el-descriptions title="退车收入" :column="1">
+                        <template #extra>
+                            <span class="text-detail" @click="jumpReturnCarPage">查看账单详情</span>
+                        </template>
+                        <el-descriptions-item
+                                v-for="(item, index) in carDetail.returnList"
+                                :label="`${item.name}:`">
+                            (应收){{item.money}}元 (实收){{item.amount}}元
+                        </el-descriptions-item>
+                    </el-descriptions>
+                </div>
+                <div style="flex: 1">
+                    <el-descriptions title="其他收入" :column="1">
+                        <template #extra>
+                            <span class="text-detail" @click="jumpIncomePage">查看账单详情</span>
+                        </template>
+                        <el-descriptions-item
+                                v-for="(item, index) in carDetail.otherList"
+                                :label="`${item.name}:`">
+                            (应收){{item.money}}元 (实收){{item.amount}}元
+                        </el-descriptions-item>
+                    </el-descriptions>
+                </div>
+            </div>
+        </div>
+
+        <div class="sub-info" style="margin-top: 15px">
+            <div class="add-title-wrap">费用支出
+                <span>总计：{{carDetail.payOutTotal || '--'}}元</span>
+            </div>
+            <div style="display: flex;">
+                <div style="flex: 1">
+                    <el-descriptions title="采购成本" :column="1">
+                        <!--                        <template #extra>-->
+                        <!--                            <span class="text-detail" >查看账单详情</span>-->
+                        <!--                        </template>-->
+                        <el-descriptions-item
+                                v-for="(item, index) in carDetail.purchaseList"
+                                :label="`${item.name}:`">
+                            (应付){{item.money}}元 (实付){{item.amount}}元
+                        </el-descriptions-item>
+                    </el-descriptions>
+                </div>
+                <div style="flex: 1">
+                    <el-descriptions title="保险费" :column="1">
+                        <!--                        <template #extra>-->
+                        <!--                            <span class="text-detail" >查看账单详情</span>-->
+                        <!--                        </template>-->
+                        <el-descriptions-item
+                                v-for="(item, index) in carDetail.insureList"
+                                :label="`${item.name}:`">
+                            (应付){{item.money}}元 (实付){{item.amount}}元
+                        </el-descriptions-item>
+                    </el-descriptions>
+                </div>
+                <div style="flex: 1">
+                    <el-descriptions title="维保年检费" :column="1">
+                        <!--                        <template #extra>-->
+                        <!--                            <span class="text-detail" >查看账单详情</span>-->
+                        <!--                        </template>-->
+                        <el-descriptions-item
+                                v-for="(item, index) in carDetail.yearCheckList"
+                                :label="`${item.name}:`">
+                            (应付){{item.money}}元 (实付){{item.amount}}元
+                        </el-descriptions-item>
+                        <el-descriptions-item
+                                v-for="(item, index) in carDetail.maintenanceList"
+                                :label="`${item.name}:`">
+                            (应付){{item.money}}元 (实付){{item.amount}}元
+                        </el-descriptions-item>
+                        <el-descriptions-item
+                                v-for="(item, index) in carDetail.maintainList"
+                                :label="`${item.name}:`">
+                            (应付){{item.money}}元 (实付){{item.amount}}元
+                        </el-descriptions-item>
+                    </el-descriptions>
+                </div>
+                <div style="flex: 1">
+                    <el-descriptions title="其他支出" :column="1">
+                        <!--                        <template #extra>-->
+                        <!--                            <span class="text-detail" >查看账单详情</span>-->
+                        <!--                        </template>-->
+                        <el-descriptions-item
+                                v-for="(item, index) in carDetail.otherPayList"
+                                :label="`${item.name}:`">
+                            (应付){{item.money}}元 (实付){{item.amount}}元
+                        </el-descriptions-item>
+                    </el-descriptions>
+                </div>
+            </div>
+        </div>
+
+        <div class="sub-info" style="margin-top: 15px">
+            <div class="add-title-wrap" style="justify-content: flex-start;align-items: center">其他费用<span
+                    class="text-detail" @click="jumpBadPage">查看账单详情</span></div>
+            <el-descriptions title="">
+                <el-descriptions-item label="车辆折旧费:">{{ carDetail.depreciateMoney }}元</el-descriptions-item>
+                <el-descriptions-item label="车辆折旧率:">{{carDetail.carDepreciate || '--'}}%</el-descriptions-item>
+                <el-descriptions-item label="税费:">{{carDetail.taxMoney || '--'}}元</el-descriptions-item>
+                <el-descriptions-item label="税率:">{{carDetail.tax == null ? 0 : carDetail.tax}}%
+                </el-descriptions-item>
+                <el-descriptions-item label="坏账:">{{carDetail.badMoney || '--'}}元</el-descriptions-item>
+            </el-descriptions>
+        </div>
+
+        <div class="sub-info" style="margin-top: 15px">
+            <div class="add-title-wrap">综述</div>
+
+            <div style="display: flex; align-items: center;margin-bottom: 20px">
+                <div style="flex: 1;font-size: 16px;color: #333;font-weight:bold;">
+                        <el-tooltip
+                                class="box-item"
+                                effect="dark"
+                                content="公式：营业收入（应收）-费用支出（实际支出）-折旧费-税费-坏账"
+                                placement="bottom-end">
+                            <el-button style="border: none;height: 23px;line-height: 23px;padding: 0;font-size: 16px;color: #333;font-weight:bold;margin-top: -3px">
+                                <svg style="width: 15px; height: 15px;margin-right: 5px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" data-v-ea893728=""><path fill="currentColor" d="M512 64a448 448 0 1 1 0 896 448 448 0 0 1 0-896m0 832a384 384 0 0 0 0-768 384 384 0 0 0 0 768m48-176a48 48 0 1 1-96 0 48 48 0 0 1 96 0m-48-464a32 32 0 0 1 32 32v288a32 32 0 0 1-64 0V288a32 32 0 0 1 32-32"></path></svg>
+                                车辆收益:</el-button>
+                        </el-tooltip>
+{{carDetail.carIncomeMoney || '--'}}元
+                </div>
+                <div style="flex: 1;font-size: 16px;color: #333;font-weight:bold;align-items: center">
+                    累计已收入(不含保证金/押金):{{carDetail.netReceiptsMoney || '--'}}元
+                </div>
+                <div style="flex: 1;font-size: 16px;color: #333;font-weight:bold;">
+                    累计已支出(不含保证金/押金){{carDetail.outputMoney || '--'}}元
+                </div>
+            </div>
+
+
+            <el-descriptions title="车辆订单费用">
+                <el-descriptions-item v-show="carDetail.currentOrderNo!=null" label="当前订单:" ><span style="color: #3facb3;cursor: pointer" @click="jumpIncomeNoPage">{{carDetail.currentOrderNo || '--'}}</span>
+                </el-descriptions-item>
+                <el-descriptions-item v-show="carDetail.currentOrderNo!=null" label="保证金/押金:">{{carDetail.currentMoney}}元</el-descriptions-item>
+                <el-descriptions-item v-show="carDetail.rentNum!=null||carDetail.rentNum!=0" label="司机欠租期数:">{{carDetail.rentNum || '--'}}期</el-descriptions-item>
+                <el-descriptions-item v-show="carDetail.rentNum!=null||carDetail.rentNum!=0" label="司机欠租金额:">{{carDetail.rentMoney || '--'}}元</el-descriptions-item>
+                <el-descriptions-item v-show="carDetail.paymentMoney!=null||carDetail.paymentMoney!=0" label="结算司机倒挂待付:">{{carDetail.paymentMoney || '--'}}元</el-descriptions-item>
+            </el-descriptions>
+
+            <div style="flex: 1;font-size: 16px;color: #333;font-weight:bold;align-items: center;margin-bottom: 15px">
+                历史欠费
+            </div>
+
+            <el-table :header-cell-style="{'background-color':'#f6f8f8','color':'#000'}"
+                      :data="carDetail.historyList"
+                      style="width: 100%" border>
+
+                <el-table-column prop="carOrderNo" label="历史订单" align="center">
+                    <template v-slot="{row}">
+                        <span style="color: #3facb3;cursor: pointer" @click="jumpIncomeNoPage(row.carOrderNo)">{{row.carOrderNo||'--'}}</span>
+                    </template>
+                </el-table-column>
+
+                <el-table-column prop="money" label="历史订单欠费金额" align="center">
+                    <template v-slot="{row}">
+                        {{row.money||'--'}}
+                    </template>
+                </el-table-column>
+
+            </el-table>
+
+            <div style="margin-top: 15px"></div>
+
+            <el-descriptions title="车辆采购费用">
+                <el-descriptions-item v-show="carDetail.purchaseNum!=null||carDetail.purchaseNum!=0" label="剩余账单期数:">{{carDetail.purchaseNum || '--'}}期</el-descriptions-item>
+                <el-descriptions-item v-show="carDetail.purchaseNum!=null||carDetail.purchaseNum!=0" label="剩余账单金额:">{{carDetail.purchaseCarMoney || '--'}}元</el-descriptions-item>
+              <!--  <el-descriptions-item label="其他待支出金额:">{{carDetail.otherOutputMoney || '&#45;&#45;'}}</el-descriptions-item>-->
+            </el-descriptions>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- Import Vue 3 -->
+<script src="../../statics/js/vue3/vue.global.js"></script>
+<!-- Import component library -->
+<script src="../../statics/js/element-plus/index.full.js"></script>
+<script src="../../statics/js/element-plus/icons-vue.js"></script>
+<script src="../../statics/plugins/jquery.min.js"></script>
+<script src="../../statics/common/layui/layui.js"></script>
+<script src="../../statics/js/common.js"></script>
+<script src="../../statics/js/element-plus/locale-cn.js"></script>
+<script>
+
+</script>
+<script src="../../statics/js/modules/carprofitreport/carFeeDetail_new.js?_${.now?long}"></script>
+</body>
+
+</html>

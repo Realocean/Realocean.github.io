@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../statics/newImages/logo/logo@2x.png">
+    <title>跟进线索首页</title>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/global.css" media="all">-->
+
+<!--    <link rel="stylesheet" type="text/css" href="../../statics/common/new_css/fonts/larry-icon.css" media="all">-->
+    <link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+<!-- 放开后表格无法拖动   <link rel="stylesheet" type="text/css" href="../../statics/new_css/larryms.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/new_css/normalize.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+    <!-- Import style -->
+    <link rel="stylesheet" href="../../statics/js/element-plus/index.css" />
+    <!-- 页面样式 -->
+    <link rel="stylesheet" href="../../statics/new_css/mf-layout.css" />
+    <link rel="stylesheet" type="text/css" href="../../statics/css/common-new.css">
+
+</head>
+<style>
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    .el-input {
+        width: 150px !important;
+        margin: 0 10px 0 0;
+    }
+
+    .bg-blue{
+        background: rgba(245, 251, 251, 1);
+        border-radius: 8px;
+    }
+
+    .d-flex{
+        display: flex;
+    }
+
+    .part-center{
+        aspect-ratio: 1/0.33;
+
+    }
+
+    #stock_0{
+        width: 95vw;
+        height: 62vh;
+    }
+
+    #stock_1{
+        width: 95vw;
+        height: 62vh;
+    }
+
+    .add-title-wrap{
+        margin-left: 37px;
+    }
+
+</style>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <div class="details-tab-content-box display">
+            <div class="layui-tab">
+                <ul class="layui-tab-title">
+                    <li :class="0==index?'layui-this':''" @click="tabClick(item)"
+                        v-for="(item, index) in tabList" :key="index">{{ item }}
+                    </li>
+                </ul>
+            </div>
+
+            <div class="flex" style="justify-content: flex-end">
+
+                <el-select v-model="q.deptId" placeholder="全部" size="default" :clearable="1==userType" @change="change">
+                    <el-option
+                            v-for="(item, index) in storeLists"
+                            :key="index"
+                            :label="item.name"
+                            :value="item.deptId">
+                    </el-option>
+                </el-select>
+
+                <el-select v-if="2==userType" v-model="q.saleId" placeholder="全部" size="default" clearable @change="change1">
+                    <el-option
+                            v-for="(item, index) in salerList"
+                            :key="index"
+                            :label="item.username"
+                            :value="item.userId">
+                    </el-option>
+                </el-select>
+
+                <el-date-picker
+                        v-model="q.month"
+                        type="month"
+                        value-format="YYYY-MM"
+                        @change="change2"
+                        size="default"
+                        placeholder="请选择"/>
+            </div>
+
+        </div>
+
+    <div class="card-wrap flex child column">
+
+        <div class="flex column bg-blue part-center">
+
+            <div class="add-title-wrap">利润分析</div>
+
+            <div id="stock_0">
+            </div>
+        </div>
+
+        <div class="flex column bg-blue part-center" style="margin-top: 15px">
+
+            <div class="add-title-wrap">售车分析</div>
+
+            <div id="stock_1">
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+<!-- Import Vue 3 -->
+<script src="../../statics/js/vue3/vue.global.js"></script>
+<!-- Import component library -->
+<script src="../../statics/js/element-plus/index.full.js"></script>
+<script src="../../statics/js/element-plus/icons-vue.js"></script>
+<script src="../../statics/plugins/jquery.min.js"></script>
+<script src="../../statics/common/layui/layui.js"></script>
+<script src="../../statics/js/common.js"></script>
+<script src="../../statics/js/element-plus/locale-cn.js"></script>
+<!--<script type="text/javascript" src="../../statics/common/plus/echarts.min.js"></script>-->
+<script type="text/javascript" src="../../statics/common/plus/echarts5.4.3.js"></script>
+<script>
+    // 基于准备好的dom，初始化echarts实例
+    // console.log('echarts', echarts)
+    // var myChart = echarts.init(document.getElementById('main'));
+    //
+    // // 指定图表的配置项和数据
+    // var option = {
+    //     title: {
+    //         text: 'ECharts 入门示例'
+    //     },
+    //     tooltip: {},
+    //     legend: {
+    //         data: ['销量']
+    //     },
+    //     xAxis: {
+    //         data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
+    //     },
+    //     yAxis: {},
+    //     series: [
+    //         {
+    //             name: '销量',
+    //             type: 'bar',
+    //             data: [5, 20, 36, 10, 10, 20]
+    //         }
+    //     ]
+    // };
+    //
+    // // 使用刚指定的配置项和数据显示图表。
+    // myChart.setOption(option);
+</script>
+<script src="../../statics/js/modules/cluesSale/dict.js"></script>
+<script src="../../statics/js/modules/cluesOrder/mainanalyse.js?_${.now?long}"></script>
+</body>
+
+</html>

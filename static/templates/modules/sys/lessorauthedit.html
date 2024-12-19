@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>出租方认证</title>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="Author" content="larry"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+    <script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+    <script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/common.js"></script>
+    <script type="text/javascript" src="../../statics/js/upload.js"></script>
+    <script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+    <link rel="stylesheet" href="../../statics/css/jxcPublicAll.css" media="all">
+    <link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../statics/common/step/steps.css">
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+    <script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+    <script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+    <script src="../../statics/common/layui/autocomplete.js"></script>
+    <script src="../../statics/js/modules/viewer/viewer.min.js"></script>
+    <script src="../../statics/common/print-js/print.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+    <script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/searchview.js"></script>
+    <script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+    <!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+    <!-- 引入组件库 -->
+    <link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/new-edit.css">
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <!-- 新增表单 -->
+    <form class="layui-form ren-form" style="margin-bottom: 60px;">
+
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                <span class="fm-daoru-title">签章管理员信息</span>
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                            <label class="layui-form-label">管理员类型<span style="color: red">*</span></label>
+                            <div class="layui-input-inline">
+                                <input type="radio" lay-filter="contactsType" v-model="lessorAuth.contactsType"
+                                       class="layui-input" value="1" name="contactsType" title="法人">
+                                <input type="radio" lay-filter="contactsType" v-model="lessorAuth.contactsType"
+                                       class="layui-input" value="2" name="contactsType" title="代理人">
+                            </div>
+                        </div>
+                        <!--签章管理员-->
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">管理员姓名<span style="color: red">*</span></label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="contactsVerify" v-model="lessorAuth.contacts"
+                                       autocomplete="off" placeholder="请输入管理员姓名" class="layui-input">
+                            </div>
+                        </div>
+                        <!--联系地址-->
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">地址<span style="color: red">*</span></label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="addressVerify" v-model="lessorAuth.address"
+                                       autocomplete="off" placeholder="请输入管理员地址" class="layui-input">
+                            </div>
+                        </div>
+                        <!--联系电话-->
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">电话<span style="color: red">*</span></label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="phoneNumberVerify" v-model="lessorAuth.phoneNumber"
+                                       autocomplete="off" placeholder="请输入管理员电话" class="layui-input">
+                            </div>
+                        </div>
+                        <!--联系人证件号码-->
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">证件号码<span style="color: red">*</span></label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="idNumberVerify" v-model="lessorAuth.idNumber"
+                                       autocomplete="off" placeholder="请输入管理员证件号码" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                <span class="fm-daoru-title">公司信息</span>
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <!--法人-->
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">企业名称<span style="color: red">*</span></label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="deptNameVerify" v-model="lessorAuth.name"
+                                       autocomplete="off" placeholder="请输入企业名称" class="layui-input">
+                            </div>
+                        </div>
+                        <!--法人-->
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">法人<span style="color: red">*</span></label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="legalPersonVerify" v-model="lessorAuth.legalPerson"
+                                       autocomplete="off" placeholder="请输入法人" class="layui-input">
+                            </div>
+                        </div>
+                        <!--公司邮箱-->
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">公司邮箱<span style="color: red">*</span></label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="mailbox" v-model="lessorAuth.mailbox" class="layui-input" placeholder="请输入公司邮箱">
+                            </div>
+                        </div>
+                        <!--对公账号-->
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">对公账号<span style="color: red">*</span></label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="bankAccountVerify" v-model="lessorAuth.bankAccount"
+                                       autocomplete="off" placeholder="请输入对公账号" class="layui-input">
+                            </div>
+                        </div>
+                        <!--开户银行-->
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">开户银行<span style="color: red">*</span></label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="bankNameVerify" v-model="lessorAuth.bankName"
+                                       placeholder="请输入开户银行"  autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <!--开户支行-->
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">开户支行<span style="color: red">*</span></label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="branchBankNameVerify" v-model="lessorAuth.branchBankName"
+                                       placeholder="请输入开户支行"  autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <!--SAP公司代码-->
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">SAP公司代码</label>
+                            <div class="layui-input-inline">
+                                <input type="text" maxlength="10" v-model="lessorAuth.sapCode"
+                                       autocomplete="off" placeholder="SAP公司代码" class="layui-input">
+                            </div>
+                        </div>
+                        <!--统一社会信用代码-->
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">统一社会信用代码<span style="color: red">*</span></label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="unifiedSocialCreditCodeVerify"
+                                       placeholder="请输入统一社会信用代码" v-model="lessorAuth.unifiedSocialCreditCode" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <!--印章类型-->
+                        <div class="layui-inline layui-col-xs12">
+                            <label class="layui-form-label">印章类型<span style="color: red">*</span></label>
+                            <div class="layui-input-inline">
+                                <input type="radio" lay-filter="sealType" v-model="lessorAuth.sealType"
+                                       class="layui-input" value=0 name="sealType" title="上传印章">
+                                <input type="radio" lay-filter="sealType" v-model="lessorAuth.sealType"
+                                       class="layui-input" value=1 name="sealType" title="自定义印章">
+                            </div>
+                        </div>
+                        <!--上传印章-->
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6"  v-show="lessorAuth.sealType==0">
+                            <label class="layui-form-label" style="width: 140px;"></label>
+                            <div class="layui-input-inline" id="localSealF">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6"  v-show="lessorAuth.sealType==1">
+                            <label class="layui-form-label">自定义印章内容<span style="color: red">*</span></label>
+                            <div class="layui-input-inline">
+                                <input type="text" v-model="lessorAuth.localSeal" lay-verify="localSealVerify"
+                                       placeholder="请输入自定义印章内容" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="float-btn-group bottom-bar">
+            <a class="layui-btn reset-btn" id="closePage">取消</a>
+            <a class="layui-btn search-btn" lay-submit lay-filter="save" id="save">保存</a>
+        </div>
+    </form>
+
+
+</div>
+
+
+<script src="../../statics/js/modules/sys/lessorauthedit.js?_${.now?long}"></script>
+</body>
+</html>

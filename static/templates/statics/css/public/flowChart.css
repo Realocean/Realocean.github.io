@@ -1,0 +1,64 @@
+/* flowChart  流程图二 */
+.car-flowChart {
+    box-sizing: border-box;
+    padding: 10px 50px;
+}
+
+.car-flowChart-circle {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-bottom: 60px;
+}
+
+.car-flowChart-images {
+    margin-right: 15px;
+}
+
+.car-flowChart-icon {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+}
+
+.car-flowChart-line {
+    position: absolute;
+    top: 55px;
+    left: 5px;
+    display: inline-block;
+    width: 2px;
+    height: 70px;
+}
+
+.car-flowChart-content {
+    display: flex;
+    box-sizing: border-box;
+    padding-top: 20px;
+}
+
+.car-flowChart-title {
+    font-size: 14px;
+    color: #1a1f33;
+    margin-bottom: 8px;
+    width: 400px;
+}
+
+.car-flowChart-title1 {
+    font-size: 14px;
+    color: #13ce66;
+    margin-bottom: 8px;
+    width: 400px;
+}
+
+.car-flowChart-text {
+    font-size: 12px;
+    color: #afafaf;
+}
+
+.car-flowChar-color {
+    color: #3FACB3;
+}
+
+.car-flowChart-status, .car-flowChart-status-feedback {
+    width: auto;
+}

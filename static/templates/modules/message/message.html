@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>消息列表</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/new_css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/new_css/index.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/css/new_fonts/iconfont.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common-tabs.css">
+
+
+
+
+        </head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+        <div class="list-header-content-box">
+            <div class="list-header-card display">
+                <div id="field1" class="flex" style="cursor:pointer;" @click="changeStatus(1)">
+                    <div class="list-header-card-title">未读</div>
+                    <div class="list-header-card-count">{{unread}}</div>
+                </div>
+                <div id="field2" class="flex" style="cursor:pointer;" @click="changeStatus(2)">
+                    <div class="list-header-card-title">已读</div>
+                    <div class="list-header-card-count">{{read}}</div>
+                </div>
+                <div id="field3" class="flex" style="cursor:pointer;" @click="changeStatus(0)">
+                    <div class="list-header-card-title">全部</div>
+                    <div class="list-header-card-count">{{allRead}}</div>
+                </div>
+            </div>
+        </div>
+    <div class="mvvm-table">
+<!--        <div class="list-search-title-box">-->
+            <form class="layui-form" style="box-shadow: 0 0 20px #eee;padding-right: 15px;">
+                <section class="jxc-section" style="display: flex;align-items: flex-start;white-space: nowrap;">
+                    <div class="card layui-row" style="flex: 1">
+                        <div class="layui-form-item ">
+                            <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs12">
+                                <label class="layui-form-label">输入内容查询</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input searchVal"
+                                           v-model="q.msgContent"
+                                           placeholder="请输入查询内容"/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs12">
+                                <label class="layui-form-label">消息类型</label>
+                                <div class="layui-input-inline">
+                                    <select name="msgType" lay-filter="msgType" v-model="q.msgType">
+                                        <option value="">全部</option>
+                                        <option value=1>系统消息</option>
+                                        <option value=2>业务消息</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm6 layui-col-xs12">
+                                <label class="layui-form-label">推送时间</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" class="layui-input searchVal"
+                                           id="createTime"
+                                           v-model="q.createTime"
+                                           readonly="readonly"
+                                           placeholder="开始时间-结束时间"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex;align-items: center;">
+                        <a class="layui-btn search-btn" @click="query">查询</a>
+                        <a class="layui-btn reset-btn" @click="reset">重置</a>
+                    </div>
+                </section>
+            </form>
+<!--        </div>-->
+
+        <div class="list-table-content-box">
+            <table class="layui-hide" id="grid" lay-filter="grid"></table>
+        </div>
+    </div>
+
+</div>
+<script type="text/html" id="titleTpl">
+    {{#if(d.msgType===1 || d.msgType ===3){}}
+    <span>{{d.msgContent}}</span>
+    {{#}else if(d.msgType===2){}}
+    <a class="layui-grid-btn-xs" lay-event="jump" more-btn-index="{{d.LAY_INDEX-1}}">{{d.msgContent}}</a>
+    {{#}}}
+</script>
+<script type="text/html" id="barTpl">
+    <a class="layui-grid-btn-xs" lay-event="detail">查看</a>
+</script>
+
+<script src="../../statics/js/modules/message/message.js?_${.now?long}"></script>
+</body>
+</html>

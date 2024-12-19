@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>子方案</title>
+    <meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="Author" content="larry" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+<link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+<script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+<script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+<script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+<script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/common.js"></script>
+<script type="text/javascript" src="../../statics/js/upload.js"></script>
+<script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+<link rel="stylesheet" href="../../statics/css/jxcPublicAll.css"  media="all">
+<link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+<link rel="stylesheet" href="../../statics/common/step/steps.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+<link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+<link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+<script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+<script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+<script src="../../statics/common/layui/autocomplete.js"></script>
+<script  src="../../statics/js/modules/viewer/viewer.min.js"></script>
+<script src="../../statics/common/print-js/print.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+<script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+<script type="text/javascript" src="../../statics/js/searchview.js"></script>
+<script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+<!-- 引入组件库 -->
+<link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+
+
+
+    <style>
+        .ztree li ul.line{ height: 80%; }
+    </style>
+</head>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+
+    <!-- 新增表单 -->
+    <form class="layui-form ren-form" style="margin-bottom: 60px;">
+
+        <div class="form-content-box">
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+<!--                        <div class="layui-row layui-form-row-content">-->
+<!--                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">-->
+<!--                                <label class="layui-form-label">所属部门类型<span style="color:red;">*</span>：</label>-->
+<!--                                <div class="layui-input-inline">-->
+<!--                                    <input type="radio" name="deptType"  lay-filter="deptType" lay-verify="deptType" v-model="subScheme.deptType" value="1" title="全部">-->
+<!--                                    <input type="radio" name="deptType" lay-filter="deptType" lay-verify="deptType" v-model="subScheme.deptType"  value="2" title="自定义" >-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+                        <div class="layui-row layui-form-row-content" >
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <label class="layui-form-label"><span style="color:red">*</span>选择门店</label>
+                                <div class="layui-input-inline" >
+                                    <div id="demo1" class="layui-col-md6 layui-col-sm6 layui-col-xs6"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>客户类型</label>
+                            <div class="layui-input-inline">
+                                <select name="customerType" lay-verify="customerType"
+                                        v-model="subScheme.customerType"    lay-filter="customerType">
+                                    <option value="0" >全部</option>
+                                    <option value="1" >企业</option>
+                                    <option value="2" >个人</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>租期</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_tenancy" v-model="subScheme.tenancy"
+                                       autocomplete="off" placeholder="请输入租期" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>整备费/元</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_servicingFee" v-model="subScheme.servicingFee"
+                                       autocomplete="off" placeholder="请输入整备费/元"  oninput="value=moneyInput(value)"  class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>月租金/元</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_monthlyRent" v-model="subScheme.monthlyRent"
+                                       autocomplete="off" placeholder="请输入月租金/元"  oninput="value=moneyInput(value)"  class="layui-input searchVal">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">尾款</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_balance" v-model="subScheme.balance"
+                                       autocomplete="off" placeholder="请输入尾款"   oninput="value=moneyInput(value)"  class="layui-input searchVal">
+                            </div>
+                        </div>
+
+                       <!-- <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">金融公司:</label>
+                            <div class="layui-input-inline">
+                                <input   v-model="subScheme.financeCompanyName"
+                                       autocomplete="off" placeholder="请输入金融公司" maxlength="50" class="layui-input searchVal">
+                            </div>
+                        </div>-->
+
+
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <label class="layui-form-label">选择渠道类型<span style="color:red;">*</span>：</label>
+                                <div class="layui-input-inline">
+                                    <input type="radio" name="chlType"  lay-filter="chlType" lay-verify="chlType" v-model="subScheme.chlType" value="1" title="全部">
+                                    <input type="radio" name="chlType" lay-filter="chlType" lay-verify="chlType" v-model="subScheme.chlType"  value="2" title="自定义" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row layui-form-row-content" v-show="subScheme.chlType == '2'">
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="subScheme.chlType == '2'">
+                                <label class="layui-form-label">选择所属渠道商</label>
+                                <div class="layui-input-inline">
+                                    <ul id="dataTreeChl" class="ztree" style="overflow:auto;" ></ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                <label class="layui-form-label">月租渠道价/元</label>
+                                <div class="layui-input-inline">
+                                    <input type="text"  v-model="subScheme.chlMonthlyRent" autocomplete="off" placeholder="请输入月租渠道价/元"   oninput="value=moneyInput(value)" class="layui-input searchVal">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">渠道商返利/元</label>
+                            <div class="layui-input-inline">
+                                <input  lay-verify="validate_chlRebate" v-model="subScheme.chlRebate"
+                                        autocomplete="off" placeholder="请输入渠道商返利/元" oninput="value=moneyInput(value)" class="layui-input searchVal">
+                            </div>
+                        </div>
+                        <!--<div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">首付款渠道价/元</label>
+                            <div class="layui-input-inline">
+                                <input   v-model="subScheme.chlDownPayment"
+                                        autocomplete="off" placeholder="请输入首付款渠道价/元" oninput="value=moneyInput(value)" class="layui-input searchVal">
+                            </div>
+                        </div>-->
+
+                       <!-- <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label"><span style="color:red">*</span>保证金</label>
+                            <div class="layui-input-inline">
+                                <input type="text" lay-verify="validate_deposit" v-model="subScheme.deposit"
+                                       autocomplete="off" placeholder="保证金" class="layui-input searchVal">
+                            </div>
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="float-btn-group bottom-bar">
+            <a class="layui-btn reset-btn" id="closePage">取消</a>
+            <a class="layui-btn search-btn" lay-submit lay-filter="save" id="save">确认</a>
+        </div>
+    </form>
+</div>
+<script src="../../statics/js/modules/subscheme/subschemeedit.js?_${.now?long}"></script>
+</body>
+</html>

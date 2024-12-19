@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>企业客户信息表</title>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="Author" content="larry"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+    <script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+    <script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/common.js"></script>
+    <script type="text/javascript" src="../../statics/js/upload.js"></script>
+    <script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+    <link rel="stylesheet" href="../../statics/css/jxcPublicAll.css" media="all">
+    <link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../statics/common/step/steps.css">
+    <link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+    <script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+    <script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+    <script src="../../statics/common/layui/autocomplete.js"></script>
+    <script src="../../statics/js/modules/viewer/viewer.min.js"></script>
+    <script src="../../statics/common/print-js/print.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+    <script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/searchview.js"></script>
+    <script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+    <!-- 引入组件库 -->
+    <link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/common-new.css">
+    <style>
+        .layui-table-cell {
+            height: auto;
+            white-space: normal;
+        }
+    </style>
+<body class="ren-body">
+<div id="rrapp" v-cloak>
+    <!--查看 -->
+    <div class="layui-form ren-form">
+        <div class="details-tab-content">
+            <div class="details-tab-content-box display">
+
+                <div class="layui-tab">
+                    <ul class="layui-tab-title">
+                        <li :class="0==index?'layui-this':''" @click="detailsSupTabContentBindtap(index, item)"
+                            v-for="(item, index) in detailsSupTabContentList" :key="index">{{ item }}
+                        </li>
+                    </ul>
+                </div>
+
+                <!--                <div-->
+                <!--                        class="flex"-->
+                <!--                        v-for="(item, index) in detailsTabContentList"-->
+                <!--                        :key="index"-->
+                <!--                        :class="index === detailsTabContentListActiveIndex ? 'active1A51FF' : ''"-->
+                <!--                        @click="detailsTabContentBindtap(index)">-->
+                <!--                    {{ item }}-->
+                <!--                    <div>-->
+                <!--                        <div :class="index === detailsTabContentListActiveIndex ? 'details-tab-content-box-absolute-bottom' : ''"></div>-->
+                <!--                    </div>-->
+                <!--                </div>-->
+            </div>
+        </div>
+        <div class="details-conteiner">
+
+            <!-- 基本信息 -->
+            <div
+                    class="details-content-box"
+                    v-show="detailsSupTabContentListActiveValue === '基本信息'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        客户信息
+                    </div>
+                </div>
+                <form class="layui-form">
+                    <div class="details-layui-row">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">客户分类:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            :value="transformTypeByMap(list.customerCategory, {1:'潜在客户', 2:'成交客户'})"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">客户来源:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            :value="transformTypeByMap(list.customerFrom, {1:'微信扫码', 2:'微信搜索', 3:'微信分享', 4:'手动录入', 5:'导入'})"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">客户类型:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="list.customerTypeShow"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">客户名称:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="list.customerName"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">紧急联系人:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="list.emergencyPerson"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">紧急电话:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="list.emergencyMobile"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">联系人:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="list.contactPerson"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <!-- 企业用户详情信息 -->
+                            <div v-show="enterpriseDiv">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                    <label class="layui-form-label">联系电话:</label>
+                                    <div class="layui-input-inline">
+                                        <input
+                                                type="text"
+                                                class="layui-input searchVal"
+                                                v-model="list.contactMobile"
+                                                disabled/>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                    <label class="layui-form-label">营业执照:</label>
+                                    <div class="layui-input-inline">
+                                        <input
+                                                type="text"
+                                                class="layui-input searchVal"
+                                                v-model="list.license"
+                                                disabled/>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                    <label class="layui-form-label">公司地址:</label>
+                                    <div class="layui-input-inline">
+                                        <input
+                                                type="text"
+                                                class="layui-input searchVal"
+                                                v-model="list.address"
+                                                disabled/>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 个人用户详情信息 -->
+                            <div v-show="personalDiv">
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                    <label class="layui-form-label">性别:</label>
+                                    <div class="layui-input-inline">
+                                        <input
+                                                type="text"
+                                                class="layui-input searchVal"
+                                                :value="transformTypeByMap(list.sex, {1: '男', 2: '女', 3: '未知'})"
+                                                disabled/>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                    <label class="layui-form-label">生日:</label>
+                                    <div class="layui-input-inline">
+                                        <input
+                                                type="text"
+                                                class="layui-input searchVal"
+                                                v-model="list.birthday"
+                                                disabled/>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                    <label class="layui-form-label">联系地址:</label>
+                                    <div class="layui-input-inline">
+                                        <input
+                                                type="text"
+                                                class="layui-input searchVal"
+                                                v-model="list.address"
+                                                disabled/>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                    <label class="layui-form-label">身份证号:</label>
+                                    <div class="layui-input-inline">
+                                        <input
+                                                type="text"
+                                                class="layui-input searchVal"
+                                                v-model="list.idCardNo"
+                                                disabled/>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                    <label class="layui-form-label">驾驶证号:</label>
+                                    <div class="layui-input-inline">
+                                        <input
+                                                type="text"
+                                                class="layui-input searchVal"
+                                                v-model="list.driverNo"
+                                                disabled/>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                    <label class="layui-form-label">驾驶证有效期:</label>
+                                    <div class="layui-input-inline">
+                                        <input
+                                                type="text"
+                                                class="layui-input searchVal"
+                                                v-model="list.driverValidity"
+                                                disabled/>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                    <label class="layui-form-label">现住地址:</label>
+                                    <div class="layui-input-inline">
+                                        <input
+                                                type="text"
+                                                class="layui-input searchVal"
+                                                v-model="list.nowAddress"
+                                                disabled/>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                    <label class="layui-form-label">联系电话:</label>
+                                    <div class="layui-input-inline">
+                                        <input
+                                                type="text"
+                                                class="layui-input searchVal"
+                                                v-model="list.contactMobile"
+                                                disabled/>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">邮箱:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="list.email"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">所属业务负责人:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="list.businessPersonShow"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">所属渠道:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="list.channelName"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">客户来源:</label>
+                                <div class="layui-input-inline">
+                                    <select id="customerSource" name="customerSource"
+                                            lay-filter="customerSource" v-model="list.customerSource"
+                                            disabled>
+                                        <option value="">请选择</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">是否签约司机:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            :value="list.signedDriver==1?'是':'否'"
+                                            class="layui-input searchVal"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">入职时间:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="list.joiningTime"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">银行账号:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="list.bankAccount"
+                                            disabled/>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">所属银行:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="list.affiliatedBank"
+                                            disabled/>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6 layui-col-lg4">
+                                <label class="layui-form-label">备注:</label>
+                                <div class="layui-input-inline">
+                                    <input
+                                            type="text"
+                                            class="layui-input searchVal"
+                                            v-model="list.note"
+                                            disabled/>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-show="pictureDiv">
+                            <legend class="aTitle">证件照片</legend>
+                            <hr class="layui-bg-gray">
+                            <div class="card">
+                                <div class="layui-row form-group">
+                                    <div class="column layui-col-xs6" v-show="idCardImgDiv">
+                                        <label class="layui-form-label"><span
+                                                style="color: red;">*</span>{{idCardName}}</label>
+                                        <img class="layui-upload-drag"
+                                             style=" border: 1px dashed #c0ccda; border-radius: 6px; cursor: pointer;margin-left: 20px;height: 120px;width: 220px;margin-top: 10px;padding: 0px;"
+                                             id="idCardImg" @click="previewImg($event)">
+                                        <img class="layui-upload-drag"
+                                             style=" border: 1px dashed #c0ccda; border-radius: 6px; cursor: pointer;margin-left: 20px;height: 120px;width: 220px;margin-top: 10px;padding: 0px;"
+                                             id="idCardImgBack" @click="previewImg($event)">
+                                    </div>
+                                    <div id="licenseDiv">
+                                        <div class="column layui-col-xs4" v-show="licenseImgDiv">
+                                            <label class="layui-form-label"><span
+                                                    style="color: red;">*</span>营业执照:</label>
+                                            <img class="layui-upload-drag"
+                                                 style=" border: 1px dashed #c0ccda; border-radius: 6px; cursor: pointer;margin-left: 20px;height: 120px;width: 220px;margin-top: 10px;padding: 0px;"
+                                                 id="licenseImg" @click="previewImg($event)">
+                                        </div>
+                                    </div>
+                                    <div id="driverDiv">
+                                        <div class="column layui-col-xs6" v-show="driverImgDiv">
+                                            <label class="layui-form-label"><span
+                                                    style="color: red;">*</span>驾驶证:</label>
+                                            <img class="layui-upload-drag"
+                                                 style=" border: 1px dashed #c0ccda; border-radius: 6px; cursor: pointer;margin-left: 20px;height: 120px;width: 220px;margin-top: 10px;padding: 0px;"
+                                                 id="driverImg" @click="previewImg($event)">
+                                            <img class="layui-upload-drag"
+                                                 style=" border: 1px dashed #c0ccda; border-radius: 6px; cursor: pointer;margin-left: 20px;height: 120px;width: 220px;margin-top: 10px;padding: 0px;"
+                                                 id="driverImgBack" @click="previewImg($event)">
+                                        </div>
+                                    </div>
+                                    <div class="column layui-col-xs6" v-show="bankCardImgDiv">
+                                        <label class="layui-form-label"><span
+                                                style="color: red;">*</span>银行卡:</label>
+                                        <img class="layui-upload-drag"
+                                             style=" border: 1px dashed #c0ccda; border-radius: 6px; cursor: pointer;margin-left: 20px;height: 120px;width: 220px;margin-top: 10px;padding: 0px;"
+                                             id="bankCardImg" @click="previewImg($event)">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="left-before margintop30">
+                            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                                <span>附件资料</span>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <table class="layui-table">
+                                <colgroup>
+                                    <col width="300">
+                                    <col width="300">
+                                    <col width="300">
+                                    <col width="300">
+                                </colgroup>
+                                <thead>
+                                <tr>
+                                    <th>操作</th>
+                                    <th>文件名称</th>
+                                    <th>上传时间</th>
+                                    <th>上传人</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr v-for="(item,index) in accessoryList" :key="index">
+                                    <td>
+                                        <a class="layui-btn layui-btn-xs" v-show="item.typeFile==1"
+                                           @click="showDoc(item.url, item.accessoryName)">查看</a>
+
+                                        <a class="layui-btn layui-btn-xs"
+                                           @click="downDoc(item.url, item.accessoryName)">下载</a>
+                                    </td>
+                                    <td>{{item.accessoryName == null || item.accessoryName == ''
+                                            ? '---' : item.accessoryName}}
+                                    </td>
+                                    <td>{{item.createTime}}</td>
+                                    <td>{{item.userName}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="left-before margintop30">
+                            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                                <span>代扣信息</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class=" margintop30" >
+                                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                                    <span>银行卡代扣</span>
+                                    <a class="layui-btn layui-btn-radius fr" @click="sgincard()">添加银行卡</a>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="table">
+                                    <table class="layui-hide" id="bankLst" lay-filter="bankLst"></table>
+                                </div>
+                            </div>
+                            <div v-show="withholdDiv">
+                                <div class=" margintop30">
+                                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                                        <span>支付宝代扣</span>
+                                        <span class="line-color fr"
+                                              >当前代扣状态：{{withholdSignStatusStr}}</span>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="table">
+                                        <table class="layui-hide" id="alipayList" lay-filter="alipayList"></table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+            <!-- 合同信息 -->
+            <div
+                    class="details-content-box"
+                    v-show="detailsSupTabContentListActiveValue === '合同信息'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        合同信息
+                    </div>
+                </div>
+                <div class="details-layui-row">
+                    <div class="table">
+                        <table class="layui-hide" id="contractTable"></table>
+                    </div>
+                </div>
+            </div>
+            <!-- 车辆订单信息 -->
+            <div class="details-content-box"
+                 v-show="detailsSupTabContentListActiveValue === '车辆订单信息'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        车辆订单信息
+                    </div>
+                </div>
+                <div class="details-layui-row">
+                    <div class="table">
+                        <table class="layui-hide" id="carOrderTable"></table>
+                    </div>
+                </div>
+            </div>
+            <!-- 应收账单 -->
+            <div class="details-content-box"
+                 v-show="detailsSupTabContentListActiveValue === '应收账单'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        应收账单信息
+                    </div>
+                </div>
+                <div class="details-layui-row">
+                    <div class="table">
+                        <table class="layui-hide" id="accountsReceivableTable"></table>
+                    </div>
+                </div>
+            </div>
+            <!-- 已收账单 -->
+            <div class="details-content-box"
+                 v-show="detailsSupTabContentListActiveValue === '已收账单'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        已收账单信息
+                    </div>
+                </div>
+                <div class="details-layui-row">
+                    <div class="table">
+                        <table class="layui-hide" id="receivablesTable"></table>
+                    </div>
+                </div>
+            </div>
+            <!-- 应退账单 -->
+            <div class="details-content-box"
+                 v-show="detailsSupTabContentListActiveValue === '应退账单'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        应退账单信息
+                    </div>
+                </div>
+                <div class="details-layui-row">
+                    <div class="table">
+                        <table class="layui-hide" id="shouldRefundTable"></table>
+                    </div>
+                </div>
+            </div>
+            <!-- 已退账单 -->
+            <div class="details-content-box"
+                 v-show="detailsSupTabContentListActiveValue === '已退账单'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        已退账单信息
+                    </div>
+                </div>
+                <div class="details-layui-row">
+                    <div class="table">
+                        <table class="layui-hide" id="refundTable"></table>
+                    </div>
+                </div>
+            </div>
+            <!-- 违章信息 -->
+            <div class="details-content-box"
+                 v-show="detailsSupTabContentListActiveValue === '违章信息'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        违章信息
+                    </div>
+                </div>
+                <div class="details-layui-row">
+                    <div class="table">
+                        <table class="layui-hide" id="illegalTable"></table>
+                    </div>
+                </div>
+            </div>
+            <!-- 操作记录 -->
+            <div class="details-content-box"
+                 v-show="detailsSupTabContentListActiveValue === '操作记录'">
+                <div class="left-before">
+                    <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                        操作记录
+                    </div>
+                </div>
+                <div class="details-layui-row">
+                    <div class="table">
+                        <table class="layui-hide" id="record"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="bankbarTpl">
+    <a class="layui-grid-btn-xs" lay-event="unsgin">解绑</a>
+    {{#if(1==0){}}
+    <a class="layui-grid-btn-xs" lay-event="viewreceivables">查看账单</a>
+    {{#}}}
+</script>
+
+<script src="../../statics/js/modules/customer/customerdetail.js"></script>
+</body>
+</html>

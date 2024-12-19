@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <link rel="icon" type="image/png" sizes="32x32" href="./statics/newImages/logo/logo@2x.png">
+    <title>汽车租赁管理系统</title>
+    <link rel="stylesheet" type="text/css" href="./statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="./statics/common/new_css/global.css" media="all">
+
+    <link rel="stylesheet" type="text/css" href="./statics/common/new_css/fonts/larry-icon.css" media="all">
+    <link rel="stylesheet" type="text/css" href="./statics/common/css/new_fonts/iconfont.css" media="all">
+    <link rel="stylesheet" type="text/css" href="./statics/new_css/larryms.css" media="all">
+    <link rel="stylesheet" href="./statics/new_css/normalize.min.css" />
+    <!-- Import style -->
+    <link rel="stylesheet" href="./statics/js/element-plus/index.css" />
+    <!-- 页面样式 -->
+    <link rel="stylesheet" href="./statics/new_css/mf-layout.css" />
+</head>
+<style>
+    .el-tabs__nav-next, .el-tabs__nav-prev{
+        line-height: initial !important;
+    }
+    .el-tabs__item{
+        padding: 0 15px !important;
+    }
+    .title_logo{
+        line-height:70px;
+        font-size:24px;
+        font-weight:700;
+        text-align:center;
+        color:#fff;
+        background:#3facb3;
+    }
+    .logo_t{
+        background:#3facb3;
+        height:70px;
+    }
+    .el-menu-item i {
+        color: inherit;
+        font-size: 20px !important;
+        margin-right: 12px;
+    }
+    .message .layui-icon-extend{
+        font-size:20px !important;
+        margin-right:12px;
+
+    }
+</style>
+<body>
+<div id="app" v-cloak>
+    <div class="common-layout">
+        <div class="top">
+            <div class="logo" :style="{width:isCollapse?'70px':'220px'}">
+                <div class="title_logo" :style="{display:isCollapse?'none':''}">{{menuTopName}}</div>
+                <div class="logo_t" :style="{display:!isCollapse?'none':''}">
+                    <img style="width:36px;height:36px;padding:17px;" src="./statics/newImages/logo/logo_t@2x.png">
+                </div>
+            </div>
+            <div @click="toggleClick" :style="{'margin-left':isCollapse?'20px':'20px'}" class="hamburger-wrap">
+                <svg :class="{'is-active':isActive}" class="hamburger" viewBox="0 0 1024 1024"
+                     xmlns="http://www.w3.org/2000/svg" width="64" height="64">
+                    <path
+                            d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM142.4 642.1L298.7 519a8.84 8.84 0 0 0 0-13.9L142.4 381.9c-5.8-4.6-14.4-.5-14.4 6.9v246.3a8.9 8.9 0 0 0 14.4 7z" />
+                </svg>
+            </div>
+            <el-tabs v-model="activeName" @tab-click="handleClick($event,'menu')">
+                <el-tab-pane  v-for="(item,index) in nav" :index="item.id" :name="item.id">
+                    <template #label>
+                        <span class="custom-tabs-label">
+                            <i :class="['icon','larry-icon',item.icon?`${item.icon.split('-')[0]+'-icon-extend'}`:'-icon',item.icon]"></i>
+                            <span>{{item.title}}</span>
+                        </span>
+                    </template>
+                </el-tab-pane>
+            </el-tabs>
+            <div class="header-right">
+<!--                <div class="refresh larryms-press message" style="margin-right: 10px;" @click="goPurchase">-->
+<!--                    <i class="icon layui-icon layui-icon-face-smile-b"></i>-->
+<!--                </div>-->
+<!--                <div class="refresh larryms-press message" style="margin-right: 10px;" @click="goOrderlist">-->
+<!--                    <i class="icon layui-icon layui-icon-cart-simple"></i>-->
+<!--                </div>-->
+<!--                <div class="refresh larryms-press message" style="margin-right: 10px;" @click="goTest1">-->
+<!--                    <i class="icon layui-icon layui-icon-face-smile"></i>-->
+<!--                </div>-->
+<!--                <div class="refresh larryms-press message" style="margin-right: 10px;" @click="goTest">-->
+<!--                    <i class="icon layui-icon layui-icon-list"></i>-->
+<!--                </div>-->
+                <div class="refresh larryms-press message" style="margin-right: 10px;" @click="goHelp">
+                    <i class="icon layui-icon layui-icon-read"></i>
+                </div>
+                <div class="refresh larryms-press message" @click="goTixing">
+                    <i class="icon layui-icon-extend layui-extend-icon_xiaoxi"></i>
+                </div>
+                <el-dropdown trigger="click" @command="handleUserInfo">
+                    <div class="fm-userinfo">
+
+
+
+                        <img v-if="sessionStorage && sessionStorage.getItem('avatar') != null && sessionStorage.getItem('avatar') != 'null'" :src="baseurl + sessionStorage.getItem('avatar')">
+                        <img v-else src="./statics/images/user.jpg">
+                        <div>
+                            <p >{{sysUserInfo.username}}</p>
+                        </div>
+                        <i style="margin: 5px 0 0 5px" class="larry-icon larry-unfold1"></i>
+                    </div>
+                    <template #dropdown>
+                        <el-dropdown-menu>
+                            <el-dropdown-item command="personal">个人信息</el-dropdown-item>
+                            <el-dropdown-item command="logout">退出登录</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </template>
+                </el-dropdown>
+            </div>
+        </div>
+        <el-container>
+            <div :class={aside:true,isCollapse:isCollapse} >
+                <el-aside class="sidebar-wrapper" :style="{width:isCollapse?'70px':'220px'}">
+                    <el-scrollbar>
+                        <el-menu :collapse="isCollapse" :collapse-transition="false" unique-opened
+                                :default-active="selMenu"
+                                :default-openeds="d.openeds"
+                                background-color="#399AA1"
+                                text-color="#FFFFFF"
+                                active-text-color="#3FACB3">
+                            <template v-for="children in subMenus" >
+                                <!-- 二级菜单 -->
+                                <template v-if="!children.children">
+                                    <el-menu-item class="nest-menu" :index="children.id" @click="openTab(children)">
+                                        <i v-if="children.icon==='larry-shouye4'" class="layui-icon-extend layui-extend-gongzuotai"></i>
+                                        <i v-else :class="['larry-icon',children.icon?children.icon:'',children.icon?children.icon.split('-')[0]+'-icon-extend':'-icon','']" :style="{margin:isCollapse?'0px 0px 0px 8px':'0px 12px 0px 0px'}"></i>
+                                        <span>{{children.title}}</span>
+                                    </el-menu-item>
+                                </template>
+                                <!-- 三级菜单 -->
+                                <template v-if="children.children">
+                                    <el-sub-menu :index="children.id">
+                                        <template #title>
+                                        <i  :class="['larry-icon',children.icon?children.icon:'',children.icon?children.icon.split('-')[0]+'-icon-extend':'-icon','']" style="margin-right: 12px;font-size:20px;"></i>
+                                            <span>{{children.title}}</span>
+                                        </template>
+                                        <el-menu-item class="nest-menu" v-for="children2 in children.children"
+                                                    :index="children2.id" @click="openTab(children2)">
+                                            <i :class="[children2.icon, children2.font]"
+                                            style="margin-right: 12px;font-size:20px;"></i>
+                                            <span>{{children2.title}}</span>
+                                        </el-menu-item>
+                                    </el-sub-menu>
+                                </template>
+                            </template>
+                        </el-menu>
+                    </el-scrollbar>
+                </el-aside>
+            </div>
+            <el-container class="main-content" :class="{'is-active':isActive}">
+                <el-main>
+                    <div class="layui-tab larryms-tab" id="larry_tab" lay-filter="larryTab">
+                        <!-- 向左翻页 -->
+                        <div class="larryms-btn-default mf-btn-goleft" id="goLeft" v-show="showFanye">
+                            <i class="larry-icon larry-top-left-jt"></i>
+                        </div>
+                        <div class="larryms-title-box clearfix" :class="{'fm-padding':showFanye}"
+                             id="larryms_title">
+                            <ul class="layui-tab-title larryms-tab-title" lay-allowclose='false'
+                                id="larry_tab_title" lay-filter='larrymsTabTitle'>
+                                <li class="layui-this" id="larryms_home" lay-id="0" data-group="0"
+                                    data-id="larryms-home" fresh="1" data-url="html/main1.html">
+                                    <i class="icon layui-icon-extend layui-extend-gongzuotai"></i>
+                                    <cite index="0">后台首页</cite>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- 向右翻页 -->
+                        <div class="larryms-btn-default mf-btn-goright" id="goRight" v-show="showFanye">
+                            <i class="larry-icon larry-gongyongshuangjiantouyou"></i>
+                        </div>
+                        <!-- 刷新菜单 -->
+                        <div class="larryms-btn-default mf-btn-clearCached" id="clearCached" v-show="showFanye">
+                            <div class="refresh larryms-press" id="larryms_refresh">
+                                <i class="larry-icon larry-refresh2 xz-icon-top" style="color: #333;font-size: 14px;"></i>
+                            </div>
+                        </div>
+                        <!-- <div class="refresh larryms-press" id="larryms_refresh">
+                            <i class="larry-icon larry-refresh2 xz-icon-top"></i>
+                        </div> -->
+                        <!-- tab title end -->
+                        <div class="layui-tab-content larryms-tab-content" id="larry_tab_content">
+                            <div class="layui-tab-item layui-show">
+                                <iframe class="larry-iframe" data-id='0' name="ifr_0" id='ifr0' :src="mainPage"
+                                        frameborder="no" border="0" style="overflow-x:auto;min-width:1140px;">
+
+
+                                </iframe>
+
+<!--                                <iframe class="larry-iframe" data-id='0' name="ifr_0" id='ifr0' src="/modules/cluesSale/main.html"-->
+<!--                                        frameborder="no" border="0" style="overflow-x:auto;min-width:1140px;"></iframe>-->
+                            </div>
+                        </div>
+                        <!-- tab content end -->
+                    </div>
+                </el-main>
+            </el-container>
+        </el-container>
+    </div>
+</div>
+<ul class="larryms-nav larryms-nav-tree" style="display: none;" id="larryms_top_menu" lay-filter="LarrySide"
+    data-group='0'></ul>
+<ul class="larryms-nav larryms-nav-tree" style="display: none;" id="larryms_left_menu" lay-filter="LarrySide"
+    data-group='0'></ul>
+
+<!-- Import Vue 3 -->
+<script src="./statics/js/vue3/vue.global.js"></script>
+<!-- Import component library -->
+<script src="./statics/js/element-plus/index.full.js"></script>
+<script src="./statics/js/element-plus/icons-vue.js"></script>
+<script src="./statics/plugins/jquery.min.js"></script>
+<script src="./statics/common/layui/layui.js"></script>
+<script src="./statics/js/common.js"></script>
+<script>
+    var openeds= []
+    const testindex = Vue.ref('1')
+    // 获取站点配置
+    function getWebConfig(){
+        var url = `${baseURL}/sys/tConfig/systemConfig?tenantCode=${localStorage.getItem("tenantCode")}`;
+        $.get(url, function (r) {
+            if(!r || !r.data){
+                return false;
+            }
+            $("[rel=icon]")[0].href = imageURL+r.data.webTitleIco;
+            app.menuTopName = r.data.menuTopName;
+            $("title").html(r.data.loginName);
+            $(".title_logo").html(r.data.menuTopName);
+            console.log("更新站点")
+        });
+    }
+
+    layui.cache.menusUrl = baseURL + '/sys/menu/nav';//这里设置 菜单数据项接口地址 或data参数
+    layui.cache.page = 'index';
+    layui.config({ base: './statics/common/' }).extend({ larry: 'js/base' }).use('larry');
+    var openeds = []
+    const App = {
+        data() {
+            return {
+                activeName:'',
+                selMenu:'1',
+                nav: [],
+                d:{
+                    openeds:[]
+                },
+                subMenus:[],//左侧二级菜单
+                menuKeyword: '',
+                isActive: false,
+                sysUserInfo: {
+                    username: '-',
+                    deptName: '-',
+                    roles: '-',
+                    avatar: '-'
+                },
+                showFanye: false,
+                menuTopName:"行知网络",
+                baseurl:imageURL,
+                sessionStorage:sessionStorage,
+                mainPage:'main.html',
+            };
+        },
+        computed: {
+            isCollapse() {
+                return this.isActive;
+            },
+        },
+        created() {
+            this.getNav();
+            this.getSysUserInfo();
+
+        },
+        mounted () {
+            let that = this;
+            // 选项卡切换事件，对应导航菜单选中处理
+            // $('#larry_tab').unbind("click").on("click", "#larry_tab_title li",function(e){
+            //     var index = $(this).find('cite').attr('index')
+            //     $(".el-tabs__nav").find(".el-tabs__item").eq(Number(index)).click()
+            // });
+            // $("#larry_tab").unbind("click").bind('click','#larry_tab_title li',function() {
+            //     var index = $(this).find('cite').attr('index')
+            //     $(".el-tabs__nav").find(".el-tabs__item").eq(Number(index)).trigger('click')
+            // });
+            console.log('sessionStorage==》', sessionStorage)
+        },
+        methods: {
+            handleClick(t, event){
+                console.log('click', t)
+                console.log('点了', t.index)
+                var that = this;
+                this.activeName = t.props.name
+                this.subMenus = this.nav[t.index].children
+                // console.log(this.subMenus)
+                // var obj = JSON.parse(JSON.stringify(this.subMenus))
+                // openeds = []
+                // console.log(obj)
+                // this.getMenuFrist(obj,function(res){
+                //     that.openTab(res,t.index)
+                //     that.selMenu = res.id;
+                //     that.d.openeds = openeds;
+                // })
+            },
+            getMenuFrist(obj,callback){
+                let that = this;
+                if(obj&&obj.length>0){
+                    if(obj[0].children){
+                            openeds.push(obj[0].id)
+                            that.getMenuFrist(obj[0].children,callback)
+                        }else{
+                            openeds.push(obj[0].id)
+                            callback(obj[0])
+                        }
+                }
+            },
+            getNav() {
+                $.ajaxSettings.async = false;
+                $.ajax({
+                    url: baseURL + '/sys/menu/nav',
+                    method: 'get',
+                    success: (res) => {
+                        console.log("res",res);
+                        // this.nav = res.data;
+                        // this.activeName = this.nav[0].id
+                        this.nav = res.data;
+                        this.activeName = res.data[0].id;
+                        this.subMenus = this.nav[0].children
+
+                        //如果是crm的，直接展示crm首页
+                        // let hasCrm = res.data.find(item=>'CRM'==item.title);
+                        let hasCrm = res.data[0].title == 'CRM';
+                        if(hasCrm){
+                            if(res.data[0].children[0].url){
+                                this.mainPage = res.data[0].children[0].url
+                            }else {
+                                this.mainPage = res.data[0].children[0].children[0].url
+                            }
+
+                        }else {
+                            this.mainPage = 'main.html'
+                        }
+
+                    },
+                })
+                getWebConfig();
+                $.ajaxSettings.async = true;
+            },
+            toggleClick() {
+                this.isActive = !this.isActive;
+            },
+            openTab(item,index) {
+                let that = this
+                // if ($('#larry_tab_title').children().length > 5) {
+                //     this.showFanye = true;
+                // }
+                window.larryTab.tabAdd({
+                    id: item.url,
+                    domId:item.id,
+                    index:index,
+                    href: item.url,
+                    title: item.title,
+                    pid: item.pid,
+                    // menuCallback:function(res){
+                    //     console.log('点击了tab', res)
+                    //     that.handleClickItem(res)
+                    // }
+                })
+            },
+
+            // handleClickItem(url){
+            //     let that = this
+            //     if('larryms-home'===url){
+            //         that.activeName = that.nav[0].id;
+            //         that.subMenus = that.nav[0].children;
+
+            //         setTimeout(()=>{
+            //             that.selMenu = that.nav[0].children[0].id;
+            //         },200)
+            //     }else
+
+            //     if(this.nav !== null && this.nav.length >0){
+
+            //         this.nav.forEach((item, index)=>{
+
+            //             if(item.children != null && item.children.length>0){
+            //                 item.children.forEach((citem, cindex)=>{
+
+            //                     if(citem.url===null){
+
+            //                         if(citem.children != null && citem.children.length>0){
+            //                             citem.children.forEach((gitem, gindex)=> {
+            //                                 if(url===gitem.url){
+            //                                     console.log('选中得一级', index)
+            //                                     console.log('选中得二级', cindex)
+            //                                     console.log('选中得三级', gindex)
+
+            //                                     that.activeName = that.nav[index].id;
+            //                                     that.subMenus = that.nav[index].children;
+            //                                     // setTimeout(()=>{
+            //                                         that.selMenu = that.nav[index].children[cindex].children[gindex].id;
+            //                                     // },200)
+            //                                     that.$forceUpdate()
+
+            //                                     return
+            //                                 }
+            //                             })
+            //                         }
+
+            //                     }else if(url===citem.url){
+            //                         console.log('选中得一级', index)
+            //                         console.log('选中得二级', cindex)
+
+            //                         that.activeName = that.nav[index].id;
+            //                         that.subMenus = that.nav[index].children;
+
+            //                         // setTimeout(()=>{
+            //                             that.selMenu = that.nav[index].children[cindex].id;
+            //                         // },200)
+            //                         that.$forceUpdate()
+
+
+            //                         return
+            //                     }
+            //                 })
+            //             }
+            //         })
+
+            //         // that.$forceUpdate()
+            //     }
+            // },
+            goPurchase(){
+                this.openTab({ title: '采购列表', url: './modules/purchaseManager/list.html' });
+            },
+            goOrderlist() {
+                this.openTab({ title: '订单列表', url: './modules/cluesOrder/list.html' });
+            },
+            goTest1() {
+                this.openTab({ title: '库存列表', url: './modules/stockManager/list.html' });
+            },
+
+            goTest() {
+                this.openTab({ title: '线索列表', url: './modules/cluesSale/list.html' });
+            },
+            goHelp() {
+                this.openTab({ title: '操作指南', url: './modules/guide/guide.html' });
+            },
+            goTixing() {
+                this.openTab({ title: '消息列表', url: './modules/message/message.html' });
+            },
+            getSysUserInfo() {
+                $.get(baseURL + 'workbench/workbench/sysuserinfo', (r) => {
+                    console.log(r)
+                    if (null != r.sysUserInfo) {
+                        this.sysUserInfo = r.sysUserInfo;
+                    }
+                });
+            },
+            handleUserInfo(evt) {
+                console.log(evt);
+                if (evt == 'logout') {
+                    this.logout();
+                    return;
+                }
+                if (evt == 'personal') {
+                    layer.open({
+                        title: "个人中心",
+                        type: 2,
+                        area: ['800px', '480px'],
+                        content: "./modules/sys/info.html",
+                        end: function () {
+                            layer.closeAll();
+                        }
+                    });
+                }
+            },
+            clearAllCookie() {
+                var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
+                if (keys) {
+                    for (var i = keys.length; i--;)
+                        document.cookie = keys[i] + '=0;expires=' + new Date(0).toUTCString()
+                }
+            },
+            logout() {
+                $.ajax({
+                    url: baseURL + '/logout',
+                    method: 'get',
+                    complete: (res) => {
+                        this.clearAllCookie()
+                        localStorage.clear();
+                        sessionStorage.clear();
+                        if (top) {
+                            top.location.href = 'login.html';
+                        } else {
+                            window.location.href = 'login.html';
+                        }
+                    }
+                })
+            }
+        },
+    };
+    const app = Vue.createApp(App);
+    for ([name, comp] of Object.entries(ElementPlusIconsVue)) {
+        app.component(name, comp);
+    }
+    app.use(ElementPlus);
+    app.mount("#app");
+    $(function (){
+        getWebConfig();
+    })
+</script>
+
+</body>
+
+</html>

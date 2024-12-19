@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>车辆出险表</title>
+    <link rel="stylesheet" type="text/css" href="../../statics/css/public/flowChart.css">
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="Author" content="larry" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../statics/common/cascader/cascader/cascader.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/autocomplete.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/common/layui/css/soulTable.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/common.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/list-search-table.css">
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/layui-soul-table/docs/soulTable.css" media="all"/>-->
+    <script type="text/javascript" src="../../statics/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/lib/vue.min.js"></script>
+    <script type="text/javascript" src="../../statics/plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/layui/layui.all.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/axios.min.js"></script>
+    <script type="text/javascript" src="../../statics/common/js/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/common.js"></script>
+    <script type="text/javascript" src="../../statics/js/upload.js"></script>
+    <script type="text/javascript" src="../../statics/common/step/steps.js"></script>
+    <link rel="stylesheet" href="../../statics/css/jxcPublicAll.css" media="all">
+    <link href="../../statics/common/photoviewer/dist/photoviewer.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../statics/common/step/steps.css">
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.css" media="all">-->
+    <link rel="stylesheet" href="../../statics/js/modules/cropper/cropper.css" media="all">
+    <link rel="stylesheet" type="text/css" href="../../statics/css/viewer.min.css">
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.7/cropper.min.js"></script>-->
+    <script src="../../statics/js/modules/cropper/cropper.min.js"></script>
+    <script src="../../statics/common/photoviewer/dist/photoviewer.js"></script>
+    <script src="../../statics/common/layui/autocomplete.js"></script>
+    <script src="../../statics/js/modules/viewer/viewer.min.js"></script>
+    <script src="../../statics/common/print-js/print.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../statics/common/print-js/print.min.css">
+    <script type="text/javascript" src="../../statics/common/xmselect/xm-select.js"></script>
+    <script type="text/javascript" src="../../statics/js/searchview.js"></script>
+    <script type="text/javascript" src="../../statics/js/tableedit.js"></script>
+    <script type="text/javascript" src="../../statics/js/bpmchart.js"></script>
+    <!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.0&type=webgl&ak=eo4XeZhRKHsQ0NOe6u6NkKscmRsk416B"></script>-->
+
+    <!-- 引入组件库 -->
+    <link rel="stylesheet" type="text/css" href="../../statics/css/index.css">
+
+
+
+    <style>
+        .layui-form-row-content .layui-inline .layui-form-label {
+            width: 170px !important;
+            font-weight: 500 !important;
+        }
+
+        .form-content-box {
+            width: 98%;
+            box-shadow: rgba(17, 45, 47, 0.12) 0px 2px 8px 0px;
+            padding: 20px;
+            background: rgb(255, 255, 255);
+            border-radius: 8px;
+        }
+
+        .layui-input,
+        .layui-select,
+        .layui-textarea {
+            height: 40px !important;
+        }
+
+        .layui-form-label-txt {
+            font-size: 16px;
+            height: 40px;
+            line-height: 40px;
+            padding: 0 15px !important;
+        }
+
+        .layui-input-value {
+            height: 40px !important;
+            line-height: 40px !important;
+            width: 100%;
+            border-radius: 4px;
+            border: 1px solid rgb(230, 230, 230);
+            padding-left: 10px;
+        }
+
+        .layui-input,
+        .layui-select,
+        .layui-textarea {
+            border-radius: 4px;
+        }
+
+        .layui-form-row-content .layui-inline .layui-input-inline-change {
+            width: 43%;
+
+        }
+
+        .layui-table-cell {
+            overflow: visible !important;
+        }
+
+        /* 使得下拉框与单元格刚好合适 */
+        td .layui-form-select {
+            /*margin-top: -10px;*/
+            margin-left: -15px;
+            margin-right: -15px;
+        }
+
+        /*解决下拉框被表格覆盖样式问题*/
+        .layui-form-select dl {
+            z-index: 9999;
+            max-height: 180px;
+        }
+
+        tr[data-index="0"] .layui-form-selectup dl,
+        tr[data-index="1"] .layui-form-selectup dl,
+        tr[data-index="2"] .layui-form-selectup dl {
+            bottom: auto;
+        }
+
+        div[lay-id="compulsoryInsurance1"] div.layui-table-box {
+            overflow: visible;
+        }
+
+        div[lay-id="compulsoryInsurance1"] div.layui-table-body {
+            overflow: visible;
+        }
+
+        .layui-table-body {
+            overflow: visible !important;
+        }
+
+        .layui-table-box,
+        layui-table-view {
+            overflow: visible !important;
+        }
+        .layui-table-view .layui-table {
+            width: 100%;
+            margin: auto;
+        }
+    </style>
+
+
+</head>
+
+<body class="ren-body">
+    <div id="rrapp" v-cloak>
+        <form class="layui-form">
+            <div class="form-content-box">
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content">
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                <label class="layui-form-label layui-form-label-txt"> <span
+                                        style="color:red">*</span>选择车牌号:</label>
+                                <div class="layui-input-inline layui-input-inline-change">
+                                    <input v-model="ouinsuranceOrder.carNo" lay-verify="carNoVerify" id="carPlateNo"
+                                        @click="selectCarNo" type="text" class="layui-input searchVal"
+                                        placeholder="请选择车牌号" readonly />
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                <label class="layui-form-label layui-form-label-txt"> <span
+                                        style="color:red">*</span>选择车架号:</label>
+                                <div class="layui-input-inline layui-input-inline-change">
+                                    <input v-model="ouinsuranceOrder.vinNo" lay-verify="vinNoVerify"
+                                        @click="selectVinNo" id="vinNo" type="text" class="layui-input searchVal"
+                                        placeholder="请选择车架号" readonly />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="form-content-box">
+            <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                车辆基础信息
+            </div>
+            <div class="form-content-session-box">
+                <div class="card">
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车牌号:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="ouinsuranceOrder.carNo"   value="" type="text" class="layui-input searchVal"  placeholder="" readonly/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车辆品牌/车型:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="ouinsuranceOrder.carBrandModelName" id="carBrandModelName" value="" type="text" class="layui-input searchVal"  placeholder="" readonly/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车架号:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="ouinsuranceOrder.vinNo"  type="text" id = "carVinNo"  class="layui-input searchVal"  placeholder="" readonly/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">客户名称:</label>
+                            <div class="layui-input-inline">
+                                <input v-model="ouinsuranceOrder.customerName" id="customerName"  type="text" class="layui-input searchVal"   placeholder=""  readonly/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车辆状态:</label>
+                            <div class="layui-input-inline">
+                                <input  v-model="ouinsuranceOrder.carStatusStr" id="carStatusStr" type="text"   class="layui-input searchVal"   placeholder=""  readonly/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">车辆订单号:</label>
+                            <div class="layui-input-inline">
+                                <input  v-model="ouinsuranceOrder.carOrderNo" type="text"   class="layui-input searchVal" placeholder=""  readonly/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm12 layui-col-xs6">
+                            <label class="layui-form-label">车辆所属公司:</label>
+                            <div class="layui-input-inline">
+                                <input  v-model="ouinsuranceOrder.deptName" type="text" class="layui-input searchVal" placeholder=""  readonly/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                            <label class="layui-form-label">租赁开始时间:</label>
+                            <div class="layui-input-inline">
+                                <input  v-model="ouinsuranceOrder.timeStartRent" type="text"  class="layui-input searchVal" placeholder="" readonly/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm12 layui-col-xs6">
+                            <label class="layui-form-label">租赁结束时间:</label>
+                            <div class="layui-input-inline">
+                                <input  v-model="ouinsuranceOrder.timeFinishRent" type="text"   class="layui-input searchVal" placeholder="" readonly/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm12 layui-col-xs6">
+                            <label class="layui-form-label">车辆当前里程数:</label>
+                            <div class="layui-input-inline">
+                                <input  v-model="ouinsuranceOrder.sumOdograph" type="text"   class="layui-input searchVal" placeholder="" readonly/>
+                            </div>
+                        </div>
+                        <div class="layui-inline layui-col-md6 layui-col-sm12 layui-col-xs6">
+                            <label class="layui-form-label">车辆用途:</label>
+                            <div class="layui-input-inline">
+                                <input  v-model="ouinsuranceOrder.rentTypeStr" type="text"   class="layui-input searchVal" placeholder="" readonly/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-form-row-content">
+                        <div class="layui-inline layui-col-md6 layui-col-sm12 layui-col-xs6">
+                            <label class="layui-form-label">车辆所属仓库:</label>
+                            <div class="layui-input-inline">
+                                <input  v-model="ouinsuranceOrder.carDepotName" type="text"   class="layui-input searchVal" placeholder="" readonly/>
+                                <input  v-model="ouinsuranceOrder.carDepotId" type="hidden"   class="layui-input searchVal" placeholder="" readonly/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+            <div class="form-content-box">
+                <div class="list-search-sup-title new-layui-title ">
+                    出险信息
+                </div>
+                <div class="form-content-session-box">
+                    <div class="card">
+                        <div class="layui-row layui-form-row-content" style="margin-bottom: 35px;">
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                    <label class="layui-form-label layui-form-label-txt">接收时间:</label>
+                                    <div class="layui-input-inline layui-input-inline-change">
+                                        <input v-model="ouinsuranceOrder.receiveDate" id="receiveDate"
+                                            lay-verify="receiveDateVerify" type="text" class="layui-input searchVal"
+                                            placeholder="请选择接收时间" readonly />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                    <label class="layui-form-label layui-form-label-txt">报案人:</label>
+                                    <div class="layui-input-inline layui-input-inline-change">
+                                        <input v-model="ouinsuranceOrder.reporter" lay-verify="reporterVerify"
+                                            type="text" class="layui-input searchVal" placeholder="请输入报案人" />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                    <label class="layui-form-label layui-form-label-txt">出险地点:</label>
+                                    <div class="layui-input-inline layui-input-inline-change">
+                                        <input v-model="ouinsuranceOrder.outAddr" lay-verify="outAddrVerify" type="text"
+                                            class="layui-input searchVal" placeholder="请输入出险地点" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                    <label class="layui-form-label layui-form-label-txt">出险时间:</label>
+                                    <div class="layui-input-inline layui-input-inline-change">
+                                        <input v-model="ouinsuranceOrder.outDate" id="outDate"
+                                            lay-verify="outDateVerify" type="text" class="layui-input searchVal"
+                                            placeholder="请选择出险时间" readonly />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                    <label class="layui-form-label layui-form-label-txt">出险经过及原因:</label>
+                                    <div class="layui-input-inline layui-input-inline-change">
+                                        <input v-model="ouinsuranceOrder.outReason" lay-verify="outReasonVerify"
+                                            type="text" class="layui-input searchVal" placeholder="请输入出险经过及原因" />
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                    <label class="layui-form-label layui-form-label-txt">事故等级:</label>
+                                    <div class="layui-input-inline layui-input-inline-change">
+                                        <select lay-filter="outLevelFilter" v-model="ouinsuranceOrder.outLevel"
+                                            lay-verify="outLevelVerify">
+                                            <option value="">请选择事故等级</option>
+                                            <option v-for="item in outLevelList" :value="item.code">{{item.value}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="!hetong"
+                                style="color:#3FACB3;cursor: pointer;text-align: right;" @click="expandChange(1)">
+                                <span>展开</span>
+                                <img src="../../statics/images/packup.png" alt="">
+                            </div>
+                            <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12" v-show="hetong"
+                                style="color:#3FACB3;cursor: pointer;text-align: right;" @click="retractChange(1)">
+                                <span>收起</span>
+                                <img src="../../statics/images/launch.png" alt="">
+                            </div>
+                            <div v-show="hetong">
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                        <label class="layui-form-label layui-form-label-txt">预估定损金额:</label>
+                                        <div class="layui-input-inline layui-input-inline-change">
+                                            <input v-model="ouinsuranceOrder.predictLossFee" type="text"
+                                                class="layui-input searchVal" oninput="value=moneyInput(value)"
+                                                placeholder="请输入预估定损金额" />
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                        <label class="layui-form-label layui-form-label-txt">责任方:</label>
+                                        <div class="layui-input-inline layui-input-inline-change">
+                                            <select lay-filter="responsiblePartyFilter"
+                                                v-model="ouinsuranceOrder.responsibleParty"
+                                                lay-verify="responsiblePartyVerify">
+                                                <option value="">请选择责任方</option>
+                                                <option value=5>0%</option>
+                                                <option value=1>20%</option>
+                                                <option value=2>30%</option>
+                                                <option value=3>50%</option>
+                                                <option value=6>70%</option>
+                                                <option value=4>100%</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                        <label class="layui-form-label layui-form-label-txt">维修厂名称:</label>
+                                        <div class="layui-input-inline layui-input-inline-change">
+                                            <input v-model="ouinsuranceOrder.serviceName" type="text"
+                                                class="layui-input searchVal" placeholder="请输入维修厂名称" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <div class="layui-inline layui-col-md3 layui-col-sm3 layui-col-xs3">
+                                        <label class="layui-form-label layui-form-label-txt"
+                                            style="font-weight: 800!important">保险赔付情况</label>
+                                    </div>
+                                    <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                        <label class="layui-form-label layui-form-label-txt">保险类型:</label>
+                                        <div class="layui-input-inline layui-input-inline-change">
+                                            <select v-model="ouinsuranceOrder.insuranceType"
+                                                lay-filter="insuranceTtype">
+                                                <option v-for=" (item,index) in insuranceArr" :value='item.value'
+                                                    :lable="item.lable">{{item.value}}</option>
+                                            </select>
+
+                                        </div>
+                                        <a @click="addInsurance" class="layui-btn search-btn"
+                                            style="margin-left: 20px;">添加</a>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <table id="compulsoryInsurance1" lay-filter="test1"></table>
+                                </div>
+
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <div class="layui-inline layui-col-md3 layui-col-sm3 layui-col-xs3">
+                                        <label class="layui-form-label layui-form-label-txt"
+                                            style="font-weight: 800!important">出险相关费用信息</label>
+                                    </div>
+                                    <div class="layui-inline layui-col-md6 layui-col-sm6 layui-col-xs6">
+                                        <label class="layui-form-label layui-form-label-txt">费用类型:</label>
+                                        <div class="layui-input-inline layui-input-inline-change">
+                                            <select v-model="ouinsuranceOrder.expenseType" lay-filter="insuranceTtype3">
+                                                <option v-for=" (item,index) in expenseArr" :value='item.value'
+                                                    :lable="item.lable">{{item.value}}</option>
+                                            </select>
+
+                                        </div>
+                                        <a @click="addExpense" class="layui-btn search-btn"
+                                            style="margin-left: 20px;">添加</a>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <table id="compulsoryInsurance2" lay-filter="test2"></table>
+                                </div>
+                                <!-- <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                        <label class="layui-form-label layui-form-label-txt">商业险是否赔付:</label>
+                                        <div class="layui-input-inline layui-input-inline-change">
+                                            <select lay-filter="sxIsPayFilter" v-model="ouinsuranceOrder.sxIsPay"
+                                                lay-verify="sxIsPayVerify">
+                                                <option value="">请选择商业险是否赔付</option>
+                                                <option value=1>是</option>
+                                                <option value=2>否</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                        <label class="layui-form-label layui-form-label-txt">商业险赔付保险公司:</label>
+                                        <div class="layui-input-inline layui-input-inline-change">
+                                            <select name="insuranceCompany" lay-verify="sxInsuranceCompanyIdVerify"
+                                                v-model="ouinsuranceOrder.sxInsuranceCompanyId"
+                                                lay-filter="sxInsuranceCompanyId" class="layui-select">
+                                                <option value="">请选择商业险保险公司</option>
+                                                <option v-for="r in compulsoryInsuranceList" :value="r.id">
+                                                    {{r.companyName}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                        <label class="layui-form-label layui-form-label-txt">商业险赔付金额/元:</label>
+                                        <div class="layui-input-inline layui-input-inline-change">
+                                            <input v-model="ouinsuranceOrder.sxPayFee" lay-verify="sxPayFeeVerify"
+                                                type="text" class="layui-input searchVal"
+                                                oninput="value=moneyInput(value)" placeholder="请输入赔付金额" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                        <label class="layui-form-label layui-form-label-txt">商业险赔付时间:</label>
+                                        <div class="layui-input-inline layui-input-inline-change">
+                                            <input v-model="ouinsuranceOrder.sxPayDate" id="sxPayDate"
+                                                lay-verify="sxPayDateVerify" type="text" class="layui-input searchVal"
+                                                placeholder="请选择支付时间" readonly />
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                        <label class="layui-form-label layui-form-label-txt">商业险客户赔付金额/元:</label>
+                                        <div class="layui-input-inline layui-input-inline-change">
+                                            <input v-model="ouinsuranceOrder.sxCustomerPaymentAmount"
+                                                lay-verify="sxCustomerPaymentAmount" type="text"
+                                                class="layui-input searchVal" oninput="value=moneyInput(value)"
+                                                placeholder="请输入商业险客户赔付金额/元" />
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                        <label class="layui-form-label layui-form-label-txt">预估定损金额:</label>
+                                        <div class="layui-input-inline layui-input-inline-change">
+                                            <input v-model="ouinsuranceOrder.predictLossFee" type="text"
+                                                class="layui-input searchVal" oninput="value=moneyInput(value)"
+                                                placeholder="请输入预估定损金额" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                        <label class="layui-form-label layui-form-label-txt">交强险是否赔付:</label>
+                                        <div class="layui-input-inline layui-input-inline-change">
+                                            <select lay-filter="qxIsPayFilter" v-model="ouinsuranceOrder.qxIsPay"
+                                                lay-verify="qxIsPayVerify">
+                                                <option value="">请选择交强险是否赔付</option>
+                                                <option value=1>是</option>
+                                                <option value=2>否</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                        <label class="layui-form-label layui-form-label-txt">交强险赔付金额/元:</label>
+                                        <div class="layui-input-inline layui-input-inline-change">
+                                            <input v-model="ouinsuranceOrder.qxPayFee" lay-verify="qxPayFeeVerify"
+                                                type="text" class="layui-input searchVal"
+                                                oninput="value=moneyInput(value)" placeholder="请输入交强险赔付金额/元" />
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                        <label class="layui-form-label layui-form-label-txt">交强险赔付保险公司:</label>
+                                        <div class="layui-input-inline layui-input-inline-change">
+                                            <select name="insuranceCompany" lay-verify="qxInsuranceCompanyIdVerify"
+                                                v-model="ouinsuranceOrder.qxInsuranceCompanyId"
+                                                lay-filter="qxInsuranceCompanyId" class="layui-select">
+                                                <option value="">请选择交强险赔付保险公司</option>
+                                                <option v-for="r in compulsoryInsuranceList" :value="r.id">
+                                                    {{r.companyName}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                        <label class="layui-form-label layui-form-label-txt">交强险赔付时间:</label>
+                                        <div class="layui-input-inline layui-input-inline-change">
+                                            <input v-model="ouinsuranceOrder.qxPayDate" id="qxPayDate"
+                                                lay-verify="qxPayDateVerify" type="text" class="layui-input searchVal"
+                                                placeholder="请选择支付时间" readonly />
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                        <label class="layui-form-label layui-form-label-txt">责任方:</label>
+                                        <div class="layui-input-inline layui-input-inline-change">
+                                            <select lay-filter="responsiblePartyFilter"
+                                                v-model="ouinsuranceOrder.responsibleParty"
+                                                lay-verify="responsiblePartyVerify">
+                                                <option value="">请选择责任方</option>
+                                                <option value=5>0%</option>
+                                                <option value=1>20%</option>
+                                                <option value=2>30%</option>
+                                                <option value=3>50%</option>
+                                                <option value=6>70%</option>
+                                                <option value=4>100%</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                        <label class="layui-form-label layui-form-label-txt">交强险客户赔付金额/元:</label>
+                                        <div class="layui-input-inline layui-input-inline-change">
+                                            <input v-model="ouinsuranceOrder.qxCustomerPaymentAmount"
+                                                lay-verify="qxCustomerPaymentAmount" type="text"
+                                                class="layui-input searchVal" oninput="value=moneyInput(value)"
+                                                placeholder="请输入交强险客户赔付金额/元" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                        <label class="layui-form-label layui-form-label-txt">保险上浮费/元:</label>
+                                        <div class="layui-input-inline layui-input-inline-change">
+                                            <input v-model="ouinsuranceOrder.floatFee" lay-verify="floatFee" type="text"
+                                                class="layui-input searchVal" oninput="value=moneyInput(value)"
+                                                placeholder="请输入保险上浮费/元" />
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                        <label class="layui-form-label layui-form-label-txt">维修返佣金额/元:</label>
+                                        <div class="layui-input-inline layui-input-inline-change">
+                                            <input v-model="ouinsuranceOrder.repairBackFee" lay-verify="repairBackFee"
+                                                type="text" class="layui-input searchVal"
+                                                oninput="value=moneyInput(value)" placeholder="请输入维修返佣金额/元" />
+                                        </div>
+                                    </div>
+                                    <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                        <label class="layui-form-label layui-form-label-txt">维修厂名称:</label>
+                                        <div class="layui-input-inline layui-input-inline-change">
+                                            <input v-model="ouinsuranceOrder.serviceName" type="text"
+                                                class="layui-input searchVal" placeholder="自动带出" disabled />
+                                        </div>
+                                    </div>
+
+                                </div> -->
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <div class="layui-inline layui-col-md4 layui-col-sm4 layui-col-xs6">
+                                        <label class="layui-form-label layui-form-label-txt">备注:</label>
+                                        <div class="layui-input-inline layui-input-inline-change">
+                                            <textarea v-model="ouinsuranceOrder.remark" placeholder="请输入备注内容"
+                                                class="layui-textarea" maxlength="200"></textarea>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                    <div class="layui-inline layui-col-md12 layui-col-sm12 layui-col-xs12">
+                                        <label class="layui-form-label layui-form-label-txt">出险附件:</label>
+                                        <div class="layui-input-inline layui-input-inline-change" id="fileLst">
+<!--                                            <div class="layui-input-inline-upload">-->
+<!--                                                <div :id="fileLstId" class="layui-input-inline-upload-show box-rect"-->
+<!--                                                    v-for="(item,index) in fileLst">-->
+<!--                                                    <div v-show="item.typeFile == 1"-->
+<!--                                                        class="layui-input-inline-upload-button">-->
+<!--                                                        <img :src="imageURL + item.url" class="view-img">-->
+<!--                                                    </div>-->
+<!--                                                    <div v-show="item.typeFile != 1"-->
+<!--                                                        class="layui-input-inline-upload-button">-->
+<!--                                                        {{item.nameAccessory}}-->
+<!--                                                    </div>-->
+<!--                                                    <div class="layui-input-inline-upload-show-delete btn-event"-->
+<!--                                                        @click="delFile(item.id)">-->
+<!--                                                        删除-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                                <div class="layui-input-inline-upload-button box-rect box-rect-event"-->
+<!--                                                    id="addFile">-->
+<!--                                                    <img src="../../statics/images/inline-upload@2x.png"-->
+<!--                                                        style="display: inline-block;width:160px;height: 120px;">-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                            <div class="layui-input-inline-upload-text"-->
+<!--                                                style="height:34px;width:380px;font-size: 14px;line-height: 20px;">-->
+<!--                                                附件说明：附件最大支持50M，-->
+<!--                                                <br />-->
+<!--                                                支持格式：PDF、Word、Excel、JPG、PNG 、ZIP、RAR-->
+<!--                                            </div>-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-content-box" v-show="openFlow">
+                <div class="list-search-sup-title new-layui-title border-bottom-dashed">
+                    车辆出险流程
+                </div>
+                <div class="car-details-info car-padding">
+                    <div class="car-flowChart" id="bpmChart">
+                        <div class="car-flowChart-circle" v-for="(item, index) in bpmChartDtoList" :key="item.index">
+                            <div class="car-flowChart-images">
+                                <img class="car-flowChart-icon" v-if="item.approveStatus != 2"
+                                    src="../../statics/images/point2.png" alt="">
+                                <img class="car-flowChart-line"
+                                    v-if="item.approveStatus != 2 && index != bpmChartDtoList.length-1"
+                                    src="../../statics/images/line3.png" alt="">
+                                <img class="car-flowChart-icon" v-if="item.approveStatus == 2"
+                                    src="../../statics/images/point.png" alt="">
+                                <img class="car-flowChart-line"
+                                    v-if="item.approveStatus == 2 && index != bpmChartDtoList.length-1"
+                                    src="../../statics/images/line4.png" alt="">
+                            </div>
+                            <div class="car-flowChart-content">
+                                <div class="car-flowChart-status">
+                                    <p class="car-flowChart-title">{{item.userName}}-{{item.nodeName}}</p>
+                                    <p class="car-flowChart-text">{{item.approveTime}}</p>
+                                </div>
+                                <div class="car-flowChart-status-feedback">
+                                    <p class="car-flowChart-title car-flowChar-color">{{item.approveNodeStatus}}</p>
+                                    <p class="car-flowChart-text"
+                                        v-if="item.elapsedTime != null && item.elapsedTime != ''">
+                                        耗时:{{item.elapsedTime}}</p>
+                                </div>
+                                <div class="car-flowChart-status"
+                                    v-if="item.approveContent != null && item.approveContent != ''">
+                                    <p class="car-flowChart-title">审核意见:{{item.approveContent}}</p>
+                                    <p class="car-flowChart-text"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="float-btn-group">
+                <a class="layui-btn reset-btn" @click="cancel">取消</a>
+                <button class="layui-btn search-btn" id="saveReceivables" lay-submit
+                    lay-filter="saveOrUpdate">确定</button>
+            </div>
+        </form>
+    </div>
+    <script type="text/html" id="selectCompontMethod">
+        <select lay-filter="insuranceTtype1" name="insuranceTtype1" id="{{d.index}}" sid="{{d.type}}" >
+    </select>
+    </script>
+    <script src="../../statics/js/modules/outinsuranceorder/outinsuranceorderadd.js"></script>
+</body>
+
+</html>

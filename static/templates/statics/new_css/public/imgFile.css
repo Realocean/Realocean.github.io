@@ -1,0 +1,111 @@
+/*    预览图片  */
+.xz-form {
+    margin-bottom: 40px;
+}
+
+.layui-form-label-file {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.file-images {
+    position: relative;
+    display: inline-block;
+    background: #f6f8f8;
+    border: 1px solid #dbe2ec;
+    border-radius: 2px;
+    width: 120px;
+    height: 120px;
+    margin-right: 15px;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+.img {
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+}
+
+.file-images:hover .file-images_hover {
+    opacity: 1;
+}
+
+.file-images_hover {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 30px;
+    background: rgba(26, 31, 51, 0.48);
+    font-size: 14px;
+    color: #fff;
+    opacity: 0;
+}
+
+.file-images_btn:hover {
+    color: #3FACB3;
+}
+
+.file-images__add {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f6f8f8;
+    border: 1px solid #dbe2ec;
+    border-radius: 2px;
+    width: 120px;
+    height: 120px;
+    cursor: pointer;
+}
+
+.add_img {
+    width: 44px;
+    height: 44px;
+}
+
+.xz-list-file {
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+    padding: 0 15px;
+    height: 40px;
+    line-height: 40px;
+    cursor: pointer;
+    margin-bottom: 2px;
+}
+
+.xz-list-file:hover {
+    background: #f6f8f8;
+}
+
+.xz-list-file__item:hover {
+    color: #3FACB3;
+}
+
+.xz-list-file__box {
+    width: 120px;
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.layui-form-input-content {
+    float: left;
+    display: block;
+    font-weight: 400;
+    line-height: 20px;
+    color: #afafaf;
+    width: 50%;
+}
+
+.label-after:after {
+    position: absolute;
+    top: 9px;
+    right: 15px;
+    content: '*';
+    color: red;
+}
